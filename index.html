@@ -20,12 +20,12 @@
 <body class="bg-stone-50 text-stone-900">
   <!-- HERO (pysyvä Lapin taustakuva) -->
   <div class="hero-fixed">
-    <!-- Voit vaihtaa oman kuvan tähän: korvaa src joko URL:lla tai repoosi lisätyllä tiedostolla (esim. ./lappi-hero.jpg) -->
+    <!-- Unsplash: fNInSqdspJQ -->
     <img
-      src="https://images.unsplash.com/photo-1505852679233-d9fd70aff56d?auto=format&fit=crop&w=2400&q=80"
-      alt="Lapin erämaa kesämaisema"
-      class="w-full h-full object-cover">
-    <!-- Hento tummennus teksteille -->
+      src="https://source.unsplash.com/fNInSqdspJQ/2400x1600"
+      alt="Lapin erämaa — niitty ja tunturit taustalla"
+      class="w-full h-full object-cover"
+      style="object-position:center 60%">
     <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/18 to-black/28"></div>
   </div>
 
@@ -87,16 +87,16 @@
               <img id="p1b" class="w-full h-full object-cover" alt="RUMAT Sling 2">
             </div>
           </div>
+          <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
           <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
         </div>
         <div class="mt-6 text-center">
           <h3 class="serif text-2xl">RUMAT Sling</h3>
           <p class="mt-1 text-stone-700">Cordura®-kangas, modulaarinen hihna. Koko: 28 × 16 × 7 cm.</p>
           <div class="mt-2 font-semibold">€149,00</div>
-          <!-- PayPal “Buy Now” (vaihda business-osoite omaan PayPaliisi) -->
           <form class="inline-block mt-3" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
             <input type="hidden" name="cmd" value="_xclick">
-            <input type="hidden" name="business" value="kauppa@esimerkki.fi">
+            <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
             <input type="hidden" name="item_name" value="RUMAT Sling">
             <input type="hidden" name="amount" value="149.00">
             <input type="hidden" name="currency_code" value="EUR">
@@ -116,6 +116,7 @@
               <img id="p2b" class="w-full h-full object-cover" alt="RUMAT Pipo 2">
             </div>
           </div>
+          <button id="prev2" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
           <button id="next2" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
         </div>
         <div class="mt-6 text-center">
@@ -124,7 +125,7 @@
           <div class="mt-2 font-semibold">€59,00</div>
           <form class="inline-block mt-3" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
             <input type="hidden" name="cmd" value="_xclick">
-            <input type="hidden" name="business" value="kauppa@esimerkki.fi">
+            <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
             <input type="hidden" name="item_name" value="RUMAT Pipo">
             <input type="hidden" name="amount" value="59.00">
             <input type="hidden" name="currency_code" value="EUR">
@@ -173,7 +174,7 @@
   </footer>
 
   <script>
-    // header taustan vahvistus ja hero-tekstin pehmeä liike (ei pomppua)
+    // header-taustan vahvistus ja hero-tekstin pehmeä liike
     const headerBg = document.getElementById('header-bg');
     const heroText = document.getElementById('hero-text');
     let lastY = -1;
@@ -185,7 +186,6 @@
       headerBg.style.backgroundColor = `rgba(248,247,245,${p})`;
       headerBg.style.borderColor = `rgba(214,211,209,${p})`;
       headerBg.style.borderBottomWidth = p ? '1px' : '0px';
-      // Liike max ~22vh, lineaarinen alusta asti (ei nykäisyä)
       const t = -22 * Math.min(1, y / (vh * 0.9));
       heroText.style.transform = `translateY(${t}vh)`;
     };
@@ -193,15 +193,13 @@
     onScroll();
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Tuotekuvakarusellit (2 kuvaa näkyy, nuolesta seuraavat)
+    // Tuotekuvakarusellit (2 kuvaa näkyy, nuolista vaihto vasemmalle/oikealle)
     const slingImgs = [
-      // laukku eri kulmista
       "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=1400&q=80",
       "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1400&q=80",
       "https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=1400&q=80"
     ];
     const pipoImgs = [
-      // pipo eri kulmista
       "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1400&q=80",
       "https://images.unsplash.com/photo-1618354691547-85f383d97047?auto=format&fit=crop&w=1400&q=80",
       "https://images.unsplash.com/photo-1516478177764-9fe5bd7e9718?auto=format&fit=crop&w=1400&q=80"
@@ -216,8 +214,13 @@
     };
     setPair(slingImgs, "p1a", "p1b", i1);
     setPair(pipoImgs,  "p2a", "p2b", i2);
+
+    // Oikea nuoli
     document.getElementById('next1').addEventListener('click', () => { i1 = (i1 + 1) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
     document.getElementById('next2').addEventListener('click', () => { i2 = (i2 + 1) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
+    // Vasen nuoli
+    document.getElementById('prev1').addEventListener('click', () => { i1 = (i1 - 1 + slingImgs.length) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
+    document.getElementById('prev2').addEventListener('click', () => { i2 = (i2 - 1 + pipoImgs.length) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
   </script>
 </body>
 </html>
