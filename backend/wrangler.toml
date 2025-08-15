@@ -1,0 +1,16 @@
+name = "rumat-backend"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# Salli pyynnöt sivultasi (vaihda tämä GitHub Pages -osoitteeseesi)
+[vars]
+ALLOWED_ORIGIN = "https://<käyttäjä>.github.io/<repo>"
+
+# KV-bindaukset: luot ne Cloudflare-dashissa ja liität id:t tänne
+[[kv_namespaces]]
+binding = "CONTENT"
+id = "KV_ID_CONTENT"     # täytä
+
+[[kv_namespaces]]
+binding = "SESSIONS"
+id = "KV_ID_SESSIONS"    # täytä
