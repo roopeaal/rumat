@@ -76,28 +76,30 @@
     <div class="mx-auto max-w-6xl px-4">
       <h2 class="serif text-3xl mb-6">Tuotteet</h2>
 
-      <!-- Tuote 1 -->
+      <!-- Tuote 1: LAUKKU -->
       <div class="mb-12">
         <div class="relative">
           <div class="grid md:grid-cols-2 gap-4 md:gap-6">
             <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200">
-              <img id="p1a" class="w-full h-full object-cover" alt="RUMAT Sling 1">
+              <img id="p1a" class="w-full h-full object-cover" alt="Laukku 1">
             </div>
             <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200">
-              <img id="p1b" class="w-full h-full object-cover" alt="RUMAT Sling 2">
+              <img id="p1b" class="w-full h-full object-cover" alt="Laukku 2">
             </div>
           </div>
           <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
           <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
         </div>
         <div class="mt-6 text-center">
-          <h3 class="serif text-2xl">RUMAT Sling</h3>
-          <p class="mt-1 text-stone-700">Cordura®-kangas, modulaarinen hihna. Koko: 28 × 16 × 7 cm.</p>
+          <h3 class="serif text-2xl">Laukku</h3>
+          <p class="mt-1 text-stone-700">
+            Täysin kierrätysmateriaaleista valmistettu sling-laukku. Kierrätetty purjekangas/tekstiili, hihna käytetystä turvavyöstä, metalliosat uudelleenkäytettyä varastoa. Koko: 28 × 16 × 7 cm. Valmistettu Suomessa.
+          </p>
           <div class="mt-2 font-semibold">€149,00</div>
           <form class="inline-block mt-3" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
             <input type="hidden" name="cmd" value="_xclick">
             <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
-            <input type="hidden" name="item_name" value="RUMAT Sling">
+            <input type="hidden" name="item_name" value="Laukku">
             <input type="hidden" name="amount" value="149.00">
             <input type="hidden" name="currency_code" value="EUR">
             <input type="submit" value="Osta PayPalilla" class="btn bg-stone-900 text-stone-50 cursor-pointer">
@@ -105,7 +107,7 @@
         </div>
       </div>
 
-      <!-- Tuote 2 -->
+      <!-- Tuote 2: PIPO -->
       <div class="mb-6">
         <div class="relative">
           <div class="grid md:grid-cols-2 gap-4 md:gap-6">
@@ -194,11 +196,15 @@
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Tuotekuvakarusellit (2 kuvaa näkyy, nuolista vaihto vasemmalle/oikealle)
+    // LAUKKU – Unsplash-kyselyt (random sopiva kuva joka latauksella)
     const slingImgs = [
-      "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=1400&q=80",
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1400&q=80",
-      "https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=1400&q=80"
+      "https://source.unsplash.com/1400x1750/?sling-bag,canvas,minimal",
+      "https://source.unsplash.com/1400x1750/?crossbody-bag,black,minimal",
+      "https://source.unsplash.com/1400x1750/?messenger-bag,canvas,olive",
+      "https://source.unsplash.com/1400x1750/?shoulder-bag,outdoor,gear",
+      "https://source.unsplash.com/1400x1750/?recycled,upcycled,bag"
     ];
+    // PIPO – esimerkkikuvat
     const pipoImgs = [
       "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1400&q=80",
       "https://images.unsplash.com/photo-1618354691547-85f383d97047?auto=format&fit=crop&w=1400&q=80",
