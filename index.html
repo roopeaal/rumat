@@ -22,14 +22,15 @@
 <body class="bg-stone-50 text-stone-900">
   <!-- HERO (pysyvä Lapin taustakuva) -->
   <div class="hero-fixed">
-    <!-- Käyttää antamaasi Unsplash-kuvaa + fallback -->
+    <!-- Antamasi Unsplash-kuva + fallback -->
     <img
       src="https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80"
       alt="Lapin erämaa"
       class="w-full h-full object-cover"
       style="object-position:center 60%"
       onerror="this.onerror=null;this.src='https://placehold.co/2400x1600?text=Lapin+taustakuva'">
-    <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/18 to-black/28"></div>
+    <!-- Kevyt tummennus, jotta teksti erottuu -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/5 via-black/12 to-black/22"></div>
   </div>
 
   <!-- Yläpalkki -->
@@ -54,12 +55,18 @@
   <!-- ETUSIVU -->
   <section id="etusivu" class="h-screen grid place-items-center text-stone-50 px-4">
     <div id="hero-text" class="text-center transition-transform">
-      <h1 class="serif text-3xl sm:text-5xl md:text-6xl tracking-[.12em] uppercase font-extrabold drop-shadow-[0_2px_12px_rgba(0,0,0,0.55)]">
+      <!-- Leveä, isokokoinen otsikko (kuvan tyylinen) -->
+      <h1
+        class="uppercase font-semibold tracking-[0.30em]
+               text-4xl sm:text-6xl md:text-7xl lg:text-8xl
+               drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
         LIIAN RUMAT OLLAKSEEN TOTTA
       </h1>
-      <div class="mt-6 flex justify-center">
-        <div class="h-9 w-9 grid place-items-center rounded-xl ring-1 ring-stone-300 bg-white/90">
-          <span class="-rotate-90 serif text-2xl font-black text-stone-900">R</span>
+      <!-- Suurempi, pyöreä R-logo keskellä -->
+      <div class="mt-8 flex justify-center">
+        <div class="h-20 w-20 sm:h-24 sm:w-24 grid place-items-center
+                    rounded-full bg-white/90 ring-1 ring-white/70 shadow-soft">
+          <span class="-rotate-90 serif text-4xl sm:text-5xl font-black text-stone-900">R</span>
         </div>
       </div>
     </div>
@@ -228,7 +235,7 @@
   </footer>
 
   <script>
-    // header-taustan vahvistus ja hero-tekstin pehmeä liike
+    // Yläpalkin taustan vahvistus scrollissa + hero-tekstin pehmeä liike
     const headerBg = document.getElementById('header-bg');
     const heroText = document.getElementById('hero-text');
     let lastY = -1;
@@ -247,8 +254,8 @@
     onScroll();
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // --------- Kuvat: varmatoimiset URL:t + automaattinen fallback ----------
-    // Vaihda näihin omat osoitteet (esim. ./assets/laukku-1.jpg) kun haluat
+    // --------- Tuotekuvat: varmatoimiset paikkamerkit + fallback ----------
+    // Vaihda näihin omat polut kun haluat (esim. ./assets/laukku-1.jpg)
     const slingImgs = [
       "https://placehold.co/1400x1750?text=Laukku+1",
       "https://placehold.co/1400x1750?text=Laukku+2",
@@ -259,14 +266,13 @@
       "https://placehold.co/1400x1750?text=Pipo+2",
       "https://placehold.co/1400x1750?text=Pipo+3"
     ];
-    const FALLBACK_1 = "https://placehold.co/1400x1750?text=Kuva";
-    const FALLBACK_2 = "https://placehold.co/1400x1750?text=Kuva";
+    const FALLBACK = "https://placehold.co/1400x1750?text=Kuva";
 
     let i1 = 0, i2 = 0;
 
-    function setWithFallback(imgEl, url, fallback){
+    function setWithFallback(imgEl, url){
       if(!imgEl) return;
-      imgEl.onerror = ()=>{ imgEl.onerror=null; imgEl.src = fallback; };
+      imgEl.onerror = ()=>{ imgEl.onerror=null; imgEl.src = FALLBACK; };
       imgEl.src = url;
     }
 
@@ -274,20 +280,17 @@
       const a = document.getElementById(aId), b = document.getElementById(bId);
       if (!a || !b) return;
       const n = arr.length;
-      const u1 = arr[(i % n + n) % n];
-      const u2 = arr[((i + 1) % n + n) % n];
-      setWithFallback(a, u1, FALLBACK_1);
-      setWithFallback(b, u2, FALLBACK_2);
+      setWithFallback(a, arr[(i % n + n) % n]);
+      setWithFallback(b, arr[((i + 1) % n + n) % n]);
     };
 
     setPair(slingImgs, "p1a", "p1b", i1);
     setPair(pipoImgs,  "p2a", "p2b", i2);
 
-    // Oikea nuoli
+    // Karusellin nuolet
     document.getElementById('next1').addEventListener('click', () => { i1 = (i1 + 1) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
-    document.getElementById('next2').addEventListener('click', () => { i2 = (i2 + 1) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
-    // Vasen nuoli
     document.getElementById('prev1').addEventListener('click', () => { i1 = (i1 - 1 + slingImgs.length) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
+    document.getElementById('next2').addEventListener('click', () => { i2 = (i2 + 1) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
     document.getElementById('prev2').addEventListener('click', () => { i2 = (i2 - 1 + pipoImgs.length) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
   </script>
 </body>
