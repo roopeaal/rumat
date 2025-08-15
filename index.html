@@ -14,18 +14,21 @@
     .serif{font-family:"Libre Baskerville",serif}
     .hero-fixed{position:fixed;inset:0;z-index:-1}
     .btn{border-radius:9999px;padding:.6rem 1rem;border:1px solid rgb(214 211 209)}
+    .btn-dark{background:#0b0f0e;color:#f8fafb}
+    .chip{font-size:.78rem;padding:.25rem .5rem;border-radius:9999px;border:1px solid rgb(214 211 209);background:#fff}
     .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
   </style>
 </head>
 <body class="bg-stone-50 text-stone-900">
   <!-- HERO (pysyvä Lapin taustakuva) -->
   <div class="hero-fixed">
-    <!-- Unsplash: fNInSqdspJQ -->
+    <!-- Käytä varmaa images.unsplash.com-URL:ia (fallback jos 1. ei lataudu) -->
     <img
-      src="https://source.unsplash.com/fNInSqdspJQ/2400x1600"
+      src="https://source.unsplash.com/fNInSqdspJQ/2400x1600?v=2"
       alt="Lapin erämaa — niitty ja tunturit taustalla"
       class="w-full h-full object-cover"
-      style="object-position:center 60%">
+      style="object-position:center 60%"
+      onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1505852679233-d9fd70aff56d?auto=format&fit=crop&w=2400&q=80'">
     <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/18 to-black/28"></div>
   </div>
 
@@ -74,7 +77,10 @@
   <!-- TUOTTEET -->
   <section id="tuotteet" class="py-14 bg-white">
     <div class="mx-auto max-w-6xl px-4">
-      <h2 class="serif text-3xl mb-6">Tuotteet</h2>
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="serif text-3xl">Tuotteet</h2>
+        <div class="text-xs text-stone-500">Hinnat sis. ALV • Palautus 14 vrk</div>
+      </div>
 
       <!-- Tuote 1: LAUKKU -->
       <div class="mb-12">
@@ -93,17 +99,41 @@
         <div class="mt-6 text-center">
           <h3 class="serif text-2xl">Laukku</h3>
           <p class="mt-1 text-stone-700">
-            Täysin kierrätysmateriaaleista valmistettu sling-laukku. Kierrätetty purjekangas/tekstiili, hihna käytetystä turvavyöstä, metalliosat uudelleenkäytettyä varastoa. Koko: 28 × 16 × 7 cm. Valmistettu Suomessa.
+            Täysin kierrätysmateriaaleista valmistettu sling-laukku. Kierrätetty purjekangas/tekstiili, hihna käytetystä turvavyöstä, metalliosat uudelleenkäytettyä varastoa.
+            Ulkomitat: 28 × 16 × 7 cm. Valmistettu Suomessa.
           </p>
           <div class="mt-2 font-semibold">€149,00</div>
-          <form class="inline-block mt-3" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-            <input type="hidden" name="cmd" value="_xclick">
-            <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
-            <input type="hidden" name="item_name" value="Laukku">
-            <input type="hidden" name="amount" value="149.00">
-            <input type="hidden" name="currency_code" value="EUR">
-            <input type="submit" value="Osta PayPalilla" class="btn bg-stone-900 text-stone-50 cursor-pointer">
-          </form>
+
+          <!-- Toimitusvaihtoehdot: Nouto 0 € / Posti 6,90 € -->
+          <div class="mt-4 flex items-center justify-center gap-2">
+            <span class="chip">Nouto (sovitusti) — 0 €</span>
+            <span class="chip">Posti — 6,90 €</span>
+          </div>
+
+          <div class="mt-3 flex items-center justify-center gap-3 flex-wrap">
+            <!-- NOUTO 0 € -->
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+              <input type="hidden" name="cmd" value="_xclick">
+              <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
+              <input type="hidden" name="item_name" value="Laukku (nouto)">
+              <input type="hidden" name="amount" value="149.00">
+              <input type="hidden" name="currency_code" value="EUR">
+              <input type="hidden" name="shipping" value="0.00">
+              <input type="hidden" name="no_shipping" value="1"><!-- ei osoitetta -->
+              <input type="submit" value="Osta – Nouto 0 €" class="btn btn-dark cursor-pointer">
+            </form>
+            <!-- POSTI 6,90 € -->
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+              <input type="hidden" name="cmd" value="_xclick">
+              <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
+              <input type="hidden" name="item_name" value="Laukku (posti)">
+              <input type="hidden" name="amount" value="149.00">
+              <input type="hidden" name="currency_code" value="EUR">
+              <input type="hidden" name="shipping" value="6.90">
+              <input type="hidden" name="no_shipping" value="2"><!-- pyydä osoite -->
+              <input type="submit" value="Osta – Posti 6,90 €" class="btn cursor-pointer">
+            </form>
+          </div>
         </div>
       </div>
 
@@ -123,18 +153,42 @@
         </div>
         <div class="mt-6 text-center">
           <h3 class="serif text-2xl">RUMAT Pipo</h3>
-          <p class="mt-1 text-stone-700">Käsinneulottu mohair-sekoite. Koko: päänympärys 54–58 cm.</p>
+          <p class="mt-1 text-stone-700">Käsinneulottu mohair-sekoite. Korkeus n. 22 cm. Päänympärys 54–58 cm (joustava).</p>
           <div class="mt-2 font-semibold">€59,00</div>
-          <form class="inline-block mt-3" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-            <input type="hidden" name="cmd" value="_xclick">
-            <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
-            <input type="hidden" name="item_name" value="RUMAT Pipo">
-            <input type="hidden" name="amount" value="59.00">
-            <input type="hidden" name="currency_code" value="EUR">
-            <input type="submit" value="Osta PayPalilla" class="btn bg-stone-900 text-stone-50 cursor-pointer">
-          </form>
+
+          <!-- Toimitusvaihtoehdot -->
+          <div class="mt-4 flex items-center justify-center gap-2">
+            <span class="chip">Nouto (sovitusti) — 0 €</span>
+            <span class="chip">Posti — 6,90 €</span>
+          </div>
+
+          <div class="mt-3 flex items-center justify-center gap-3 flex-wrap">
+            <!-- NOUTO 0 € -->
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+              <input type="hidden" name="cmd" value="_xclick">
+              <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
+              <input type="hidden" name="item_name" value="RUMAT Pipo (nouto)">
+              <input type="hidden" name="amount" value="59.00">
+              <input type="hidden" name="currency_code" value="EUR">
+              <input type="hidden" name="shipping" value="0.00">
+              <input type="hidden" name="no_shipping" value="1">
+              <input type="submit" value="Osta – Nouto 0 €" class="btn btn-dark cursor-pointer">
+            </form>
+            <!-- POSTI 6,90 € -->
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+              <input type="hidden" name="cmd" value="_xclick">
+              <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
+              <input type="hidden" name="item_name" value="RUMAT Pipo (posti)">
+              <input type="hidden" name="amount" value="59.00">
+              <input type="hidden" name="currency_code" value="EUR">
+              <input type="hidden" name="shipping" value="6.90">
+              <input type="hidden" name="no_shipping" value="2">
+              <input type="submit" value="Osta – Posti 6,90 €" class="btn cursor-pointer">
+            </form>
+          </div>
         </div>
       </div>
+
     </div>
   </section>
 
@@ -167,8 +221,9 @@
       <div>
         <h5 class="text-sm text-stone-400">Tilaukset</h5>
         <ul class="mt-2 space-y-2 text-sm">
-          <li>Toimitus: nouto tai Posti</li>
-          <li>Maksa: PayPal</li>
+          <li>Nouto (sovitusti) — 0 €</li>
+          <li>Posti — 6,90 € (lisätään kassalla)</li>
+          <li>Hinnat sisältävät ALV:n • Palautus 14 vrk</li>
         </ul>
       </div>
     </div>
