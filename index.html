@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>RUMAT.STUDIO</title>
+  <meta name="description" content="Helsinki — Contemporary textiles, built to last."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{--acc-1:#0E2016;--acc-2:#E4EAE4;--acc-3:#3B3A36}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial}
+    .serif{font-family:"Libre Baskerville",serif}
+    .hero-fixed{position:fixed;inset:0;z-index:-1}
+    .btn{border-radius:9999px;padding:.6rem 1rem;border:1px solid rgb(214 211 209)}
+    .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
+  </style>
+</head>
+<body class="bg-stone-50 text-stone-900">
+  <!-- HERO (pysyvä taustakuva) -->
+  <div class="hero-fixed">
+    <img src="https://images.unsplash.com/photo-1504280390368-3971edfbd5f6?auto=format&fit=crop&w=2400&q=80"
+         alt="Lapin erämaa" class="w-full h-full object-cover">
+    <div class="absolute inset-0 bg-gradient-to-b from-black/15 via-black/25 to-black/35"></div>
+  </div>
+
+  <!-- Yläpalkki -->
+  <header class="fixed top-0 left-0 right-0 z-50">
+    <div id="header-bg" class="absolute inset-0 bg-stone-50/0 backdrop-blur-sm border-b border-stone-200/0 transition-all"></div>
+    <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
+      <a href="#etusivu" class="flex items-center gap-3">
+        <div class="h-9 w-9 grid place-items-center rounded-xl ring-1 ring-stone-300 bg-white/80">
+          <span class="-rotate-90 serif text-2xl font-black text-stone-900">R</span>
+        </div>
+        <span class="hidden sm:inline text-sm uppercase tracking-wide font-semibold">RUMAT.STUDIO</span>
+      </a>
+      <nav class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
+        <a href="#etusivu" class="hover:underline underline-offset-4 font-semibold">Etusivu</a>
+        <a href="#tuotteet" class="hover:underline underline-offset-4 font-semibold">Tuotteet</a>
+        <a href="#tarina" class="hover:underline underline-offset-4 font-semibold">Tarina</a>
+        <a href="#yhteys" class="hover:underline underline-offset-4 font-semibold">Yhteystiedot</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ETUSIVU -->
+  <section id="etusivu" class="h-screen grid place-items-center text-stone-50 px-4">
+    <div id="hero-text" class="text-center transition-transform">
+      <h1 class="serif text-3xl sm:text-5xl tracking-[.14em] uppercase drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+        LIIAN RUMAT OLLAKSEEN TOTTA
+      </h1>
+      <div class="mt-6 flex justify-center">
+        <div class="h-9 w-9 grid place-items-center rounded-xl ring-1 ring-stone-300 bg-white/80">
+          <span class="-rotate-90 serif text-2xl font-black text-stone-900">R</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Esittelypalkki -->
+  <section class="py-12 bg-stone-50/90">
+    <div class="mx-auto max-w-3xl px-6 text-center">
+      <p class="text-xl sm:text-2xl">Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Valmistamme pieniä eriä Suomessa ja EU:ssa, jotta vaate kestää vuosia ja tekijät näkyvät.</p>
+    </div>
+  </section>
+
+  <!-- TUOTTEET -->
+  <section id="tuotteet" class="py-14 bg-white">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 class="serif text-3xl mb-6">Tuotteet</h2>
+
+      <!-- Tuote 1 -->
+      <div class="mb-12">
+        <div class="relative">
+          <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200"><img id="p1a" class="w-full h-full object-cover" alt="RUMAT Sling 1"></div>
+            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200"><img id="p1b" class="w-full h-full object-cover" alt="RUMAT Sling 2"></div>
+          </div>
+          <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
+        </div>
+        <div class="mt-6 text-center">
+          <h3 class="serif text-2xl">RUMAT Sling</h3>
+          <p class="mt-1 text-stone-700">Cordura®-kangas, modulaarinen hihna. Koko: 28 × 16 × 7 cm.</p>
+          <div class="mt-2 font-semibold">€149,00</div>
+          <form class="inline-block mt-3" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+            <input type="hidden" name="cmd" value="_xclick">
+            <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
+            <input type="hidden" name="item_name" value="RUMAT Sling">
+            <input type="hidden" name="amount" value="149.00">
+            <input type="hidden" name="currency_code" value="EUR">
+            <input type="submit" value="Osta PayPalilla" class="btn bg-stone-900 text-stone-50 cursor-pointer">
+          </form>
+        </div>
+      </div>
+
+      <!-- Tuote 2 -->
+      <div class="mb-6">
+        <div class="relative">
+          <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200"><img id="p2a" class="w-full h-full object-cover" alt="RUMAT Pipo 1"></div>
+            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200"><img id="p2b" class="w-full h-full object-cover" alt="RUMAT Pipo 2"></div>
+          </div>
+          <button id="next2" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
+        </div>
+        <div class="mt-6 text-center">
+          <h3 class="serif text-2xl">RUMAT Pipo</h3>
+          <p class="mt-1 text-stone-700">Käsinneulottu mohair-sekoite. Koko: päänympärys 54–58 cm.</p>
+          <div class="mt-2 font-semibold">€59,00</div>
+          <form class="inline-block mt-3" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+            <input type="hidden" name="cmd" value="_xclick">
+            <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
+            <input type="hidden" name="item_name" value="RUMAT Pipo">
+            <input type="hidden" name="amount" value="59.00">
+            <input type="hidden" name="currency_code" value="EUR">
+            <input type="submit" value="Osta PayPalilla" class="btn bg-stone-900 text-stone-50 cursor-pointer">
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TARINA -->
+  <section id="tarina" class="py-14 bg-stone-50/90">
+    <div class="mx-auto max-w-3xl px-6">
+      <h2 class="serif text-3xl mb-4">Tarina</h2>
+      <p>Kirjoita tähän yrityksen matkaa. Voit muuttaa tekstiä myöhemmin admin-versiossa.</p>
+    </div>
+  </section>
+
+  <!-- YHTEYSTIEDOT / FOOTER -->
+  <footer id="yhteys" class="pt-14 bg-stone-900 text-stone-200">
+    <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
+      <div>
+        <div class="uppercase tracking-wide">RUMAT.STUDIO</div>
+        <div class="text-stone-400 text-sm mt-1">Helsinki — Contemporary textiles, built to last.</div>
+      </div>
+      <div>
+        <h5 class="text-sm text-stone-400">Yhteys</h5>
+        <ul class="mt-2 space-y-2 text-sm">
+          <li><a href="mailto:hello@rumat.fi" class="hover:underline">hello@rumat.fi</a></li>
+          <li><a href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer" class="hover:underline">Instagram</a></li>
+          <li>Rovaniemi — Helsinki</li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="text-sm text-stone-400">Tilaukset</h5>
+        <ul class="mt-2 space-y-2 text-sm">
+          <li>Toimitus: nouto tai Posti</li>
+          <li>Maksa: PayPal</li>
+        </ul>
+      </div>
+    </div>
+    <div class="py-8 text-center text-xs text-stone-500">© <span id="year"></span> RUMAT.STUDIO</div>
+  </footer>
+
+  <script>
+    // header taustan vahvistus ja hero-tekstin liike
+    const headerBg = document.getElementById('header-bg');
+    const heroText = document.getElementById('hero-text');
+    const onScroll = () => {
+      const y = window.scrollY || 0;
+      const vh = window.innerHeight || 1;
+      const p = Math.min(1, Math.max(0, y / 140));
+      headerBg.style.backgroundColor = `rgba(248,247,245,${p})`;
+      headerBg.style.borderColor = `rgba(214,211,209,${p})`;
+      headerBg.style.borderBottomWidth = p ? '1px' : '0px';
+      heroText.style.transform = `translateY(${-22 * Math.min(1, (y / (vh*0.9))) }vh)`;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Karusellit (2 kuvaa näkyy, nuolesta seuraavat)
+    const slingImgs = [
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1400&q=80"
+    ];
+    const pipoImgs = [
+      "https://images.unsplash.com/photo-1516478177764-9fe5bd7e9718?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1618354691547-85f383d97047?auto=format&fit=crop&w=1400&q=80"
+    ];
+    let i1 = 0, i2 = 0;
+    const setPair = (arr, aId, bId, i) => {
+      const a = document.getElementById(aId), b = document.getElementById(bId);
+      if (!a || !b) return;
+      const n = arr.length;
+      a.src = arr[(i % n + n) % n];
+      b.src = arr[((i+1) % n + n) % n];
+    };
+    setPair(slingImgs, "p1a", "p1b", i1);
+    setPair(pipoImgs,  "p2a", "p2b", i2);
+    document.getElementById('next1').addEventListener('click', ()=>{ i1=(i1+1)%slingImgs.length; setPair(slingImgs,"p1a","p1b",i1); });
+    document.getElementById('next2').addEventListener('click', ()=>{ i2=(i2+1)%pipoImgs.length; setPair(pipoImgs,"p2a","p2b",i2); });
+  </script>
+</body>
+</html>
