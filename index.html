@@ -8,19 +8,47 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- ===== Brändityylit ===== -->
   <style>
-    :root{--acc-1:#0E2016;--acc-2:#E4EAE4;--acc-3:#3B3A36}
-    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial}
+    /* RUMAT.STUDIO – brändivärit (kuvastasi) */
+    :root{
+      --brand-deep:  #345563; /* syvä sinivihreä */
+      --brand-ink:   #202020; /* lähes musta */
+      --brand-olive: #A1A266; /* oliivi accent */
+      --brand-slate: #789FAB; /* siniharmaa */
+      --brand-ivory: #F6F6F4; /* lämmin valkoinen */
+      --brand-mist:  #DEEEEE; /* vaalea sinivihreä */
+    }
+    body{
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
+      background:#F8F7F5;
+      color:#202020;
+    }
     .serif{font-family:"Libre Baskerville",serif}
     .hero-fixed{position:fixed;inset:0;z-index:-1}
-    .btn{border-radius:9999px;padding:.6rem 1rem;border:1px solid rgb(214 211 209)}
-    .btn-dark{background:#0b0f0e;color:#f8fafb}
-    .chip{font-size:.78rem;padding:.25rem .5rem;border-radius:9999px;border:1px solid rgb(214 211 209);background:#fff}
+    .text-brand{color:var(--brand-deep)}
+    .bg-brand{background:var(--brand-deep)}
+    .btn{
+      border-radius:9999px;
+      padding:.6rem 1rem;
+      border:1px solid rgb(214 211 209);
+      transition:transform .06s ease, box-shadow .12s ease, background-color .15s;
+    }
+    .btn:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(0,0,0,.12); }
+    .btn-dark{ background:var(--brand-ink); color:#fff; border-color:#1b1b1b; }
+    .btn-olive{ background:var(--brand-olive); color:#202020; border-color:#8f945a; }
+    .chip{
+      font-size:.78rem; padding:.25rem .5rem; border-radius:9999px;
+      border:1px solid rgb(214 211 209); background:#fff;
+    }
+    .chip-olive{ border-color:var(--brand-olive); color:var(--brand-olive); }
     .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
   </style>
 </head>
+
 <body class="bg-stone-50 text-stone-900">
-  <!-- HERO (pysyvä Lapin taustakuva) -->
+  <!-- ===== HERO (pysyvä Lapin taustakuva) ===== -->
   <div class="hero-fixed">
     <!-- Antamasi Unsplash-kuva + fallback -->
     <img
@@ -33,7 +61,7 @@
     <div class="absolute inset-0 bg-gradient-to-b from-black/5 via-black/12 to-black/22"></div>
   </div>
 
-  <!-- Yläpalkki -->
+  <!-- ===== Yläpalkki ===== -->
   <header class="fixed top-0 left-0 right-0 z-50">
     <div id="header-bg" class="absolute inset-0 bg-stone-50/0 backdrop-blur-sm border-b border-stone-200/0 transition-all"></div>
     <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
@@ -52,10 +80,10 @@
     </div>
   </header>
 
-  <!-- ETUSIVU -->
+  <!-- ===== ETUSIVU ===== -->
   <section id="etusivu" class="h-screen grid place-items-center text-stone-50 px-4">
     <div id="hero-text" class="text-center transition-transform">
-      <!-- Leveä, isokokoinen otsikko (kuvan tyylinen) -->
+      <!-- Leveä, isokokoinen otsikko -->
       <h1
         class="uppercase font-semibold tracking-[0.30em]
                text-4xl sm:text-6xl md:text-7xl lg:text-8xl
@@ -72,7 +100,7 @@
     </div>
   </section>
 
-  <!-- Esittelypalkki -->
+  <!-- ===== Esittelypalkki ===== -->
   <section class="py-12 bg-stone-50/90">
     <div class="mx-auto max-w-3xl px-6 text-center">
       <p class="text-xl sm:text-2xl">
@@ -81,7 +109,7 @@
     </div>
   </section>
 
-  <!-- TUOTTEET -->
+  <!-- ===== TUOTTEET ===== -->
   <section id="tuotteet" class="py-14 bg-white">
     <div class="mx-auto max-w-6xl px-4">
       <div class="flex items-center justify-between mb-2">
@@ -114,7 +142,7 @@
           <!-- Toimitusvaihtoehdot: Nouto 0 € / Posti 6,90 € -->
           <div class="mt-4 flex items-center justify-center gap-2">
             <span class="chip">Nouto (sovitusti) — 0 €</span>
-            <span class="chip">Posti — 6,90 €</span>
+            <span class="chip chip-olive">Posti — 6,90 €</span>
           </div>
 
           <div class="mt-3 flex items-center justify-center gap-3 flex-wrap">
@@ -138,7 +166,7 @@
               <input type="hidden" name="currency_code" value="EUR">
               <input type="hidden" name="shipping" value="6.90">
               <input type="hidden" name="no_shipping" value="2"><!-- pyydä osoite -->
-              <input type="submit" value="Osta – Posti 6,90 €" class="btn cursor-pointer">
+              <input type="submit" value="Osta – Posti 6,90 €" class="btn btn-olive cursor-pointer">
             </form>
           </div>
         </div>
@@ -165,7 +193,7 @@
 
           <div class="mt-4 flex items-center justify-center gap-2">
             <span class="chip">Nouto (sovitusti) — 0 €</span>
-            <span class="chip">Posti — 6,90 €</span>
+            <span class="chip chip-olive">Posti — 6,90 €</span>
           </div>
 
           <div class="mt-3 flex items-center justify-center gap-3 flex-wrap">
@@ -187,7 +215,7 @@
               <input type="hidden" name="currency_code" value="EUR">
               <input type="hidden" name="shipping" value="6.90">
               <input type="hidden" name="no_shipping" value="2">
-              <input type="submit" value="Osta – Posti 6,90 €" class="btn cursor-pointer">
+              <input type="submit" value="Osta – Posti 6,90 €" class="btn btn-olive cursor-pointer">
             </form>
           </div>
         </div>
@@ -196,7 +224,7 @@
     </div>
   </section>
 
-  <!-- TARINA -->
+  <!-- ===== TARINA ===== -->
   <section id="tarina" class="py-14 bg-stone-50/90">
     <div class="mx-auto max-w-3xl px-6">
       <h2 class="serif text-3xl mb-4">Tarina</h2>
@@ -207,7 +235,7 @@
     </div>
   </section>
 
-  <!-- YHTEYSTIEDOT / FOOTER -->
+  <!-- ===== YHTEYSTIEDOT / FOOTER ===== -->
   <footer id="yhteys" class="pt-14 bg-stone-900 text-stone-200">
     <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
       <div>
@@ -234,6 +262,7 @@
     <div class="py-8 text-center text-xs text-stone-500">© <span id="year"></span> RUMAT.STUDIO</div>
   </footer>
 
+  <!-- ===== Skriptit ===== -->
   <script>
     // Yläpalkin taustan vahvistus scrollissa + hero-tekstin pehmeä liike
     const headerBg = document.getElementById('header-bg');
@@ -244,7 +273,7 @@
       if (y === lastY) return; lastY = y;
       const vh = window.innerHeight || 1;
       const p = Math.min(1, Math.max(0, y / 140));
-      headerBg.style.backgroundColor = `rgba(248,247,245,${p})`;
+      headerBg.style.backgroundColor = `rgba(248,247,245,${p})`; // (lämmin valkoinen tausta)
       headerBg.style.borderColor = `rgba(214,211,209,${p})`;
       headerBg.style.borderBottomWidth = p ? '1px' : '0px';
       const t = -22 * Math.min(1, y / (vh * 0.9));
@@ -275,7 +304,6 @@
       imgEl.onerror = ()=>{ imgEl.onerror=null; imgEl.src = FALLBACK; };
       imgEl.src = url;
     }
-
     const setPair = (arr, aId, bId, i) => {
       const a = document.getElementById(aId), b = document.getElementById(bId);
       if (!a || !b) return;
