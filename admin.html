@@ -7,26 +7,27 @@
   <style>
     :root{--ink:#202020;--edge:#dadada}
     body{font:16px system-ui,Segoe UI,Inter,sans-serif;background:#f6f6f4;color:var(--ink);margin:0}
-    .wrap{max-width:920px;margin:40px auto;padding:20px;background:#fff;border:1px solid var(--edge);border-radius:14px}
+    .wrap{max-width:980px;margin:40px auto;padding:20px;background:#fff;border:1px solid var(--edge);border-radius:14px}
     h1{margin:0 0 10px 0}
     .row{display:flex;gap:.6rem;flex-wrap:wrap;margin:.6rem 0}
     input,button,textarea{font:inherit}
-    input{padding:.55rem .7rem;border:1px solid var(--edge);border-radius:10px}
+    input{padding:.55rem .7rem;border:1px solid var(--edge);border-radius:10px;width:100%}
     button{padding:.55rem 1rem;border-radius:9999px;border:1px solid #2a2a2a;background:#202020;color:#fff;cursor:pointer}
     button.secondary{background:#789FAB;border-color:#789FAB}
-    textarea{width:100%;min-height:380px;padding:.8rem;border:1px solid var(--edge);border-radius:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+    textarea{width:100%;min-height:320px;padding:.8rem;border:1px solid var(--edge);border-radius:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
     .hint{font-size:.9rem;color:#666}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
-    label{font-size:.9rem;color:#444}
+    label{font-size:.9rem;color:#444;display:block;margin-bottom:.2rem}
+    .small{font-size:.85rem;color:#555}
   </style>
 </head>
 <body>
   <div class="wrap">
     <h1>RUMAT Admin</h1>
-    <p class="hint">Kirjaudu salasanalla, lataa nykyinen sisältö, muokkaa ja tallenna. Salasana ei koskaan näy sivukoodissa – se tarkistetaan Workerissa.</p>
+    <p class="hint">Kirjaudu salasanalla, lataa nykyinen sisältö, muokkaa ja tallenna. Salasana tarkistetaan Workerissa, eikä se näy sivukoodissa.</p>
 
     <div class="row">
-      <input id="pwd" type="password" placeholder="Salasana">
+      <input id="pwd" type="password" placeholder="Salasana (ADMIN_PASSWORD)">
       <button id="login">Kirjaudu</button>
       <button id="logout" class="secondary">Ulos</button>
     </div>
@@ -42,17 +43,35 @@
       </div>
     </div>
 
-    <div class="row">
+    <div class="grid" style="margin-top:.6rem">
+      <div>
+        <label>PayPal-tili (business email)</label>
+        <input id="f_paypal" placeholder="kauppa@oma.fi">
+      </div>
+      <div>
+        <label>Instagram-osoite</label>
+        <input id="f_ig" placeholder="https://instagram.com/rumat.studio">
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:.6rem">
+      <div>
+        <label>Laukku – kuvien URL-osoitteet (yksi per rivi)</label>
+        <textarea id="f_laukku_imgs" class="small" placeholder="https://.../1.jpg&#10;https://.../2.jpg"></textarea>
+      </div>
+      <div>
+        <label>Pipo – kuvien URL-osoitteet (yksi per rivi)</label>
+        <textarea id="f_pipo_imgs" class="small" placeholder="https://.../1.jpg&#10;https://.../2.jpg"></textarea>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:.6rem">
       <button id="pull" class="secondary">Lataa sisältö</button>
       <button id="push">Tallenna sisältö</button>
     </div>
 
-    <textarea id="json" placeholder='{"brandName":"RUMAT.STUDIO","hero":{"headline":"...","image":"..."}, "products":[...]}'></textarea>
+    <textarea id="json" placeholder='{"paypalBusiness":"...","hero":{"headline":"...","image":"..."},"products":[...]}'></textarea>
     <pre id="out" class="hint"></pre>
-
-    <p class="hint">Vinkki: pidä rakenne muodossa
-    <code>{"brandName","hero":{"headline","image"},"products":[{"id","name","price","description","images":[...] }],"contact":{"email","instagram","location","shipping"}}</code>.
-    </p>
   </div>
 
   <script>
@@ -60,27 +79,49 @@
     const out = (m)=> document.getElementById('out').textContent =
       (typeof m==='string') ? m : JSON.stringify(m,null,2);
 
-    // Pieni apu: synkkaa lomake <-> textarea
+    const el = id => document.getElementById(id);
+
+    function lines(id){
+      return el(id).value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+    }
+
     function applyFormToJson(){
       let data = {};
-      try{ data = JSON.parse(document.getElementById('json').value || "{}"); }catch{}
-      if(!data.hero) data.hero = {};
-      const headline = document.getElementById('f_headline').value.trim();
-      const image    = document.getElementById('f_image').value.trim();
-      if(headline) data.hero.headline = headline;
-      if(image)    data.hero.image    = image;
-      document.getElementById('json').value = JSON.stringify(data,null,2);
+      try{ data = JSON.parse(el('json').value || "{}"); }catch{}
+      data.hero = data.hero || {};
+      if(el('f_headline').value.trim()) data.hero.headline = el('f_headline').value.trim();
+      if(el('f_image').value.trim())    data.hero.image    = el('f_image').value.trim();
+      if(el('f_paypal').value.trim())   data.paypalBusiness= el('f_paypal').value.trim();
+
+      data.contact = data.contact || {};
+      if(el('f_ig').value.trim()) data.contact.instagram = el('f_ig').value.trim();
+
+      const lau = lines('f_laukku_imgs');
+      const pip = lines('f_pipo_imgs');
+      data.products = data.products || [];
+      const byId = Object.fromEntries(data.products.map(p=>[p.id,p]));
+      if(!byId.laukku) { byId.laukku = { id:'laukku', images:[] }; data.products.push(byId.laukku); }
+      if(!byId.pipo)   { byId.pipo   = { id:'pipo',   images:[] }; data.products.push(byId.pipo); }
+      if(lau.length) byId.laukku.images = lau;
+      if(pip.length) byId.pipo.images   = pip;
+
+      el('json').value = JSON.stringify(data,null,2);
     }
+
     function applyJsonToForm(){
       try{
-        const data = JSON.parse(document.getElementById('json').value || "{}");
-        document.getElementById('f_headline').value = data?.hero?.headline || "";
-        document.getElementById('f_image').value    = data?.hero?.image || "";
+        const d = JSON.parse(el('json').value || "{}");
+        el('f_headline').value = d?.hero?.headline || "";
+        el('f_image').value    = d?.hero?.image || "";
+        el('f_paypal').value   = d?.paypalBusiness || "";
+        el('f_ig').value       = d?.contact?.instagram || "";
+        el('f_laukku_imgs').value = (d?.products?.find(p=>p.id==='laukku')?.images || []).join("\n");
+        el('f_pipo_imgs').value   = (d?.products?.find(p=>p.id==='pipo')?.images || []).join("\n");
       }catch{}
     }
 
-    document.getElementById('login').onclick = async () => {
-      const password = document.getElementById('pwd').value;
+    el('login').onclick = async () => {
+      const password = el('pwd').value;
       const r = await fetch(`${API_BASE}/api/login`, {
         method:'POST', credentials:'include',
         headers:{'content-type':'application/json'},
@@ -89,24 +130,22 @@
       out(await r.json());
     };
 
-    document.getElementById('logout').onclick = async () => {
-      const r = await fetch(`${API_BASE}/api/logout`, {
-        method:'POST', credentials:'include'
-      });
+    el('logout').onclick = async () => {
+      const r = await fetch(`${API_BASE}/api/logout`, { method:'POST', credentials:'include' });
       out(await r.json());
     };
 
-    document.getElementById('pull').onclick = async () => {
+    el('pull').onclick = async () => {
       const r = await fetch(`${API_BASE}/api/content`, { credentials:'include' });
       const text = await r.text();
-      document.getElementById('json').value = text || "{}";
+      el('json').value = text || "{}";
       applyJsonToForm();
       out("Ladattu.");
     };
 
-    document.getElementById('push').onclick = async () => {
+    el('push').onclick = async () => {
       applyFormToJson();
-      const body = document.getElementById('json').value || "{}";
+      const body = el('json').value || "{}";
       try{ JSON.parse(body); }catch{ return out("Virhe: JSON ei ole kelvollinen"); }
       const r = await fetch(`${API_BASE}/api/content`, {
         method:'PUT', credentials:'include',
@@ -116,8 +155,7 @@
       out(await r.json());
     };
 
-    // Päivitä tekstialueen muutoksista lomakekenttiin
-    document.getElementById('json').addEventListener('input', applyJsonToForm);
+    el('json').addEventListener('input', applyJsonToForm);
   </script>
 </body>
 </html>
