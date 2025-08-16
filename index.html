@@ -1,68 +1,357 @@
-<script>
-  // VAIHDA oma Worker-osoitteesi
-  const API_BASE = "https://rumat-backend.<tilisi>.workers.dev";
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>RUMAT.STUDIO</title>
+  <meta name="description" content="Pienet erät. Kestävä käyttö. Pohjoiset sävyt."/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{ --ink:#202020; }
+    html,body{height:100%}
+    body{display:flex;flex-direction:column;background:#f8f8f6;color:var(--ink)}
+    main{flex:1 0 auto} footer{flex-shrink:0}
 
-  (async () => {
-    try {
-      const r = await fetch(`${API_BASE}/api/content`, { credentials:"include" });
-      if (!r.ok) return; // jos ei vielä käytössä, poistutaan hiljaa
-      const data = await r.json();
+    /* Logo “R” sivuttain */
+    .logo-r{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;
+      background:#ffffff25;border:1px solid #ffffff80;backdrop-filter:blur(6px)}
+    .logo-r span{display:inline-block;transform:rotate(-90deg);font-weight:800;color:#fff;letter-spacing:1px}
 
-      // 1) Hero
-      if (data?.hero?.headline) {
-        const h = document.getElementById('hero-text')?.querySelector('h1');
-        if (h) h.textContent = data.hero.headline;
-      }
-      if (data?.hero?.image) {
-        const bg = document.querySelector('.hero-fixed img');
-        if (bg) bg.src = data.hero.image;
-      }
-
-      // 2) PayPal business -sähköposti kaikkiin osto-nappeihin
-      if (data?.paypalBusiness) {
-        document.querySelectorAll('input[name="business"]').forEach(inp => {
-          inp.value = data.paypalBusiness;
-        });
-      }
-
-      // 3) Tuotekuvat – korvaa taulukot ja päivitä näkyvät
-      if (Array.isArray(data?.products)) {
-        const byId = Object.fromEntries(data.products.map(p => [p.id, p]));
-        // Laukku
-        if (byId.laukku?.images?.length) {
-          window.slingImgs = byId.laukku.images.slice();
-          // Nollaa ja näytä pari
-          window.i1 = 0;
-          const setWithFallback = (imgEl, url)=>{
-            if(!imgEl) return;
-            imgEl.onerror = ()=>{ imgEl.onerror=null; imgEl.src = "https://placehold.co/1400x1750?text=Kuva"; };
-            imgEl.src = url;
-          };
-          const a = document.getElementById('p1a'), b = document.getElementById('p1b');
-          setWithFallback(a, window.slingImgs[0]);
-          setWithFallback(b, window.slingImgs[1 % window.slingImgs.length]);
-        }
-        // Pipo
-        if (byId.pipo?.images?.length) {
-          window.pipoImgs = byId.pipo.images.slice();
-          window.i2 = 0;
-          const setWithFallback = (imgEl, url)=>{
-            if(!imgEl) return;
-            imgEl.onerror = ()=>{ imgEl.onerror=null; imgEl.src = "https://placehold.co/1400x1750?text=Kuva"; };
-            imgEl.src = url;
-          };
-          const a = document.getElementById('p2a'), b = document.getElementById('p2b');
-          setWithFallback(a, window.pipoImgs[0]);
-          setWithFallback(b, window.pipoImgs[1 % window.pipoImgs.length]);
-        }
-
-        // Hintoja/tekstejä voi myös korvata, jos haluat (esim. data.products[].price)
-        // Voit antaa tuotteelle id:t ja hakea vastaavat <h3>/<div> jne. myöhemmin.
-      }
-
-    } catch(e) {
-      // Ei pakollinen; jos backend ei käytössä, sivu toimii staattisena
-      console.warn("Sisältöä ei luettu backendistä:", e);
+    /* HERO: kiinteä taustakuva */
+    .hero{
+      min-height:100svh; position:relative; overflow:hidden;
+      background-size:cover;background-position:center;background-attachment:fixed;
     }
-  })();
-</script>
+    .hero::before{
+      content:""; position:absolute; inset:0;
+      background:linear-gradient(to bottom, rgba(16,20,20,.35), rgba(16,20,20,.45) 42%, rgba(248,248,246,.86));
+    }
+
+    /* 2-kuvan karuselli */
+    .carousel{position:relative;overflow:hidden}
+    .track{display:flex;gap:12px;transition:transform .35s ease}
+    .track img{width:min(520px,48vw);height:420px;object-fit:cover;border-radius:14px;background:#fff}
+    .car-btn{position:absolute;top:50%;transform:translateY(-50%);background:#fff;border:1px solid #e5e5e5;
+      width:38px;height:38px;border-radius:9999px;display:grid;place-items:center}
+    .car-left{left:6px}.car-right{right:6px}
+
+    /* Tuotekortti */
+    .card{background:#fff;border-radius:16px;padding:1.5rem;border:1px solid rgba(0,0,0,.08)}
+  </style>
+</head>
+<body>
+  <!-- Sticky header -->
+  <header class="sticky top-0 z-50 border-b border-black/5 bg-white/70 backdrop-blur">
+    <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+      <a href="#/" class="flex items-center gap-3 text-stone-900">
+        <div class="h-9 w-9 rounded-xl ring-1 ring-stone-300 grid place-items-center bg-white/70">
+          <div class="rotate-[-90deg] font-bold">R</div>
+        </div>
+        <div class="font-semibold tracking-wide">RUMAT.STUDIO</div>
+      </a>
+      <nav class="flex items-center gap-6 text-sm text-stone-800">
+        <a class="hover:underline underline-offset-4" href="#/">Etusivu</a>
+        <a class="hover:underline underline-offset-4" href="#tuotteet">Tuotteet</a>
+        <a class="hover:underline underline-offset-4" href="#tarina">Tarina</a>
+        <a class="hover:underline underline-offset-4" href="#yhteys">Yhteystiedot</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO (Lapin kuva) -->
+    <section id="/" class="hero"
+      style="background-image:url('https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80')">
+      <div class="relative z-10 h-[100svh] grid place-items-center text-center">
+        <div id="hero-text">
+          <h1 id="hero-headline"
+              class="px-3 text-white/95 font-serif text-[clamp(28px,5.5vw,64px)] tracking-[0.18em] drop-shadow-[0_6px_16px_rgba(0,0,0,.35)]">
+            LIIAN RUMAT OLLAKSEEN TOTTA
+          </h1>
+          <div class="mt-6 mx-auto logo-r"><span>R</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Esittely -->
+    <section class="py-12">
+      <div class="mx-auto max-w-3xl px-4 text-center">
+        <h2 class="font-serif text-2xl">RUMAT.STUDIO</h2>
+        <p class="mt-4 text-stone-700">
+          Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Valmistamme tuotteet käsityönä
+          Suomessa ja EU:ssa – jotta ne kestävät vuosia ja tekijät näkyvät.
+        </p>
+      </div>
+    </section>
+
+    <!-- Tuotteet -->
+    <section id="tuotteet" class="py-10">
+      <div class="mx-auto max-w-6xl px-4">
+        <h2 class="font-serif text-3xl mb-6">Tuotteet</h2>
+        <div class="grid gap-8 md:gap-10">
+
+          <!-- Tuote 1: Laukku -->
+          <div class="card">
+            <div class="carousel mb-4">
+              <div class="track">
+                <img id="p1a" alt="Laukku 1" loading="lazy" decoding="async">
+                <img id="p1b" alt="Laukku 2" loading="lazy" decoding="async">
+              </div>
+              <button id="prev1" class="car-btn car-left" aria-label="Edellinen">‹</button>
+              <button id="next1" class="car-btn car-right" aria-label="Seuraava">›</button>
+            </div>
+            <h3 class="font-serif text-2xl">Laukku</h3>
+            <p class="mt-2 text-stone-700">
+              Täysin kierrätysmateriaaleista valmistettu sling-tyylinen laukku.
+              Cordura®-kierrätyskangas, YKK®-vetoketju, säädettävä hihna. Rakennettu käyttöön.
+              Mitat: 28 × 16 × 7 cm. Valmistettu Suomessa.
+            </p>
+            <div class="mt-3 font-medium">€149,00</div>
+
+            <div class="mt-3 flex items-center justify-center gap-2">
+              <span class="text-xs px-2 py-1 rounded-full border border-stone-300">Nouto (sovitusti) — 0 €</span>
+              <span class="text-xs px-2 py-1 rounded-full border border-stone-300">Posti — 6,90 €</span>
+            </div>
+
+            <!-- PayPal -->
+            <div class="mt-4 flex items-center justify-center gap-3 flex-wrap">
+              <!-- NOUTO -->
+              <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+                <input type="hidden" name="cmd" value="_xclick">
+                <input type="hidden" name="business" value="kauppa@oma.fi"><!-- VAIHDA -->
+                <input type="hidden" name="item_name" value="Laukku (nouto)">
+                <input type="hidden" name="amount" value="149.00">
+                <input type="hidden" name="currency_code" value="EUR">
+                <input type="hidden" name="shipping" value="0.00">
+                <input type="hidden" name="no_shipping" value="1">
+                <input type="submit" value="Osta – Nouto 0 €"
+                       class="px-4 py-2 rounded-full border border-stone-700 bg-stone-900 text-white cursor-pointer">
+              </form>
+              <!-- POSTI -->
+              <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+                <input type="hidden" name="cmd" value="_xclick">
+                <input type="hidden" name="business" value="kauppa@oma.fi"><!-- VAIHDA -->
+                <input type="hidden" name="item_name" value="Laukku (posti)">
+                <input type="hidden" name="amount" value="149.00">
+                <input type="hidden" name="currency_code" value="EUR">
+                <input type="hidden" name="shipping" value="6.90">
+                <input type="hidden" name="no_shipping" value="2">
+                <input type="submit" value="Osta – Posti 6,90 €"
+                       class="px-4 py-2 rounded-full border border-stone-300 bg-white cursor-pointer">
+              </form>
+            </div>
+          </div>
+
+          <!-- Tuote 2: Pipo -->
+          <div class="card">
+            <div class="carousel mb-4">
+              <div class="track">
+                <img id="p2a" alt="Pipo 1" loading="lazy" decoding="async">
+                <img id="p2b" alt="Pipo 2" loading="lazy" decoding="async">
+              </div>
+              <button id="prev2" class="car-btn car-left" aria-label="Edellinen">‹</button>
+              <button id="next2" class="car-btn car-right" aria-label="Seuraava">›</button>
+            </div>
+            <h3 class="font-serif text-2xl">Pipo</h3>
+            <p class="mt-2 text-stone-700">
+              Käsinneulottu mohair-sekoite. Lämmin, hengittävä ja kevyt. Päänympärys 54–58 cm (joustava),
+              korkeus noin 22 cm.
+            </p>
+            <div class="mt-3 font-medium">€59,00</div>
+
+            <div class="mt-3 flex items-center justify-center gap-2">
+              <span class="text-xs px-2 py-1 rounded-full border border-stone-300">Nouto (sovitusti) — 0 €</span>
+              <span class="text-xs px-2 py-1 rounded-full border border-stone-300">Posti — 6,90 €</span>
+            </div>
+
+            <!-- PayPal -->
+            <div class="mt-4 flex items-center justify-center gap-3 flex-wrap">
+              <!-- NOUTO -->
+              <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+                <input type="hidden" name="cmd" value="_xclick">
+                <input type="hidden" name="business" value="kauppa@oma.fi"><!-- VAIHDA -->
+                <input type="hidden" name="item_name" value="Pipo (nouto)">
+                <input type="hidden" name="amount" value="59.00">
+                <input type="hidden" name="currency_code" value="EUR">
+                <input type="hidden" name="shipping" value="0.00">
+                <input type="hidden" name="no_shipping" value="1">
+                <input type="submit" value="Osta – Nouto 0 €"
+                       class="px-4 py-2 rounded-full border border-stone-700 bg-stone-900 text-white cursor-pointer">
+              </form>
+              <!-- POSTI -->
+              <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+                <input type="hidden" name="cmd" value="_xclick">
+                <input type="hidden" name="business" value="kauppa@oma.fi"><!-- VAIHDA -->
+                <input type="hidden" name="item_name" value="Pipo (posti)">
+                <input type="hidden" name="amount" value="59.00">
+                <input type="hidden" name="currency_code" value="EUR">
+                <input type="hidden" name="shipping" value="6.90">
+                <input type="hidden" name="no_shipping" value="2">
+                <input type="submit" value="Osta – Posti 6,90 €"
+                       class="px-4 py-2 rounded-full border border-stone-300 bg-white cursor-pointer">
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Tarina -->
+    <section id="tarina" class="py-12">
+      <div class="mx-auto max-w-3xl px-4">
+        <h2 class="font-serif text-3xl mb-4">Tarina</h2>
+        <p class="text-stone-700">
+          RUMAT sai alkunsa Lapin erämaassa – tarpeesta tehdä käyttöä kestävää tekstiiliä
+          ja asusteita ilman turhaa koristelua. Jokaisessa erässä hiomme yksityiskohtia
+          vähän paremmaksi.
+        </p>
+      </div>
+    </section>
+
+    <!-- Yhteystiedot -->
+    <section id="yhteys" class="py-12">
+      <div class="mx-auto max-w-3xl px-4">
+        <h2 class="font-serif text-3xl mb-4">Yhteystiedot</h2>
+        <ul class="space-y-2">
+          <li>Sähköposti: <a id="email" class="underline" href="mailto:hello@rumat.fi">hello@rumat.fi</a></li>
+          <li>Instagram: <a id="ig" class="underline" target="_blank" rel="noreferrer" href="https://instagram.com/rumat.studio">@rumat.studio</a></li>
+          <li id="location">Rovaniemi — Helsinki</li>
+          <li id="shipping">Toimitus: Nouto (sovitusti) / Posti 6,90 €</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-10 bg-stone-900 text-stone-200">
+    <div class="mx-auto max-w-6xl px-4 py-10 grid sm:grid-cols-3 gap-8">
+      <div>
+        <div class="flex items-center gap-3">
+          <div class="logo-r" style="background:#ffffff18;border-color:#ffffff50"><span>R</span></div>
+          <div class="font-semibold tracking-wide">RUMAT.STUDIO</div>
+        </div>
+        <div class="mt-2 text-stone-300 text-sm">Pienet erät – kestävää käyttöä.</div>
+      </div>
+      <div>
+        <h5 class="text-stone-400 text-sm">Yhteys</h5>
+        <ul class="mt-2 space-y-2 text-sm">
+          <li><a id="email2" class="underline" href="mailto:hello@rumat.fi">hello@rumat.fi</a></li>
+          <li><a id="ig2" class="underline" target="_blank" rel="noreferrer" href="https://instagram.com/rumat.studio">Instagram</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="text-stone-400 text-sm">Tietoa</h5>
+        <ul class="mt-2 space-y-2 text-sm">
+          <li id="shipping2">Toimitus: Nouto (sovitusti) / Posti 6,90 €</li>
+        </ul>
+      </div>
+    </div>
+    <div class="text-center text-xs text-stone-400 pb-6">© <span id="year"></span> RUMAT.STUDIO</div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Oletuskuvat (voit vaihtaa)
+    let slingImgs = [
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1543975200-8e313fb04c4a?auto=format&fit=crop&w=1600&q=80"
+    ];
+    let pipoImgs = [
+      "https://images.unsplash.com/photo-1516478177764-9fe5bd7e9718?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1519415943484-9fa18778f9c0?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1503342162216-90329d0f0be0?auto=format&fit=crop&w=1600&q=80"
+    ];
+    const FALLBACK = "https://placehold.co/1400x1750?text=Kuva";
+    let i1 = 0, i2 = 0;
+
+    function setWithFallback(imgEl, url){
+      if(!imgEl) return;
+      imgEl.onerror = ()=>{ imgEl.onerror=null; imgEl.src = FALLBACK; };
+      imgEl.src = url;
+    }
+    function setPair(arr, aId, bId, idx){
+      const a = document.getElementById(aId), b = document.getElementById(bId);
+      if(!a || !b || !arr.length) return;
+      const n = arr.length;
+      setWithFallback(a, arr[(idx % n + n) % n]);
+      setWithFallback(b, arr[((idx+1) % n + n) % n]);
+    }
+
+    // Alustus
+    document.addEventListener('DOMContentLoaded', () => {
+      setPair(slingImgs, "p1a", "p1b", i1);
+      setPair(pipoImgs,  "p2a", "p2b", i2);
+
+      document.getElementById('next1').onclick = ()=>{ i1 = (i1+1) % slingImgs.length; setPair(slingImgs,"p1a","p1b",i1); };
+      document.getElementById('prev1').onclick = ()=>{ i1 = (i1-1+slingImgs.length) % slingImgs.length; setPair(slingImgs,"p1a","p1b",i1); };
+      document.getElementById('next2').onclick = ()=>{ i2 = (i2+1) % pipoImgs.length; setPair(pipoImgs,"p2a","p2b",i2); };
+      document.getElementById('prev2').onclick = ()=>{ i2 = (i2-1+pipoImgs.length) % pipoImgs.length; setPair(pipoImgs,"p2a","p2b",i2); };
+    });
+
+    // ---------- Backend-integraatio (valinnainen) ----------
+    const API_BASE = "https://rumat-backend.roope-aa.workers.dev"; // VAIHDA oma Worker-URL
+    const defaults = {
+      hero:{ headline:"LIIAN RUMAT OLLAKSEEN TOTTA",
+             image:"https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80" },
+      paypalBusiness:"kauppa@oma.fi",
+      products:[
+        { id:"laukku", images:[...slingImgs], name:"Laukku", price:"€149,00",
+          description:"Täysin kierrätysmateriaaleista valmistettu sling-tyylinen laukku." },
+        { id:"pipo",   images:[...pipoImgs],  name:"Pipo",   price:"€59,00",
+          description:"Käsinneulottu mohair-sekoite. Lämmin, hengittävä ja kevyt." }
+      ],
+      contact:{ email:"hello@rumat.fi", instagram:"https://instagram.com/rumat.studio",
+                location:"Rovaniemi — Helsinki", shipping:"Nouto (sovitusti) / Posti 6,90 €" }
+    };
+    function merge(a,b){ const o = structuredClone(a);
+      for(const k in b){ if(b[k] && typeof b[k]==='object' && !Array.isArray(b[k])) o[k]=merge(a[k]??{},b[k]); else o[k]=b[k]; }
+      return o;
+    }
+    (async ()=>{
+      try{
+        const r = await fetch(`${API_BASE}/api/content`, { credentials:'include' });
+        if(!r.ok) throw 0;
+        const data = await r.json().catch(()=> ({}));
+        const c = merge(defaults, data);
+
+        // Hero
+        if (c.hero?.headline) document.getElementById('hero-headline').textContent = c.hero.headline;
+        if (c.hero?.image) document.querySelector('.hero').style.backgroundImage = `url('${c.hero.image}')`;
+
+        // PayPal business
+        if (c.paypalBusiness){
+          document.querySelectorAll('input[name="business"]').forEach(inp=> inp.value=c.paypalBusiness);
+        }
+
+        // Yhteystiedot
+        if (c.contact?.email){
+          document.getElementById('email').href=`mailto:${c.contact.email}`;
+          document.getElementById('email').textContent=c.contact.email;
+          document.getElementById('email2').href=`mailto:${c.contact.email}`;
+          document.getElementById('email2').textContent=c.contact.email;
+        }
+        if (c.contact?.instagram){
+          document.getElementById('ig').href=c.contact.instagram;
+          document.getElementById('ig2').href=c.contact.instagram;
+        }
+        if (c.contact?.location) document.getElementById('location').textContent=c.contact.location;
+        if (c.contact?.shipping){
+          document.getElementById('shipping').textContent="Toimitus: "+c.contact.shipping;
+          document.getElementById('shipping2').textContent="Toimitus: "+c.contact.shipping;
+        }
+
+        // Tuotekuvat
+        const byId = Object.fromEntries((c.products||[]).map(p=>[p.id,p]));
+        if (byId.laukku?.images?.length){ slingImgs = byId.laukku.images.slice(); i1=0; setPair(slingImgs,"p1a","p1b",i1); }
+        if (byId.pipo?.images?.length){   pipoImgs  = byId.pipo.images.slice();  i2=0; setPair(pipoImgs,"p2a","p2b",i2); }
+
+      }catch(e){
+        // Ei backendia → käytetään oletuksia
+      }
+    })();
+  </script>
+</body>
+</html>
