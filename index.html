@@ -9,7 +9,7 @@
   <!-- Fontit + Tailwind -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -58,14 +58,9 @@
 
     <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
       <a href="#etusivu" class="flex items-center gap-3">
-        <!-- Pieni R, kaadettu 90° oikealle -->
+        <!-- NORMAALI PAKSU R – kaadettu 90° oikealle -->
         <div class="h-10 w-10 grid place-items-center rounded-xl border border-white/55 bg-white/92">
-          <svg class="h-6" viewBox="0 0 64 64" aria-label="RUMAT R" style="color:#345563">
-            <g fill="currentColor" transform="rotate(90 32 32)">
-              <path d="M4 6H26Q50 6 50 24T26 42H4V6Z"/>
-              <path d="M26 42L50 58H32L4 42Z"/>
-            </g>
-          </svg>
+          <span class="font-black text-[22px] leading-none text-[color:var(--brand-deep)] transform rotate-90 select-none">R</span>
         </div>
         <span class="hidden sm:inline text-sm uppercase tracking-widest font-semibold">RUMAT.STUDIO</span>
       </a>
@@ -89,15 +84,10 @@
         LIIAN RUMAT OLLAKSEEN TOTTA
       </h1>
       <div class="mt-9 flex justify-center">
-        <!-- Iso R, kaadettu 90° oikealle -->
+        <!-- Iso ympyrälogo: NORMAALI PAKSU R – kaadettu 90° oikealle -->
         <div class="h-28 w-28 sm:h-32 sm:w-32 grid place-items-center
                     rounded-full bg-white/92 ring-1 ring-white/70 shadow-soft">
-          <svg class="h-12 sm:h-14" viewBox="0 0 64 64" aria-label="RUMAT R" style="color:#202020">
-            <g fill="currentColor" transform="rotate(90 32 32)">
-              <path d="M4 6H26Q50 6 50 24T26 42H4V6Z"/>
-              <path d="M26 42L50 58H32L4 42Z"/>
-            </g>
-          </svg>
+          <span class="font-black text-6xl sm:text-7xl leading-none text-stone-900 transform rotate-90 select-none">R</span>
         </div>
       </div>
     </div>
@@ -284,7 +274,7 @@
 
   <!-- Skriptit -->
   <script>
-    // Header-sävy + hero-tekstin kevyt nosto (ilman "pomppua")
+    // Header-sävy + hero-tekstin kevyt nosto
     const headerBg = document.getElementById('header-bg');
     const heroText = document.getElementById('hero-text');
     let lastY = -1;
