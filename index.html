@@ -8,14 +8,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
     :root{
       --brand-deep:  #345563;
       --brand-ink:   #202020;
       --brand-olive: #A1A266;
       --brand-slate: #789FAB;
-      --brand-ivory: #F6F6F4;
+      --brand-ivory: #F6F6F4; /* = kuvapalkkien tausta */
     }
     body{
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
@@ -35,7 +34,7 @@
 </head>
 
 <body class="text-stone-900">
-  <!-- HERO tausta -->
+  <!-- Pysyvä hero-tausta -->
   <div class="hero-fixed">
     <img
       src="https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80"
@@ -50,7 +49,6 @@
   <header class="fixed top-0 left-0 right-0 z-50 text-white">
     <div id="header-bg" class="absolute inset-0 backdrop-blur-sm transition-all"
          style="background:rgba(120,159,171,.26); border-bottom:1px solid rgba(32,32,32,.0)"></div>
-
     <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
       <a href="#etusivu" class="flex items-center gap-3">
         <div class="h-10 w-10 grid place-items-center rounded-xl border border-white/55 bg-white/90">
@@ -85,7 +83,7 @@
     </div>
   </section>
 
-  <!-- Esittely -->
+  <!-- Intro-esittely -->
   <section class="py-12 bg-stone-50/90">
     <div class="mx-auto max-w-3xl px-6 text-center">
       <p class="text-xl sm:text-2xl">
@@ -94,10 +92,10 @@
     </div>
   </section>
 
-  <!-- ===== TUOTTEET: KOKOSIVUN LEVEÄT #DEEEEE-PALKIT ===== -->
+  <!-- ===================== TUOTTEET ===================== -->
 
-  <!-- Tuote 1: LAUKKU -->
-  <section id="tuotteet" style="background:#DEEEEE">
+  <!-- (A) LAUKKU – KUVAPALKki (#F6F6F4) -->
+  <section id="tuotteet" style="background:#F6F6F4">
     <div class="mx-auto max-w-6xl px-4 py-14">
       <div class="flex items-center justify-between mb-6">
         <h2 class="serif text-3xl">Tuotteet</h2>
@@ -116,8 +114,13 @@
         <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
         <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
       </div>
+    </div>
+  </section>
 
-      <div class="mt-6 text-center">
+  <!-- (B) LAUKKU – ESITTELYpalkki (#DEEEEE) -->
+  <section style="background:#DEEEEE">
+    <div class="mx-auto max-w-6xl px-4 py-12">
+      <div class="text-center">
         <h3 class="serif text-2xl">Laukku</h3>
         <p class="mt-1 text-stone-700">
           Täysin kierrätysmateriaaleista valmistettu sling-laukku. Kierrätetty purjekangas/tekstiili, hihna käytetystä turvavyöstä, metalliosat uudelleenkäytettyä varastoa.
@@ -158,8 +161,8 @@
     </div>
   </section>
 
-  <!-- Tuote 2: PIPO -->
-  <section style="background:#DEEEEE">
+  <!-- (C) PIPO – KUVAPALKki (#F6F6F4) -->
+  <section style="background:#F6F6F4">
     <div class="mx-auto max-w-6xl px-4 py-14">
       <div class="relative">
         <div class="grid md:grid-cols-2 gap-4 md:gap-6">
@@ -173,8 +176,13 @@
         <button id="prev2" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
         <button id="next2" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
       </div>
+    </div>
+  </section>
 
-      <div class="mt-6 text-center">
+  <!-- (D) PIPO – ESITTELYpalkki (#DEEEEE) -->
+  <section style="background:#DEEEEE">
+    <div class="mx-auto max-w-6xl px-4 py-12">
+      <div class="text-center">
         <h3 class="serif text-2xl">RUMAT Pipo</h3>
         <p class="mt-1 text-stone-700">Käsinneulottu mohair-sekoite. Korkeus n. 22 cm. Päänympärys 54–58 cm (joustava).</p>
         <div class="mt-2 font-semibold">€59,00</div>
@@ -252,9 +260,8 @@
     </div>
   </footer>
 
-  <!-- Skriptit -->
   <script>
-    // headerin vahvistus + hero-tekstin nosto
+    // Header-sävy + hero-tekstin kevyt nosto
     const headerBg = document.getElementById('header-bg');
     const heroText = document.getElementById('hero-text');
     let lastY = -1;
@@ -273,7 +280,7 @@
     onScroll();
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Tuotekuvat (paikkamerkit → vaihda omiin)
+    // Tuotekuvat (vaihda omiin URL:eihin)
     const slingImgs = [
       "https://placehold.co/1400x1750?text=Laukku+1",
       "https://placehold.co/1400x1750?text=Laukku+2",
