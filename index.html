@@ -10,10 +10,9 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     :root{
-      --brand-dark: #345563;   /* tumma sinivihreä – footer */
-      --brand-mid:  #789FAB;   /* vaalea sininen – header */
-      --brand-mist: #DEEEEE;   /* hellä vaalea tuotteiden palkki */
-      --ink:        #202020;
+      --brand-dark:#345563;   /* footer */
+      --brand-mid:#789FAB;    /* header */
+      --ink:#202020;
     }
     html,body{height:100%}
     body{display:flex;flex-direction:column;background:#f8f8f6;color:var(--ink)}
@@ -21,42 +20,32 @@
     footer{flex-shrink:0}
 
     /* Logo “R” sivuttain */
-    .logo-r{
-      display:grid;place-items:center;width:36px;height:36px;border-radius:10px;
-      background:#ffffff20;border:1px solid #ffffff70;backdrop-filter:blur(6px)
-    }
-    .logo-r span{
-      display:inline-block;transform:rotate(-90deg);
-      font-weight:800;color:#fff;letter-spacing:1px
-    }
+    .logo-r{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;
+      background:#ffffff20;border:1px solid #ffffff70;backdrop-filter:blur(6px)}
+    .logo-r span{display:inline-block;transform:rotate(-90deg);font-weight:800;color:#fff;letter-spacing:1px}
 
-    /* Hero-alue: kiinteä taustakuva, tekstit liikkuu sivun mukana ilman “pomppua” */
+    /* Hero: kiinteä tausta, tekstit eivät “pomppaa” */
     .hero{
-      min-height:100svh; position:relative; overflow:hidden;
-      background-size:cover;background-position:center;
-      background-attachment:fixed; /* pitää kuvan paikoillaan scrollissa */
+      min-height:100svh;position:relative;overflow:hidden;
+      background-size:cover;background-position:center;background-attachment:fixed;
     }
     .hero::before{
-      content:""; position:absolute; inset:0;
+      content:"";position:absolute;inset:0;
       background:linear-gradient(to bottom, rgba(16,20,20,.35), rgba(16,20,20,.45) 40%, rgba(248,248,246,.85));
     }
 
-    /* Tuote-kuvakaruselli */
+    /* Karuselli */
     .carousel{position:relative;overflow:hidden}
     .track{display:flex;gap:12px;transition:transform .35s ease}
     .track img{width:min(520px,48vw);height:420px;object-fit:cover;border-radius:14px;background:#fff}
-    .car-btn{
-      position:absolute;top:50%;transform:translateY(-50%);
-      background:#ffffffd0;border:1px solid #e6e6e6;border-radius:9999px;
-      width:38px;height:38px;display:grid;place-items:center
-    }
-    .car-left{left:6px} .car-right{right:6px}
+    .car-btn{position:absolute;top:50%;transform:translateY(-50%);
+      background:#ffffffd0;border:1px solid #e6e6e6;border-radius:9999px;width:38px;height:38px;display:grid;place-items:center}
+    .car-left{left:6px}.car-right{right:6px}
   </style>
 </head>
 <body>
   <!-- Sticky header -->
-  <header class="sticky top-0 z-50 border-b border-black/5"
-          style="background:var(--brand-mid);">
+  <header class="sticky top-0 z-50 border-b border-black/5" style="background:var(--brand-mid);">
     <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
       <a href="#/" class="flex items-center gap-3 text-white">
         <div class="logo-r"><span>R</span></div>
@@ -80,9 +69,7 @@
               class="px-3 text-white/95 font-serif text-[clamp(28px,5.5vw,64px)] tracking-[0.2em] drop-shadow-[0_6px_16px_rgba(0,0,0,.35)]">
             LIIAN RUMAT OLLAKSEEN TOTTA
           </h1>
-          <div class="mt-6 mx-auto logo-r" style="border-color:#fff">
-            <span>R</span>
-          </div>
+          <div class="mt-6 mx-auto logo-r" style="border-color:#fff"><span>R</span></div>
         </div>
       </div>
     </section>
@@ -102,11 +89,7 @@
     <section id="tuotteet" class="py-10">
       <div class="mx-auto max-w-6xl px-4">
         <h2 class="font-serif text-3xl mb-6">Tuotteet</h2>
-
-        <!-- Tuote-kortit täytetään JS:llä -->
-        <div id="products" class="grid gap-8 md:gap-10">
-          <!-- JS render -->
-        </div>
+        <div id="products" class="grid gap-8 md:gap-10"><!-- JS render --></div>
       </div>
     </section>
 
@@ -167,137 +150,90 @@
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // ---- BACKEND ----
-    const API_BASE = "https://rumat-backend.roope-aa.workers.dev"; // <-- VAIHDA OMA URL
+    const API_BASE = "https://rumat-backend.roope-aa.workers.dev"; // VAIHDA oma URL
     const defaultContent = {
-      brandName: "RUMAT.STUDIO",
-      hero: {
-        headline: "LIIAN RUMAT OLLAKSEEN TOTTA",
-        image: "https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80" // Lapin erämaa
-      },
-      products: [
-        {
-          id:"laukku",
-          name:"Laukku",
-          price:"€139",
+      brandName:"RUMAT.STUDIO",
+      hero:{ headline:"LIIAN RUMAT OLLAKSEEN TOTTA",
+        image:"https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80" },
+      products:[
+        { id:"laukku", name:"Laukku", price:"€139",
           description:"Täysin kierrätysmateriaaleista valmistettu sling-tyylinen laukku. Cordura®-kierrätyskangas, YKK®-vetoketju, säädettävä hihna. Rakennettu käyttöön.",
           images:[
             "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=1600&q=80",
             "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",
             "https://images.unsplash.com/photo-1543975200-8e313fb04c4a?auto=format&fit=crop&w=1600&q=80"
-          ]
-        },
-        {
-          id:"pipo",
-          name:"Pipo",
-          price:"€49",
+          ]},
+        { id:"pipo", name:"Pipo", price:"€49",
           description:"Käsinneulottu mohair-sekoite. Lämmin, hengittävä ja kevyt. Valmistettu pieninä erinä.",
           images:[
             "https://images.unsplash.com/photo-1516478177764-9fe5bd7e9718?auto=format&fit=crop&w=1600&q=80",
             "https://images.unsplash.com/photo-1519415943484-9fa18778f9c0?auto=format&fit=crop&w=1600&q=80"
-          ]
-        }
+          ]}
       ],
-      contact:{ email:"hello@rumat.fi", instagram:"https://instagram.com/rumat.studio", location:"Rovaniemi — Helsinki",
-                shipping:"Nouto (sovitusti) / Posti 6,90 €" }
+      contact:{ email:"hello@rumat.fi", instagram:"https://instagram.com/rumat.studio", location:"Rovaniemi — Helsinki", shipping:"Nouto (sovitusti) / Posti 6,90 €" }
     };
 
-    // Syvämerge (yksinkertainen)
-    function merge(a,b){ const o = structuredClone(a);
-      for(const k in b){ if(b[k] && typeof b[k]==='object' && !Array.isArray(b[k])) o[k]=merge(a[k]??{},b[k]); else o[k]=b[k]; }
+    // Yksinkertainen syvämerge
+    function merge(a,b){ const o=structuredClone(a);
+      for(const k in b){ if(b[k]&&typeof b[k]==='object'&&!Array.isArray(b[k])) o[k]=merge(a[k]??{},b[k]); else o[k]=b[k]; }
       return o;
     }
 
     async function loadContent(){
       try{
-        const r = await fetch(`${API_BASE}/api/content`, { credentials:"include" });
-        if(!r.ok) throw new Error("fetch-failed");
-        const data = await r.json().catch(()=> ({}));
-        return merge(defaultContent, data);
-      }catch(e){
-        console.warn("Backend ei vastannut, käytetään oletuksia.", e);
-        return defaultContent;
-      }
+        const r=await fetch(`${API_BASE}/api/content`,{credentials:"include"});
+        if(!r.ok) throw 0; const d=await r.json().catch(()=> ({}));
+        return merge(defaultContent,d);
+      }catch{ return defaultContent; }
     }
 
     function renderProducts(list){
-      const wrap = document.getElementById('products');
-      wrap.innerHTML = "";
+      const wrap=document.getElementById('products'); wrap.innerHTML="";
       for(const p of list){
-        const card = document.createElement('div');
-        card.className = "rounded-2xl ring-1 ring-stone-200/60 p-6 md:p-8";
-        card.style.background = "var(--brand-mist)";
-
-        // Kuva-karauselli
-        const idsuf = Math.random().toString(36).slice(2);
-        const carId = `track-${idsuf}`;
-        const car = document.createElement('div');
-        car.className = "carousel mb-4";
-        car.innerHTML = `
-          <div id="${carId}" class="track">
-            ${p.images.map(src => `<img alt="${p.name}" loading="lazy" decoding="async" src="${src}">`).join("")}
+        const card=document.createElement('div');
+        card.className="rounded-2xl ring-1 ring-stone-200/60 p-6 md:p-8 bg-white"; // neutraali valkoinen
+        // karuselli
+        const car=document.createElement('div'); car.className="carousel mb-4";
+        car.innerHTML=`
+          <div class="track">
+            ${p.images.map(src=>`<img alt="${p.name}" loading="lazy" decoding="async" src="${src}">`).join("")}
           </div>
           <button class="car-btn car-left" aria-label="Edellinen">‹</button>
-          <button class="car-btn car-right" aria-label="Seuraava">›</button>
-        `;
+          <button class="car-btn car-right" aria-label="Seuraava">›</button>`;
         card.appendChild(car);
-
-        // Tekstit
-        const name = document.createElement('h3');
-        name.className = "font-serif text-2xl";
-        name.textContent = p.name;
-        const desc = document.createElement('p');
-        desc.className = "mt-2 text-stone-700";
-        desc.textContent = p.description;
-        const price = document.createElement('div');
-        price.className = "mt-3 font-medium";
-        price.textContent = p.price;
-
-        // Toimitusnote
-        const buy = document.createElement('div');
-        buy.className = "mt-4 text-sm text-stone-600";
-        buy.textContent = "Ota yhteyttä sähköpostilla tilaukseen.";
-
-        card.append(name, desc, price, buy);
-        wrap.appendChild(card);
-
-        // Karusellilogiikka (voi selata molempiin suuntiin)
-        let index = 0;
-        const track = car.querySelector('.track');
-        function update(){
-          const w = car.clientWidth;
-          track.style.transform = `translateX(${-index * (w * 0.9)}px)`;
-        }
-        const left = car.querySelector('.car-left');
-        const right = car.querySelector('.car-right');
-        left.onclick = ()=>{ index = Math.max(0, index-1); update(); };
-        right.onclick = ()=>{ index = Math.min(p.images.length-1, index+1); update(); };
-        // Alustava asettelu
+        // tekstit
+        const name=document.createElement('h3'); name.className="font-serif text-2xl"; name.textContent=p.name;
+        const desc=document.createElement('p'); desc.className="mt-2 text-stone-700"; desc.textContent=p.description;
+        const price=document.createElement('div'); price.className="mt-3 font-medium"; price.textContent=p.price;
+        const note=document.createElement('div'); note.className="mt-4 text-sm text-stone-600"; note.textContent="Ota yhteyttä sähköpostilla tilaukseen.";
+        card.append(name,desc,price,note); wrap.appendChild(card);
+        // karusellilogiikka (molempiin suuntiin)
+        let i=0; const track=car.querySelector('.track');
+        function update(){ const w=car.clientWidth; track.style.transform=`translateX(${-i*(w*0.9)}px)`; }
+        car.querySelector('.car-left').onclick=()=>{i=Math.max(0,i-1);update();};
+        car.querySelector('.car-right').onclick=()=>{i=Math.min(p.images.length-1,i+1);update();};
         new ResizeObserver(update).observe(car);
       }
     }
 
-    // Käynnistä
     (async ()=>{
-      const c = await loadContent();
-
-      // Hero
-      document.getElementById('hero-headline').textContent = c.hero.headline;
-      document.querySelector('.hero').style.backgroundImage = `url('${c.hero.image}')`;
-
-      // Yhteys
-      document.getElementById('email').href = `mailto:${c.contact.email}`;
-      document.getElementById('email').textContent = c.contact.email;
-      document.getElementById('email2').href = `mailto:${c.contact.email}`;
-      document.getElementById('email2').textContent = c.contact.email;
-      document.getElementById('ig').href = c.contact.instagram;
-      document.getElementById('ig2').href = c.contact.instagram;
-      document.getElementById('location').textContent = c.contact.location;
-      document.getElementById('shipping').textContent = "Toimitus: " + c.contact.shipping;
-      document.getElementById('shipping2').textContent = "Toimitus: " + c.contact.shipping;
-
-      // Tuotteet
+      const c=await loadContent();
+      // hero
+      document.getElementById('hero-headline').textContent=c.hero.headline;
+      document.querySelector('.hero').style.backgroundImage=`url('${c.hero.image}')`;
+      // yhteys
+      const e1=document.getElementById('email'), e2=document.getElementById('email2');
+      e1.href=e2.href=`mailto:${c.contact.email}`; e1.textContent=e2.textContent=c.contact.email;
+      const ig1=document.getElementById('ig'), ig2=document.getElementById('ig2');
+      ig1.href=ig2.href=c.contact.instagram;
+      document.getElementById('location').textContent=c.contact.location;
+      document.getElementById('shipping').textContent="Toimitus: "+c.contact.shipping;
+      document.getElementById('shipping2').textContent="Toimitus: "+c.contact.shipping;
+      // tuotteet
       renderProducts(c.products);
     })();
+
+    document.getElementById('year').textContent=new Date().getFullYear();
   </script>
 </body>
 </html>
