@@ -2,15 +2,17 @@ name = "rumat-backend"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 
-# Salli pyynnöt sivultasi (vaihda tämä GitHub Pages -osoitteeseesi)
 [vars]
-ALLOWED_ORIGIN = "https://<käyttäjä>.github.io/<repo>"
+# Salli pyynnöt sivultasi (vaihda tämä GitHub Pages / oma domain)
+ALLOWED_ORIGIN = "https://roopeaal.github.io/rumat"
 
-# KV-bindaukset: luot ne Cloudflare-dashissa ja liität id:t tänne
+# Lisää tämä Workers → Settings → Variables (secrets)
+# ADMIN_PASSWORD = ""   # ASETETAAN SECRETINÄ, EI TÄHÄN TIEDOSTOON
+
 [[kv_namespaces]]
 binding = "CONTENT"
-id = "KV_ID_CONTENT"     # täytä
+id = "KV_ID_CONTENT"     # täytä Cloudflaren antamalla ID:llä
 
 [[kv_namespaces]]
 binding = "SESSIONS"
-id = "KV_ID_SESSIONS"    # täytä
+id = "KV_ID_SESSIONS"    # täytä Cloudflaren antamalla ID:llä
