@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>RUMAT.STUDIO</title>
   <meta name="description" content="Helsinki — Contemporary textiles, built to last."/>
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -22,8 +23,8 @@
     }
     body{
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
-      background:#F8F7F5;
-      color:#202020;
+      background:var(--brand-ivory); /* lämmin valkoinen tausta */
+      color:var(--brand-ink);
     }
     .serif{font-family:"Libre Baskerville",serif}
     .hero-fixed{position:fixed;inset:0;z-index:-1}
@@ -50,12 +51,14 @@
 <body class="bg-stone-50 text-stone-900">
   <!-- ===== HERO (pysyvä Lapin taustakuva) ===== -->
   <div class="hero-fixed">
+    <!-- Antamasi Unsplash-kuva + fallback -->
     <img
       src="https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80"
       alt="Lapin erämaa"
       class="w-full h-full object-cover"
       style="object-position:center 60%"
       onerror="this.onerror=null;this.src='https://placehold.co/2400x1600?text=Lapin+taustakuva'">
+    <!-- Kevyt tummennus, jotta teksti erottuu -->
     <div class="absolute inset-0 bg-gradient-to-b from-black/5 via-black/12 to-black/22"></div>
   </div>
 
@@ -81,12 +84,14 @@
   <!-- ===== ETUSIVU ===== -->
   <section id="etusivu" class="h-screen grid place-items-center text-stone-50 px-4">
     <div id="hero-text" class="text-center transition-transform">
+      <!-- Leveä, isokokoinen otsikko -->
       <h1
         class="uppercase font-semibold tracking-[0.30em]
                text-4xl sm:text-6xl md:text-7xl lg:text-8xl
                drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
         LIIAN RUMAT OLLAKSEEN TOTTA
       </h1>
+      <!-- Suurempi, pyöreä R-logo keskellä -->
       <div class="mt-8 flex justify-center">
         <div class="h-20 w-20 sm:h-24 sm:w-24 grid place-items-center
                     rounded-full bg-white/90 ring-1 ring-white/70 shadow-soft">
@@ -255,4 +260,68 @@
         </ul>
       </div>
     </div>
-    <div class="py-8 text-center text-xs text
+    <div class="py-8 text-center text-xs text-stone-500">© <span id="year"></span> RUMAT.STUDIO</div>
+  </footer>
+
+  <!-- ===== Skriptit ===== -->
+  <script>
+    // Yläpalkin taustan vahvistus scrollissa + hero-tekstin pehmeä liike
+    const headerBg = document.getElementById('header-bg');
+    const heroText = document.getElementById('hero-text');
+    let lastY = -1;
+    const onScroll = () => {
+      const y = window.scrollY || 0;
+      if (y === lastY) return; lastY = y;
+      const vh = window.innerHeight || 1;
+      const p = Math.min(1, Math.max(0, y / 140));
+      headerBg.style.backgroundColor = `rgba(248,247,245,${p})`; // (lämmin valkoinen tausta)
+      headerBg.style.borderColor = `rgba(214,211,209,${p})`;
+      headerBg.style.borderBottomWidth = p ? '1px' : '0px';
+      const t = -22 * Math.min(1, y / (vh * 0.9));
+      heroText.style.transform = `translateY(${t}vh)`;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // --------- Tuotekuvat: varmatoimiset paikkamerkit + fallback ----------
+    // Vaihda näihin omat polut kun haluat (esim. ./assets/laukku-1.jpg)
+    const slingImgs = [
+      "https://placehold.co/1400x1750?text=Laukku+1",
+      "https://placehold.co/1400x1750?text=Laukku+2",
+      "https://placehold.co/1400x1750?text=Laukku+3"
+    ];
+    const pipoImgs = [
+      "https://placehold.co/1400x1750?text=Pipo+1",
+      "https://placehold.co/1400x1750?text=Pipo+2",
+      "https://placehold.co/1400x1750?text=Pipo+3"
+    ];
+    const FALLBACK = "https://placehold.co/1400x1750?text=Kuva";
+
+    let i1 = 0, i2 = 0;
+
+    function setWithFallback(imgEl, url){
+      if(!imgEl) return;
+      imgEl.onerror = ()=>{ imgEl.onerror=null; imgEl.src = FALLBACK; };
+      imgEl.src = url;
+    }
+    const setPair = (arr, aId, bId, i) => {
+      const a = document.getElementById(aId), b = document.getElementById(bId);
+      if (!a || !b) return;
+      const n = arr.length;
+      setWithFallback(a, arr[(i % n + n) % n]);
+      setWithFallback(b, arr[((i + 1) % n + n) % n]);
+    };
+
+    setPair(slingImgs, "p1a", "p1b", i1);
+    setPair(pipoImgs,  "p2a", "p2b", i2);
+
+    // Karusellin nuolet
+    document.getElementById('next1').addEventListener('click', () => { i1 = (i1 + 1) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
+    document.getElementById('prev1').addEventListener('click', () => { i1 = (i1 - 1 + slingImgs.length) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
+    document.getElementById('next2').addEventListener('click', () => { i2 = (i2 + 1) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
+    document.getElementById('prev2').addEventListener('click', () => { i2 = (i2 - 1 + pipoImgs.length) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
+
+  </script>
+</body>
+</html>
