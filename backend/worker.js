@@ -33,6 +33,7 @@ export default {
 
     if (req.method === "OPTIONS") return new Response(null, { headers });
 
+    // LOGIN
     if (url.pathname === "/api/login" && req.method === "POST") {
       try {
         const { password } = await req.json();
@@ -48,17 +49,20 @@ export default {
       }
     }
 
+    // LOGOUT
     if (url.pathname === "/api/logout" && req.method === "POST") {
       const resp = new Response(JSON.stringify({ ok: true }), { headers: { ...headers, ...JSON_TYPE } });
       resp.headers.append("set-cookie", `sid=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0`);
       return resp;
     }
 
+    // CONTENT GET
     if (url.pathname === "/api/content" && req.method === "GET") {
       const raw = (await env.CONTENT.get("site")) || "{}";
       return new Response(raw, { headers: { ...headers, ...JSON_TYPE } });
     }
 
+    // CONTENT PUT
     if (url.pathname === "/api/content" && req.method === "PUT") {
       const authed = await requireSession(env, req);
       if (!authed) {
