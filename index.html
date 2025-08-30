@@ -37,14 +37,14 @@
 </head>
 
 <body class="text-stone-900">
-  <!-- Kiinteä hero-tausta (ei liiku) -->
+  <!-- Kiinteä hero-tausta (ei liiku). Käytetään IG-postin URLia esimerkkinä; fallback varmistaa toiminnan. -->
   <div class="hero-fixed">
     <img
-      src="https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80"
-      alt="Lapin erämaa"
+      src="https://www.instagram.com/p/DMXVRgGC1Bv/?img_index=2"
+      alt="RUMAT.STUDIO – hero"
       class="w-full h-full object-cover"
       style="object-position:center 60%"
-      onerror="this.onerror=null;this.src='https://placehold.co/2400x1600?text=Lapin+taustakuva'">
+      onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80'">
     <div class="absolute inset-0 bg-gradient-to-b from-black/5 via-black/12 to-black/22"></div>
   </div>
 
@@ -176,30 +176,40 @@
     </div>
   </section>
 
+  <!-- ===== TARINA ===== -->
+  <section id="tarina" class="py-14 bg-stone-50/90">
+    <div class="mx-auto max-w-3xl px-6">
+      <h2 class="serif text-3xl mb-4">Tarina</h2>
+      <p>
+        Kirjoita tähän yrityksen matkaa: miksi perustit, mitä opit, minne olet menossa.
+        Tekstiä voi muuttaa milloin vain päivittämällä tämän tiedoston.
+      </p>
+    </div>
+  </section>
+
   <!-- ===== SOME (Instagram + TikTok) ===== -->
   <section id="some" class="py-14 bg-white">
     <div class="mx-auto max-w-6xl px-4">
       <h2 class="serif text-3xl mb-6">Some</h2>
 
-      <!-- Instagram upotukset: lisää rivejä ja vaihda permalink osoitteet julkisiksi postauksiksi -->
       <div class="grid md:grid-cols-2 gap-6">
+        <!-- Instagram upotus (esimerkkiposti) -->
         <blockquote class="instagram-media"
           data-instgrm-permalink="https://www.instagram.com/p/DMlK18qiE5O/"
           data-instgrm-version="14"
           style="background:#FFF; border:0; margin:0; max-width:540px; width:100%; min-width:326px;">
         </blockquote>
 
-        <!-- TikTok (vaihda käyttäjä ja VIDEO_ID) -->
+        <!-- TikTok: käyttäjän antama linkki -->
         <blockquote class="tiktok-embed"
-          cite="https://www.tiktok.com/@rumat.studio/video/0000000000000000000"
-          data-video-id="0000000000000000000"
+          cite="https://www.tiktok.com/@rumat.studio/video/7525414518562753814"
+          data-video-id="7525414518562753814"
           style="max-width:605px;min-width:325px;margin:0;">
           <section></section>
         </blockquote>
       </div>
 
-      <!-- Vaihtoehto: oma IG-galleria omista tiedostoista (nopea & varma).
-           Lataa kuvat repoosi esim. /assets/ig/ ja poista kommentit alla. -->
+      <!-- Vaihtoehto: oma nopea IG-galleria reposta (poista kommentit ja lisää kuvat /assets/ig/) -->
       <!--
       <div class="mt-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
         <img src="assets/ig/kuva-1.jpg" alt="IG" class="w-full h-44 object-cover rounded-lg">
@@ -299,7 +309,7 @@
     document.getElementById('prev2').addEventListener('click', () => { i2 = (i2 - 1 + pipoImgs.length) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
   </script>
 
-  <!-- Upotus-skriptit: lisää kumpikin vain kerran -->
+  <!-- Upotus-skriptit (vain kerran / sivu) -->
   <script async src="https://www.instagram.com/embed.js"></script>
   <script async src="https://www.tiktok.com/embed.js"></script>
 </body>
