@@ -16,7 +16,6 @@
     :root{
       --brand-green: #0E2016;  /* headerin tumma vihreä */
       --footer-black:#0B0F0E;  /* footerin musta */
-      --brand-ink:   #202020;  /* mustanharmaa teksti */
       --brand-ivory: #F6F6F4;  /* vaalea tausta */
       --band-pale:   #DEEEEE;  /* esittelypalkkien tausta */
       --photo-band:  #F6F6F4;  /* kuvapalkkien tausta */
@@ -27,8 +26,8 @@
       color:#1f2937;
     }
     .serif{font-family:"Libre Baskerville",serif}
-    .hero-wrap{position:relative; height:100vh; overflow:hidden}
-    .hero-canvas{position:absolute; inset:0; width:100%; height:100%; display:block}
+    .hero-wrap{position:relative;height:100vh;overflow:hidden}
+    .hero-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
     .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
     .btn{border-radius:9999px;padding:.65rem 1.05rem;border:1px solid rgb(214 211 209);
          transition:transform .06s ease, box-shadow .12s ease, background-color .15s;}
@@ -41,18 +40,15 @@
 </head>
 
 <body class="text-stone-900">
-
   <!-- Kiinteä header -->
   <header class="fixed top-0 left-0 right-0 z-50 text-white">
     <div style="background:var(--brand-green)" class="mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
       <a href="#etusivu" class="flex items-center gap-3">
-        <!-- Paksu “R” kaadettu 90° oikealle -->
         <div class="h-10 w-10 grid place-items-center rounded-xl border border-white/55 bg-white/92">
           <span class="font-black text-[22px] leading-none text-[color:var(--brand-green)] transform rotate-90 select-none">R</span>
         </div>
         <span class="hidden sm:inline text-sm uppercase tracking-widest font-semibold">RUMAT.STUDIO</span>
       </a>
-
       <nav class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
         <a href="#etusivu"   class="font-semibold hover:underline underline-offset-4">Etusivu</a>
         <a href="#tuotteet"  class="font-semibold hover:underline underline-offset-4">Tuotteet</a>
@@ -63,13 +59,17 @@
     </div>
   </header>
 
-  <!-- HERO (revontulet WebGL:llä + tekstit) -->
+  <!-- HERO -->
   <section id="etusivu" class="hero-wrap">
     <canvas id="aurora" class="hero-canvas" aria-hidden="true"></canvas>
 
-    <!-- Varmuuden vuoksi kevyt gradientti, jos WebGL ei toimi -->
-    <div class="absolute inset-0 pointer-events-none"
-         style="background:radial-gradient(1200px 600px at 50% -200px, rgba(0,180,200,.22), rgba(0,0,0,0) 60%), linear-gradient(#071522,#0e2034)"></div>
+    <!-- Fallback on piilossa; näytetään vain jos WebGL epäonnistuu -->
+    <div id="aurora-fallback"
+         class="absolute inset-0 transition-opacity duration-500 opacity-0 pointer-events-none"
+         style="background:
+           radial-gradient(1200px 600px at 50% -200px, rgba(0,180,200,.22), rgba(0,0,0,0) 60%),
+           linear-gradient(#071522,#0e2034)">
+    </div>
 
     <!-- Hero-tekstit -->
     <div class="relative z-10 h-full grid place-items-center text-stone-50 px-4">
@@ -89,7 +89,7 @@
     </div>
   </section>
 
-  <!-- Intro-esittely -->
+  <!-- Intro -->
   <section class="py-12 bg-stone-50/90">
     <div class="mx-auto max-w-3xl px-6 text-center">
       <p class="text-xl sm:text-2xl">
@@ -98,9 +98,7 @@
     </div>
   </section>
 
-  <!-- ===================== TUOTTEET ===================== -->
-
-  <!-- (A) LAUKKU – KUVAPALKki (vaalea kuvatausta) -->
+  <!-- TUOTTEET -->
   <section id="tuotteet" style="background:var(--photo-band)">
     <div class="mx-auto max-w-6xl px-4 py-14">
       <div class="flex items-center justify-between mb-6">
@@ -124,7 +122,6 @@
     </div>
   </section>
 
-  <!-- (B) LAUKKU – ESITTELYpalkki (#DEEEEE) -->
   <section style="background:var(--band-pale)">
     <div class="mx-auto max-w-6xl px-4 py-12">
       <div class="text-center">
@@ -141,10 +138,9 @@
         </div>
 
         <div class="mt-3 flex items-center justify-center gap-3 flex-wrap">
-          <!-- NOUTO 0 € -->
           <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
             <input type="hidden" name="cmd" value="_xclick">
-            <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
+            <input type="hidden" name="business" value="kauppa@esimerkki.fi">
             <input type="hidden" name="item_name" value="Laukku (nouto)">
             <input type="hidden" name="amount" value="149.00">
             <input type="hidden" name="currency_code" value="EUR">
@@ -152,10 +148,9 @@
             <input type="hidden" name="no_shipping" value="1">
             <input type="submit" value="Osta – Nouto 0 €" class="btn btn-dark cursor-pointer">
           </form>
-          <!-- POSTI 6,90 € -->
           <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
             <input type="hidden" name="cmd" value="_xclick">
-            <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
+            <input type="hidden" name="business" value="kauppa@esimerkki.fi">
             <input type="hidden" name="item_name" value="Laukku (posti)">
             <input type="hidden" name="amount" value="149.00">
             <input type="hidden" name="currency_code" value="EUR">
@@ -168,7 +163,6 @@
     </div>
   </section>
 
-  <!-- (C) PIPO – KUVAPALKki -->
   <section style="background:var(--photo-band)">
     <div class="mx-auto max-w-6xl px-4 py-14">
       <div class="relative">
@@ -187,7 +181,6 @@
     </div>
   </section>
 
-  <!-- (D) PIPO – ESITTELYpalkki (#DEEEEE) -->
   <section style="background:var(--band-pale)">
     <div class="mx-auto max-w-6xl px-4 py-12">
       <div class="text-center">
@@ -268,9 +261,8 @@
     </div>
   </footer>
 
-  <!-- ===================== SCRIPTS ===================== -->
+  <!-- ===== UI-skriptit ===== -->
   <script>
-    // Hero-tekstin pehmeä nosto
     const heroText = document.getElementById('hero-text');
     let lastY = -1;
     const onScroll = () => {
@@ -279,14 +271,12 @@
       const vh = window.innerHeight || 1;
       const t = -22 * Math.min(1, y / (vh * 0.9));
       heroText.style.transform = `translateY(${t}vh)`;
-      // syötä scroll-arvo myös shaderille
       if (window.__aurora && __aurora.setScroll) __aurora.setScroll(Math.min(1, y/(vh*0.75)));
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Tuotekuvat (Unsplash) + fallback
     const slingImgs = [
       "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80",
       "https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1600&q=80",
@@ -298,13 +288,7 @@
       "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1600&q=80"
     ];
     const FALLBACK = "https://placehold.co/1400x1750?text=Kuva";
-
-    function setWithFallback(imgEl, url){
-      if(!imgEl) return;
-      imgEl.onerror = ()=>{ imgEl.onerror=null; imgEl.src = FALLBACK; };
-      imgEl.src = url;
-    }
-
+    function setWithFallback(imgEl, url){ if(!imgEl) return; imgEl.onerror = ()=>{ imgEl.onerror=null; imgEl.src = FALLBACK; }; imgEl.src = url; }
     let i1 = 0, i2 = 0;
     const setPair = (arr, aId, bId, i) => {
       const a = document.getElementById(aId), b = document.getElementById(bId);
@@ -313,13 +297,10 @@
       setWithFallback(a, arr[(i % n + n) % n]);
       setWithFallback(b, arr[((i + 1) % n + n) % n]);
     };
-
     setPair(slingImgs, "p1a", "p1b", i1);
     setPair(pipoImgs,  "p2a", "p2b", i2);
-
     document.getElementById('next1').addEventListener('click', () => { i1 = (i1 + 1) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
     document.getElementById('prev1').addEventListener('click', () => { i1 = (i1 - 1 + slingImgs.length) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
-
     document.getElementById('next2').addEventListener('click', () => { i2 = (i2 + 1) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
     document.getElementById('prev2').addEventListener('click', () => { i2 = (i2 - 1 + pipoImgs.length) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
   </script>
@@ -327,9 +308,16 @@
   <!-- ===== Revontuli-shader ===== -->
   <script>
     (function(){
-      const canvas = document.getElementById('aurora');
+      const canvas   = document.getElementById('aurora');
+      const fallback = document.getElementById('aurora-fallback');
+
+      function showFallback(reason){
+        console.warn('Aurora fallback:', reason||'(unknown)');
+        fallback.style.opacity = '1';
+      }
+
       const gl = canvas.getContext('webgl', { alpha:false, antialias:true });
-      if(!gl){ console.warn('WebGL ei käytettävissä'); return; }
+      if(!gl){ showFallback('no webgl'); return; }
 
       const VS = `
         attribute vec2 a_pos;
@@ -340,15 +328,15 @@
         }
       `;
 
-      // --- KORJATTU FS: lisätty u_yoff ja UV:n siirto alaspäin ---
+      // mediump toimii laajimmin; highp ei ole kaikissa fragmenttishadereissa
       const FS = `
-        precision highp float;
+        precision mediump float;
         varying vec2 vUv;
         uniform vec2  u_res;
         uniform float u_time;
         uniform float u_intensity;
         uniform float u_scroll;
-        uniform float u_yoff;   // uusi
+        uniform float u_yoff;
 
         float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453); }
         float noise(vec2 p){
@@ -372,8 +360,6 @@
 
         void main(){
           vec2 uv = vUv;
-
-          // siirrä verhon "massaa" alaspäin
           uv.y = clamp(uv.y - u_yoff, 0.0, 1.5);
 
           vec3 base = mix(vec3(0.02,0.05,0.10), vec3(0.01,0.02,0.05), uv.y);
@@ -409,23 +395,26 @@
         gl.shaderSource(s, src);
         gl.compileShader(s);
         if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)){
-          console.error(gl.getShaderInfoLog(s)); return null;
+          showFallback(gl.getShaderInfoLog(s));
+          return null;
         }
         return s;
       }
 
       const vs = compile(gl.VERTEX_SHADER, VS);
       const fs = compile(gl.FRAGMENT_SHADER, FS);
+      if(!vs || !fs){ return; }
+
       const prog = gl.createProgram();
       gl.attachShader(prog, vs);
       gl.attachShader(prog, fs);
       gl.linkProgram(prog);
       if(!gl.getProgramParameter(prog, gl.LINK_STATUS)){
-        console.error(gl.getProgramInfoLog(prog)); return;
+        showFallback(gl.getProgramInfoLog(prog));
+        return;
       }
       gl.useProgram(prog);
 
-      // fullscreen quad
       const buf = gl.createBuffer();
       gl.bindBuffer(gl.ARRAY_BUFFER, buf);
       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
@@ -436,30 +425,28 @@
       gl.enableVertexAttribArray(a_pos);
       gl.vertexAttribPointer(a_pos, 2, gl.FLOAT, false, 0, 0);
 
-      // uniforms
       const u_res        = gl.getUniformLocation(prog, 'u_res');
       const u_time       = gl.getUniformLocation(prog, 'u_time');
       const u_intensity  = gl.getUniformLocation(prog, 'u_intensity');
       const u_scroll     = gl.getUniformLocation(prog, 'u_scroll');
-      const u_yoff       = gl.getUniformLocation(prog, 'u_yoff'); // uusi
+      const u_yoff       = gl.getUniformLocation(prog, 'u_yoff');
 
       function resize(){
         const dpr = Math.min(2, window.devicePixelRatio || 1);
-        const w = Math.floor(canvas.clientWidth  * dpr) || canvas.parentElement.clientWidth  * dpr;
-        const h = Math.floor(canvas.clientHeight * dpr) || canvas.parentElement.clientHeight * dpr;
+        const w = Math.floor((canvas.clientWidth  || window.innerWidth)  * dpr);
+        const h = Math.floor((canvas.clientHeight || window.innerHeight) * dpr);
         if(canvas.width !== w || canvas.height !== h){
           canvas.width = w; canvas.height = h;
           gl.viewport(0,0,w,h);
           gl.uniform2f(u_res, w, h);
         }
       }
-      const ro = new ResizeObserver(resize);
-      ro.observe(canvas);
+      resize();
+      window.addEventListener('resize', resize);
+      if (window.ResizeObserver) new ResizeObserver(resize).observe(canvas);
 
       let start = performance.now();
       let scroll = 0;
-
-      // oletussiirto: desktop 0.20, mobiili 0.26
       const yDefault = (innerWidth < 640 ? 0.26 : 0.20);
       gl.uniform1f(u_yoff, yDefault);
       gl.uniform1f(u_intensity, 1.0);
@@ -474,7 +461,6 @@
       }
       requestAnimationFrame(frame);
 
-      // API selaimen konsoliin
       window.__aurora = {
         setScroll(v){ scroll = Math.max(0, Math.min(1, v||0)); },
         setIntensity(v){ gl.uniform1f(u_intensity, Math.max(0, v||0)); },
