@@ -6,7 +6,7 @@
   <title>RUMAT.STUDIO</title>
   <meta name="description" content="Liian RUMAT ollakseen totta – käsintehtyjä tekstiilejä ja asusteita Pohjolasta."/>
 
-  <!-- Open Graph / Twitter (korvaa og.jpg omaan polkuun) -->
+  <!-- Open Graph / Twitter -->
   <meta property="og:title" content="RUMAT.STUDIO">
   <meta property="og:description" content="Liian RUMAT ollakseen totta.">
   <meta property="og:image" content="https://roopeaal.github.io/rumat/og.jpg">
@@ -20,15 +20,14 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* Brändivärit (kuvastasi) */
     :root{
-      --brand-deep:  #345563; /* syvä sinivihreä (header) */
-      --brand-ink:   #202020; /* melkein musta teksti */
-      --brand-olive: #A1A266; /* oliivi accent */
+      --brand-deep:  #345563; /* header */
+      --brand-ink:   #202020; /* teksti */
+      --brand-olive: #A1A266; /* accent */
       --brand-slate: #789FAB; /* siniharmaa */
       --brand-ivory: #F6F6F4; /* lämmin valkoinen */
-      --brand-mist:  #DEEEEE; /* tuote-esittelypalkkien tausta */
-      --footer-black:#0B0F0E; /* aiempi footer-musta */
+      --brand-mist:  #DEEEEE; /* tuote-esittelypalkit */
+      --footer-black:#0B0F0E; /* footer */
       --images-strip:#F6F6F4; /* kuvapalkkien tausta */
     }
     body{
@@ -50,22 +49,29 @@
     .chip-olive{ border-color:var(--brand-olive); color:var(--brand-olive); }
     .rlogo{ transform: rotate(-90deg); }
     .linkish{ text-underline-offset:4px; }
+
+    /* Revontuli-canvas */
+    #auroraCanvas{position:absolute; inset:0; width:100%; height:100%; display:block}
+    @media (prefers-reduced-motion: reduce){
+      #auroraCanvas{display:none;}
+    }
   </style>
 </head>
 
 <body class="text-stone-900">
-  <!-- ===== HERO-TAUSTA: pysyy paikallaan, kuva tulee IG/Unsplashista tai fallback ===== -->
+  <!-- ===== HERO-TAUSTA: Elävä revontuli (canvas) + kuvafallback ===== -->
   <div class="hero-fixed">
+    <canvas id="auroraCanvas"></canvas>
     <img id="hero-img"
       src="https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80"
-      alt="Lapin erämaa"
+      alt="Taustakuva"
       class="w-full h-full object-cover"
-      style="object-position:center 60%"
+      style="object-position:center 60%;display:none"
       onerror="this.onerror=null;this.src='https://placehold.co/2400x1600?text=Taustakuva'">
-    <div class="absolute inset-0 bg-gradient-to-b from-black/5 via-black/12 to-black/22"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/5 via-black/12 to-black/22 pointer-events-none"></div>
   </div>
 
-  <!-- Yläpalkki (brand-deep) joka liikkuu heron mukana; tekstit jäävät -->
+  <!-- Header (pysyy tekstillä paikoillaan) -->
   <header class="fixed top-0 left-0 right-0 z-50">
     <div class="absolute inset-0" style="background:var(--brand-deep); opacity:.93;"></div>
     <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center text-white">
@@ -84,7 +90,7 @@
     </div>
   </header>
 
-  <!-- ===== ETUSIVU ===== -->
+  <!-- HERO-tekstit -->
   <section id="etusivu" class="h-screen grid place-items-center text-stone-50 px-4">
     <div id="hero-text" class="text-center transition-transform">
       <h1 class="uppercase font-semibold tracking-[0.30em]
@@ -101,7 +107,7 @@
     </div>
   </section>
 
-  <!-- ===== Esittelypalkki (#DEEEEE) ===== -->
+  <!-- Esittelypalkki (#DEEEEE) -->
   <section class="py-12" style="background:var(--brand-mist)">
     <div class="mx-auto max-w-3xl px-6 text-center">
       <p class="text-xl sm:text-2xl">
@@ -119,7 +125,7 @@
         <div class="text-xs text-stone-500">Hinnat sis. ALV • Palautus 14 vrk</div>
       </div>
 
-      <!-- Tuote 1: LAUKKU – kuvapalkki (tausta #F6F6F4) -->
+      <!-- LAUKKU -->
       <div class="mb-12">
         <div class="relative rounded-xl p-3 md:p-4" style="background:var(--images-strip)">
           <div class="grid md:grid-cols-2 gap-4 md:gap-6">
@@ -134,7 +140,7 @@
           <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
         </div>
 
-        <!-- Esittelypalkki (täysleveä #DEEEEE) -->
+        <!-- Esittelypalkki -->
         <div class="mt-6 text-center py-10" style="background:var(--brand-mist)">
           <h3 class="serif text-2xl">Laukku</h3>
           <p class="mt-1 text-stone-700 max-w-3xl mx-auto">
@@ -174,7 +180,7 @@
         </div>
       </div>
 
-      <!-- Tuote 2: PIPO -->
+      <!-- PIPO -->
       <div class="mb-6">
         <div class="relative rounded-xl p-3 md:p-4" style="background:var(--images-strip)">
           <div class="grid md:grid-cols-2 gap-4 md:gap-6">
@@ -227,7 +233,7 @@
     </div>
   </section>
 
-  <!-- ===== TARINA ===== -->
+  <!-- TARINA -->
   <section id="tarina" class="py-14 bg-stone-50/90">
     <div class="mx-auto max-w-3xl px-6">
       <h2 class="serif text-3xl mb-4">Tarina</h2>
@@ -238,7 +244,7 @@
     </div>
   </section>
 
-  <!-- ===== FOOTER ===== -->
+  <!-- FOOTER -->
   <footer id="yhteys" class="pt-14 text-[color:var(--brand-ivory)]" style="background:var(--footer-black)">
     <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
       <div>
@@ -271,10 +277,10 @@
   </footer>
 
   <script>
-    // Täytä vuosi
+    // Vuosi
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Hero-tekstin pehmeä nosto (ei pomppua)
+    // Hero-tekstin pehmeä liike
     const heroText = document.getElementById('hero-text');
     let lastY = -1;
     const onScroll = () => {
@@ -287,15 +293,72 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    // Aseta kuvat turvallisesti (fallback)
+    // ----- Elävä revontuli (Canvas) -----
+    (function(){
+      const cvs = document.getElementById('auroraCanvas');
+      const ctx = cvs.getContext('2d');
+      let DPR = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
+      function resize(){
+        const w = cvs.clientWidth, h = cvs.clientHeight;
+        cvs.width = Math.floor(w * DPR);
+        cvs.height = Math.floor(h * DPR);
+        ctx.setTransform(DPR,0,0,DPR,0,0);
+      }
+      resize(); addEventListener('resize', resize);
+
+      // Ribbons parametrit
+      const ribbons = [
+        { hue:170, sat:90, light:65, y:.35, amp:60,  w:180, speed:.12, phase:0   },
+        { hue:200, sat:85, light:60, y:.55, amp:50,  w:160, speed:.10, phase:1.7 },
+        { hue:285, sat:75, light:70, y:.45, amp:40,  w:140, speed:.08, phase:3.1 }
+      ];
+      let start = performance.now();
+
+      function draw(){
+        const t = (performance.now()-start)/1000;
+        const W = cvs.clientWidth, H = cvs.clientHeight;
+        // pehmeä yötaivas
+        const g = ctx.createLinearGradient(0,0,0,H);
+        g.addColorStop(0,'rgba(5,12,18,0.85)');
+        g.addColorStop(1,'rgba(10,16,22,0.85)');
+        ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+        ctx.globalCompositeOperation = 'lighter';
+        for(const r of ribbons){
+          ctx.beginPath();
+          const baseY = r.y*H;
+          const freq = 2*Math.PI/W;
+          const amp = r.amp;
+          const step = 24;
+          ctx.moveTo(0, baseY + Math.sin(0 + r.phase + t*r.speed)*amp);
+          for(let x=0; x<=W; x+=step){
+            const y = baseY + Math.sin(x*freq*1.3 + r.phase + t*r.speed)*amp;
+            ctx.lineTo(x, y);
+          }
+          ctx.lineWidth = r.w;
+          const col = `hsla(${r.hue} ${r.sat}% ${r.light}% / 0.16)`;
+          ctx.strokeStyle = col;
+          ctx.shadowBlur = r.w*0.9;
+          ctx.shadowColor = `hsla(${r.hue} ${r.sat}% ${Math.min(95,r.light+20)}% / 0.35)`;
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+        }
+        ctx.globalCompositeOperation = 'source-over';
+        requestAnimationFrame(draw);
+      }
+      // Käyttäjän "Vähennä liikettä" kunnioitus
+      const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(!prefersReduced) requestAnimationFrame(draw);
+      else cvs.style.display='none';
+    })();
+
+    // ----- Tuotekuvien karusellit + fallback -----
     const FALLBACK = "https://placehold.co/1400x1750?text=Kuva";
     function setWithFallback(imgEl, url){
       if(!imgEl) return;
       imgEl.onerror = ()=>{ imgEl.onerror=null; imgEl.src = FALLBACK; };
       imgEl.src = url;
     }
-
-    // Tuotekuvien karusellit
     const slingImgs = [
       "https://placehold.co/1400x1750?text=Laukku+1",
       "https://placehold.co/1400x1750?text=Laukku+2",
@@ -320,7 +383,7 @@
     document.getElementById('next2').onclick=()=>{i2=(i2+1)%pipoImgs.length;setPair(pipoImgs,"p2a","p2b",i2);};
     document.getElementById('prev2').onclick=()=>{i2=(i2-1+pipoImgs.length)%pipoImgs.length;setPair(pipoImgs,"p2a","p2b",i2);};
 
-    // ---- Dynaaminen sisältö backendistä (tai ./content.json fallback) ----
+    // ----- Dynaaminen sisältö backendistä -----
     async function loadContent() {
       const sources = ["/api/content","./content.json"];
       for(const u of sources){
@@ -329,23 +392,23 @@
           if(!r.ok) continue;
           const d = await r.json();
 
-          // Hero-otsikko & kuva (IG-kuvaurl käy, EI <iframe>)
           if(d?.hero?.headline){
             document.querySelector('#etusivu h1').textContent = d.hero.headline;
           }
+          // Jos adminissa on asetettu suora kuva-URL, näytä kuva ja piilota aurora-canvas
           if(d?.hero?.image){
             const img = document.getElementById('hero-img');
-            img.src = d.hero.image; // pitää olla suora kuvalinkki (jpg/png)
+            img.style.display = 'block';
+            img.src = d.hero.image;
+            const cvs = document.getElementById('auroraCanvas');
+            if(cvs) cvs.style.display='none';
           }
 
-          // PayPal business
           if(d?.paypalBusiness){
             ["pp1a","pp1b","pp2a","pp2b"].forEach(id=>{
               const el=document.getElementById(id); if(el) el.value=d.paypalBusiness;
             });
           }
-
-          // Linkit
           if(d?.contact?.instagram) document.getElementById('ig').href = d.contact.instagram;
           if(d?.contact?.tiktok)    document.getElementById('tt').href = d.contact.tiktok;
           if(d?.contact?.email){
@@ -353,23 +416,19 @@
             m.href = "mailto:"+d.contact.email; m.textContent = d.contact.email;
           }
 
-          // Tuotekuvat jos annettu
           const get=(id)=>d?.products?.find(p=>p.id===id);
           const lau=get('laukku'); const pip=get('pipo');
           if(lau?.images?.length>=2){
-            slingImgs.splice(0,slingImgs.length,...lau.images);
-            i1=0; setPair(slingImgs,"p1a","p1b",i1);
+            slingImgs.splice(0,slingImgs.length,...lau.images); i1=0; setPair(slingImgs,"p1a","p1b",i1);
           }
           if(pip?.images?.length>=2){
-            pipoImgs.splice(0,pipoImgs.length,...pip.images);
-            i2=0; setPair(pipoImgs,"p2a","p2b",i2);
+            pipoImgs.splice(0,pipoImgs.length,...pip.images); i2=0; setPair(pipoImgs,"p2a","p2b",i2);
           }
           return;
-        }catch(e){/* jatka seuraavaan lähteeseen */}
+        }catch(e){}
       }
     }
     loadContent();
   </script>
 </body>
 </html>
-
