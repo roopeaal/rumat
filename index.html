@@ -14,19 +14,18 @@
 
   <style>
     :root{
-      --brand-deep:#A1A266;   /* syvä sinivihreä */
-      --brand-ink:#202020;    /* lähes musta */
-      --brand-olive:#A1A266;  /* oliivi */
-      --brand-ivory:#F6F6F4;  /* lämmin vaalea */
-      --brand-mist:#DEEEEE;   /* vaalea sinivihreä (esittelypalkit) */
-
-      --nav-bg:#0f1e18;       /* tumma vihertävä nav */
+      --brand-deep:#345563;
+      --brand-ink:#202020;
+      --brand-olive:#A1A266;
+      --brand-ivory:#F6F6F4;
+      --brand-mist:#DEEEEE;
+      --nav-bg:#0f1e18;
     }
     html,body{height:100%}
     body{
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
       color:#1f2937;
-      background:linear-gradient(#0e2230,#12334a);
+      background:linear-gradient(#0b1c28,#0f2b3f);
     }
     .serif{font-family:"Libre Baskerville",serif}
     .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
@@ -42,18 +41,17 @@
     .hero{position:relative;min-height:100vh;isolation:isolate}
     #auroraCanvas{position:absolute;inset:0;z-index:-1;display:block}
     .hero-overlay{position:absolute;inset:0;
-      background:radial-gradient(60% 40% at 50% 10%, rgba(255,255,255,.06), transparent 60%),
-                 linear-gradient(to bottom, rgba(0,0,0,.15), rgba(0,0,0,.35) 70%);}
-    .hero-title{
-      text-shadow:0 2px 18px rgba(0,0,0,.45), 0 0 2px rgba(0,0,0,.25);
-    }
+      background:
+        radial-gradient(60% 40% at 50% 10%, rgba(255,255,255,.06), transparent 60%),
+        linear-gradient(to bottom, rgba(0,0,0,.18), rgba(0,0,0,.38) 70%)}
+    .hero-title{ text-shadow:0 2px 18px rgba(0,0,0,.45), 0 0 2px rgba(0,0,0,.25); }
 
     /* NAV */
     .nav-fixed{position:fixed;top:0;left:0;right:0;z-index:50;background:var(--nav-bg);color:#e5e7eb}
 
     /* Osioiden taustat */
-    .band-pale{background:var(--brand-mist);}    /* koko sivun levyinen esittelypalkki */
-    .pics-band{background:#F6F6F4;}              /* kuvien taustapalkki */
+    .band-pale{background:var(--brand-mist);}  /* koko sivun levyiset esittelypalkit */
+    .pics-band{background:#F6F6F4;}            /* kuvien taustapalkit */
     footer{background:#0B0F0E;color:var(--brand-ivory)}
   </style>
 </head>
@@ -131,7 +129,7 @@
         </div>
       </div>
 
-      <!-- Tuote 1: LAUKKU – esittelypalkki (kokosivu #DEEEEE) -->
+      <!-- Tuote 1: LAUKKU – esittelypalkki -->
       <div class="band-pale -mx-4 md:mx-0 rounded-none md:rounded-2xl md:p-6 p-4 ring-0 md:ring-1 md:ring-stone-200 text-center">
         <h3 class="serif text-2xl">Laukku</h3>
         <p class="mt-1 text-stone-700">
@@ -184,7 +182,7 @@
         </div>
       </div>
 
-      <!-- Tuote 2: PIPO – esittelypalkki (#DEEEEE) -->
+      <!-- Tuote 2: PIPO – esittelypalkki -->
       <div class="band-pale -mx-4 md:mx-0 rounded-none md:rounded-2xl md:p-6 p-4 ring-0 md:ring-1 md:ring-stone-200 text-center">
         <h3 class="serif text-2xl">RUMAT Pipo</h3>
         <p class="mt-1 text-stone-700">
@@ -276,15 +274,20 @@
     onScroll();
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // --------- Aurora canvas (2D) ----------
+    // --------- Aurora canvas (parempi versio) ----------
     (function(){
       const canvas = document.getElementById('auroraCanvas');
       const ctx = canvas.getContext('2d');
+
+      // Offscreen-kanvaasi teräviä nauhoja ja blur-hehkua varten
+      const off = document.createElement('canvas');
+      const octx = off.getContext('2d');
+
       let w=0,h=0, dpr=1, t=0;
 
       const state = {
-        y: 0.26,              // << NOSTETTU: 0.22 mobiili / 0.26 desktop (alla asetetaan)
-        amp: 0.85,
+        y: 0.26,       // pystysijainti (0=ylä, 1=ala) – pidetään tässä koska korkeus oli “oikea”
+        amp: 0.9,
         speed: 0.18,
         bands: 7,
         seed: Math.random()*1000|0
@@ -294,16 +297,16 @@
         dpr = Math.min(window.devicePixelRatio || 1, 2);
         w = canvas.clientWidth = canvas.parentElement.clientWidth;
         h = canvas.clientHeight = canvas.parentElement.clientHeight;
-        canvas.width = (w*dpr)|0;
-        canvas.height = (h*dpr)|0;
+        canvas.width = (w*dpr)|0;  canvas.height = (h*dpr)|0;
         ctx.setTransform(dpr,0,0,dpr,0,0);
 
-        // Sijoitus: hiukan ylemmäs mobiililla ja desktopilla
-        const yDefault = (innerWidth < 640 ? 0.22 : 0.26);  // <-- TÄMÄ ON MUUTETTU
-        state.y = yDefault;
+        off.width = (w*dpr)|0;  off.height = (h*dpr)|0;
+        octx.setTransform(dpr,0,0,dpr,0,0);
+
+        state.y = (innerWidth < 640 ? 0.22 : 0.26);
       }
 
-      // yksinkertainen 2D noise
+      // kevyt sileä noise
       function n1(x,y){
         const s = Math.sin(x*12.9898 + y*78.233 + state.seed)*43758.5453;
         return s - Math.floor(s);
@@ -317,54 +320,103 @@
         return tl*(1-u)*(1-v)+tr*u*(1-v)+bl*(1-u)*v+br*u*v;
       }
 
+      function drawBands(targetCtx, blurPx=0, alphaScale=1){
+        const baseY = h*state.y;
+        const count = state.bands;
+        // pystysuorat “verhot”
+        targetCtx.save();
+        targetCtx.globalCompositeOperation = 'lighter';
+        targetCtx.globalAlpha = 0.9*alphaScale;
+
+        if (blurPx) targetCtx.filter = `blur(${blurPx}px)`;
+
+        for(let b=0;b<count;b++){
+          const phase = t*0.6 + b*0.7;
+          const bandW = w/(2.6 + b*0.35);
+          const xOff = Math.sin(phase*0.7 + b)*w*0.10;
+          const yOff = Math.cos(phase*0.5 + b)*12;
+
+          const bandHeight = 70 + b*24;  // matala nauha — EI täytä koko pohjaa
+          const base = baseY + yOff + b*10;
+
+          // Sävy turkoosista vihreään, himmeä läpikuultavuus
+          const hue = 166 - b*6; // 166..130
+          targetCtx.fillStyle = `hsla(${hue}, 85%, ${58-b*3}%, ${0.10 + (0.06*(count-b))})`;
+
+          targetCtx.beginPath();
+          targetCtx.moveTo(-120, base);
+          for(let x=-120; x<=w+120; x+=8){
+            const nx = (x + xOff)/bandW;
+            const yy = base + (smoothNoise(nx, phase)*2 -1) * (bandHeight*state.amp)
+                        + Math.sin(x*0.003 + phase*1.6)*14;
+            targetCtx.lineTo(x, yy);
+          }
+          // sulje nauha vain hieman alemmas (ei koko ruudun alaosaan)
+          targetCtx.lineTo(w+120, base + bandHeight + 18);
+          targetCtx.lineTo(-120,  base + bandHeight + 18);
+          targetCtx.closePath();
+          targetCtx.fill();
+
+          // kevyet alas valuvat “sateet”
+          targetCtx.save();
+          targetCtx.globalAlpha = 0.06*alphaScale;
+          targetCtx.strokeStyle = 'rgba(255,255,255,.7)';
+          targetCtx.lineWidth = 1;
+          for(let i=0;i<2;i++){
+            const xx = (w*(i+1)/(2.2+b)) + Math.sin(phase+i)*70;
+            targetCtx.beginPath();
+            targetCtx.moveTo(xx, base-160);
+            targetCtx.lineTo(xx, base + bandHeight + 40);
+            targetCtx.stroke();
+          }
+          targetCtx.restore();
+        }
+
+        // hienovarainen alareunan maski (häivytys)
+        const mask = targetCtx.createLinearGradient(0, baseY+40, 0, h);
+        mask.addColorStop(0,'rgba(0,0,0,0)');
+        mask.addColorStop(1,'rgba(0,0,0,.25)');
+        targetCtx.fillStyle = mask;
+        targetCtx.fillRect(0, baseY+40, w, h-(baseY+40));
+
+        targetCtx.filter = 'none';
+        targetCtx.restore();
+      }
+
       function draw(){
         t += state.speed/60;
-        // taustagradientti
+
+        // yötausta
         const g = ctx.createLinearGradient(0,0,0,h);
-        g.addColorStop(0,'#0e2a3d');
-        g.addColorStop(1,'#163a55');
+        g.addColorStop(0,'#0b1c28');
+        g.addColorStop(1,'#0f2b3f');
         ctx.fillStyle = g;
         ctx.fillRect(0,0,w,h);
 
-        const baseY = h*state.y;
-        const count = state.bands;
-        for(let b=0;b<count;b++){
-          const phase = t*0.6 + b*0.7;
-          const bandW = w/(2.8 + b*0.35);
-          const xOff = Math.sin(phase*0.7 + b)*w*0.12;
-          const yOff = Math.cos(phase*0.5 + b)*20;
+        // offscreen: ensin terävät nauhat
+        octx.clearRect(0,0,w,h);
+        drawBands(octx, 0, 1.0);
 
-          // väri (turkoosi -> vihertävä)
-          const hue = 170 - b*6;
-          ctx.fillStyle = `hsla(${hue}, 85%, ${60-b*4}%, ${0.10 + (0.06*(count-b))})`;
+        // piirrä terävät
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.drawImage(off, 0, 0, w, h);
 
-          ctx.beginPath();
-          ctx.moveTo(-100, baseY + yOff);
-          for(let x=-100; x<=w+100; x+=8){
-            const nx = (x + xOff)/bandW;
-            const yy = baseY + yOff + (smoothNoise(nx, phase)*2 -1) * (60 + b*22) * state.amp
-                        + (Math.sin((x*0.003)+(phase*1.7))*18);
-            ctx.lineTo(x, yy);
-          }
-          ctx.lineTo(w+120, h+120);
-          ctx.lineTo(-120, h+120);
-          ctx.closePath();
-          ctx.fill();
+        // piirrä hehku (blur) päälle
+        octx.clearRect(0,0,w,h);
+        drawBands(octx, 14, 0.9);
+        ctx.drawImage(off, 0, 0, w, h);
 
-          // kevyet "hiukkassateet"
-          ctx.save();
-          ctx.globalAlpha = 0.08;
-          ctx.strokeStyle = 'rgba(255,255,255,.5)';
-          ctx.lineWidth = 1;
-          for(let i=0;i<3;i++){
-            const xx = (w*(i+1)/(3+b)) + Math.sin(phase+i)*80;
-            ctx.beginPath();
-            ctx.moveTo(xx, baseY-200);
-            ctx.lineTo(xx, h);
-            ctx.stroke();
-          }
-          ctx.restore();
+        // tähtisemuja yläosaan
+        ctx.save();
+        ctx.globalCompositeOperation = 'screen';
+        ctx.globalAlpha = 0.10;
+        for(let i=0;i<70;i++){
+          const x = (i*37 + (t*80)%w) % w;
+          const y = (i*53 % (h*0.35));
+          ctx.fillStyle = 'white';
+          ctx.fillRect(x, y, 1, 1);
         }
+        ctx.restore();
 
         requestAnimationFrame(draw);
       }
@@ -372,7 +424,7 @@
       resize(); draw();
       window.addEventListener('resize', resize);
 
-      // Konsolista säätöihin:
+      // Konsolisäädöt:
       window.__aurora = {
         setYOffset(v){ state.y = Math.max(0,Math.min(1, v)); },
         setSpeed(v){ state.speed = v; },
