@@ -29,7 +29,6 @@
     .btn-olive{background:#A1A266;color:#202020;border-color:#8f945a}
     .chip{font-size:.78rem;padding:.28rem .6rem;border-radius:9999px;border:1px solid rgb(214 211 209);background:#fff;color:#374151}
     .chip-olive{border-color:#A1A266;color:#A1A266}
-    /* varmuuden vuoksi: canvas täyteen ruutuun ilman scrollisaumaa */
     #aurora{position:absolute;inset:0;display:block;width:100vw;height:100vh}
   </style>
 </head>
@@ -39,14 +38,13 @@
     <canvas id="aurora"></canvas>
     <img id="hero-fallback"
          src="https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80"
-         alt="Lapin erämaa"
-         class="w-full h-full object-cover hidden"
+         alt="Lapin erämaa" class="w-full h-full object-cover hidden"
          style="object-position:center 60%"
          onerror="this.onerror=null;this.src='https://placehold.co/2400x1600?text=Lapin+taustakuva'">
     <div class="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/5 via-black/10 to-black/22"></div>
   </div>
 
-  <!-- Yläreunan väripalkki joka “nousee” -->
+  <!-- Yläreunan väripalkki -->
   <div class="h-14 md:h-16 w-full" style="background:var(--brand-green);opacity:.92;"></div>
 
   <!-- Header -->
@@ -89,14 +87,13 @@
     </div>
   </section>
 
-  <!-- Tuotteet — kuvapalkit vihreällä -->
+  <!-- Tuotteet (vihreä kuvapalkki) -->
   <section id="tuotteet" style="background:var(--brand-green)">
     <div class="mx-auto max-w-6xl px-4 py-14 text-white">
       <div class="flex items-center justify-between mb-6">
         <h2 class="serif text-3xl">Tuotteet</h2>
         <div class="text-xs text-white/80">Hinnat sis. ALV • Palautus 14 vrk</div>
       </div>
-
       <div class="relative">
         <div class="grid md:grid-cols-2 gap-4 md:gap-6">
           <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-white/20 bg-black/10">
@@ -112,7 +109,7 @@
     </div>
   </section>
 
-  <!-- Tuote-esittelypalkki (kokosivu, #DEEEEE) -->
+  <!-- Esittelypalkki -->
   <section style="background:var(--band-pale)">
     <div class="mx-auto max-w-6xl px-4 py-12">
       <div class="text-center">
@@ -195,17 +192,19 @@
     <div class="py-8 text-center text-xs text-white/65">© <span id="year"></span> RUMAT.STUDIO</div>
   </footer>
 
-  <!-- Three.js (yksi passsi, ilman RenderTargeteja) -->
+  <!-- Three.js -->
   <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
   <script>
     // Hero-tekstin pehmeä nosto
     (function(){
       const heroText=document.getElementById('hero-text'); if(!heroText) return;
-      let last=-1; const onScroll=()=>{const y=window.scrollY||0;if(y===last) return;last=y;const vh=window.innerHeight||1;const t=-22*Math.min(1,y/(vh*0.9));heroText.style.transform=`translateY(${t}vh)`};window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+      let last=-1;
+      const onScroll=()=>{const y=window.scrollY||0;if(y===last) return;last=y;const vh=window.innerHeight||1;const t=-22*Math.min(1,y/(vh*0.9));heroText.style.transform=`translateY(${t}vh)`};
+      window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
       const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();
     })();
 
-    // Tuotekuvien karusellit (placeholderit edelleen)
+    // Tuotekuvat (placeholderit)
     (function(){
       const sling=["https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80","https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1600&q=80","https://images.unsplash.com/photo-1511389026070-a14ae610a1be?auto=format&fit=crop&w=1600&q=80"];
       const pipo=["https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80","https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1600&q=80","https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1600&q=80"];
@@ -217,110 +216,91 @@
       const n2=document.getElementById('next2'),p2=document.getElementById('prev2'); if(n2) n2.addEventListener('click',()=>{i2=(i2+1)%pipo.length;pair(pipo,"p2a","p2b",i2)}); if(p2) p2.addEventListener('click',()=>{i2=(i2-1+pipo.length)%pipo.length;pair(pipo,"p2a","p2b",i2)});
     })();
 
-    // ======= Aurora (yksi-passinen, sisäinen "glow") =======
+    // ===== Aurora: varma yhden passin shader =====
     (function(){
       const canvas=document.getElementById('aurora'); const fallback=document.getElementById('hero-fallback');
-      const prefersReduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const hasGL=(()=>{ try{ const c=document.createElement('canvas'); return !!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')))}catch{return false} })();
-      if(prefersReduce || !hasGL || !window.THREE){ canvas.style.display='none'; fallback.classList.remove('hidden'); return; }
+      const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const glOK=(()=>{ try{ const c=document.createElement('canvas'); return !!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')))}catch{return false} })();
+      if(reduce || !glOK || !window.THREE){ canvas.style.display='none'; fallback.classList.remove('hidden'); return; }
 
       const THREE=window.THREE;
-      const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:false,powerPreference:'high-performance'});
-      renderer.setClearColor(0x0a1622,1); // syvä taustasävy
+      const renderer=new THREE.WebGLRenderer({canvas,alpha:false,antialias:false,powerPreference:'high-performance'});
+      renderer.setClearColor(0x0a1622,1);
       const cam=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
       const quad=new THREE.PlaneGeometry(2,2);
 
-      const VS=`precision highp float; void main(){ gl_Position=vec4(position,1.0); }`;
-      const FS=`
-        precision highp float;
+      const VS = `
+        precision mediump float;
+        attribute vec3 position;
+        attribute vec2 uv;
+        varying vec2 vUv;
+        void main(){ vUv = uv; gl_Position = vec4(position,1.0); }
+      `;
+
+      const FS = `
+        precision mediump float;
+        varying vec2 vUv;
         uniform vec2  u_res;
         uniform float u_time;
-        uniform vec2  u_mouse;
         uniform float u_intensity;
-        uniform float u_hueShift;
         uniform float u_scroll;
 
-        float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453123); }
+        float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453); }
         float noise(vec2 p){
           vec2 i=floor(p), f=fract(p);
-          float a=hash(i), b=hash(i+vec2(1.,0.)), c=hash(i+vec2(0.,1.)), d=hash(i+vec2(1.,1.));
-          vec2 u=f*f*(3.-2.*f);
-          return mix(a,b,u.x)+ (c-a)*u.y*(1.-u.x) + (d-b)*u.x*u.y;
+          float a=hash(i);
+          float b=hash(i+vec2(1.,0.));
+          float c=hash(i+vec2(0.,1.));
+          float d=hash(i+vec2(1.,1.));
+          vec2 u=f*f*(3.0-2.0*f);
+          return mix(a,b,u.x) + (c-a)*u.y*(1.0-u.x) + (d-b)*u.x*u.y;
         }
-        float fbm(vec2 p){ float v=0.,a=.5; for(int i=0;i<6;i++){ v+=a*noise(p); p*=2.; a*=.5; } return v; }
-        vec3 hsl2rgb(vec3 c){
-          vec3 p=abs(mod(c.xxx+vec3(0.,1./3.,2./3.),1.)*6.-3.);
-          return c.z + c.y*(clamp(p-1.,0.,1.)-0.5)*(1.-abs(2.*c.z-1.));
-        }
-        vec3 palette(float x, float H){
-          vec3 c1=hsl2rgb(vec3(H, .85, .55));
-          vec3 c2=hsl2rgb(vec3(fract(H+.08), .85, .55));
-          vec3 c3=hsl2rgb(vec3(fract(H+.36), .75, .62));
-          return mix(mix(c1,c2,smoothstep(.2,.6,x)), c3, smoothstep(.6,1.,x));
+        float fbm(vec2 p){
+          float v=0.0; float a=0.5;
+          v += a*noise(p);          p*=2.02; a*=0.5;
+          v += a*noise(p);          p*=2.02; a*=0.5;
+          v += a*noise(p);          p*=2.02; a*=0.5;
+          v += a*noise(p);          p*=2.02; a*=0.5;
+          v += a*noise(p);
+          return v;
         }
 
         void main(){
-          vec2 uv=gl_FragCoord.xy/u_res.xy;
-          vec2 aspect=vec2(u_res.x/u_res.y,1.0);
-          vec2 p=(uv-.5)*aspect + .5;
+          vec2 uv = vUv;
+          // taustagradientti
+          vec3 base = mix(vec3(0.02,0.05,0.10), vec3(0.01,0.02,0.05), uv.y);
 
-          // taivas
-          vec3 col=mix(vec3(0.012,0.028,0.045), vec3(0.03,0.06,0.10), uv.y);
+          // ajastin & skrolli
+          float t = u_time*0.35;
+          float s = u_scroll;
 
-          float t=u_time*0.55;
-          float H=fract(0.33 + u_hueShift/360.0);
-          float inten=u_intensity*(1.0+0.25*u_scroll);
-
-          // revontuliverho (kolme “kaistaa”)
-          float a=0.0;
-          for(int i=0;i<3;i++){
-            float off=float(i)*0.27;
-            vec2 q=p*2.1 + vec2(0.0, -t*0.25 - off);
-            float k=fbm(q + vec2(0.0, p.y*2.0 + float(i)*.7));
-            float stripe=smoothstep(0.25,0.95,k) * smoothstep(1.0,0.30,uv.y);
-            a += stripe*(0.75 + 0.25*sin(t*1.2+float(i)*1.7));
+          // verhojen kohina ja pystysuuntainen aalto
+          float curtain = 0.0;
+          for(int k=0;k<3;k++){
+            float o = float(k)*0.33;
+            vec2 p = vec2(uv.x*3.0 + sin((uv.y+o+t)*2.0)*0.15, uv.y*2.0 - t*0.8 - o);
+            float n = fbm(p);
+            float band = smoothstep(0.35,0.95,n) * (1.0 - pow(uv.y, 0.65));
+            curtain += band;
           }
-          a=clamp(a,0.0,1.0);
+          curtain = clamp(curtain, 0.0, 1.0);
 
-          vec3 aur=palette(a,H) * a;
+          // värit (vihreä–turkoosi)
+          vec3 aur = mix(vec3(0.08,0.55,0.25), vec3(0.10,0.78,0.85), uv.y) * curtain;
 
-          // sisäinen "glow": neljä offset-näytettä
-          vec2 px=1.0/u_res.xy;
-          vec3 blur=(
-            palette(a,H)*a*0.38 +
-            palette(a,H)*a*0.18*texture2DProj + // (vain syntaksin täydennyksenä – ei käytössä)
-            texture2DProj                             // (ei käytössä – WebGL1 ei tarvitse)
-          );
-          vec3 g =
-              palette(a,H)*a*0.40
-            + palette(a,H)*a*0.18
-            + palette(a,H)*a*0.18
-            + palette(a,H)*a*0.12
-            + palette(a,H)*a*0.12;
+          // pehmeä "glow" ilman jälkikäsittelyä (laskennallinen sumennus)
+          float glow = curtain * (0.6 + 0.4*noise(uv*8.0 + t));
+          vec3 color = base + (aur*1.2 + vec3(0.05,0.12,0.18)*glow) * (u_intensity*(1.0+0.2*s));
 
-          // oikeasti sampletaan naapurit:
-          g = (
-            palette(a,H)*a*0.40 +
-            palette(a,H)*a*0.18 +
-            palette(a,H)*a*0.18 +
-            palette(a,H)*a*0.12 +
-            palette(a,H)*a*0.12
-          );
-
-          // Sekoita pehmeästi (korostaa valoja, ei lisää saumoja)
-          vec3 outCol = col + aur*inten + g*0.65*inten;
-
-          gl_FragColor=vec4(outCol,1.0);
+          gl_FragColor = vec4(color, 1.0);
         }
       `;
 
       const uniforms={
         u_res:{value:new THREE.Vector2(1,1)},
         u_time:{value:0},
-        u_mouse:{value:new THREE.Vector2(.5,.5)},
-        u_intensity:{value:1.45},
-        u_hueShift:{value:0.0},
-        u_scroll:{value:0.0}
+        u_intensity:{value:1.6},
+        u_scroll:{value:0.0},
       };
 
       const mat=new THREE.ShaderMaterial({uniforms,vertexShader:VS,fragmentShader:FS,depthWrite:false});
@@ -339,7 +319,7 @@
 
       let last=performance.now();
       function loop(){
-        const now=performance.now(); uniforms.u_time.value += (now-last)/1000; last=now;
+        const now=performance.now(); uniforms.u_time.value += (now-last)/1000.0; last=now;
         renderer.render(scene,cam);
         requestAnimationFrame(loop);
       }
