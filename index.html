@@ -62,7 +62,7 @@
   <!-- 2) LÄPINÄKYVÄ KIINTEÄ HEADER (logo + linkit jäävät) -->
   <header class="fixed top-0 left-0 right-0 z-50 text-white">
     <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
-      <a href="#etusivu" className="flex items-center gap-3">
+      <a href="#etusivu" class="flex items-center gap-3">
         <!-- Paksu “R” kaadettu 90° oikealle -->
         <div class="h-10 w-10 grid place-items-center rounded-xl border border-white/55 bg-white/92">
           <span class="font-black text-[22px] leading-none text-[color:var(--brand-green)] transform rotate-90 select-none">R</span>
@@ -282,354 +282,370 @@
   <!-- Skriptit -->
   <script>
     // ---------- Headerin tausta + hero-tekstin liike ----------
-    const heroText = document.getElementById('hero-text');
-    let lastY = -1;
-    const onScroll = () => {
-      const y = window.scrollY || 0;
-      if (y === lastY) return; lastY = y;
-      const vh = window.innerHeight || 1;
-      const t = -22 * Math.min(1, y / (vh * 0.9));
-      heroText.style.transform = `translateY(${t}vh)`;
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    document.getElementById('year').textContent = new Date().getFullYear();
+    (function(){
+      const heroText = document.getElementById('hero-text');
+      if(!heroText) return;
+      let lastY = -1;
+      const onScroll = () => {
+        const y = window.scrollY || 0;
+        if (y === lastY) return; lastY = y;
+        const vh = window.innerHeight || 1;
+        const t = -22 * Math.min(1, y / (vh * 0.9));
+        heroText.style.transform = `translateY(${t}vh)`;
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    })();
+
+    // Vuosi footerissa
+    (function(){
+      const y = document.getElementById('year');
+      if (y) y.textContent = new Date().getFullYear();
+    })();
 
     // ---------- Tuotekuvat (Unsplash placeholderit) ----------
-    const slingImgs = [
-      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1511389026070-a14ae610a1be?auto=format&fit=crop&w=1600&q=80"
-    ];
-    const pipoImgs = [
-      "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1600&q=80"
-    ];
-    const FALLBACK = "https://placehold.co/1400x1750?text=Kuva";
-    function setWithFallback(imgEl, url){
-      if(!imgEl) return;
-      imgEl.onerror = ()=>{ imgEl.onerror=null; imgEl.src = FALLBACK; };
-      imgEl.src = url;
-    }
-    let i1 = 0, i2 = 0;
-    const setPair = (arr, aId, bId, i) => {
-      const a = document.getElementById(aId), b = document.getElementById(bId);
-      if (!a || !b) return;
-      const n = arr.length;
-      setWithFallback(a, arr[(i % n + n) % n]);
-      setWithFallback(b, arr[((i + 1) % n + n) % n]);
-    };
-    setPair(slingImgs, "p1a", "p1b", i1);
-    setPair(pipoImgs,  "p2a", "p2b", i2);
-    document.getElementById('next1').addEventListener('click', () => { i1 = (i1 + 1) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
-    document.getElementById('prev1').addEventListener('click', () => { i1 = (i1 - 1 + slingImgs.length) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
-    document.getElementById('next2').addEventListener('click', () => { i2 = (i2 + 1) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
-    document.getElementById('prev2').addEventListener('click', () => { i2 = (i2 - 1 + pipoImgs.length) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
+    (function(){
+      const slingImgs = [
+        "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1511389026070-a14ae610a1be?auto=format&fit=crop&w=1600&q=80"
+      ];
+      const pipoImgs = [
+        "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1600&q=80"
+      ];
+      const FALLBACK = "https://placehold.co/1400x1750?text=Kuva";
+      function setWithFallback(imgEl, url){
+        if(!imgEl) return;
+        imgEl.onerror = ()=>{ imgEl.onerror=null; imgEl.src = FALLBACK; };
+        imgEl.src = url;
+      }
+      let i1 = 0, i2 = 0;
+      const setPair = (arr, aId, bId, i) => {
+        const a = document.getElementById(aId), b = document.getElementById(bId);
+        if (!a || !b) return;
+        const n = arr.length;
+        setWithFallback(a, arr[(i % n + n) % n]);
+        setWithFallback(b, arr[((i + 1) % n + n) % n]);
+      };
+      setPair(slingImgs, "p1a", "p1b", i1);
+      setPair(pipoImgs,  "p2a", "p2b", i2);
+
+      const n1 = document.getElementById('next1'), p1 = document.getElementById('prev1');
+      const n2 = document.getElementById('next2'), p2 = document.getElementById('prev2');
+      if(n1) n1.addEventListener('click', () => { i1 = (i1 + 1) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
+      if(p1) p1.addEventListener('click', () => { i1 = (i1 - 1 + slingImgs.length) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
+      if(n2) n2.addEventListener('click', () => { i2 = (i2 + 1) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
+      if(p2) p2.addEventListener('click', () => { i2 = (i2 - 1 + pipoImgs.length) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
+    })();
 
     // ===================== Aurora Hero (shader) =====================
     (function initAurora(){
-      const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const canvas = document.getElementById('aurora');
       const fallbackImg = document.getElementById('hero-fallback');
+      if(!canvas || !fallbackImg){ return; }
 
-      // Jos liike pois päältä tai WebGL ei ole saatavilla -> näytä kuva
-      const hasWebGL = (() => {
-        try {
-          const c = document.createElement('canvas');
-          return !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')));
-        } catch { return false; }
-      })();
-      if (prefersReduced || !hasWebGL || !window.THREE) {
-        fallbackImg.classList.remove('hidden');
+      function showFallback(reason){
+        // Näytä kuva ja piilota canvas
         canvas.style.display = 'none';
-        return;
+        fallbackImg.classList.remove('hidden');
+        if (reason) console.warn('[Aurora] fallback:', reason);
       }
 
-      const renderer = new THREE.WebGLRenderer({ canvas, antialias:false, alpha:true, powerPreference:'high-performance' });
-      const DPR_MAX = 2;
-      function setDPR(){ renderer.setPixelRatio(Math.max(1, Math.min(devicePixelRatio||1, DPR_MAX))); }
-      setDPR();
+      try {
+        const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const hasWebGL = (() => {
+          try {
+            const c = document.createElement('canvas');
+            return !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')));
+          } catch { return false; }
+        })();
+        if (prefersReduced) return showFallback('prefers-reduced-motion');
+        if (!hasWebGL)      return showFallback('webgl not available');
+        if (!window.THREE)  return showFallback('three.js missing');
 
-      // Fullscreen quad
-      const quad = new THREE.PlaneGeometry(2,2);
-      const cam  = new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+        const THREE = window.THREE;
 
-      // Render targets
-      let scale = 1.0;
-      let rtBase, rtBright, rtBlur1, rtBlur2;
-      function rt(w,h){ return new THREE.WebGLRenderTarget(w,h,{minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter,format:THREE.RGBAFormat,depthBuffer:false,stencilBuffer:false}); }
-      function resizeAll(){
-        const w = Math.max(1, Math.floor(innerWidth  * scale));
-        const h = Math.max(1, Math.floor(innerHeight * scale));
-        [rtBase, rtBright, rtBlur1, rtBlur2].forEach(x=>x?.dispose());
-        rtBase  = rt(w,h);
-        rtBright= rt(w,h);
-        rtBlur1 = rt(Math.max(1,w>>1), Math.max(1,h>>1));
-        rtBlur2 = rt(Math.max(1,w>>2), Math.max(1,h>>2));
-      }
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias:false, alpha:true, powerPreference:'high-performance' });
 
-      // Shaders
-      const VS = `precision highp float; void main(){ gl_Position = vec4(position,1.0); }`;
-      const LIB = `
-        float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453123); }
-        float noise(vec2 p){
-          vec2 i=floor(p), f=fract(p);
-          float a=hash(i), b=hash(i+vec2(1.0,0.0)), c=hash(i+vec2(0.0,1.0)), d=hash(i+vec2(1.0,1.0));
-          vec2 u=f*f*(3.0-2.0*f);
-          return mix(a,b,u.x)+ (c - a)*u.y*(1.0-u.x) + (d - b)*u.x*u.y;
-        }
-        float fbm(vec2 p){
-          float v=0.0; float a=0.5;
-          for(int i=0;i<6;i++){ v+=a*noise(p); p*=2.0; a*=0.5; }
-          return v;
-        }
-        vec2 curl(vec2 p){
-          float e=0.03;
-          float n1=fbm(p+vec2(0.0,e)), n2=fbm(p-vec2(0.0,e));
-          float n3=fbm(p+vec2(e,0.0)), n4=fbm(p-vec2(e,0.0));
-          return vec2(n1-n2, n4-n3);
-        }
-        vec3 hsl2rgb(vec3 c){
-          vec3 p = abs(mod(c.xxx + vec3(0., 1./3., 2./3.), 1.)*6.-3.);
-          return c.z + c.y*(clamp(p-1.,0.,1.) - 0.5)*(1.-abs(2.*c.z-1.));
-        }
-        vec3 auroraPalette(float x, float hue){
-          float H = fract((0.33 + hue)/1.0);
-          vec3 c1 = hsl2rgb(vec3(H, 0.85, 0.55));
-          vec3 c2 = hsl2rgb(vec3(fract(H+0.08), 0.85, 0.55));
-          vec3 c3 = hsl2rgb(vec3(fract(H+0.36), 0.75, 0.62));
-          return mix(mix(c1, c2, smoothstep(0.2,0.6,x)), c3, smoothstep(0.6,1.0,x));
-        }
-        float ridgeNoise(vec2 p){
-          float r=0.0, amp=0.5;
-          for(int i=0;i<5;i++){ r += (1.0-abs(2.0*fract(noise(p)*0.95)-1.0))*amp; p*=2.0; amp*=0.55; }
-          return r;
-        }
-      `;
-
-      const FS_AURORA = `
-        precision highp float;
-        uniform vec2  u_res;
-        uniform float u_time;
-        uniform vec2  u_mouse;
-        uniform float u_speed;
-        uniform float u_intensity;
-        uniform float u_hueShift;
-        uniform bool  u_stars;
-        uniform bool  u_mountains;
-        uniform float u_scroll;
-        ${LIB}
-        float stars(vec2 uv, float t){
-          vec2 id = floor(uv * u_res * 0.75);
-          float h = fract(sin(dot(id, vec2(12.9898,78.233)))*43758.5453);
-          float tw = 0.50 + 0.50*sin(t*3.0 + h*6.2831);
-          return step(0.9976, h) * tw;
-        }
-        float field(vec2 p, float z){
-          float f = fbm(p*1.6 + curl(p*1.1)*0.6 + z*0.15);
-          f = (f + fbm(p*3.1 - z*0.22))/2.0;
-          return f;
-        }
-        void main(){
-          vec2 uv = gl_FragCoord.xy / u_res.xy;
-          vec2 aspect = vec2(u_res.x/u_res.y,1.0);
-          vec2 par = (u_mouse - 0.5) * vec2(0.12, 0.06);
-          vec2 p = (uv + par) * aspect;
-
-          vec3 col = mix(vec3(0.012,0.028,0.045), vec3(0.03,0.06,0.10), uv.y);
-          float t = u_time * (0.55 + u_speed*0.85 + u_scroll*0.25);
-          float intensity = u_intensity * (1.0 + 0.25*u_scroll);
-
-          const int STEPS = 48;
-          float yStart = 0.15;
-          float yEnd   = 1.05;
-          float dy = (yEnd - yStart) / float(STEPS);
-          vec3 acc = vec3(0.0);
-          float tot=0.0;
-
-          float beams=0.0;
-          for(float i=0.0;i<6.0;i+=1.0){
-            float cx = fract(i/6.0 + 0.37);
-            float d = abs(uv.x - cx);
-            float b = exp(-pow(d*40.0, 2.0)) * (0.25 + 0.25*sin(t*1.2 + i*1.7));
-            beams += b;
-          }
-          beams *= smoothstep(0.12,0.8,uv.y);
-
-          for(int i=0;i<STEPS;i++){
-            float yy = yStart + float(i)*dy;
-            vec2 q   = p*2.2 + vec2(0.0, -t*0.25);
-            float k  = field(q + vec2(0.0, yy*2.0), yy*2.0 + t*0.35);
-            float curtain = smoothstep(0.25, 0.95, k) * smoothstep(1.0, 0.30, yy);
-            curtain *= 0.9 + 0.1*sin((uv.x + yy)*16.0 + t*1.1);
-            vec3 aCol = auroraPalette(k, u_hueShift/360.0);
-            vec3 c    = aCol * curtain * (1.0 + 0.35*beams);
-            float w   = 0.9 * exp(-pow(1.2 - yy, 2.0)*1.4);
-            acc += c * w; tot += w;
-          }
-          acc /= max(tot, 1e-4);
-          acc *= 1.12 * intensity;
-
-          if(u_stars){
-            col += vec3(stars(uv, t*1.2));
-          }
-
-          if(u_mountains){
-            float base = 0.12;
-            float h = base + ridgeNoise(vec2(uv.x*2.0, 0.0))*0.12;
-            if(uv.y < h){
-              float edge = smoothstep(0.0, 0.012, h - uv.y);
-              vec3 mcol = mix(vec3(0.01,0.02,0.03), vec3(0.02,0.03,0.05), 0.35);
-              col = mix(mcol, col, edge);
-            }
-          }
-
-          vec3 outCol = col + acc;
-
-          // kevyt “film noise”
-          float n = fract(sin(dot(gl_FragCoord.xy + u_time*vec2(23.2,47.7), vec2(12.9898,78.233))) * 43758.5453);
-          outCol += (n-0.5)/255.0;
-
-          gl_FragColor = vec4(outCol, 1.0);
-        }
-      `;
-
-      const FS_BRIGHT = `
-        precision highp float;
-        uniform sampler2D tDiffuse;
-        uniform vec2 u_res;
-        uniform float u_threshold;
-        void main(){
-          vec2 uv = gl_FragCoord.xy / u_res;
-          vec3 c = texture2D(tDiffuse, uv).rgb;
-          float b = max(max(c.r,c.g),c.b);
-          float knee = 0.35;
-          float soft = smoothstep(u_threshold - knee, u_threshold + knee, b);
-          gl_FragColor = vec4(c * soft, 1.0);
-        }
-      `;
-      const FS_KAWASE = `
-        precision highp float;
-        uniform sampler2D tDiffuse;
-        uniform vec2 u_res;
-        void main(){
-          vec2 uv = gl_FragCoord.xy / u_res;
-          vec2 off = 1.0 / u_res;
-          vec3 s = texture2D(tDiffuse, uv).rgb * 0.4;
-          s += texture2D(tDiffuse, uv + vec2( off.x, 0.0)).rgb * 0.15;
-          s += texture2D(tDiffuse, uv + vec2(-off.x, 0.0)).rgb * 0.15;
-          s += texture2D(tDiffuse, uv + vec2(0.0,  off.y)).rgb * 0.15;
-          s += texture2D(tDiffuse, uv + vec2(0.0, -off.y)).rgb * 0.15;
-          gl_FragColor = vec4(s, 1.0);
-        }
-      `;
-      const FS_COMPOSITE = `
-        precision highp float;
-        uniform sampler2D tBase;
-        uniform sampler2D tBloom;
-        uniform vec2 u_res;
-        uniform float u_strength;
-        void main(){
-          vec2 uv = gl_FragCoord.xy / u_res;
-          vec3 base  = texture2D(tBase, uv).rgb;
-          vec3 bloom = texture2D(tBloom, uv).rgb;
-          gl_FragColor = vec4(base + bloom * u_strength, 1.0);
-        }
-      `;
-      const FS_BLIT = `
-        precision highp float;
-        uniform sampler2D tTex; uniform vec2 u_res;
-        void main(){ vec2 uv=gl_FragCoord.xy/u_res; gl_FragColor=texture2D(tTex,uv); }
-      `;
-
-      // Materials & scenes
-      const U_A = { u_res:{value:new THREE.Vector2(1,1)}, u_time:{value:0}, u_mouse:{value:new THREE.Vector2(0.5,0.5)}, u_speed:{value:0.95}, u_intensity:{value:1.30}, u_hueShift:{value:0.0}, u_stars:{value:true}, u_mountains:{value:true}, u_scroll:{value:0.0} };
-      const M_A = new THREE.ShaderMaterial({uniforms:U_A, vertexShader:VS, fragmentShader:FS_AURORA, depthWrite:false});
-      const S_A = new THREE.Scene(); S_A.add(new THREE.Mesh(quad, M_A));
-
-      const U_B = { tDiffuse:{value:null}, u_res:{value:new THREE.Vector2(1,1)}, u_threshold:{value:0.65} };
-      const M_B = new THREE.ShaderMaterial({uniforms:U_B, vertexShader:VS, fragmentShader:FS_BRIGHT, depthWrite:false});
-      const S_B = new THREE.Scene(); S_B.add(new THREE.Mesh(quad, M_B));
-
-      const U_K1 = { tDiffuse:{value:null}, u_res:{value:new THREE.Vector2(1,1)} };
-      const U_K2 = { tDiffuse:{value:null}, u_res:{value:new THREE.Vector2(1,1)} };
-      const M_K  = new THREE.ShaderMaterial({uniforms:U_K1, vertexShader:VS, fragmentShader:FS_KAWASE, depthWrite:false});
-      const S_K1 = new THREE.Scene(); S_K1.add(new THREE.Mesh(quad, M_K));
-      const M_K2 = new THREE.ShaderMaterial({uniforms:U_K2, vertexShader:VS, fragmentShader:FS_KAWASE, depthWrite:false});
-      const S_K2 = new THREE.Scene(); S_K2.add(new THREE.Mesh(quad, M_K2));
-
-      const U_C = { tBase:{value:null}, tBloom:{value:null}, u_res:{value:new THREE.Vector2(1,1)}, u_strength:{value:1.25} };
-      const M_C = new THREE.ShaderMaterial({uniforms:U_C, vertexShader:VS, fragmentShader:FS_COMPOSITE, depthWrite:false});
-      const S_C = new THREE.Scene(); S_C.add(new THREE.Mesh(quad, M_C));
-
-      const U_BL = { tTex:{value:null}, u_res:{value:new THREE.Vector2(1,1)} };
-      const M_BL = new THREE.ShaderMaterial({uniforms:U_BL, vertexShader:VS, fragmentShader:FS_BLIT, depthWrite:false});
-      const S_BL = new THREE.Scene(); S_BL.add(new THREE.Mesh(quad, M_BL));
-
-      function size(){
+        const DPR_MAX = 2;
+        function setDPR(){ renderer.setPixelRatio(Math.max(1, Math.min(window.devicePixelRatio||1, DPR_MAX))); }
         setDPR();
-        const w = Math.max(1, Math.floor(innerWidth * scale));
-        const h = Math.max(1, Math.floor(innerHeight* scale));
-        renderer.setSize(w, h, false);
-        resizeAll();
-        U_A.u_res.value.set(w,h);
-        U_B.u_res.value.set(w,h);
-        U_C.u_res.value.set(w,h);
-        U_BL.u_res.value.set(w,h);
-      }
-      addEventListener('resize', size, {passive:true}); size();
 
-      // Interaction
-      function setMouse(x,y){ U_A.u_mouse.value.set(x,y); }
-      addEventListener('mousemove', e=>{ const r=canvas.getBoundingClientRect(); setMouse((e.clientX-r.left)/r.width, (e.clientY-r.top)/r.height); }, {passive:true});
-      addEventListener('touchmove', e=>{ const t=e.touches[0]; if(!t) return; const r=canvas.getBoundingClientRect(); setMouse((t.clientX-r.left)/r.width, (t.clientY-r.top)/r.height); }, {passive:true});
-      function onScrollAur(){ const k=Math.max(0, Math.min(1, pageYOffset/(0.7*innerHeight))); U_A.u_scroll.value=k; }
-      addEventListener('scroll', onScrollAur, {passive:true}); onScrollAur();
+        const quad = new THREE.PlaneGeometry(2,2);
+        const cam  = new THREE.OrthographicCamera(-1,1,1,-1,0,1);
 
-      // Pipeline
-      let last = performance.now(), acc=0, frames=0;
-      function renderFrame(){
-        const now=performance.now(), dt=now-last; last=now;
-        U_A.u_time.value += dt/1000;
+        let scale = 1.0;
+        let rtBase, rtBright, rtBlur1, rtBlur2;
+        function rt(w,h){ return new THREE.WebGLRenderTarget(w,h,{minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter,format:THREE.RGBAFormat,depthBuffer:false,stencilBuffer:false}); }
+        function resizeAll(){
+          const w = Math.max(1, Math.floor(window.innerWidth  * scale));
+          const h = Math.max(1, Math.floor(window.innerHeight * scale));
+          [rtBase, rtBright, rtBlur1, rtBlur2].forEach(x=>x?.dispose?.());
+          rtBase  = rt(w,h);
+          rtBright= rt(w,h);
+          rtBlur1 = rt(Math.max(1,w>>1), Math.max(1,h>>1));
+          rtBlur2 = rt(Math.max(1,w>>2), Math.max(1,h>>2));
+        }
 
-        // base
-        renderer.setRenderTarget(rtBase);
-        renderer.render(S_A, cam);
+        const VS = `precision highp float; void main(){ gl_Position = vec4(position,1.0); }`;
+        const LIB = `
+          float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453123); }
+          float noise(vec2 p){
+            vec2 i=floor(p), f=fract(p);
+            float a=hash(i), b=hash(i+vec2(1.0,0.0)), c=hash(i+vec2(0.0,1.0)), d=hash(i+vec2(1.0,1.0));
+            vec2 u=f*f*(3.0-2.0*f);
+            return mix(a,b,u.x)+ (c - a)*u.y*(1.0-u.x) + (d - b)*u.x*u.y;
+          }
+          float fbm(vec2 p){
+            float v=0.0; float a=0.5;
+            for(int i=0;i<6;i++){ v+=a*noise(p); p*=2.0; a*=0.5; }
+            return v;
+          }
+          vec2 curl(vec2 p){
+            float e=0.03;
+            float n1=fbm(p+vec2(0.0,e)), n2=fbm(p-vec2(0.0,e));
+            float n3=fbm(p+vec2(e,0.0)), n4=fbm(p-vec2(e,0.0));
+            return vec2(n1-n2, n4-n3);
+          }
+          vec3 hsl2rgb(vec3 c){
+            vec3 p = abs(mod(c.xxx + vec3(0., 1./3., 2./3.), 1.)*6.-3.);
+            return c.z + c.y*(clamp(p-1.,0.,1.) - 0.5)*(1.-abs(2.*c.z-1.));
+          }
+          vec3 auroraPalette(float x, float hue){
+            float H = fract((0.33 + hue)/1.0);
+            vec3 c1 = hsl2rgb(vec3(H, 0.85, 0.55));
+            vec3 c2 = hsl2rgb(vec3(fract(H+0.08), 0.85, 0.55));
+            vec3 c3 = hsl2rgb(vec3(fract(H+0.36), 0.75, 0.62));
+            return mix(mix(c1, c2, smoothstep(0.2,0.6,x)), c3, smoothstep(0.6,1.0,x));
+          }
+          float ridgeNoise(vec2 p){
+            float r=0.0, amp=0.5;
+            for(int i=0;i<5;i++){ r += (1.0-abs(2.0*fract(noise(p)*0.95)-1.0))*amp; p*=2.0; amp*=0.55; }
+            return r;
+          }
+        `;
 
-        // bright
-        U_B.tDiffuse.value = rtBase.texture;
-        renderer.setRenderTarget(rtBright);
-        renderer.render(S_B, cam);
+        const FS_AURORA = `
+          precision highp float;
+          uniform vec2  u_res;
+          uniform float u_time;
+          uniform vec2  u_mouse;
+          uniform float u_speed;
+          uniform float u_intensity;
+          uniform float u_hueShift;
+          uniform bool  u_stars;
+          uniform bool  u_mountains;
+          uniform float u_scroll;
+          ${LIB}
+          float stars(vec2 uv, float t){
+            vec2 id = floor(uv * u_res * 0.75);
+            float h = fract(sin(dot(id, vec2(12.9898,78.233)))*43758.5453);
+            float tw = 0.50 + 0.50*sin(t*3.0 + h*6.2831);
+            return step(0.9976, h) * tw;
+          }
+          float field(vec2 p, float z){
+            float f = fbm(p*1.6 + curl(p*1.1)*0.6 + z*0.15);
+            f = (f + fbm(p*3.1 - z*0.22))/2.0;
+            return f;
+          }
+          void main(){
+            vec2 uv = gl_FragCoord.xy / u_res.xy;
+            vec2 aspect = vec2(u_res.x/u_res.y,1.0);
+            vec2 p = uv * aspect;
 
-        // kawase blur
-        U_K1.tDiffuse.value = rtBright.texture;
-        U_K1.u_res.value.set(rtBright.width, rtBright.height);
-        renderer.setRenderTarget(rtBlur1);
-        renderer.render(S_K1, cam);
+            vec3 col = mix(vec3(0.012,0.028,0.045), vec3(0.03,0.06,0.10), uv.y);
+            float t = u_time * (0.55 + u_speed*0.85 + u_scroll*0.25);
+            float intensity = u_intensity * (1.0 + 0.25*u_scroll);
 
-        U_K2.tDiffuse.value = rtBlur1.texture;
-        U_K2.u_res.value.set(rtBlur1.width, rtBlur1.height);
-        renderer.setRenderTarget(rtBlur2);
-        renderer.render(S_K2, cam);
+            const int STEPS = 48;
+            float yStart = 0.15;
+            float yEnd   = 1.05;
+            float dy = (yEnd - yStart) / float(STEPS);
+            vec3 acc = vec3(0.0);
+            float tot=0.0;
 
-        // composite
-        U_C.tBase.value  = rtBase.texture;
-        U_C.tBloom.value = rtBlur2.texture;
-        renderer.setRenderTarget(null);
-        renderer.render(S_C, cam);
+            float beams=0.0;
+            for(float i=0.0;i<6.0;i+=1.0){
+              float cx = fract(i/6.0 + 0.37);
+              float d = abs(uv.x - cx);
+              float b = exp(-pow(d*40.0, 2.0)) * (0.25 + 0.25*sin(t*1.2 + i*1.7));
+              beams += b;
+            }
+            beams *= smoothstep(0.12,0.8,uv.y);
 
-        // autoscale (kevyesti)
-        acc+=dt; frames++;
-        if(acc>500){
-          const fps = Math.round(1000*frames/acc);
-          if(fps<50 && scale>0.7){ scale=Math.max(0.7, scale-0.05); size(); }
-          else if(fps>58 && scale<1.0){ scale=Math.min(1.0, scale+0.02); size(); }
-          acc=0; frames=0;
+            for(int i=0;i<STEPS;i++){
+              float yy = yStart + float(i)*dy;
+              vec2 q   = p*2.2 + vec2(0.0, -t*0.25);
+              float k  = field(q + vec2(0.0, yy*2.0), yy*2.0 + t*0.35);
+              float curtain = smoothstep(0.25, 0.95, k) * smoothstep(1.0, 0.30, yy);
+              curtain *= 0.9 + 0.1*sin((uv.x + yy)*16.0 + t*1.1);
+              vec3 aCol = auroraPalette(k, u_hueShift/360.0);
+              vec3 c    = aCol * curtain * (1.0 + 0.35*beams);
+              float w   = 0.9 * exp(-pow(1.2 - yy, 2.0)*1.4);
+              acc += c * w; tot += w;
+            }
+            acc /= max(tot, 1e-4);
+            acc *= 1.12 * intensity;
+
+            if(u_stars){
+              vec2 suv = uv;
+              col += vec3(stars(suv, t*1.2));
+            }
+
+            if(u_mountains){
+              float base = 0.12;
+              float h = base + ridgeNoise(vec2(uv.x*2.0, 0.0))*0.12;
+              if(uv.y < h){
+                float edge = smoothstep(0.0, 0.012, h - uv.y);
+                vec3 mcol = mix(vec3(0.01,0.02,0.03), vec3(0.02,0.03,0.05), 0.35);
+                col = mix(mcol, col, edge);
+              }
+            }
+
+            vec3 outCol = col + acc;
+            float n = fract(sin(dot(gl_FragCoord.xy + u_time*vec2(23.2,47.7), vec2(12.9898,78.233))) * 43758.5453);
+            outCol += (n-0.5)/255.0;
+            gl_FragColor = vec4(outCol, 1.0);
+          }
+        `;
+
+        const FS_BRIGHT = `
+          precision highp float;
+          uniform sampler2D tDiffuse;
+          uniform vec2 u_res;
+          uniform float u_threshold;
+          void main(){
+            vec2 uv = gl_FragCoord.xy / u_res;
+            vec3 c = texture2D(tDiffuse, uv).rgb;
+            float b = max(max(c.r,c.g),c.b);
+            float knee = 0.35;
+            float soft = smoothstep(u_threshold - knee, u_threshold + knee, b);
+            gl_FragColor = vec4(c * soft, 1.0);
+          }
+        `;
+        const FS_KAWASE = `
+          precision highp float;
+          uniform sampler2D tDiffuse;
+          uniform vec2 u_res;
+          void main(){
+            vec2 uv = gl_FragCoord.xy / u_res;
+            vec2 off = 1.0 / u_res;
+            vec3 s = texture2D(tDiffuse, uv).rgb * 0.4;
+            s += texture2D(tDiffuse, uv + vec2( off.x, 0.0)).rgb * 0.15;
+            s += texture2D(tDiffuse, uv + vec2(-off.x, 0.0)).rgb * 0.15;
+            s += texture2D(tDiffuse, uv + vec2(0.0,  off.y)).rgb * 0.15;
+            s += texture2D(tDiffuse, uv + vec2(0.0, -off.y)).rgb * 0.15;
+            gl_FragColor = vec4(s, 1.0);
+          }
+        `;
+        const FS_COMPOSITE = `
+          precision highp float;
+          uniform sampler2D tBase;
+          uniform sampler2D tBloom;
+          uniform vec2 u_res;
+          uniform float u_strength;
+          void main(){
+            vec2 uv = gl_FragCoord.xy / u_res;
+            vec3 base  = texture2D(tBase, uv).rgb;
+            vec3 bloom = texture2D(tBloom, uv).rgb;
+            gl_FragColor = vec4(base + bloom * u_strength, 1.0);
+          }
+        `;
+        const FS_BLIT = `
+          precision highp float;
+          uniform sampler2D tTex; uniform vec2 u_res;
+          void main(){ vec2 uv=gl_FragCoord.xy/u_res; gl_FragColor=texture2D(tTex,uv); }
+        `;
+
+        const U_A = { u_res:{value:new THREE.Vector2(1,1)}, u_time:{value:0}, u_mouse:{value:new THREE.Vector2(0.5,0.5)}, u_speed:{value:0.95}, u_intensity:{value:1.30}, u_hueShift:{value:0.0}, u_stars:{value:true}, u_mountains:{value:true}, u_scroll:{value:0.0} };
+        const M_A = new THREE.ShaderMaterial({uniforms:U_A, vertexShader:VS, fragmentShader:FS_AURORA, depthWrite:false});
+        const S_A = new THREE.Scene(); S_A.add(new THREE.Mesh(quad, M_A));
+
+        const U_B = { tDiffuse:{value:null}, u_res:{value:new THREE.Vector2(1,1)}, u_threshold:{value:0.65} };
+        const M_B = new THREE.ShaderMaterial({uniforms:U_B, vertexShader:VS, fragmentShader:FS_BRIGHT, depthWrite:false});
+        const S_B = new THREE.Scene(); S_B.add(new THREE.Mesh(quad, M_B));
+
+        const U_K1 = { tDiffuse:{value:null}, u_res:{value:new THREE.Vector2(1,1)} };
+        const U_K2 = { tDiffuse:{value:null}, u_res:{value:new THREE.Vector2(1,1)} };
+        const M_K  = new THREE.ShaderMaterial({uniforms:U_K1, vertexShader:VS, fragmentShader:FS_KAWASE, depthWrite:false});
+        const S_K1 = new THREE.Scene(); S_K1.add(new THREE.Mesh(quad, M_K));
+        const M_K2 = new THREE.ShaderMaterial({uniforms:U_K2, vertexShader:VS, fragmentShader:FS_KAWASE, depthWrite:false});
+        const S_K2 = new THREE.Scene(); S_K2.add(new THREE.Mesh(quad, M_K2));
+
+        const U_C = { tBase:{value:null}, tBloom:{value:null}, u_res:{value:new THREE.Vector2(1,1)}, u_strength:{value:1.25} };
+        const M_C = new THREE.ShaderMaterial({uniforms:U_C, vertexShader:VS, fragmentShader:FS_COMPOSITE, depthWrite:false});
+        const S_C = new THREE.Scene(); S_C.add(new THREE.Mesh(quad, M_C));
+
+        const U_BL = { tTex:{value:null}, u_res:{value:new THREE.Vector2(1,1)} };
+        const M_BL = new THREE.ShaderMaterial({uniforms:U_BL, vertexShader:VS, fragmentShader:FS_BLIT, depthWrite:false});
+        const S_BL = new THREE.Scene(); S_BL.add(new THREE.Mesh(quad, M_BL));
+
+        function size(){
+          renderer.setPixelRatio(Math.max(1, Math.min(window.devicePixelRatio||1, DPR_MAX)));
+          const w = Math.max(1, Math.floor(window.innerWidth * scale));
+          const h = Math.max(1, Math.floor(window.innerHeight* scale));
+          renderer.setSize(w, h, false);
+          const rt = (w,h)=>new THREE.WebGLRenderTarget(w,h,{minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter,format:THREE.RGBAFormat,depthBuffer:false,stencilBuffer:false});
+          [rtBase, rtBright, rtBlur1, rtBlur2].forEach(x=>x?.dispose?.());
+          rtBase  = rt(w,h);
+          rtBright= rt(w,h);
+          rtBlur1 = rt(Math.max(1,w>>1), Math.max(1,h>>1));
+          rtBlur2 = rt(Math.max(1,w>>2), Math.max(1,h>>2));
+          U_A.u_res.value.set(w,h);
+          U_B.u_res.value.set(w,h);
+          U_C.u_res.value.set(w,h);
+          U_BL.u_res.value.set(w,h);
+        }
+        window.addEventListener('resize', size, {passive:true}); size();
+
+        function setMouse(x,y){ U_A.u_mouse.value.set(x,y); }
+        window.addEventListener('mousemove', e=>{ const r=canvas.getBoundingClientRect(); setMouse((e.clientX-r.left)/r.width, (e.clientY-r.top)/r.height); }, {passive:true});
+        window.addEventListener('touchmove', e=>{ const t=e.touches[0]; if(!t) return; const r=canvas.getBoundingClientRect(); setMouse((t.clientX-r.left)/r.width, (t.clientY-r.top)/r.height); }, {passive:true});
+        function onScrollAur(){ const k=Math.max(0, Math.min(1, (window.pageYOffset||0)/(0.7*window.innerHeight))); U_A.u_scroll.value=k; }
+        window.addEventListener('scroll', onScrollAur, {passive:true}); onScrollAur();
+
+        let last = performance.now(), acc=0, frames=0;
+        function renderFrame(){
+          const now=performance.now(), dt=now-last; last=now;
+          U_A.u_time.value += dt/1000;
+
+          // base
+          renderer.setRenderTarget(rtBase);
+          renderer.render(S_A, cam);
+
+          // bright
+          (U_B.tDiffuse.value = rtBase.texture), renderer.setRenderTarget(rtBright), renderer.render(S_B, cam);
+
+          // blur passes
+          (U_K1.tDiffuse.value = rtBright.texture), U_K1.u_res.value.set(rtBright.width, rtBright.height);
+          renderer.setRenderTarget(rtBlur1); renderer.render(S_K1, cam);
+
+          (U_K2.tDiffuse.value = rtBlur1.texture), U_K2.u_res.value.set(rtBlur1.width, rtBlur1.height);
+          renderer.setRenderTarget(rtBlur2); renderer.render(S_K2, cam);
+
+          // composite
+          U_C.tBase.value  = rtBase.texture;
+          U_C.tBloom.value = rtBlur2.texture;
+          renderer.setRenderTarget(null);
+          renderer.render(S_C, cam);
+
+          // autoscale
+          acc+=dt; frames++;
+          if(acc>500){
+            const fps = Math.round(1000*frames/acc);
+            if(fps<50 && scale>0.7){ scale=Math.max(0.7, scale-0.05); size(); }
+            else if(fps>58 && scale<1.0){ scale=Math.min(1.0, scale+0.02); size(); }
+            acc=0; frames=0;
+          }
+          requestAnimationFrame(renderFrame);
         }
         requestAnimationFrame(renderFrame);
+      } catch (err){
+        console.error('[Aurora] init failed', err);
+        showFallback(err && (err.message||String(err)));
       }
-      requestAnimationFrame(renderFrame);
     })();
   </script>
 </body>
