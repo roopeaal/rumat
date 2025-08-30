@@ -8,14 +8,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
+    /* Brändivärit (kuten esimerkissä) */
     :root{
-      --brand-deep:  #345563;
-      --brand-ink:   #202020;
-      --brand-olive: #A1A266;
-      --brand-slate: #789FAB;
-      --brand-ivory: #F6F6F4; /* = kuvapalkkien tausta */
+      --brand-deep:  #345563; /* tummansininen / sinivihreä (footer) */
+      --brand-ink:   #202020; /* tumma teksti */
+      --brand-olive: #A1A266; /* oliivi-aksentti (chip/nappi) */
+      --brand-slate: #789FAB; /* vaalea sininen header */
+      --brand-ivory: #F6F6F4; /* lämmin valkoinen tausta */
     }
+
     body{
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
       background:var(--brand-ivory);
@@ -24,17 +27,26 @@
     .serif{font-family:"Libre Baskerville",serif}
     .hero-fixed{position:fixed;inset:0;z-index:-1}
     .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
-    .btn{border-radius:9999px;padding:.65rem 1.05rem;border:1px solid rgb(214 211 209);transition:transform .06s ease, box-shadow .12s ease, background-color .15s;}
+
+    /* Napit & chipit */
+    .btn{
+      border-radius:9999px;padding:.65rem 1.05rem;
+      border:1px solid rgb(214 211 209);
+      transition:transform .06s ease, box-shadow .12s ease, background-color .15s;
+    }
     .btn:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(0,0,0,.12); }
     .btn-dark{ background:#0b0f0e; color:#f8fafb; border-color:#0b0f0e; }
     .btn-olive{ background:var(--brand-olive); color:#202020; border-color:#8f945a; }
-    .chip{font-size:.78rem; padding:.28rem .6rem; border-radius:9999px; border:1px solid rgb(214 211 209); background:#fff; color:#374151;}
+    .chip{
+      font-size:.78rem; padding:.28rem .6rem; border-radius:9999px;
+      border:1px solid rgb(214 211 209); background:#fff; color:#374151;
+    }
     .chip-olive{ border-color:var(--brand-olive); color:var(--brand-olive); }
   </style>
 </head>
 
 <body class="text-stone-900">
-  <!-- Pysyvä hero-tausta -->
+  <!-- ===== HERO (pysyvä Lapin taustakuva, kevyempi peitto) ===== -->
   <div class="hero-fixed">
     <img
       src="https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80"
@@ -45,10 +57,11 @@
     <div class="absolute inset-0 bg-gradient-to-b from-black/5 via-black/10 to-black/22"></div>
   </div>
 
-  <!-- Header -->
+  <!-- ===== Yläpalkki: vaaleansininen, voimistuu skrollissa ===== -->
   <header class="fixed top-0 left-0 right-0 z-50 text-white">
     <div id="header-bg" class="absolute inset-0 backdrop-blur-sm transition-all"
          style="background:rgba(120,159,171,.26); border-bottom:1px solid rgba(32,32,32,.0)"></div>
+
     <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
       <a href="#etusivu" class="flex items-center gap-3">
         <div class="h-10 w-10 grid place-items-center rounded-xl border border-white/55 bg-white/90">
@@ -66,12 +79,12 @@
     </div>
   </header>
 
-  <!-- HERO-tekstit -->
+  <!-- ===== ETUSIVU / HERO-tekstit ===== -->
   <section id="etusivu" class="h-screen grid place-items-center text-stone-50 px-4">
     <div id="hero-text" class="text-center transition-transform">
-      <h1 class="uppercase font-semibold tracking-[0.28em]
-                 text-[clamp(26px,4.6vw,56px)]
-                 drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
+      <h1 class="uppercase font-semibold tracking-[0.36em]
+                 text-4xl sm:text-6xl md:text-7xl lg:text-8xl
+                 drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
         LIIAN RUMAT OLLAKSEEN TOTTA
       </h1>
       <div class="mt-9 flex justify-center">
@@ -83,7 +96,7 @@
     </div>
   </section>
 
-  <!-- Intro-esittely -->
+  <!-- ===== Esittelypalkki ===== -->
   <section class="py-12 bg-stone-50/90">
     <div class="mx-auto max-w-3xl px-6 text-center">
       <p class="text-xl sm:text-2xl">
@@ -92,133 +105,121 @@
     </div>
   </section>
 
-  <!-- ===================== TUOTTEET ===================== -->
-
-  <!-- (A) LAUKKU – KUVAPALKki (#F6F6F4) -->
-  <section id="tuotteet" style="background:#F6F6F4">
-    <div class="mx-auto max-w-6xl px-4 py-14">
-      <div class="flex items-center justify-between mb-6">
+  <!-- ===== TUOTTEET ===== -->
+  <section id="tuotteet" class="py-14 bg-white">
+    <div class="mx-auto max-w-6xl px-4">
+      <div class="flex items-center justify-between mb-2">
         <h2 class="serif text-3xl">Tuotteet</h2>
-        <div class="text-xs text-stone-600">Hinnat sis. ALV • Palautus 14 vrk</div>
+        <div class="text-xs text-stone-500">Hinnat sis. ALV • Palautus 14 vrk</div>
       </div>
 
-      <div class="relative">
-        <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-stone-100">
-            <img id="p1a" class="w-full h-full object-cover" alt="Laukku 1" loading="lazy" decoding="async">
+      <!-- Tuote 1: LAUKKU -->
+      <div class="mb-12">
+        <div class="relative">
+          <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-stone-100">
+              <img id="p1a" class="w-full h-full object-cover" alt="Laukku 1" loading="lazy" decoding="async">
+            </div>
+            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-stone-100">
+              <img id="p1b" class="w-full h-full object-cover" alt="Laukku 2" loading="lazy" decoding="async">
+            </div>
           </div>
-          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-stone-100">
-            <img id="p1b" class="w-full h-full object-cover" alt="Laukku 2" loading="lazy" decoding="async">
+          <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
+          <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
+        </div>
+        <div class="mt-6 text-center">
+          <h3 class="serif text-2xl">Laukku</h3>
+          <p class="mt-1 text-stone-700">
+            Täysin kierrätysmateriaaleista valmistettu sling-laukku. Kierrätetty purjekangas/tekstiili, hihna käytetystä turvavyöstä, metalliosat uudelleenkäytettyä varastoa.
+            Ulkomitat: 28 × 16 × 7 cm. Valmistettu Suomessa.
+          </p>
+          <div class="mt-2 font-semibold">€149,00</div>
+
+          <div class="mt-4 flex items-center justify-center gap-2">
+            <span class="chip">Nouto (sovitusti) — 0 €</span>
+            <span class="chip chip-olive">Posti — 6,90 €</span>
+          </div>
+
+          <div class="mt-3 flex items-center justify-center gap-3 flex-wrap">
+            <!-- NOUTO 0 € -->
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+              <input type="hidden" name="cmd" value="_xclick">
+              <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
+              <input type="hidden" name="item_name" value="Laukku (nouto)">
+              <input type="hidden" name="amount" value="149.00">
+              <input type="hidden" name="currency_code" value="EUR">
+              <input type="hidden" name="shipping" value="0.00">
+              <input type="hidden" name="no_shipping" value="1">
+              <input type="submit" value="Osta – Nouto 0 €" class="btn btn-dark cursor-pointer">
+            </form>
+            <!-- POSTI 6,90 € -->
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+              <input type="hidden" name="cmd" value="_xclick">
+              <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
+              <input type="hidden" name="item_name" value="Laukku (posti)">
+              <input type="hidden" name="amount" value="149.00">
+              <input type="hidden" name="currency_code" value="EUR">
+              <input type="hidden" name="shipping" value="6.90">
+              <input type="hidden" name="no_shipping" value="2">
+              <input type="submit" value="Osta – Posti 6,90 €" class="btn btn-olive cursor-pointer">
+            </form>
           </div>
         </div>
-        <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
-        <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
       </div>
+
+      <!-- Tuote 2: PIPO -->
+      <div class="mb-6">
+        <div class="relative">
+          <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-stone-100">
+              <img id="p2a" class="w-full h-full object-cover" alt="RUMAT Pipo 1" loading="lazy" decoding="async">
+            </div>
+            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-stone-100">
+              <img id="p2b" class="w-full h-full object-cover" alt="RUMAT Pipo 2" loading="lazy" decoding="async">
+            </div>
+          </div>
+          <button id="prev2" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
+          <button id="next2" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
+        </div>
+        <div class="mt-6 text-center">
+          <h3 class="serif text-2xl">RUMAT Pipo</h3>
+          <p class="mt-1 text-stone-700">Käsinneulottu mohair-sekoite. Korkeus n. 22 cm. Päänympärys 54–58 cm (joustava).</p>
+          <div class="mt-2 font-semibold">€59,00</div>
+
+          <div class="mt-4 flex items-center justify-center gap-2">
+            <span class="chip">Nouto (sovitusti) — 0 €</span>
+            <span class="chip chip-olive">Posti — 6,90 €</span>
+          </div>
+
+          <div class="mt-3 flex items-center justify-center gap-3 flex-wrap">
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+              <input type="hidden" name="cmd" value="_xclick">
+              <input type="hidden" name="business" value="kauppa@esimerkki.fi">
+              <input type="hidden" name="item_name" value="RUMAT Pipo (nouto)">
+              <input type="hidden" name="amount" value="59.00">
+              <input type="hidden" name="currency_code" value="EUR">
+              <input type="hidden" name="shipping" value="0.00">
+              <input type="hidden" name="no_shipping" value="1">
+              <input type="submit" value="Osta – Nouto 0 €" class="btn btn-dark cursor-pointer">
+            </form>
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+              <input type="hidden" name="cmd" value="_xclick">
+              <input type="hidden" name="business" value="kauppa@esimerkki.fi">
+              <input type="hidden" name="item_name" value="RUMAT Pipo (posti)">
+              <input type="hidden" name="amount" value="59.00">
+              <input type="hidden" name="currency_code" value="EUR">
+              <input type="hidden" name="shipping" value="6.90">
+              <input type="hidden" name="no_shipping" value="2">
+              <input type="submit" value="Osta – Posti 6,90 €" class="btn btn-olive cursor-pointer">
+            </form>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
-  <!-- (B) LAUKKU – ESITTELYpalkki (#DEEEEE) -->
-  <section style="background:#DEEEEE">
-    <div class="mx-auto max-w-6xl px-4 py-12">
-      <div class="text-center">
-        <h3 class="serif text-2xl">Laukku</h3>
-        <p class="mt-1 text-stone-700">
-          Täysin kierrätysmateriaaleista valmistettu sling-laukku. Kierrätetty purjekangas/tekstiili, hihna käytetystä turvavyöstä, metalliosat uudelleenkäytettyä varastoa.
-          Ulkomitat: 28 × 16 × 7 cm. Valmistettu Suomessa.
-        </p>
-        <div class="mt-2 font-semibold">€149,00</div>
-
-        <div class="mt-4 flex items-center justify-center gap-2">
-          <span class="chip">Nouto (sovitusti) — 0 €</span>
-          <span class="chip chip-olive">Posti — 6,90 €</span>
-        </div>
-
-        <div class="mt-3 flex items-center justify-center gap-3 flex-wrap">
-          <!-- NOUTO 0 € -->
-          <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-            <input type="hidden" name="cmd" value="_xclick">
-            <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
-            <input type="hidden" name="item_name" value="Laukku (nouto)">
-            <input type="hidden" name="amount" value="149.00">
-            <input type="hidden" name="currency_code" value="EUR">
-            <input type="hidden" name="shipping" value="0.00">
-            <input type="hidden" name="no_shipping" value="1">
-            <input type="submit" value="Osta – Nouto 0 €" class="btn btn-dark cursor-pointer">
-          </form>
-          <!-- POSTI 6,90 € -->
-          <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-            <input type="hidden" name="cmd" value="_xclick">
-            <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
-            <input type="hidden" name="item_name" value="Laukku (posti)">
-            <input type="hidden" name="amount" value="149.00">
-            <input type="hidden" name="currency_code" value="EUR">
-            <input type="hidden" name="shipping" value="6.90">
-            <input type="hidden" name="no_shipping" value="2">
-            <input type="submit" value="Osta – Posti 6,90 €" class="btn btn-olive cursor-pointer">
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- (C) PIPO – KUVAPALKki (#F6F6F4) -->
-  <section style="background:#F6F6F4">
-    <div class="mx-auto max-w-6xl px-4 py-14">
-      <div class="relative">
-        <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-stone-100">
-            <img id="p2a" class="w-full h-full object-cover" alt="RUMAT Pipo 1" loading="lazy" decoding="async">
-          </div>
-          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-stone-100">
-            <img id="p2b" class="w-full h-full object-cover" alt="RUMAT Pipo 2" loading="lazy" decoding="async">
-          </div>
-        </div>
-        <button id="prev2" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
-        <button id="next2" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- (D) PIPO – ESITTELYpalkki (#DEEEEE) -->
-  <section style="background:#DEEEEE">
-    <div class="mx-auto max-w-6xl px-4 py-12">
-      <div class="text-center">
-        <h3 class="serif text-2xl">RUMAT Pipo</h3>
-        <p class="mt-1 text-stone-700">Käsinneulottu mohair-sekoite. Korkeus n. 22 cm. Päänympärys 54–58 cm (joustava).</p>
-        <div class="mt-2 font-semibold">€59,00</div>
-
-        <div class="mt-4 flex items-center justify-center gap-2">
-          <span class="chip">Nouto (sovitusti) — 0 €</span>
-          <span class="chip chip-olive">Posti — 6,90 €</span>
-        </div>
-
-        <div class="mt-3 flex items-center justify-center gap-3 flex-wrap">
-          <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-            <input type="hidden" name="cmd" value="_xclick">
-            <input type="hidden" name="business" value="kauppa@esimerkki.fi">
-            <input type="hidden" name="item_name" value="RUMAT Pipo (nouto)">
-            <input type="hidden" name="amount" value="59.00">
-            <input type="hidden" name="currency_code" value="EUR">
-            <input type="hidden" name="shipping" value="0.00">
-            <input type="hidden" name="no_shipping" value="1">
-            <input type="submit" value="Osta – Nouto 0 €" class="btn btn-dark cursor-pointer">
-          </form>
-          <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-            <input type="hidden" name="cmd" value="_xclick">
-            <input type="hidden" name="business" value="kauppa@esimerkki.fi">
-            <input type="hidden" name="item_name" value="RUMAT Pipo (posti)">
-            <input type="hidden" name="amount" value="59.00">
-            <input type="hidden" name="currency_code" value="EUR">
-            <input type="hidden" name="shipping" value="6.90">
-            <input type="hidden" name="no_shipping" value="2">
-            <input type="submit" value="Osta – Posti 6,90 €" class="btn btn-olive cursor-pointer">
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TARINA -->
+  <!-- ===== TARINA ===== -->
   <section id="tarina" class="py-14 bg-stone-50/90">
     <div class="mx-auto max-w-3xl px-6">
       <h2 class="serif text-3xl">Tarina</h2>
@@ -229,7 +230,7 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
+  <!-- ===== FOOTER: brändin tummansininen ===== -->
   <footer id="yhteys" class="pt-14 text-[color:var(--brand-ivory)]" style="background:var(--brand-deep)">
     <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
       <div>
@@ -260,8 +261,9 @@
     </div>
   </footer>
 
+  <!-- ===== Skriptit ===== -->
   <script>
-    // Header-sävy + hero-tekstin kevyt nosto
+    // Yläpalkin vaaleansinisen vahvistus skrollissa + hero-tekstin kevyt nosto
     const headerBg = document.getElementById('header-bg');
     const heroText = document.getElementById('hero-text');
     let lastY = -1;
@@ -269,10 +271,14 @@
       const y = window.scrollY || 0;
       if (y === lastY) return; lastY = y;
       const vh = window.innerHeight || 1;
+
+      // rgba(120,159,171, α), α 0.26 → 0.86
       const alpha = 0.26 + 0.60 * Math.min(1, y / 140);
       headerBg.style.backgroundColor = `rgba(120,159,171,${alpha.toFixed(3)})`;
       headerBg.style.borderBottomColor = `rgba(32,32,32,${Math.min(0.18, alpha/3).toFixed(3)})`;
       headerBg.style.borderBottomWidth = '1px';
+
+      // Hero-tekstin kevyt nosto ilman "pomppua"
       const t = -22 * Math.min(1, y / (vh * 0.9));
       heroText.style.transform = `translateY(${t}vh)`;
     };
@@ -280,7 +286,7 @@
     onScroll();
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Tuotekuvat (vaihda omiin URL:eihin)
+    // --------- Tuotekuvat (paikkamerkit; vaihda omiin URL:eihin) ----------
     const slingImgs = [
       "https://placehold.co/1400x1750?text=Laukku+1",
       "https://placehold.co/1400x1750?text=Laukku+2",
@@ -292,6 +298,7 @@
       "https://placehold.co/1400x1750?text=Pipo+3"
     ];
     const FALLBACK = "https://placehold.co/1400x1750?text=Kuva";
+
     let i1 = 0, i2 = 0;
     function setWithFallback(imgEl, url){
       if(!imgEl) return;
@@ -305,8 +312,11 @@
       setWithFallback(a, arr[(i % n + n) % n]);
       setWithFallback(b, arr[((i + 1) % n + n) % n]);
     };
+
     setPair(slingImgs, "p1a", "p1b", i1);
     setPair(pipoImgs,  "p2a", "p2b", i2);
+
+    // Karusellin nuolet
     document.getElementById('next1').addEventListener('click', () => { i1 = (i1 + 1) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
     document.getElementById('prev1').addEventListener('click', () => { i1 = (i1 - 1 + slingImgs.length) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
     document.getElementById('next2').addEventListener('click', () => { i2 = (i2 + 1) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
