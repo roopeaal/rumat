@@ -14,52 +14,103 @@
 
   <!-- Brändityylit -->
   <style>
-    :root{
-      --brand-green: #0E2016;  /* Spruce (vihreä) */
-      --footer-black:#0B0F0E;  /* aiempi musta footer */
-      --brand-ink:   #202020;  /* mustanharmaa teksti */
-      --brand-ivory: #F6F6F4;  /* vaalea tausta */
-      --band-pale:   #DEEEEE;  /* esittelypalkkien tausta */
+    :root {
+      --brand-deep:  #345563; /* syvä sinivihreä */
+      --brand-ink:   #202020; /* lähes musta */
+      --brand-olive: #A1A266; /* oliivi accent */
+      --brand-slate: #789FAB; /* siniharmaa */
+      --brand-ivory: #F6F6F4; /* lämmin valkoinen */
+      --brand-mist:  #DEEEEE; /* vaalea sinivihreä */
     }
 
-    body{
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
-      background:var(--brand-ivory);
-      color:#1f2937;
+    body {
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial;
+      background: var(--brand-ivory);
+      color: #1f2937;
     }
 
-    .serif{font-family:"Libre Baskerville",serif}
-    .hero-fixed{position:fixed;inset:0;z-index:-1}
-    .text-brand{color:var(--brand-green)}
-    .bg-brand{background:var(--brand-green)}
-    .btn{
-      border-radius:9999px;
-      padding:.65rem 1.05rem;
-      border:1px solid rgb(214 211 209);
-      transition:transform .06s ease, box-shadow .12s ease, background-color .15s;
+    .serif {
+      font-family: "Libre Baskerville", serif;
     }
 
-    .btn:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(0,0,0,.12); }
-    .btn-dark{ background:var(--footer-black); color:#fff; border-color:#1b1b1b; }
-    .btn-olive{ background:var(--brand-green); color:#202020; border-color:#8f945a; }
-
-    .chip{
-      font-size:.78rem; padding:.28rem .6rem; border-radius:9999px; border:1px solid rgb(214 211 209); background:#fff; color:#374151;
+    .hero-fixed {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
     }
 
-    .chip-olive{ border-color:var(--brand-green); color:var(--brand-green); }
-    .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
+    .text-brand {
+      color: var(--brand-deep);
+    }
+
+    .bg-brand {
+      background: var(--brand-deep);
+    }
+
+    .btn {
+      border-radius: 9999px;
+      padding: .65rem 1.05rem;
+      border: 1px solid rgb(214 211 209);
+      transition: transform .06s ease, box-shadow .12s ease, background-color .15s;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .12);
+    }
+
+    .btn-dark {
+      background: var(--brand-ink);
+      color: #fff;
+      border-color: #1b1b1b;
+    }
+
+    .btn-olive {
+      background: var(--brand-olive);
+      color: #202020;
+      border-color: #8f945a;
+    }
+
+    .chip {
+      font-size: .78rem;
+      padding: .25rem .5rem;
+      border-radius: 9999px;
+      border: 1px solid rgb(214 211 209);
+      background: #fff;
+    }
+
+    .chip-olive {
+      border-color: var(--brand-olive);
+      color: var(--brand-olive);
+    }
+
+    .shadow-soft {
+      box-shadow: 0 6px 20px rgba(0, 0, 0, .12);
+    }
+
+    /* Hero text style */
+    #hero-text {
+      text-align: center;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .hero-img {
+      width: 100%;
+      height: 100vh;
+      object-fit: cover;
+      object-position: center 60%;
+    }
   </style>
 </head>
 
 <body class="text-stone-900">
+
   <!-- Hero Section -->
   <div class="hero-fixed">
     <img
       src="https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80"
       alt="Lapin erämaa"
-      class="w-full h-full object-cover"
-      style="object-position:center 60%"
+      class="hero-img"
       onerror="this.onerror=null;this.src='https://placehold.co/2400x1600?text=Lapin+taustakuva'">
     <div class="absolute inset-0 bg-gradient-to-b from-black/5 via-black/10 to-black/22"></div>
   </div>
@@ -68,7 +119,6 @@
   <header class="fixed top-0 left-0 right-0 z-50 text-white">
     <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
       <a href="#etusivu" class="flex items-center gap-3">
-        <!-- Paksu “R” kaadettu 90° oikealle -->
         <div class="h-10 w-10 grid place-items-center rounded-xl border border-white/55 bg-white/92">
           <span class="font-black text-[22px] leading-none text-[color:var(--brand-green)] transform rotate-90 select-none">R</span>
         </div>
@@ -101,41 +151,6 @@
     </div>
   </section>
 
-  <!-- Tuotteet -->
-  <section id="tuotteet" class="py-14 bg-white">
-    <div class="mx-auto max-w-6xl px-4">
-      <div class="flex items-center justify-between mb-2">
-        <h2 class="serif text-3xl">Tuotteet</h2>
-        <div class="text-xs text-stone-500">Hinnat sis. ALV • Palautus 14 vrk</div>
-      </div>
-
-      <!-- Laukku -->
-      <div class="mb-12">
-        <div class="relative">
-          <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200">
-              <img id="p1a" class="w-full h-full object-cover" alt="Laukku 1" loading="lazy" decoding="async">
-            </div>
-            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200">
-              <img id="p1b" class="w-full h-full object-cover" alt="Laukku 2" loading="lazy" decoding="async">
-            </div>
-          </div>
-          <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
-          <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
-        </div>
-        <div class="mt-6 text-center">
-          <h3 class="serif text-2xl">Laukku</h3>
-          <p class="mt-1 text-stone-700">
-            Täysin kierrätysmateriaaleista valmistettu sling-laukku. Kierrätetty purjekangas/tekstiili, hihna käytetystä turvavyöstä, metalliosat uudelleenkäytettyä varastoa.
-            Ulkomitat: 28 × 16 × 7 cm. Valmistettu Suomessa.
-          </p>
-          <div class="mt-2 font-semibold">€149,00</div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
   <!-- Footer -->
   <footer id="yhteys" class="pt-14 text-[color:var(--brand-ivory)]" style="background:var(--footer-black)">
     <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
@@ -158,10 +173,5 @@
       © <span id="year"></span> RUMAT.STUDIO
     </div>
   </footer>
-
-  <!-- Skriptit -->
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>
