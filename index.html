@@ -9,16 +9,16 @@
   <!-- Fontit + Tailwind -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     :root{
-      --brand-deep:  #F6F6F4;  /* tumma sinivihreä (footer) */
+      --brand-deep:  #345563;  /* tumma sinivihreä (footer) */
       --brand-ink:   #202020;  /* mustanharmaa */
       --brand-olive: #A1A266;  /* oliivi aksentti */
-      --brand-slate: #A1A266;  /* vaaleansininen (headerin sävy) */
-      --brand-ivory: #345563;  /* kuvapalkkien tausta */
+      --brand-slate: #789FAB;  /* vaaleansininen (headerin sävy) */
+      --brand-ivory: #F6F6F4;  /* kuvapalkkien tausta */
       --brand-band:  #DEEEEE;  /* esittelypalkkien tausta */
     }
     body{
@@ -27,7 +27,10 @@
       color:#1f2937;
     }
     .serif{font-family:"Libre Baskerville",serif}
+
+    /* Hero-tausta pysyy paikallaan */
     .hero-fixed{position:fixed;inset:0;z-index:-1}
+
     .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
     .btn{border-radius:9999px;padding:.65rem 1.05rem;border:1px solid rgb(214 211 209);
          transition:transform .06s ease, box-shadow .12s ease, background-color .15s;}
@@ -58,9 +61,14 @@
 
     <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
       <a href="#etusivu" class="flex items-center gap-3">
-        <!-- NORMAALI PAKSU R – kaadettu 90° oikealle -->
-        <div class="h-10 w-10 grid place-items-center rounded-xl border border-white/55 bg-white/92">
-          <span class="font-black text-[22px] leading-none text-[color:var(--brand-deep)] transform rotate-90 select-none">R</span>
+        <!-- UUSI RR-monogrammi (compact) -->
+        <div class="h-10 w-[72px] grid place-items-center rounded-xl border border-white/55 bg-white/92">
+          <svg class="h-6" viewBox="0 0 124 64" aria-label="RUMAT monogram" style="color:#345563">
+            <g fill="currentColor">
+              <path d="M4 6H26Q50 6 50 24T26 42H4V6Z M26 42L50 58H32L4 42Z"/>
+              <path d="M64 6H86Q110 6 110 24T86 42H64V6Z M86 42L110 58H92L64 42Z"/>
+            </g>
+          </svg>
         </div>
         <span class="hidden sm:inline text-sm uppercase tracking-widest font-semibold">RUMAT.STUDIO</span>
       </a>
@@ -79,15 +87,21 @@
   <section id="etusivu" class="h-screen grid place-items-center text-stone-50 px-4">
     <div id="hero-text" class="text-center transition-transform">
       <h1 class="uppercase font-semibold tracking-[0.28em]
-                 text-[clamp(22px,4.1vw,48px)]
+                 text-[clamp(26px,4.6vw,56px)]
                  drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
         LIIAN RUMAT OLLAKSEEN TOTTA
       </h1>
       <div class="mt-9 flex justify-center">
-        <!-- Iso ympyrälogo: NORMAALI PAKSU R – kaadettu 90° oikealle -->
+        <!-- Iso ympyrälogo + RR-monogrammi -->
         <div class="h-28 w-28 sm:h-32 sm:w-32 grid place-items-center
                     rounded-full bg-white/92 ring-1 ring-white/70 shadow-soft">
-          <span class="font-black text-6xl sm:text-7xl leading-none text-stone-900 transform rotate-90 select-none">R</span>
+          <svg class="h-12 sm:h-14" viewBox="0 0 124 64" aria-label="RUMAT monogram"
+               style="color:#202020">
+            <g fill="currentColor">
+              <path d="M4 6H26Q50 6 50 24T26 42H4V6Z M26 42L50 58H32L4 42Z"/>
+              <path d="M64 6H86Q110 6 110 24T86 42H64V6Z M86 42L110 58H92L64 42Z"/>
+            </g>
+          </svg>
         </div>
       </div>
     </div>
@@ -274,7 +288,7 @@
 
   <!-- Skriptit -->
   <script>
-    // Header-sävy + hero-tekstin kevyt nosto
+    // Header-sävy + hero-tekstin kevyt nosto (ilman "pomppua")
     const headerBg = document.getElementById('header-bg');
     const heroText = document.getElementById('hero-text');
     let lastY = -1;
@@ -293,16 +307,16 @@
     onScroll();
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Tuotekuvat (Unsplash) + fallback
+    // Tuotekuvat — käytä vapaasti vaihdettavia lähteitä (Unsplash). Voit vaihtaa URL:t omiin.
     const slingImgs = [
-      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1511389026070-a14ae610a1be?auto=format&fit=crop&w=1600&q=80"
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80", // laukku lähikuva
+      "https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1600&q=80", // sling olalla
+      "https://images.unsplash.com/photo-1511389026070-a14ae610a1be?auto=format&fit=crop&w=1600&q=80"  // laukku asetelma
     ];
     const pipoImgs = [
-      "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1600&q=80"
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",  // pipo/tekstiili
+      "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1600&q=80",  // pipo ulkona
+      "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1600&q=80"   // neule lähikuva
     ];
     const FALLBACK = "https://placehold.co/1400x1750?text=Kuva";
 
