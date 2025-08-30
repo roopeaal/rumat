@@ -5,20 +5,21 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>RUMAT Admin</title>
   <style>
-    :root{--ink:#202020;--edge:#dadada}
-    body{font:16px system-ui,Segoe UI,Inter,sans-serif;background:#f6f6f4;color:var(--ink);margin:0}
-    .wrap{max-width:980px;margin:40px auto;padding:20px;background:#fff;border:1px solid var(--edge);border-radius:14px}
+    :root{--ink:#202020;--edge:#dadada;--bg:#f6f6f4}
+    body{font:16px system-ui,Segoe UI,Inter,sans-serif;background:var(--bg);color:var(--ink);margin:0}
+    .wrap{max-width:1000px;margin:40px auto;padding:20px;background:#fff;border:1px solid var(--edge);border-radius:14px}
     h1{margin:0 0 10px 0}
     .row{display:flex;gap:.6rem;flex-wrap:wrap;margin:.6rem 0}
     input,button,textarea{font:inherit}
     input{padding:.55rem .7rem;border:1px solid var(--edge);border-radius:10px;width:100%}
     button{padding:.55rem 1rem;border-radius:9999px;border:1px solid #2a2a2a;background:#202020;color:#fff;cursor:pointer}
     button.secondary{background:#789FAB;border-color:#789FAB}
-    textarea{width:100%;min-height:320px;padding:.8rem;border:1px solid var(--edge);border-radius:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-    .hint{font-size:.9rem;color:#666}
+    textarea{width:100%;min-height:260px;padding:.8rem;border:1px solid var(--edge);border-radius:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
     label{font-size:.9rem;color:#444;display:block;margin-bottom:.2rem}
+    .hint{font-size:.9rem;color:#666}
     .small{font-size:.85rem;color:#555}
+    .card{border:1px solid var(--edge);border-radius:12px;padding:12px}
   </style>
 </head>
 <body>
@@ -27,39 +28,42 @@
     <p class="hint">Kirjaudu salasanalla, lataa nykyinen sisältö, muokkaa ja tallenna. Salasana tarkistetaan Workerissa, eikä se näy sivukoodissa.</p>
 
     <div class="row">
-      <input id="pwd" type="password" placeholder="Salasana (ADMIN_PASSWORD)">
+      <input id="pwd" type="password" placeholder="Salasana">
       <button id="login">Kirjaudu</button>
       <button id="logout" class="secondary">Ulos</button>
     </div>
 
     <div class="grid">
-      <div>
+      <div class="card">
         <label>Hero-otsikko</label>
         <input id="f_headline" placeholder="LIIAN RUMAT OLLAKSEEN TOTTA">
+        <label style="margin-top:.5rem">Hero-kuvan suora URL (jpg/png – esim. IG:n kuvalinkki, ei iframe)</label>
+        <input id="f_image" placeholder="https://.../hero.jpg">
       </div>
-      <div>
-        <label>Hero-kuvan URL</label>
-        <input id="f_image" placeholder="https://images.unsplash.com/...">
-      </div>
-    </div>
-
-    <div class="grid" style="margin-top:.6rem">
-      <div>
+      <div class="card">
         <label>PayPal-tili (business email)</label>
         <input id="f_paypal" placeholder="kauppa@oma.fi">
-      </div>
-      <div>
-        <label>Instagram-osoite</label>
-        <input id="f_ig" placeholder="https://instagram.com/rumat.studio">
+        <div class="grid" style="margin-top:.6rem">
+          <div>
+            <label>Instagram</label>
+            <input id="f_ig" placeholder="https://instagram.com/rumat.studio">
+          </div>
+          <div>
+            <label>TikTok</label>
+            <input id="f_tt" placeholder="https://tiktok.com/@rumat.studio">
+          </div>
+        </div>
+        <label style="margin-top:.6rem">Yhteys-sähköposti</label>
+        <input id="f_mail" placeholder="hello@rumat.fi">
       </div>
     </div>
 
     <div class="grid" style="margin-top:.6rem">
-      <div>
+      <div class="card">
         <label>Laukku – kuvien URL-osoitteet (yksi per rivi)</label>
         <textarea id="f_laukku_imgs" class="small" placeholder="https://.../1.jpg&#10;https://.../2.jpg"></textarea>
       </div>
-      <div>
+      <div class="card">
         <label>Pipo – kuvien URL-osoitteet (yksi per rivi)</label>
         <textarea id="f_pipo_imgs" class="small" placeholder="https://.../1.jpg&#10;https://.../2.jpg"></textarea>
       </div>
@@ -68,22 +72,19 @@
     <div class="row" style="margin-top:.6rem">
       <button id="pull" class="secondary">Lataa sisältö</button>
       <button id="push">Tallenna sisältö</button>
+      <button id="download" class="secondary" title="Lataa varmuuskopio">Lataa varmuuskopio</button>
     </div>
 
-    <textarea id="json" placeholder='{"paypalBusiness":"...","hero":{"headline":"...","image":"..."},"products":[...]}'></textarea>
+    <label style="display:block;margin-top:.6rem">Raaka JSON (voit muokata käsin)</label>
+    <textarea id="json" placeholder='{"paypalBusiness":"...","hero":{"headline":"...","image":"..."},"products":[...],"contact":{"instagram":"...","tiktok":"...","email":"..."}}'></textarea>
     <pre id="out" class="hint"></pre>
   </div>
 
   <script>
-    const API_BASE = "https://rumat-backend.roope-aa.workers.dev"; // <-- VAIHDA OMA URL
-    const out = (m)=> document.getElementById('out').textContent =
-      (typeof m==='string') ? m : JSON.stringify(m,null,2);
-
+    const API_BASE = "https://rumat-backend.roope-aa.workers.dev"; // VAIHDA oma Workers-URL
     const el = id => document.getElementById(id);
-
-    function lines(id){
-      return el(id).value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
-    }
+    const out = (m)=> el('out').textContent = (typeof m==='string')? m : JSON.stringify(m,null,2);
+    const lines = id => el(id).value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
 
     function applyFormToJson(){
       let data = {};
@@ -94,14 +95,17 @@
       if(el('f_paypal').value.trim())   data.paypalBusiness= el('f_paypal').value.trim();
 
       data.contact = data.contact || {};
-      if(el('f_ig').value.trim()) data.contact.instagram = el('f_ig').value.trim();
+      if(el('f_ig').value.trim())   data.contact.instagram = el('f_ig').value.trim();
+      if(el('f_tt').value.trim())   data.contact.tiktok    = el('f_tt').value.trim();
+      if(el('f_mail').value.trim()) data.contact.email     = el('f_mail').value.trim();
+
+      data.products = data.products || [];
+      const byId = Object.fromEntries(data.products.map(p=>[p.id,p]));
+      if(!byId.laukku) { byId.laukku = { id:'laukku', images:[], price:149, name:"Laukku" }; data.products.push(byId.laukku); }
+      if(!byId.pipo)   { byId.pipo   = { id:'pipo',   images:[], price:59,  name:"RUMAT Pipo" }; data.products.push(byId.pipo); }
 
       const lau = lines('f_laukku_imgs');
       const pip = lines('f_pipo_imgs');
-      data.products = data.products || [];
-      const byId = Object.fromEntries(data.products.map(p=>[p.id,p]));
-      if(!byId.laukku) { byId.laukku = { id:'laukku', images:[] }; data.products.push(byId.laukku); }
-      if(!byId.pipo)   { byId.pipo   = { id:'pipo',   images:[] }; data.products.push(byId.pipo); }
       if(lau.length) byId.laukku.images = lau;
       if(pip.length) byId.pipo.images   = pip;
 
@@ -115,11 +119,14 @@
         el('f_image').value    = d?.hero?.image || "";
         el('f_paypal').value   = d?.paypalBusiness || "";
         el('f_ig').value       = d?.contact?.instagram || "";
+        el('f_tt').value       = d?.contact?.tiktok || "";
+        el('f_mail').value     = d?.contact?.email || "";
         el('f_laukku_imgs').value = (d?.products?.find(p=>p.id==='laukku')?.images || []).join("\n");
         el('f_pipo_imgs').value   = (d?.products?.find(p=>p.id==='pipo')?.images || []).join("\n");
       }catch{}
     }
 
+    // Auth
     el('login').onclick = async () => {
       const password = el('pwd').value;
       const r = await fetch(`${API_BASE}/api/login`, {
@@ -129,12 +136,12 @@
       });
       out(await r.json());
     };
-
     el('logout').onclick = async () => {
       const r = await fetch(`${API_BASE}/api/logout`, { method:'POST', credentials:'include' });
       out(await r.json());
     };
 
+    // Load/Save
     el('pull').onclick = async () => {
       const r = await fetch(`${API_BASE}/api/content`, { credentials:'include' });
       const text = await r.text();
@@ -142,7 +149,6 @@
       applyJsonToForm();
       out("Ladattu.");
     };
-
     el('push').onclick = async () => {
       applyFormToJson();
       const body = el('json').value || "{}";
@@ -153,6 +159,14 @@
         body
       });
       out(await r.json());
+    };
+    el('download').onclick = () => {
+      const blob = new Blob([el('json').value||"{}"], {type:"application/json"});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `rumat-content-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(a.href);
     };
 
     el('json').addEventListener('input', applyJsonToForm);
