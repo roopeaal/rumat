@@ -14,11 +14,12 @@
 
   <style>
     :root{
-      --brand-green: #0E2016;  /* Spruce (vihreä) */
-      --footer-black:#0B0F0E;  /* aiempi musta footer */
-      --brand-ink:   #202020;  /* mustanharmaa teksti */
-      --brand-ivory: #F6F6F4;  /* vaalea tausta */
-      --band-pale:   #DEEEEE;  /* esittelypalkkien tausta */
+      --brand-deep:  #345563;  /* tumma sinivihreä (footer) */
+      --brand-ink:   #202020;  /* mustanharmaa */
+      --brand-olive: #A1A266;  /* oliivi aksentti */
+      --brand-slate: #789FAB;  /* vaaleansininen (headerin sävy) */
+      --brand-ivory: #F6F6F4;  /* kuvapalkkien tausta */
+      --brand-band:  #DEEEEE;  /* esittelypalkkien tausta */
     }
     body{
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
@@ -32,14 +33,14 @@
          transition:transform .06s ease, box-shadow .12s ease, background-color .15s;}
     .btn:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(0,0,0,.12); }
     .btn-dark{ background:#0b0f0e; color:#f8fafb; border-color:#0b0f0e; }
-    .btn-olive{ background:#A1A266; color:#202020; border-color:#8f945a; }
+    .btn-olive{ background:var(--brand-olive); color:#202020; border-color:#8f945a; }
     .chip{font-size:.78rem; padding:.28rem .6rem; border-radius:9999px; border:1px solid rgb(214 211 209); background:#fff; color:#374151;}
-    .chip-olive{ border-color:#A1A266; color:#A1A266; }
+    .chip-olive{ border-color:var(--brand-olive); color:var(--brand-olive); }
   </style>
 </head>
 
 <body class="text-stone-900">
-  <!-- Kiinteä hero-tausta (ei liiku) -->
+  <!-- Pysyvä hero-tausta -->
   <div class="hero-fixed">
     <img
       src="https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80"
@@ -50,18 +51,18 @@
     <div class="absolute inset-0 bg-gradient-to-b from-black/5 via-black/10 to-black/22"></div>
   </div>
 
-  <!-- 1) HEROON KUULUVA VÄRIPALKki — NOUSEE YLÖS SKROLLATESSA -->
-  <div class="h-14 md:h-16 w-full" style="background:var(--brand-green); opacity:.92;"></div>
-
-  <!-- 2) LÄPINÄKYVÄ KIINTEÄ HEADER (logo + linkit jäävät) -->
+  <!-- Header -->
   <header class="fixed top-0 left-0 right-0 z-50 text-white">
+    <div id="header-bg" class="absolute inset-0 backdrop-blur-sm transition-all"
+         style="background:rgba(120,159,171,.26); border-bottom:1px solid rgba(32,32,32,.0)"></div>
+
     <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
       <a href="#etusivu" class="flex items-center gap-3">
-        <!-- Paksu “R” kaadettu 90° oikealle -->
+        <!-- NORMAALI PAKSU R – kaadettu 90° oikealle -->
         <div class="h-10 w-10 grid place-items-center rounded-xl border border-white/55 bg-white/92">
-          <span class="font-black text-[22px] leading-none text-[color:var(--brand-green)] transform rotate-90 select-none">R</span>
+          <span class="font-black text-[22px] leading-none text-[color:var(--brand-deep)] transform rotate-90 select-none">R</span>
         </div>
-        <span class="hidden sm:inline text-sm uppercase tracking-widest font-semibold drop-shadow">RUMAT.STUDIO</span>
+        <span class="hidden sm:inline text-sm uppercase tracking-widest font-semibold">RUMAT.STUDIO</span>
       </a>
 
       <nav class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
@@ -75,7 +76,7 @@
   </header>
 
   <!-- HERO-tekstit -->
-  <section id="etusivu" class="h-[calc(100vh-56px)] md:h-[calc(100vh-64px)] grid place-items-center text-stone-50 px-4">
+  <section id="etusivu" class="h-screen grid place-items-center text-stone-50 px-4">
     <div id="hero-text" class="text-center transition-transform">
       <h1 class="uppercase font-semibold tracking-[0.28em]
                  text-[clamp(22px,4.1vw,48px)]
@@ -83,6 +84,7 @@
         LIIAN RUMAT OLLAKSEEN TOTTA
       </h1>
       <div class="mt-9 flex justify-center">
+        <!-- Iso ympyrälogo: NORMAALI PAKSU R – kaadettu 90° oikealle -->
         <div class="h-28 w-28 sm:h-32 sm:w-32 grid place-items-center
                     rounded-full bg-white/92 ring-1 ring-white/70 shadow-soft">
           <span class="font-black text-6xl sm:text-7xl leading-none text-stone-900 transform rotate-90 select-none">R</span>
@@ -102,32 +104,32 @@
 
   <!-- ===================== TUOTTEET ===================== -->
 
-  <!-- (A) LAUKKU – KUVAPALKki (Vihreä tausta) -->
-  <section id="tuotteet" style="background:var(--brand-green)">
-    <div class="mx-auto max-w-6xl px-4 py-14 text-white">
+  <!-- (A) LAUKKU – KUVAPALKki (#F6F6F4) -->
+  <section id="tuotteet" style="background:#F6F6F4">
+    <div class="mx-auto max-w-6xl px-4 py-14">
       <div class="flex items-center justify-between mb-6">
         <h2 class="serif text-3xl">Tuotteet</h2>
-        <div class="text-xs text-white/80">Hinnat sis. ALV • Palautus 14 vrk</div>
+        <div class="text-xs text-stone-600">Hinnat sis. ALV • Palautus 14 vrk</div>
       </div>
 
       <div class="relative">
         <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-white/20 bg-black/10">
+          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-stone-100">
             <img id="p1a" class="w-full h-full object-cover" alt="Laukku 1" loading="lazy" decoding="async">
           </div>
-          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-white/20 bg-black/10">
+          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-stone-100">
             <img id="p1b" class="w-full h-full object-cover" alt="Laukku 2" loading="lazy" decoding="async">
           </div>
         </div>
 
-        <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft" aria-label="Edelliset kuvat">◀</button>
-        <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
+        <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
+        <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
       </div>
     </div>
   </section>
 
   <!-- (B) LAUKKU – ESITTELYpalkki (#DEEEEE) -->
-  <section style="background:var(--band-pale)">
+  <section style="background:#DEEEEE">
     <div class="mx-auto max-w-6xl px-4 py-12">
       <div class="text-center">
         <h3 class="serif text-2xl">Laukku</h3>
@@ -170,27 +172,27 @@
     </div>
   </section>
 
-  <!-- (C) PIPO – KUVAPALKki (Vihreä tausta) -->
-  <section style="background:var(--brand-green)">
-    <div class="mx-auto max-w-6xl px-4 py-14 text-white">
+  <!-- (C) PIPO – KUVAPALKki (#F6F6F4) -->
+  <section style="background:#F6F6F4">
+    <div class="mx-auto max-w-6xl px-4 py-14">
       <div class="relative">
         <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-white/20 bg-black/10">
+          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-stone-100">
             <img id="p2a" class="w-full h-full object-cover" alt="RUMAT Pipo 1" loading="lazy" decoding="async">
           </div>
-          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-white/20 bg-black/10">
+          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-stone-100">
             <img id="p2b" class="w-full h-full object-cover" alt="RUMAT Pipo 2" loading="lazy" decoding="async">
           </div>
         </div>
 
-        <button id="prev2" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft" aria-label="Edelliset kuvat">◀</button>
-        <button id="next2" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
+        <button id="prev2" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
+        <button id="next2" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
       </div>
     </div>
   </section>
 
   <!-- (D) PIPO – ESITTELYpalkki (#DEEEEE) -->
-  <section style="background:var(--band-pale)">
+  <section style="background:#DEEEEE">
     <div class="mx-auto max-w-6xl px-4 py-12">
       <div class="text-center">
         <h3 class="serif text-2xl">RUMAT Pipo</h3>
@@ -239,17 +241,17 @@
     </div>
   </section>
 
-  <!-- FOOTER (aiempi musta) -->
-  <footer id="yhteys" class="pt-14 text-[color:var(--brand-ivory)]" style="background:var(--footer-black)">
+  <!-- FOOTER -->
+  <footer id="yhteys" class="pt-14 text-[color:var(--brand-ivory)]" style="background:var(--brand-deep)">
     <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
       <div>
         <div class="uppercase tracking-wide">RUMAT.STUDIO</div>
-        <div class="text-sm mt-1 text-white/70">
+        <div class="text-sm mt-1" style="color:color-mix(in oklab, var(--brand-ivory) 70%, var(--brand-deep))">
           Helsinki — Contemporary textiles, built to last.
         </div>
       </div>
       <div>
-        <h5 class="text-sm text-white/70">Yhteys</h5>
+        <h5 class="text-sm" style="color:color-mix(in oklab, var(--brand-ivory) 70%, var(--brand-deep))">Yhteys</h5>
         <ul class="mt-2 space-y-2 text-sm">
           <li><a href="mailto:hello@rumat.fi" class="hover:underline">hello@rumat.fi</a></li>
           <li><a href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer" class="hover:underline">Instagram</a></li>
@@ -257,7 +259,7 @@
         </ul>
       </div>
       <div>
-        <h5 class="text-sm text-white/70">Tilaukset</h5>
+        <h5 class="text-sm" style="color:color-mix(in oklab, var(--brand-ivory) 70%, var(--brand-deep))">Tilaukset</h5>
         <ul class="mt-2 space-y-2 text-sm">
           <li>Nouto (sovitusti) — 0 €</li>
           <li>Posti — 6,90 € (lisätään kassalla)</li>
@@ -265,26 +267,30 @@
         </ul>
       </div>
     </div>
-    <div class="py-8 text-center text-xs text-white/65">
+    <div class="py-8 text-center text-xs" style="color:color-mix(in oklab, var(--brand-ivory) 65%, var(--brand-deep))">
       © <span id="year"></span> RUMAT.STUDIO
     </div>
   </footer>
 
   <!-- Skriptit -->
   <script>
-    // Hero-tekstin pehmeä nosto ilman "pomppua"
+    // Header-sävy + hero-tekstin kevyt nosto
+    const headerBg = document.getElementById('header-bg');
     const heroText = document.getElementById('hero-text');
     let lastY = -1;
     const onScroll = () => {
       const y = window.scrollY || 0;
       if (y === lastY) return; lastY = y;
       const vh = window.innerHeight || 1;
+      const alpha = 0.26 + 0.60 * Math.min(1, y / 140);
+      headerBg.style.backgroundColor = `rgba(120,159,171,${alpha.toFixed(3)})`;
+      headerBg.style.borderBottomColor = `rgba(32,32,32,${Math.min(0.18, alpha/3).toFixed(3)})`;
+      headerBg.style.borderBottomWidth = '1px';
       const t = -22 * Math.min(1, y / (vh * 0.9));
       heroText.style.transform = `translateY(${t}vh)`;
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
-
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Tuotekuvat (Unsplash) + fallback
