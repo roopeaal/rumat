@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>RUMAT.STUDIO</title>
   <meta name="description" content="Helsinki — Contemporary textiles, built to last."/>
-
-  <!-- Fontit + Tailwind -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
@@ -14,18 +12,16 @@
 
   <style>
     :root{
-      --brand-deep:#345563;
-      --brand-ink:#202020;
-      --brand-olive:#A1A266;
-      --brand-ivory:#F6F6F4;
-      --brand-mist:#DEEEEE;
-      --nav-bg:#0f1e18;
+      --brand-green: #0E2016;   /* yläpalkin tumma vihreä */
+      --footer-black:#0B0F0E;   /* footerin musta */
+      --brand-ink:   #202020;   /* tekstitummuus */
+      --brand-ivory: #F6F6F4;   /* vaalea tausta */
+      --band-pale:   #DEEEEE;   /* esittelypalkit */
     }
-    html,body{height:100%}
     body{
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
+      background:var(--brand-ivory);
       color:#1f2937;
-      background:linear-gradient(#0b1c28,#0f2b3f);
     }
     .serif{font-family:"Libre Baskerville",serif}
     .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
@@ -33,39 +29,50 @@
          transition:transform .06s ease, box-shadow .12s ease, background-color .15s;}
     .btn:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(0,0,0,.12); }
     .btn-dark{ background:#0b0f0e; color:#f8fafb; border-color:#0b0f0e; }
-    .btn-olive{ background:var(--brand-olive); color:#202020; border-color:#8f945a; }
+    .btn-olive{ background:#A1A266; color:#202020; border-color:#8f945a; }
     .chip{font-size:.78rem; padding:.28rem .6rem; border-radius:9999px; border:1px solid rgb(214 211 209); background:#fff; color:#374151;}
-    .chip-olive{ border-color:var(--brand-olive); color:var(--brand-olive); }
+    .chip-olive{ border-color:#A1A266; color:#A1A266; }
 
-    /* HERO */
-    .hero{position:relative;min-height:100vh;isolation:isolate}
-    #auroraCanvas{position:absolute;inset:0;z-index:-1;display:block}
-    .hero-overlay{position:absolute;inset:0;
+    /* ---------- HERO + AURORA PINOJÄRJESTYS ---------- */
+    .hero{
+      position:relative;
+      min-height:100vh;
+      isolation:isolate;                   /* oma pino hero-osiolle */
+      /* varatausta, jos canvas ei piirry */
+      background:linear-gradient(#0b1c28,#0f2b3f);
+    }
+    #auroraCanvas{
+      position:absolute; inset:0;
+      z-index:0;                           /* CANVAS näkyviin (ei -1) */
+      display:block;
+    }
+    .hero-overlay{
+      position:absolute; inset:0;
+      z-index:1;                           /* overlay kankaan päälle */
+      pointer-events:none;
       background:
-        radial-gradient(60% 40% at 50% 10%, rgba(255,255,255,.06), transparent 60%),
-        linear-gradient(to bottom, rgba(0,0,0,.18), rgba(0,0,0,.38) 70%)}
-    .hero-title{ text-shadow:0 2px 18px rgba(0,0,0,.45), 0 0 2px rgba(0,0,0,.25); }
-
-    /* NAV */
-    .nav-fixed{position:fixed;top:0;left:0;right:0;z-index:50;background:var(--nav-bg);color:#e5e7eb}
-
-    /* Osioiden taustat */
-    .band-pale{background:var(--brand-mist);}  /* koko sivun levyiset esittelypalkit */
-    .pics-band{background:#F6F6F4;}            /* kuvien taustapalkit */
-    footer{background:#0B0F0E;color:var(--brand-ivory)}
+        radial-gradient(60% 40% at 50% 10%, rgba(255,255,255,.05), transparent 55%),
+        linear-gradient(to bottom, rgba(0,0,0,.18), rgba(0,0,0,.38) 75%);
+    }
+    #hero-text{
+      position:relative;                   /* tekstit ylimmäksi */
+      z-index:2;
+    }
   </style>
 </head>
 
-<body class="text-stone-50">
-  <!-- ===== NAV ===== -->
-  <header class="nav-fixed">
-    <div class="mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
+<body class="text-stone-900">
+  <!-- YLÄPALKKI -->
+  <header class="fixed top-0 left-0 right-0 z-50 text-white" style="background:var(--brand-green)">
+    <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
       <a href="#etusivu" class="flex items-center gap-3">
-        <div class="h-9 w-9 grid place-items-center rounded-xl ring-1 ring-stone-700 bg-stone-900/70">
-          <span class="-rotate-90 serif text-2xl font-black text-stone-100 select-none">R</span>
+        <!-- Paksu “R” kaadettu 90° oikealle -->
+        <div class="h-10 w-10 grid place-items-center rounded-xl border border-white/55 bg-white/92">
+          <span class="font-black text-[22px] leading-none text-[color:var(--brand-green)] transform rotate-90 select-none">R</span>
         </div>
         <span class="hidden sm:inline text-sm uppercase tracking-widest font-semibold">RUMAT.STUDIO</span>
       </a>
+
       <nav class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
         <a href="#etusivu"   class="font-semibold hover:underline underline-offset-4">Etusivu</a>
         <a href="#tuotteet"  class="font-semibold hover:underline underline-offset-4">Tuotteet</a>
@@ -76,28 +83,28 @@
     </div>
   </header>
 
-  <!-- ===== HERO ===== -->
-  <section id="etusivu" class="hero pt-16">
-    <canvas id="auroraCanvas" aria-hidden="true"></canvas>
+  <!-- HERO (revontulet + tekstit) -->
+  <section id="etusivu" class="hero grid place-items-center text-stone-50 px-4">
+    <canvas id="auroraCanvas"></canvas>
     <div class="hero-overlay"></div>
 
-    <div id="hero-text" class="min-h-[calc(100vh-64px)] grid place-items-center px-4 text-center">
-      <div>
-        <h1 class="hero-title uppercase font-extrabold tracking-[0.30em]
-                   text-4xl sm:text-6xl md:text-7xl lg:text-8xl">
-          LIIAN RUMAT OLLAKSEEN TOTTA
-        </h1>
-        <div class="mt-9 flex justify-center">
-          <div class="h-24 w-24 sm:h-28 sm:w-28 grid place-items-center rounded-full bg-white/92 ring-1 ring-white/70 shadow-soft">
-            <span class="-rotate-90 serif text-5xl sm:text-6xl font-black text-stone-900 select-none">R</span>
-          </div>
+    <div id="hero-text" class="text-center transition-transform mt-24 md:mt-28">
+      <h1 class="uppercase font-semibold tracking-[0.28em]
+                 text-[clamp(22px,4.1vw,48px)]
+                 drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
+        LIIAN RUMAT OLLAKSEEN TOTTA
+      </h1>
+      <div class="mt-9 flex justify-center">
+        <div class="h-28 w-28 sm:h-32 sm:w-32 grid place-items-center
+                    rounded-full bg-white/92 ring-1 ring-white/70 shadow-soft">
+          <span class="font-black text-6xl sm:text-7xl leading-none text-stone-900 transform rotate-90 select-none">R</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== Intro-esittely ===== -->
-  <section class="py-12 pics-band text-stone-900">
+  <!-- Intro-esittely -->
+  <section class="py-12 bg-stone-50/90">
     <div class="mx-auto max-w-3xl px-6 text-center">
       <p class="text-xl sm:text-2xl">
         Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Valmistamme pieniä eriä Suomessa ja EU:ssa, jotta vaate kestää vuosia ja tekijät näkyvät.
@@ -105,44 +112,48 @@
     </div>
   </section>
 
-  <!-- ===== TUOTTEET ===== -->
-  <section id="tuotteet" class="py-14 bg-white text-stone-900">
-    <div class="mx-auto max-w-6xl px-4">
-      <div class="flex items-center justify-between mb-2">
+  <!-- ===================== TUOTTEET ===================== -->
+  <section id="tuotteet" style="background:var(--brand-green)">
+    <div class="mx-auto max-w-6xl px-4 py-14 text-white">
+      <div class="flex items-center justify-between mb-6">
         <h2 class="serif text-3xl">Tuotteet</h2>
-        <div class="text-xs text-stone-500">Hinnat sis. ALV • Palautus 14 vrk</div>
+        <div class="text-xs text-white/80">Hinnat sis. ALV • Palautus 14 vrk</div>
       </div>
 
-      <!-- Tuote 1: LAUKKU – kuvapalkki -->
-      <div class="mb-10 pics-band rounded-2xl p-4 ring-1 ring-stone-200">
-        <div class="relative">
-          <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-white">
-              <img id="p1a" class="w-full h-full object-cover" alt="Laukku 1" loading="lazy" decoding="async">
-            </div>
-            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-white">
-              <img id="p1b" class="w-full h-full object-cover" alt="Laukku 2" loading="lazy" decoding="async">
-            </div>
+      <!-- Kuvakaruselli 1 -->
+      <div class="relative">
+        <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-white/20 bg-black/10">
+            <img id="p1a" class="w-full h-full object-cover" alt="Laukku 1" loading="lazy" decoding="async">
           </div>
-          <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
-          <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
+          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-white/20 bg-black/10">
+            <img id="p1b" class="w-full h-full object-cover" alt="Laukku 2" loading="lazy" decoding="async">
+          </div>
         </div>
+        <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft" aria-label="Edelliset kuvat">◀</button>
+        <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
       </div>
+    </div>
+  </section>
 
-      <!-- Tuote 1: LAUKKU – esittelypalkki -->
-      <div class="band-pale -mx-4 md:mx-0 rounded-none md:rounded-2xl md:p-6 p-4 ring-0 md:ring-1 md:ring-stone-200 text-center">
+  <!-- Esittelypalkki 1 -->
+  <section style="background:var(--band-pale)">
+    <div class="mx-auto max-w-6xl px-4 py-12">
+      <div class="text-center">
         <h3 class="serif text-2xl">Laukku</h3>
         <p class="mt-1 text-stone-700">
-          Täysin kierrätysmateriaaleista valmistettu sling-laukku. Kierrätetty purjekangas/tekstiili,
-          hihna käytetystä turvavyöstä, metalliosat uudelleenkäytettyä varastoa. Ulkomitat: 28 × 16 × 7 cm.
-          Valmistettu Suomessa.
+          Täysin kierrätysmateriaaleista valmistettu sling-laukku. Kierrätetty purjekangas/tekstiili, hihna käytetystä turvavyöstä, metalliosat uudelleenkäytettyä varastoa.
+          Ulkomitat: 28 × 16 × 7 cm. Valmistettu Suomessa.
         </p>
         <div class="mt-2 font-semibold">€149,00</div>
+
         <div class="mt-4 flex items-center justify-center gap-2">
           <span class="chip">Nouto (sovitusti) — 0 €</span>
           <span class="chip chip-olive">Posti — 6,90 €</span>
         </div>
+
         <div class="mt-3 flex items-center justify-center gap-3 flex-wrap">
+          <!-- NOUTO -->
           <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
             <input type="hidden" name="cmd" value="_xclick">
             <input type="hidden" name="business" value="kauppa@esimerkki.fi">
@@ -153,6 +164,7 @@
             <input type="hidden" name="no_shipping" value="1">
             <input type="submit" value="Osta – Nouto 0 €" class="btn btn-dark cursor-pointer">
           </form>
+          <!-- POSTI -->
           <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
             <input type="hidden" name="cmd" value="_xclick">
             <input type="hidden" name="business" value="kauppa@esimerkki.fi">
@@ -165,34 +177,40 @@
           </form>
         </div>
       </div>
+    </div>
+  </section>
 
-      <!-- Tuote 2: PIPO – kuvapalkki -->
-      <div class="mt-12 mb-10 pics-band rounded-2xl p-4 ring-1 ring-stone-200">
-        <div class="relative">
-          <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-white">
-              <img id="p2a" class="w-full h-full object-cover" alt="RUMAT Pipo 1" loading="lazy" decoding="async">
-            </div>
-            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-white">
-              <img id="p2b" class="w-full h-full object-cover" alt="RUMAT Pipo 2" loading="lazy" decoding="async">
-            </div>
+  <!-- Kuvakaruselli 2 -->
+  <section style="background:var(--brand-green)">
+    <div class="mx-auto max-w-6xl px-4 py-14 text-white">
+      <div class="relative">
+        <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-white/20 bg-black/10">
+            <img id="p2a" class="w-full h-full object-cover" alt="RUMAT Pipo 1" loading="lazy" decoding="async">
           </div>
-          <button id="prev2" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
-          <button id="next2" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
+          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-white/20 bg-black/10">
+            <img id="p2b" class="w-full h-full object-cover" alt="RUMAT Pipo 2" loading="lazy" decoding="async">
+          </div>
         </div>
+        <button id="prev2" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft" aria-label="Edelliset kuvat">◀</button>
+        <button id="next2" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
       </div>
+    </div>
+  </section>
 
-      <!-- Tuote 2: PIPO – esittelypalkki -->
-      <div class="band-pale -mx-4 md:mx-0 rounded-none md:rounded-2xl md:p-6 p-4 ring-0 md:ring-1 md:ring-stone-200 text-center">
+  <!-- Esittelypalkki 2 -->
+  <section style="background:var(--band-pale)">
+    <div class="mx-auto max-w-6xl px-4 py-12">
+      <div class="text-center">
         <h3 class="serif text-2xl">RUMAT Pipo</h3>
-        <p class="mt-1 text-stone-700">
-          Käsinneulottu mohair-sekoite. Korkeus n. 22 cm. Päänympärys 54–58 cm (joustava).
-        </p>
+        <p class="mt-1 text-stone-700">Käsinneulottu mohair-sekoite. Korkeus n. 22 cm. Päänympärys 54–58 cm (joustava).</p>
         <div class="mt-2 font-semibold">€59,00</div>
+
         <div class="mt-4 flex items-center justify-center gap-2">
           <span class="chip">Nouto (sovitusti) — 0 €</span>
           <span class="chip chip-olive">Posti — 6,90 €</span>
         </div>
+
         <div class="mt-3 flex items-center justify-center gap-3 flex-wrap">
           <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
             <input type="hidden" name="cmd" value="_xclick">
@@ -216,12 +234,11 @@
           </form>
         </div>
       </div>
-
     </div>
   </section>
 
-  <!-- ===== TARINA ===== -->
-  <section id="tarina" class="py-14 pics-band text-stone-900">
+  <!-- TARINA -->
+  <section id="tarina" class="py-14 bg-stone-50/90">
     <div class="mx-auto max-w-3xl px-6">
       <h2 class="serif text-3xl">Tarina</h2>
       <p>
@@ -231,12 +248,14 @@
     </div>
   </section>
 
-  <!-- ===== FOOTER ===== -->
-  <footer id="yhteys" class="pt-14">
+  <!-- FOOTER -->
+  <footer id="yhteys" class="pt-14 text-[color:var(--brand-ivory)]" style="background:var(--footer-black)">
     <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
       <div>
         <div class="uppercase tracking-wide">RUMAT.STUDIO</div>
-        <div class="text-sm mt-1 text-white/70">Helsinki — Contemporary textiles, built to last.</div>
+        <div class="text-sm mt-1 text-white/70">
+          Helsinki — Contemporary textiles, built to last.
+        </div>
       </div>
       <div>
         <h5 class="text-sm text-white/70">Yhteys</h5>
@@ -262,178 +281,23 @@
 
   <!-- ===== Skriptit ===== -->
   <script>
-    // --------- Parallax & vuosi ----------
+    // Vuosi footeriin
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Hero-tekstin kevyt nosto ilman "pomppua"
     const heroText = document.getElementById('hero-text');
+    let lastY = -1;
     const onScroll = () => {
       const y = window.scrollY || 0;
+      if (y === lastY) return; lastY = y;
       const vh = window.innerHeight || 1;
       const t = -22 * Math.min(1, y / (vh * 0.9));
       heroText.style.transform = `translateY(${t}vh)`;
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
-    document.getElementById('year').textContent = new Date().getFullYear();
 
-    // --------- Aurora canvas (parempi versio) ----------
-    (function(){
-      const canvas = document.getElementById('auroraCanvas');
-      const ctx = canvas.getContext('2d');
-
-      // Offscreen-kanvaasi teräviä nauhoja ja blur-hehkua varten
-      const off = document.createElement('canvas');
-      const octx = off.getContext('2d');
-
-      let w=0,h=0, dpr=1, t=0;
-
-      const state = {
-        y: 0.26,       // pystysijainti (0=ylä, 1=ala) – pidetään tässä koska korkeus oli “oikea”
-        amp: 0.9,
-        speed: 0.18,
-        bands: 7,
-        seed: Math.random()*1000|0
-      };
-
-      function resize(){
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-        w = canvas.clientWidth = canvas.parentElement.clientWidth;
-        h = canvas.clientHeight = canvas.parentElement.clientHeight;
-        canvas.width = (w*dpr)|0;  canvas.height = (h*dpr)|0;
-        ctx.setTransform(dpr,0,0,dpr,0,0);
-
-        off.width = (w*dpr)|0;  off.height = (h*dpr)|0;
-        octx.setTransform(dpr,0,0,dpr,0,0);
-
-        state.y = (innerWidth < 640 ? 0.22 : 0.26);
-      }
-
-      // kevyt sileä noise
-      function n1(x,y){
-        const s = Math.sin(x*12.9898 + y*78.233 + state.seed)*43758.5453;
-        return s - Math.floor(s);
-      }
-      function smoothNoise(x,y){
-        const xi = Math.floor(x), yi = Math.floor(y);
-        const xf = x-xi, yf=y-yi;
-        const tl = n1(xi,yi), tr = n1(xi+1,yi),
-              bl = n1(xi,yi+1), br = n1(xi+1,yi+1);
-        const u = xf*xf*(3-2*xf), v=yf*yf*(3-2*yf);
-        return tl*(1-u)*(1-v)+tr*u*(1-v)+bl*(1-u)*v+br*u*v;
-      }
-
-      function drawBands(targetCtx, blurPx=0, alphaScale=1){
-        const baseY = h*state.y;
-        const count = state.bands;
-        // pystysuorat “verhot”
-        targetCtx.save();
-        targetCtx.globalCompositeOperation = 'lighter';
-        targetCtx.globalAlpha = 0.9*alphaScale;
-
-        if (blurPx) targetCtx.filter = `blur(${blurPx}px)`;
-
-        for(let b=0;b<count;b++){
-          const phase = t*0.6 + b*0.7;
-          const bandW = w/(2.6 + b*0.35);
-          const xOff = Math.sin(phase*0.7 + b)*w*0.10;
-          const yOff = Math.cos(phase*0.5 + b)*12;
-
-          const bandHeight = 70 + b*24;  // matala nauha — EI täytä koko pohjaa
-          const base = baseY + yOff + b*10;
-
-          // Sävy turkoosista vihreään, himmeä läpikuultavuus
-          const hue = 166 - b*6; // 166..130
-          targetCtx.fillStyle = `hsla(${hue}, 85%, ${58-b*3}%, ${0.10 + (0.06*(count-b))})`;
-
-          targetCtx.beginPath();
-          targetCtx.moveTo(-120, base);
-          for(let x=-120; x<=w+120; x+=8){
-            const nx = (x + xOff)/bandW;
-            const yy = base + (smoothNoise(nx, phase)*2 -1) * (bandHeight*state.amp)
-                        + Math.sin(x*0.003 + phase*1.6)*14;
-            targetCtx.lineTo(x, yy);
-          }
-          // sulje nauha vain hieman alemmas (ei koko ruudun alaosaan)
-          targetCtx.lineTo(w+120, base + bandHeight + 18);
-          targetCtx.lineTo(-120,  base + bandHeight + 18);
-          targetCtx.closePath();
-          targetCtx.fill();
-
-          // kevyet alas valuvat “sateet”
-          targetCtx.save();
-          targetCtx.globalAlpha = 0.06*alphaScale;
-          targetCtx.strokeStyle = 'rgba(255,255,255,.7)';
-          targetCtx.lineWidth = 1;
-          for(let i=0;i<2;i++){
-            const xx = (w*(i+1)/(2.2+b)) + Math.sin(phase+i)*70;
-            targetCtx.beginPath();
-            targetCtx.moveTo(xx, base-160);
-            targetCtx.lineTo(xx, base + bandHeight + 40);
-            targetCtx.stroke();
-          }
-          targetCtx.restore();
-        }
-
-        // hienovarainen alareunan maski (häivytys)
-        const mask = targetCtx.createLinearGradient(0, baseY+40, 0, h);
-        mask.addColorStop(0,'rgba(0,0,0,0)');
-        mask.addColorStop(1,'rgba(0,0,0,.25)');
-        targetCtx.fillStyle = mask;
-        targetCtx.fillRect(0, baseY+40, w, h-(baseY+40));
-
-        targetCtx.filter = 'none';
-        targetCtx.restore();
-      }
-
-      function draw(){
-        t += state.speed/60;
-
-        // yötausta
-        const g = ctx.createLinearGradient(0,0,0,h);
-        g.addColorStop(0,'#0b1c28');
-        g.addColorStop(1,'#0f2b3f');
-        ctx.fillStyle = g;
-        ctx.fillRect(0,0,w,h);
-
-        // offscreen: ensin terävät nauhat
-        octx.clearRect(0,0,w,h);
-        drawBands(octx, 0, 1.0);
-
-        // piirrä terävät
-        ctx.globalCompositeOperation = 'lighter';
-        ctx.drawImage(off, 0, 0, w, h);
-
-        // piirrä hehku (blur) päälle
-        octx.clearRect(0,0,w,h);
-        drawBands(octx, 14, 0.9);
-        ctx.drawImage(off, 0, 0, w, h);
-
-        // tähtisemuja yläosaan
-        ctx.save();
-        ctx.globalCompositeOperation = 'screen';
-        ctx.globalAlpha = 0.10;
-        for(let i=0;i<70;i++){
-          const x = (i*37 + (t*80)%w) % w;
-          const y = (i*53 % (h*0.35));
-          ctx.fillStyle = 'white';
-          ctx.fillRect(x, y, 1, 1);
-        }
-        ctx.restore();
-
-        requestAnimationFrame(draw);
-      }
-
-      resize(); draw();
-      window.addEventListener('resize', resize);
-
-      // Konsolisäädöt:
-      window.__aurora = {
-        setYOffset(v){ state.y = Math.max(0,Math.min(1, v)); },
-        setSpeed(v){ state.speed = v; },
-        setAmp(v){ state.amp = v; },
-        setBands(n){ state.bands = n|0; }
-      };
-    })();
-
-    // --------- Tuotekuvat & karusellit ----------
+    // Tuotekuvat (placeholderit + fallback)
     const slingImgs = [
       "https://placehold.co/1400x1750?text=Laukku+1",
       "https://placehold.co/1400x1750?text=Laukku+2",
@@ -451,6 +315,7 @@
       imgEl.onerror = ()=>{ imgEl.onerror=null; imgEl.src = FALLBACK; };
       imgEl.src = url;
     }
+    let i1 = 0, i2 = 0;
     const setPair = (arr, aId, bId, i) => {
       const a = document.getElementById(aId), b = document.getElementById(bId);
       if (!a || !b) return;
@@ -458,15 +323,96 @@
       setWithFallback(a, arr[(i % n + n) % n]);
       setWithFallback(b, arr[((i + 1) % n + n) % n]);
     };
-
-    let i1=0,i2=0;
     setPair(slingImgs, "p1a", "p1b", i1);
     setPair(pipoImgs,  "p2a", "p2b", i2);
-
     document.getElementById('next1').addEventListener('click', () => { i1 = (i1 + 1) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
     document.getElementById('prev1').addEventListener('click', () => { i1 = (i1 - 1 + slingImgs.length) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
     document.getElementById('next2').addEventListener('click', () => { i2 = (i2 + 1) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
     document.getElementById('prev2').addEventListener('click', () => { i2 = (i2 - 1 + pipoImgs.length) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
+
+    // ------------------- REVONTULET (Canvas 2D) -------------------
+    const cnv = document.getElementById('auroraCanvas');
+    const ctx = cnv.getContext('2d');
+    let W = 0, H = 0, t0 = performance.now();
+
+    function resize(){
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      W = cnv.clientWidth = cnv.parentElement.clientWidth;
+      H = cnv.clientHeight = Math.max(innerHeight, cnv.parentElement.clientHeight);
+      cnv.width = Math.floor(W * dpr);
+      cnv.height = Math.floor(H * dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+    new ResizeObserver(resize).observe(cnv.parentElement);
+    resize();
+
+    // Kevyt 2D "aurora": aaltoilevat läpikuultavat kaistat
+    const bands = [
+      {h:0.18, a:0.55, c:"#79ffe5"},
+      {h:0.28, a:0.45, c:"#8affff"},
+      {h:0.38, a:0.40, c:"#7ee2ff"},
+      {h:0.52, a:0.35, c:"#90ffcf"}
+    ];
+    function easeInOut(t){ return t<.5 ? 2*t*t : -1+(4-2*t)*t; }
+
+    function draw(ts){
+      const t = (ts - t0)/1000;
+      ctx.clearRect(0,0,W,H);
+
+      // taustan syvyys
+      const grd = ctx.createLinearGradient(0,0,0,H);
+      grd.addColorStop(0, "#0b1c28");
+      grd.addColorStop(1, "#0f2b3f");
+      ctx.fillStyle = grd;
+      ctx.fillRect(0,0,W,H);
+
+      // valuvat "pilarit"
+      ctx.save();
+      ctx.globalAlpha = 0.10;
+      ctx.strokeStyle = "#9bdfff";
+      for(let x=0; x<W; x+=Math.max(70, W/12)){
+        const y0 = (t*60 + x*0.07)%H;
+        ctx.beginPath();
+        ctx.moveTo(x, y0- H);
+        ctx.lineTo(x, y0 + H);
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // kaistat
+      bands.forEach((b,i) => {
+        const baseY = H*(0.25 + b.h*0.8);
+        const amp   = H*(0.08 + 0.06*i);
+        const speed = 0.2 + i*0.07;
+
+        ctx.save();
+        ctx.globalCompositeOperation = "screen";
+        ctx.globalAlpha = b.a;
+
+        const g = ctx.createLinearGradient(0, baseY-amp, 0, baseY+amp);
+        g.addColorStop(0, "transparent");
+        g.addColorStop(0.45, b.c);
+        g.addColorStop(0.55, b.c);
+        g.addColorStop(1, "transparent");
+        ctx.fillStyle = g;
+
+        ctx.beginPath();
+        ctx.moveTo(0, H);
+        for(let x=0;x<=W;x+=12){
+          const k = x/W;
+          const phase = (t*speed + i*0.6) + k*2.4;
+          const y = baseY + Math.sin(phase)*amp*easeInOut((Math.sin(phase*0.5)+1)/2);
+          ctx.lineTo(x,y);
+        }
+        ctx.lineTo(W,H); ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      });
+
+      requestAnimationFrame(draw);
+    }
+    requestAnimationFrame(draw);
   </script>
 </body>
 </html>
