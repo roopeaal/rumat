@@ -4,247 +4,248 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>RUMAT.STUDIO</title>
-  <meta name="description" content="Liian RUMAT ollakseen totta – käsintehtyjä tekstiilejä ja asusteita Pohjolasta."/>
-
-  <!-- Open Graph / Twitter -->
-  <meta property="og:title" content="RUMAT.STUDIO">
-  <meta property="og:description" content="Liian RUMAT ollakseen totta.">
-  <meta property="og:image" content="https://roopeaal.github.io/rumat/og.jpg">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
+  <meta name="description" content="Helsinki — Contemporary textiles, built to last."/>
 
   <!-- Fontit + Tailwind -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     :root{
-      --brand-deep:  #345563; /* header */
-      --brand-ink:   #202020; /* teksti */
-      --brand-olive: #A1A266; /* accent */
-      --brand-slate: #789FAB; /* siniharmaa */
-      --brand-ivory: #F6F6F4; /* lämmin valkoinen */
-      --brand-mist:  #DEEEEE; /* tuote-esittelypalkit */
-      --footer-black:#0B0F0E; /* footer */
-      --images-strip:#F6F6F4; /* kuvapalkkien tausta */
+      --brand-green: #0E2016;  /* Spruce (vihreä) */
+      --footer-black:#0B0F0E;  /* aiempi musta footer */
+      --brand-ink:   #202020;  /* mustanharmaa teksti */
+      --brand-ivory: #F6F6F4;  /* vaalea tausta */
+      --band-pale:   #DEEEEE;  /* esittelypalkkien tausta */
     }
     body{
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
-      background:#F8F7F5;
-      color:var(--brand-ink);
+      background:var(--brand-ivory);
+      color:#1f2937;
     }
     .serif{font-family:"Libre Baskerville",serif}
     .hero-fixed{position:fixed;inset:0;z-index:-1}
     .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
-    .btn{
-      border-radius:9999px;padding:.6rem 1rem;border:1px solid rgb(214 211 209);
-      transition:transform .06s ease, box-shadow .12s ease, background-color .15s;
-    }
+    .btn{border-radius:9999px;padding:.65rem 1.05rem;border:1px solid rgb(214 211 209);
+         transition:transform .06s ease, box-shadow .12s ease, background-color .15s;}
     .btn:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(0,0,0,.12); }
-    .btn-dark{ background:var(--brand-ink); color:#fff; border-color:#1b1b1b; }
-    .btn-olive{ background:var(--brand-olive); color:#202020; border-color:#8f945a; }
-    .chip{font-size:.78rem; padding:.25rem .5rem; border-radius:9999px; border:1px solid rgb(214 211 209); background:#fff;}
-    .chip-olive{ border-color:var(--brand-olive); color:var(--brand-olive); }
-    .rlogo{ transform: rotate(-90deg); }
-    .linkish{ text-underline-offset:4px; }
-
-    /* Revontuli-canvas */
-    #auroraCanvas{position:absolute; inset:0; width:100%; height:100%; display:block}
-    @media (prefers-reduced-motion: reduce){
-      #auroraCanvas{display:none;}
-    }
+    .btn-dark{ background:#0b0f0e; color:#f8fafb; border-color:#0b0f0e; }
+    .btn-olive{ background:#A1A266; color:#202020; border-color:#8f945a; }
+    .chip{font-size:.78rem; padding:.28rem .6rem; border-radius:9999px; border:1px solid rgb(214 211 209); background:#fff; color:#374151;}
+    .chip-olive{ border-color:#A1A266; color:#A1A266; }
   </style>
 </head>
 
 <body class="text-stone-900">
-  <!-- ===== HERO-TAUSTA: Elävä revontuli (canvas) + kuvafallback ===== -->
+  <!-- Kiinteä hero-tausta: Aurora canvas + fallback-kuva (canvas prioriteetti) -->
   <div class="hero-fixed">
-    <canvas id="auroraCanvas"></canvas>
-    <img id="hero-img"
+    <!-- Aurora canvas -->
+    <canvas id="aurora" class="w-full h-full block"></canvas>
+
+    <!-- Kuvafallback (näkyy, jos WebGL ei toimi tai reduced-motion päällä) -->
+    <img
+      id="hero-fallback"
       src="https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80"
-      alt="Taustakuva"
-      class="w-full h-full object-cover"
-      style="object-position:center 60%;display:none"
-      onerror="this.onerror=null;this.src='https://placehold.co/2400x1600?text=Taustakuva'">
-    <div class="absolute inset-0 bg-gradient-to-b from-black/5 via-black/12 to-black/22 pointer-events-none"></div>
+      alt="Lapin erämaa"
+      class="w-full h-full object-cover hidden"
+      style="object-position:center 60%"
+      onerror="this.onerror=null;this.src='https://placehold.co/2400x1600?text=Lapin+taustakuva'">
+    <!-- kevyt tummennus -->
+    <div class="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/5 via-black/10 to-black/22"></div>
   </div>
 
-  <!-- Header (pysyy tekstillä paikoillaan) -->
-  <header class="fixed top-0 left-0 right-0 z-50">
-    <div class="absolute inset-0" style="background:var(--brand-deep); opacity:.93;"></div>
-    <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center text-white">
-      <a href="#etusivu" class="flex items-center gap-3">
-        <div class="h-9 w-9 grid place-items-center rounded-xl ring-1 ring-white/50 bg-white/90">
-          <span class="serif text-2xl font-black text-stone-900 rlogo">R</span>
+  <!-- 1) HEROON KUULUVA VÄRIPALKki — NOUSEE YLÖS SKROLLATESSA -->
+  <div class="h-14 md:h-16 w-full" style="background:var(--brand-green); opacity:.92;"></div>
+
+  <!-- 2) LÄPINÄKYVÄ KIINTEÄ HEADER (logo + linkit jäävät) -->
+  <header class="fixed top-0 left-0 right-0 z-50 text-white">
+    <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
+      <a href="#etusivu" className="flex items-center gap-3">
+        <!-- Paksu “R” kaadettu 90° oikealle -->
+        <div class="h-10 w-10 grid place-items-center rounded-xl border border-white/55 bg-white/92">
+          <span class="font-black text-[22px] leading-none text-[color:var(--brand-green)] transform rotate-90 select-none">R</span>
         </div>
-        <span class="hidden sm:inline text-sm uppercase tracking-wide font-semibold">RUMAT.STUDIO</span>
+        <span class="hidden sm:inline text-sm uppercase tracking-widest font-semibold drop-shadow">RUMAT.STUDIO</span>
       </a>
+
       <nav class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
-        <a href="#etusivu"  class="font-semibold hover:underline linkish">Etusivu</a>
-        <a href="#tuotteet" class="font-semibold hover:underline linkish">Tuotteet</a>
-        <a href="#tarina"   class="font-semibold hover:underline linkish">Tarina</a>
-        <a href="#yhteys"   class="font-semibold hover:underline linkish">Yhteystiedot</a>
+        <a href="#etusivu"   class="font-semibold hover:underline underline-offset-4">Etusivu</a>
+        <a href="#tuotteet"  class="font-semibold hover:underline underline-offset-4">Tuotteet</a>
+        <a href="#tarina"    class="font-semibold hover:underline underline-offset-4">Tarina</a>
+        <a href="#yhteys"    class="font-semibold hover:underline underline-offset-4">Yhteystiedot</a>
       </nav>
+      <div></div>
     </div>
   </header>
 
   <!-- HERO-tekstit -->
-  <section id="etusivu" class="h-screen grid place-items-center text-stone-50 px-4">
+  <section id="etusivu" class="h-[calc(100vh-56px)] md:h-[calc(100vh-64px)] grid place-items-center text-stone-50 px-4">
     <div id="hero-text" class="text-center transition-transform">
-      <h1 class="uppercase font-semibold tracking-[0.30em]
-                 text-4xl sm:text-6xl md:text-7xl lg:text-8xl
-                 drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
+      <h1 class="uppercase font-semibold tracking-[0.28em]
+                 text-[clamp(22px,4.1vw,48px)]
+                 drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
         LIIAN RUMAT OLLAKSEEN TOTTA
       </h1>
-      <div class="mt-8 flex justify-center">
-        <div class="h-20 w-20 sm:h-24 sm:w-24 grid place-items-center
-                    rounded-full bg-white/90 ring-1 ring-white/70 shadow-soft">
-          <span class="serif text-4xl sm:text-5xl font-black text-stone-900 rlogo">R</span>
+      <div class="mt-9 flex justify-center">
+        <div class="h-28 w-28 sm:h-32 sm:w-32 grid place-items-center
+                    rounded-full bg-white/92 ring-1 ring-white/70 shadow-soft">
+          <span class="font-black text-6xl sm:text-7xl leading-none text-stone-900 transform rotate-90 select-none">R</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Esittelypalkki (#DEEEEE) -->
-  <section class="py-12" style="background:var(--brand-mist)">
+  <!-- Intro-esittely -->
+  <section class="py-12 bg-stone-50/90">
     <div class="mx-auto max-w-3xl px-6 text-center">
       <p class="text-xl sm:text-2xl">
-        Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Valmistamme pieniä eriä Suomessa ja EU:ssa,
-        jotta vaate kestää vuosia ja tekijät näkyvät.
+        Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Valmistamme pieniä eriä Suomessa ja EU:ssa, jotta vaate kestää vuosia ja tekijät näkyvät.
       </p>
     </div>
   </section>
 
-  <!-- ===== TUOTTEET ===== -->
-  <section id="tuotteet" class="py-14" style="background:#fff">
-    <div class="mx-auto max-w-6xl px-4">
-      <div class="flex items-center justify-between mb-2">
+  <!-- ===================== TUOTTEET ===================== -->
+
+  <!-- (A) LAUKKU – KUVAPALKki (Vihreä tausta) -->
+  <section id="tuotteet" style="background:var(--brand-green)">
+    <div class="mx-auto max-w-6xl px-4 py-14 text-white">
+      <div class="flex items-center justify-between mb-6">
         <h2 class="serif text-3xl">Tuotteet</h2>
-        <div class="text-xs text-stone-500">Hinnat sis. ALV • Palautus 14 vrk</div>
+        <div class="text-xs text-white/80">Hinnat sis. ALV • Palautus 14 vrk</div>
       </div>
 
-      <!-- LAUKKU -->
-      <div class="mb-12">
-        <div class="relative rounded-xl p-3 md:p-4" style="background:var(--images-strip)">
-          <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200">
-              <img id="p1a" class="w-full h-full object-cover" alt="Laukku 1" loading="lazy" decoding="async">
-            </div>
-            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200">
-              <img id="p1b" class="w-full h-full object-cover" alt="Laukku 2" loading="lazy" decoding="async">
-            </div>
+      <div class="relative">
+        <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-white/20 bg-black/10">
+            <img id="p1a" class="w-full h-full object-cover" alt="Laukku 1" loading="lazy" decoding="async">
           </div>
-          <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
-          <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
+          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-white/20 bg-black/10">
+            <img id="p1b" class="w-full h-full object-cover" alt="Laukku 2" loading="lazy" decoding="async">
+          </div>
         </div>
 
-        <!-- Esittelypalkki -->
-        <div class="mt-6 text-center py-10" style="background:var(--brand-mist)">
-          <h3 class="serif text-2xl">Laukku</h3>
-          <p class="mt-1 text-stone-700 max-w-3xl mx-auto">
-            Täysin kierrätysmateriaaleista valmistettu sling-laukku. Kierrätetty purjekangas/tekstiili,
-            hihna käytetystä turvavyöstä, metalliosat uudelleenkäytettyä varastoa.
-            Ulkomitat: 28 × 16 × 7 cm. Valmistettu Suomessa.
-          </p>
-          <div class="mt-2 font-semibold">€149,00</div>
+        <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft" aria-label="Edelliset kuvat">◀</button>
+        <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
+      </div>
+    </div>
+  </section>
 
-          <div class="mt-4 flex items-center justify-center gap-2">
-            <span class="chip">Nouto (sovitusti) — 0 €</span>
-            <span class="chip chip-olive">Posti — 6,90 €</span>
-          </div>
+  <!-- (B) LAUKKU – ESITTELYpalkki (#DEEEEE) -->
+  <section style="background:var(--band-pale)">
+    <div class="mx-auto max-w-6xl px-4 py-12">
+      <div class="text-center">
+        <h3 class="serif text-2xl">Laukku</h3>
+        <p class="mt-1 text-stone-700">
+          Täysin kierrätysmateriaaleista valmistettu sling-laukku. Kierrätetty purjekangas/tekstiili, hihna käytetystä turvavyöstä, metalliosat uudelleenkäytettyä varastoa.
+          Ulkomitat: 28 × 16 × 7 cm. Valmistettu Suomessa.
+        </p>
+        <div class="mt-2 font-semibold">€149,00</div>
 
-          <div class="mt-3 flex items-center justify-center gap-3 flex-wrap">
-            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-              <input type="hidden" name="cmd" value="_xclick">
-              <input type="hidden" id="pp1a" name="business" value="kauppa@esimerkki.fi">
-              <input type="hidden" name="item_name" value="Laukku (nouto)">
-              <input type="hidden" name="amount" value="149.00">
-              <input type="hidden" name="currency_code" value="EUR">
-              <input type="hidden" name="shipping" value="0.00">
-              <input type="hidden" name="no_shipping" value="1">
-              <input type="submit" value="Osta – Nouto 0 €" class="btn btn-dark cursor-pointer">
-            </form>
-            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-              <input type="hidden" name="cmd" value="_xclick">
-              <input type="hidden" id="pp1b" name="business" value="kauppa@esimerkki.fi">
-              <input type="hidden" name="item_name" value="Laukku (posti)">
-              <input type="hidden" name="amount" value="149.00">
-              <input type="hidden" name="currency_code" value="EUR">
-              <input type="hidden" name="shipping" value="6.90">
-              <input type="hidden" name="no_shipping" value="2">
-              <input type="submit" value="Osta – Posti 6,90 €" class="btn btn-olive cursor-pointer">
-            </form>
-          </div>
+        <div class="mt-4 flex items-center justify-center gap-2">
+          <span class="chip">Nouto (sovitusti) — 0 €</span>
+          <span class="chip chip-olive">Posti — 6,90 €</span>
+        </div>
+
+        <div class="mt-3 flex items-center justify-center gap-3 flex-wrap">
+          <!-- NOUTO 0 € -->
+          <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+            <input type="hidden" name="cmd" value="_xclick">
+            <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
+            <input type="hidden" name="item_name" value="Laukku (nouto)">
+            <input type="hidden" name="amount" value="149.00">
+            <input type="hidden" name="currency_code" value="EUR">
+            <input type="hidden" name="shipping" value="0.00">
+            <input type="hidden" name="no_shipping" value="1">
+            <input type="submit" value="Osta – Nouto 0 €" class="btn btn-dark cursor-pointer">
+          </form>
+          <!-- POSTI 6,90 € -->
+          <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+            <input type="hidden" name="cmd" value="_xclick">
+            <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
+            <input type="hidden" name="item_name" value="Laukku (posti)">
+            <input type="hidden" name="amount" value="149.00">
+            <input type="hidden" name="currency_code" value="EUR">
+            <input type="hidden" name="shipping" value="6.90">
+            <input type="hidden" name="no_shipping" value="2">
+            <input type="submit" value="Osta – Posti 6,90 €" class="btn btn-olive cursor-pointer">
+          </form>
         </div>
       </div>
+    </div>
+  </section>
 
-      <!-- PIPO -->
-      <div class="mb-6">
-        <div class="relative rounded-xl p-3 md:p-4" style="background:var(--images-strip)">
-          <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200">
-              <img id="p2a" class="w-full h-full object-cover" alt="RUMAT Pipo 1" loading="lazy" decoding="async">
-            </div>
-            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200">
-              <img id="p2b" class="w-full h-full object-cover" alt="RUMAT Pipo 2" loading="lazy" decoding="async">
-            </div>
+  <!-- (C) PIPO – KUVAPALKki (Vihreä tausta) -->
+  <section style="background:var(--brand-green)">
+    <div class="mx-auto max-w-6xl px-4 py-14 text-white">
+      <div class="relative">
+        <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-white/20 bg-black/10">
+            <img id="p2a" class="w-full h-full object-cover" alt="RUMAT Pipo 1" loading="lazy" decoding="async">
           </div>
-          <button id="prev2" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
-          <button id="next2" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
+          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-white/20 bg-black/10">
+            <img id="p2b" class="w-full h-full object-cover" alt="RUMAT Pipo 2" loading="lazy" decoding="async">
+          </div>
         </div>
 
-        <div class="mt-6 text-center py-10" style="background:var(--brand-mist)">
-          <h3 class="serif text-2xl">RUMAT Pipo</h3>
-          <p class="mt-1 text-stone-700 max-w-3xl mx-auto">Käsinneulottu mohair-sekoite. Korkeus n. 22 cm. Päänympärys 54–58 cm (joustava).</p>
-          <div class="mt-2 font-semibold">€59,00</div>
+        <button id="prev2" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft" aria-label="Edelliset kuvat">◀</button>
+        <button id="next2" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
+      </div>
+    </div>
+  </section>
 
-          <div class="mt-4 flex items-center justify-center gap-2">
-            <span class="chip">Nouto (sovitusti) — 0 €</span>
-            <span class="chip chip-olive">Posti — 6,90 €</span>
-          </div>
+  <!-- (D) PIPO – ESITTELYpalkki (#DEEEEE) -->
+  <section style="background:var(--band-pale)">
+    <div class="mx-auto max-w-6xl px-4 py-12">
+      <div class="text-center">
+        <h3 class="serif text-2xl">RUMAT Pipo</h3>
+        <p class="mt-1 text-stone-700">Käsinneulottu mohair-sekoite. Korkeus n. 22 cm. Päänympärys 54–58 cm (joustava).</p>
+        <div class="mt-2 font-semibold">€59,00</div>
 
-          <div class="mt-3 flex items-center justify-center gap-3 flex-wrap">
-            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-              <input type="hidden" name="cmd" value="_xclick">
-              <input type="hidden" id="pp2a" name="business" value="kauppa@esimerkki.fi">
-              <input type="hidden" name="item_name" value="RUMAT Pipo (nouto)">
-              <input type="hidden" name="amount" value="59.00">
-              <input type="hidden" name="currency_code" value="EUR">
-              <input type="hidden" name="shipping" value="0.00">
-              <input type="hidden" name="no_shipping" value="1">
-              <input type="submit" value="Osta – Nouto 0 €" class="btn btn-dark cursor-pointer">
-            </form>
-            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
-              <input type="hidden" name="cmd" value="_xclick">
-              <input type="hidden" id="pp2b" name="business" value="kauppa@esimerkki.fi">
-              <input type="hidden" name="item_name" value="RUMAT Pipo (posti)">
-              <input type="hidden" name="amount" value="59.00">
-              <input type="hidden" name="currency_code" value="EUR">
-              <input type="hidden" name="shipping" value="6.90">
-              <input type="hidden" name="no_shipping" value="2">
-              <input type="submit" value="Osta – Posti 6,90 €" class="btn btn-olive cursor-pointer">
-            </form>
-          </div>
+        <div class="mt-4 flex items-center justify-center gap-2">
+          <span class="chip">Nouto (sovitusti) — 0 €</span>
+          <span class="chip chip-olive">Posti — 6,90 €</span>
+        </div>
+
+        <div class="mt-3 flex items-center justify-center gap-3 flex-wrap">
+          <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+            <input type="hidden" name="cmd" value="_xclick">
+            <input type="hidden" name="business" value="kauppa@esimerkki.fi">
+            <input type="hidden" name="item_name" value="RUMAT Pipo (nouto)">
+            <input type="hidden" name="amount" value="59.00">
+            <input type="hidden" name="currency_code" value="EUR">
+            <input type="hidden" name="shipping" value="0.00">
+            <input type="hidden" name="no_shipping" value="1">
+            <input type="submit" value="Osta – Nouto 0 €" class="btn btn-dark cursor-pointer">
+          </form>
+          <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+            <input type="hidden" name="cmd" value="_xclick">
+            <input type="hidden" name="business" value="kauppa@esimerkki.fi">
+            <input type="hidden" name="item_name" value="RUMAT Pipo (posti)">
+            <input type="hidden" name="amount" value="59.00">
+            <input type="hidden" name="currency_code" value="EUR">
+            <input type="hidden" name="shipping" value="6.90">
+            <input type="hidden" name="no_shipping" value="2">
+            <input type="submit" value="Osta – Posti 6,90 €" class="btn btn-olive cursor-pointer">
+          </form>
         </div>
       </div>
-
     </div>
   </section>
 
   <!-- TARINA -->
   <section id="tarina" class="py-14 bg-stone-50/90">
     <div class="mx-auto max-w-3xl px-6">
-      <h2 class="serif text-3xl mb-4">Tarina</h2>
+      <h2 class="serif text-3xl">Tarina</h2>
       <p>
         Kirjoita tähän yrityksen matkaa: miksi perustit, mitä opit, minne olet menossa.
-        Tekstiä voi muuttaa milloin vain adminin kautta tai päivittämällä JSON-sisällön.
+        Tekstiä voi muuttaa milloin vain päivittämällä tämän tiedoston tai adminin kautta.
       </p>
     </div>
   </section>
 
-  <!-- FOOTER -->
+  <!-- FOOTER (aiempi musta) -->
   <footer id="yhteys" class="pt-14 text-[color:var(--brand-ivory)]" style="background:var(--footer-black)">
     <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
       <div>
@@ -256,9 +257,8 @@
       <div>
         <h5 class="text-sm text-white/70">Yhteys</h5>
         <ul class="mt-2 space-y-2 text-sm">
-          <li><a id="mail" href="mailto:hello@rumat.fi" class="hover:underline">hello@rumat.fi</a></li>
-          <li><a id="ig" href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer" class="hover:underline">Instagram</a></li>
-          <li><a id="tt" href="https://tiktok.com/@rumat.studio" target="_blank" rel="noreferrer" class="hover:underline">TikTok</a></li>
+          <li><a href="mailto:hello@rumat.fi" class="hover:underline">hello@rumat.fi</a></li>
+          <li><a href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer" class="hover:underline">Instagram</a></li>
           <li>Rovaniemi — Helsinki</li>
         </ul>
       </div>
@@ -276,11 +276,12 @@
     </div>
   </footer>
 
-  <script>
-    // Vuosi
-    document.getElementById('year').textContent = new Date().getFullYear();
+  <!-- Three.js -->
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
 
-    // Hero-tekstin pehmeä liike
+  <!-- Skriptit -->
+  <script>
+    // ---------- Headerin tausta + hero-tekstin liike ----------
     const heroText = document.getElementById('hero-text');
     let lastY = -1;
     const onScroll = () => {
@@ -292,143 +293,344 @@
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-    // ----- Elävä revontuli (Canvas) -----
-    (function(){
-      const cvs = document.getElementById('auroraCanvas');
-      const ctx = cvs.getContext('2d');
-      let DPR = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
-      function resize(){
-        const w = cvs.clientWidth, h = cvs.clientHeight;
-        cvs.width = Math.floor(w * DPR);
-        cvs.height = Math.floor(h * DPR);
-        ctx.setTransform(DPR,0,0,DPR,0,0);
-      }
-      resize(); addEventListener('resize', resize);
-
-      // Ribbons parametrit
-      const ribbons = [
-        { hue:170, sat:90, light:65, y:.35, amp:60,  w:180, speed:.12, phase:0   },
-        { hue:200, sat:85, light:60, y:.55, amp:50,  w:160, speed:.10, phase:1.7 },
-        { hue:285, sat:75, light:70, y:.45, amp:40,  w:140, speed:.08, phase:3.1 }
-      ];
-      let start = performance.now();
-
-      function draw(){
-        const t = (performance.now()-start)/1000;
-        const W = cvs.clientWidth, H = cvs.clientHeight;
-        // pehmeä yötaivas
-        const g = ctx.createLinearGradient(0,0,0,H);
-        g.addColorStop(0,'rgba(5,12,18,0.85)');
-        g.addColorStop(1,'rgba(10,16,22,0.85)');
-        ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
-
-        ctx.globalCompositeOperation = 'lighter';
-        for(const r of ribbons){
-          ctx.beginPath();
-          const baseY = r.y*H;
-          const freq = 2*Math.PI/W;
-          const amp = r.amp;
-          const step = 24;
-          ctx.moveTo(0, baseY + Math.sin(0 + r.phase + t*r.speed)*amp);
-          for(let x=0; x<=W; x+=step){
-            const y = baseY + Math.sin(x*freq*1.3 + r.phase + t*r.speed)*amp;
-            ctx.lineTo(x, y);
-          }
-          ctx.lineWidth = r.w;
-          const col = `hsla(${r.hue} ${r.sat}% ${r.light}% / 0.16)`;
-          ctx.strokeStyle = col;
-          ctx.shadowBlur = r.w*0.9;
-          ctx.shadowColor = `hsla(${r.hue} ${r.sat}% ${Math.min(95,r.light+20)}% / 0.35)`;
-          ctx.stroke();
-          ctx.shadowBlur = 0;
-        }
-        ctx.globalCompositeOperation = 'source-over';
-        requestAnimationFrame(draw);
-      }
-      // Käyttäjän "Vähennä liikettä" kunnioitus
-      const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if(!prefersReduced) requestAnimationFrame(draw);
-      else cvs.style.display='none';
-    })();
-
-    // ----- Tuotekuvien karusellit + fallback -----
+    // ---------- Tuotekuvat (Unsplash placeholderit) ----------
+    const slingImgs = [
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1511389026070-a14ae610a1be?auto=format&fit=crop&w=1600&q=80"
+    ];
+    const pipoImgs = [
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1600&q=80"
+    ];
     const FALLBACK = "https://placehold.co/1400x1750?text=Kuva";
     function setWithFallback(imgEl, url){
       if(!imgEl) return;
       imgEl.onerror = ()=>{ imgEl.onerror=null; imgEl.src = FALLBACK; };
       imgEl.src = url;
     }
-    const slingImgs = [
-      "https://placehold.co/1400x1750?text=Laukku+1",
-      "https://placehold.co/1400x1750?text=Laukku+2",
-      "https://placehold.co/1400x1750?text=Laukku+3"
-    ];
-    const pipoImgs = [
-      "https://placehold.co/1400x1750?text=Pipo+1",
-      "https://placehold.co/1400x1750?text=Pipo+2",
-      "https://placehold.co/1400x1750?text=Pipo+3"
-    ];
-    let i1=0,i2=0;
-    const setPair=(arr,aId,bId,i)=>{
-      const a=document.getElementById(aId), b=document.getElementById(bId);
-      if(!a||!b) return; const n=arr.length;
-      setWithFallback(a, arr[(i%n+n)%n]);
-      setWithFallback(b, arr[((i+1)%n+n)%n]);
+    let i1 = 0, i2 = 0;
+    const setPair = (arr, aId, bId, i) => {
+      const a = document.getElementById(aId), b = document.getElementById(bId);
+      if (!a || !b) return;
+      const n = arr.length;
+      setWithFallback(a, arr[(i % n + n) % n]);
+      setWithFallback(b, arr[((i + 1) % n + n) % n]);
     };
-    setPair(slingImgs,"p1a","p1b",i1);
-    setPair(pipoImgs,"p2a","p2b",i2);
-    document.getElementById('next1').onclick=()=>{i1=(i1+1)%slingImgs.length;setPair(slingImgs,"p1a","p1b",i1);};
-    document.getElementById('prev1').onclick=()=>{i1=(i1-1+slingImgs.length)%slingImgs.length;setPair(slingImgs,"p1a","p1b",i1);};
-    document.getElementById('next2').onclick=()=>{i2=(i2+1)%pipoImgs.length;setPair(pipoImgs,"p2a","p2b",i2);};
-    document.getElementById('prev2').onclick=()=>{i2=(i2-1+pipoImgs.length)%pipoImgs.length;setPair(pipoImgs,"p2a","p2b",i2);};
+    setPair(slingImgs, "p1a", "p1b", i1);
+    setPair(pipoImgs,  "p2a", "p2b", i2);
+    document.getElementById('next1').addEventListener('click', () => { i1 = (i1 + 1) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
+    document.getElementById('prev1').addEventListener('click', () => { i1 = (i1 - 1 + slingImgs.length) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
+    document.getElementById('next2').addEventListener('click', () => { i2 = (i2 + 1) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
+    document.getElementById('prev2').addEventListener('click', () => { i2 = (i2 - 1 + pipoImgs.length) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
 
-    // ----- Dynaaminen sisältö backendistä -----
-    async function loadContent() {
-      const sources = ["/api/content","./content.json"];
-      for(const u of sources){
-        try{
-          const r = await fetch(u, {credentials:"include"});
-          if(!r.ok) continue;
-          const d = await r.json();
+    // ===================== Aurora Hero (shader) =====================
+    (function initAurora(){
+      const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const canvas = document.getElementById('aurora');
+      const fallbackImg = document.getElementById('hero-fallback');
 
-          if(d?.hero?.headline){
-            document.querySelector('#etusivu h1').textContent = d.hero.headline;
-          }
-          // Jos adminissa on asetettu suora kuva-URL, näytä kuva ja piilota aurora-canvas
-          if(d?.hero?.image){
-            const img = document.getElementById('hero-img');
-            img.style.display = 'block';
-            img.src = d.hero.image;
-            const cvs = document.getElementById('auroraCanvas');
-            if(cvs) cvs.style.display='none';
-          }
-
-          if(d?.paypalBusiness){
-            ["pp1a","pp1b","pp2a","pp2b"].forEach(id=>{
-              const el=document.getElementById(id); if(el) el.value=d.paypalBusiness;
-            });
-          }
-          if(d?.contact?.instagram) document.getElementById('ig').href = d.contact.instagram;
-          if(d?.contact?.tiktok)    document.getElementById('tt').href = d.contact.tiktok;
-          if(d?.contact?.email){
-            const m = document.getElementById('mail');
-            m.href = "mailto:"+d.contact.email; m.textContent = d.contact.email;
-          }
-
-          const get=(id)=>d?.products?.find(p=>p.id===id);
-          const lau=get('laukku'); const pip=get('pipo');
-          if(lau?.images?.length>=2){
-            slingImgs.splice(0,slingImgs.length,...lau.images); i1=0; setPair(slingImgs,"p1a","p1b",i1);
-          }
-          if(pip?.images?.length>=2){
-            pipoImgs.splice(0,pipoImgs.length,...pip.images); i2=0; setPair(pipoImgs,"p2a","p2b",i2);
-          }
-          return;
-        }catch(e){}
+      // Jos liike pois päältä tai WebGL ei ole saatavilla -> näytä kuva
+      const hasWebGL = (() => {
+        try {
+          const c = document.createElement('canvas');
+          return !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')));
+        } catch { return false; }
+      })();
+      if (prefersReduced || !hasWebGL || !window.THREE) {
+        fallbackImg.classList.remove('hidden');
+        canvas.style.display = 'none';
+        return;
       }
-    }
-    loadContent();
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias:false, alpha:true, powerPreference:'high-performance' });
+      const DPR_MAX = 2;
+      function setDPR(){ renderer.setPixelRatio(Math.max(1, Math.min(devicePixelRatio||1, DPR_MAX))); }
+      setDPR();
+
+      // Fullscreen quad
+      const quad = new THREE.PlaneGeometry(2,2);
+      const cam  = new THREE.OrthographicCamera(-1,1,1,-1,0,1);
+
+      // Render targets
+      let scale = 1.0;
+      let rtBase, rtBright, rtBlur1, rtBlur2;
+      function rt(w,h){ return new THREE.WebGLRenderTarget(w,h,{minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter,format:THREE.RGBAFormat,depthBuffer:false,stencilBuffer:false}); }
+      function resizeAll(){
+        const w = Math.max(1, Math.floor(innerWidth  * scale));
+        const h = Math.max(1, Math.floor(innerHeight * scale));
+        [rtBase, rtBright, rtBlur1, rtBlur2].forEach(x=>x?.dispose());
+        rtBase  = rt(w,h);
+        rtBright= rt(w,h);
+        rtBlur1 = rt(Math.max(1,w>>1), Math.max(1,h>>1));
+        rtBlur2 = rt(Math.max(1,w>>2), Math.max(1,h>>2));
+      }
+
+      // Shaders
+      const VS = `precision highp float; void main(){ gl_Position = vec4(position,1.0); }`;
+      const LIB = `
+        float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453123); }
+        float noise(vec2 p){
+          vec2 i=floor(p), f=fract(p);
+          float a=hash(i), b=hash(i+vec2(1.0,0.0)), c=hash(i+vec2(0.0,1.0)), d=hash(i+vec2(1.0,1.0));
+          vec2 u=f*f*(3.0-2.0*f);
+          return mix(a,b,u.x)+ (c - a)*u.y*(1.0-u.x) + (d - b)*u.x*u.y;
+        }
+        float fbm(vec2 p){
+          float v=0.0; float a=0.5;
+          for(int i=0;i<6;i++){ v+=a*noise(p); p*=2.0; a*=0.5; }
+          return v;
+        }
+        vec2 curl(vec2 p){
+          float e=0.03;
+          float n1=fbm(p+vec2(0.0,e)), n2=fbm(p-vec2(0.0,e));
+          float n3=fbm(p+vec2(e,0.0)), n4=fbm(p-vec2(e,0.0));
+          return vec2(n1-n2, n4-n3);
+        }
+        vec3 hsl2rgb(vec3 c){
+          vec3 p = abs(mod(c.xxx + vec3(0., 1./3., 2./3.), 1.)*6.-3.);
+          return c.z + c.y*(clamp(p-1.,0.,1.) - 0.5)*(1.-abs(2.*c.z-1.));
+        }
+        vec3 auroraPalette(float x, float hue){
+          float H = fract((0.33 + hue)/1.0);
+          vec3 c1 = hsl2rgb(vec3(H, 0.85, 0.55));
+          vec3 c2 = hsl2rgb(vec3(fract(H+0.08), 0.85, 0.55));
+          vec3 c3 = hsl2rgb(vec3(fract(H+0.36), 0.75, 0.62));
+          return mix(mix(c1, c2, smoothstep(0.2,0.6,x)), c3, smoothstep(0.6,1.0,x));
+        }
+        float ridgeNoise(vec2 p){
+          float r=0.0, amp=0.5;
+          for(int i=0;i<5;i++){ r += (1.0-abs(2.0*fract(noise(p)*0.95)-1.0))*amp; p*=2.0; amp*=0.55; }
+          return r;
+        }
+      `;
+
+      const FS_AURORA = `
+        precision highp float;
+        uniform vec2  u_res;
+        uniform float u_time;
+        uniform vec2  u_mouse;
+        uniform float u_speed;
+        uniform float u_intensity;
+        uniform float u_hueShift;
+        uniform bool  u_stars;
+        uniform bool  u_mountains;
+        uniform float u_scroll;
+        ${LIB}
+        float stars(vec2 uv, float t){
+          vec2 id = floor(uv * u_res * 0.75);
+          float h = fract(sin(dot(id, vec2(12.9898,78.233)))*43758.5453);
+          float tw = 0.50 + 0.50*sin(t*3.0 + h*6.2831);
+          return step(0.9976, h) * tw;
+        }
+        float field(vec2 p, float z){
+          float f = fbm(p*1.6 + curl(p*1.1)*0.6 + z*0.15);
+          f = (f + fbm(p*3.1 - z*0.22))/2.0;
+          return f;
+        }
+        void main(){
+          vec2 uv = gl_FragCoord.xy / u_res.xy;
+          vec2 aspect = vec2(u_res.x/u_res.y,1.0);
+          vec2 par = (u_mouse - 0.5) * vec2(0.12, 0.06);
+          vec2 p = (uv + par) * aspect;
+
+          vec3 col = mix(vec3(0.012,0.028,0.045), vec3(0.03,0.06,0.10), uv.y);
+          float t = u_time * (0.55 + u_speed*0.85 + u_scroll*0.25);
+          float intensity = u_intensity * (1.0 + 0.25*u_scroll);
+
+          const int STEPS = 48;
+          float yStart = 0.15;
+          float yEnd   = 1.05;
+          float dy = (yEnd - yStart) / float(STEPS);
+          vec3 acc = vec3(0.0);
+          float tot=0.0;
+
+          float beams=0.0;
+          for(float i=0.0;i<6.0;i+=1.0){
+            float cx = fract(i/6.0 + 0.37);
+            float d = abs(uv.x - cx);
+            float b = exp(-pow(d*40.0, 2.0)) * (0.25 + 0.25*sin(t*1.2 + i*1.7));
+            beams += b;
+          }
+          beams *= smoothstep(0.12,0.8,uv.y);
+
+          for(int i=0;i<STEPS;i++){
+            float yy = yStart + float(i)*dy;
+            vec2 q   = p*2.2 + vec2(0.0, -t*0.25);
+            float k  = field(q + vec2(0.0, yy*2.0), yy*2.0 + t*0.35);
+            float curtain = smoothstep(0.25, 0.95, k) * smoothstep(1.0, 0.30, yy);
+            curtain *= 0.9 + 0.1*sin((uv.x + yy)*16.0 + t*1.1);
+            vec3 aCol = auroraPalette(k, u_hueShift/360.0);
+            vec3 c    = aCol * curtain * (1.0 + 0.35*beams);
+            float w   = 0.9 * exp(-pow(1.2 - yy, 2.0)*1.4);
+            acc += c * w; tot += w;
+          }
+          acc /= max(tot, 1e-4);
+          acc *= 1.12 * intensity;
+
+          if(u_stars){
+            col += vec3(stars(uv, t*1.2));
+          }
+
+          if(u_mountains){
+            float base = 0.12;
+            float h = base + ridgeNoise(vec2(uv.x*2.0, 0.0))*0.12;
+            if(uv.y < h){
+              float edge = smoothstep(0.0, 0.012, h - uv.y);
+              vec3 mcol = mix(vec3(0.01,0.02,0.03), vec3(0.02,0.03,0.05), 0.35);
+              col = mix(mcol, col, edge);
+            }
+          }
+
+          vec3 outCol = col + acc;
+
+          // kevyt “film noise”
+          float n = fract(sin(dot(gl_FragCoord.xy + u_time*vec2(23.2,47.7), vec2(12.9898,78.233))) * 43758.5453);
+          outCol += (n-0.5)/255.0;
+
+          gl_FragColor = vec4(outCol, 1.0);
+        }
+      `;
+
+      const FS_BRIGHT = `
+        precision highp float;
+        uniform sampler2D tDiffuse;
+        uniform vec2 u_res;
+        uniform float u_threshold;
+        void main(){
+          vec2 uv = gl_FragCoord.xy / u_res;
+          vec3 c = texture2D(tDiffuse, uv).rgb;
+          float b = max(max(c.r,c.g),c.b);
+          float knee = 0.35;
+          float soft = smoothstep(u_threshold - knee, u_threshold + knee, b);
+          gl_FragColor = vec4(c * soft, 1.0);
+        }
+      `;
+      const FS_KAWASE = `
+        precision highp float;
+        uniform sampler2D tDiffuse;
+        uniform vec2 u_res;
+        void main(){
+          vec2 uv = gl_FragCoord.xy / u_res;
+          vec2 off = 1.0 / u_res;
+          vec3 s = texture2D(tDiffuse, uv).rgb * 0.4;
+          s += texture2D(tDiffuse, uv + vec2( off.x, 0.0)).rgb * 0.15;
+          s += texture2D(tDiffuse, uv + vec2(-off.x, 0.0)).rgb * 0.15;
+          s += texture2D(tDiffuse, uv + vec2(0.0,  off.y)).rgb * 0.15;
+          s += texture2D(tDiffuse, uv + vec2(0.0, -off.y)).rgb * 0.15;
+          gl_FragColor = vec4(s, 1.0);
+        }
+      `;
+      const FS_COMPOSITE = `
+        precision highp float;
+        uniform sampler2D tBase;
+        uniform sampler2D tBloom;
+        uniform vec2 u_res;
+        uniform float u_strength;
+        void main(){
+          vec2 uv = gl_FragCoord.xy / u_res;
+          vec3 base  = texture2D(tBase, uv).rgb;
+          vec3 bloom = texture2D(tBloom, uv).rgb;
+          gl_FragColor = vec4(base + bloom * u_strength, 1.0);
+        }
+      `;
+      const FS_BLIT = `
+        precision highp float;
+        uniform sampler2D tTex; uniform vec2 u_res;
+        void main(){ vec2 uv=gl_FragCoord.xy/u_res; gl_FragColor=texture2D(tTex,uv); }
+      `;
+
+      // Materials & scenes
+      const U_A = { u_res:{value:new THREE.Vector2(1,1)}, u_time:{value:0}, u_mouse:{value:new THREE.Vector2(0.5,0.5)}, u_speed:{value:0.95}, u_intensity:{value:1.30}, u_hueShift:{value:0.0}, u_stars:{value:true}, u_mountains:{value:true}, u_scroll:{value:0.0} };
+      const M_A = new THREE.ShaderMaterial({uniforms:U_A, vertexShader:VS, fragmentShader:FS_AURORA, depthWrite:false});
+      const S_A = new THREE.Scene(); S_A.add(new THREE.Mesh(quad, M_A));
+
+      const U_B = { tDiffuse:{value:null}, u_res:{value:new THREE.Vector2(1,1)}, u_threshold:{value:0.65} };
+      const M_B = new THREE.ShaderMaterial({uniforms:U_B, vertexShader:VS, fragmentShader:FS_BRIGHT, depthWrite:false});
+      const S_B = new THREE.Scene(); S_B.add(new THREE.Mesh(quad, M_B));
+
+      const U_K1 = { tDiffuse:{value:null}, u_res:{value:new THREE.Vector2(1,1)} };
+      const U_K2 = { tDiffuse:{value:null}, u_res:{value:new THREE.Vector2(1,1)} };
+      const M_K  = new THREE.ShaderMaterial({uniforms:U_K1, vertexShader:VS, fragmentShader:FS_KAWASE, depthWrite:false});
+      const S_K1 = new THREE.Scene(); S_K1.add(new THREE.Mesh(quad, M_K));
+      const M_K2 = new THREE.ShaderMaterial({uniforms:U_K2, vertexShader:VS, fragmentShader:FS_KAWASE, depthWrite:false});
+      const S_K2 = new THREE.Scene(); S_K2.add(new THREE.Mesh(quad, M_K2));
+
+      const U_C = { tBase:{value:null}, tBloom:{value:null}, u_res:{value:new THREE.Vector2(1,1)}, u_strength:{value:1.25} };
+      const M_C = new THREE.ShaderMaterial({uniforms:U_C, vertexShader:VS, fragmentShader:FS_COMPOSITE, depthWrite:false});
+      const S_C = new THREE.Scene(); S_C.add(new THREE.Mesh(quad, M_C));
+
+      const U_BL = { tTex:{value:null}, u_res:{value:new THREE.Vector2(1,1)} };
+      const M_BL = new THREE.ShaderMaterial({uniforms:U_BL, vertexShader:VS, fragmentShader:FS_BLIT, depthWrite:false});
+      const S_BL = new THREE.Scene(); S_BL.add(new THREE.Mesh(quad, M_BL));
+
+      function size(){
+        setDPR();
+        const w = Math.max(1, Math.floor(innerWidth * scale));
+        const h = Math.max(1, Math.floor(innerHeight* scale));
+        renderer.setSize(w, h, false);
+        resizeAll();
+        U_A.u_res.value.set(w,h);
+        U_B.u_res.value.set(w,h);
+        U_C.u_res.value.set(w,h);
+        U_BL.u_res.value.set(w,h);
+      }
+      addEventListener('resize', size, {passive:true}); size();
+
+      // Interaction
+      function setMouse(x,y){ U_A.u_mouse.value.set(x,y); }
+      addEventListener('mousemove', e=>{ const r=canvas.getBoundingClientRect(); setMouse((e.clientX-r.left)/r.width, (e.clientY-r.top)/r.height); }, {passive:true});
+      addEventListener('touchmove', e=>{ const t=e.touches[0]; if(!t) return; const r=canvas.getBoundingClientRect(); setMouse((t.clientX-r.left)/r.width, (t.clientY-r.top)/r.height); }, {passive:true});
+      function onScrollAur(){ const k=Math.max(0, Math.min(1, pageYOffset/(0.7*innerHeight))); U_A.u_scroll.value=k; }
+      addEventListener('scroll', onScrollAur, {passive:true}); onScrollAur();
+
+      // Pipeline
+      let last = performance.now(), acc=0, frames=0;
+      function renderFrame(){
+        const now=performance.now(), dt=now-last; last=now;
+        U_A.u_time.value += dt/1000;
+
+        // base
+        renderer.setRenderTarget(rtBase);
+        renderer.render(S_A, cam);
+
+        // bright
+        U_B.tDiffuse.value = rtBase.texture;
+        renderer.setRenderTarget(rtBright);
+        renderer.render(S_B, cam);
+
+        // kawase blur
+        U_K1.tDiffuse.value = rtBright.texture;
+        U_K1.u_res.value.set(rtBright.width, rtBright.height);
+        renderer.setRenderTarget(rtBlur1);
+        renderer.render(S_K1, cam);
+
+        U_K2.tDiffuse.value = rtBlur1.texture;
+        U_K2.u_res.value.set(rtBlur1.width, rtBlur1.height);
+        renderer.setRenderTarget(rtBlur2);
+        renderer.render(S_K2, cam);
+
+        // composite
+        U_C.tBase.value  = rtBase.texture;
+        U_C.tBloom.value = rtBlur2.texture;
+        renderer.setRenderTarget(null);
+        renderer.render(S_C, cam);
+
+        // autoscale (kevyesti)
+        acc+=dt; frames++;
+        if(acc>500){
+          const fps = Math.round(1000*frames/acc);
+          if(fps<50 && scale>0.7){ scale=Math.max(0.7, scale-0.05); size(); }
+          else if(fps>58 && scale<1.0){ scale=Math.min(1.0, scale+0.02); size(); }
+          acc=0; frames=0;
+        }
+        requestAnimationFrame(renderFrame);
+      }
+      requestAnimationFrame(renderFrame);
+    })();
   </script>
 </body>
 </html>
