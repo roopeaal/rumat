@@ -1,236 +1,136 @@
 <!doctype html>
 <html lang="fi">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>RUMAT.STUDIO</title>
-    <meta name="description" content="Helsinki — Contemporary textiles, built to last." />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>RUMAT.STUDIO</title>
+  <meta name="description" content="Helsinki — Contemporary textiles, built to last."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Brändivärit -->
-    <style>
-        :root {
-            --brand-green: #A1A266;
-            --brand-dark: #345563;
-            --brand-ivory: #F6F6F4;
-            --brand-olive: #A1A266;
-            --brand-ink: #202020;
-            --footer-black: #0B0F0E;
-        }
-
-        body {
-            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial;
-            background: var(--brand-ivory);
-            color: var(--brand-ink);
-        }
-
-        .serif {
-            font-family: "Libre Baskerville", serif;
-        }
-
-        .hero-fixed {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-        }
-
-        .shadow-soft {
-            box-shadow: 0 6px 20px rgba(0, 0, 0, .12);
-        }
-
-        .btn {
-            border-radius: 9999px;
-            padding: .65rem 1.05rem;
-            border: 1px solid rgb(214 211 209);
-            transition: transform .06s ease, box-shadow .12s ease, background-color .15s;
-        }
-
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, .12);
-        }
-
-        .btn-dark {
-            background: var(--brand-ink);
-            color: #fff;
-            border-color: var(--brand-ink);
-        }
-
-        .btn-olive {
-            background: var(--brand-olive);
-            color: #202020;
-            border-color: #8f945a;
-        }
-
-        .chip {
-            font-size: .78rem;
-            padding: .28rem .6rem;
-            border-radius: 9999px;
-            border: 1px solid rgb(214 211 209);
-            background: #fff;
-            color: #374151;
-        }
-
-        .chip-olive {
-            border-color: var(--brand-olive);
-            color: var(--brand-olive);
-        }
-    </style>
+  <!-- Brändivärit ja tyylit -->
+  <style>
+    :root {
+      --brand-deep: #345563;
+      --brand-olive: #A1A266;
+      --brand-ink: #202020;
+      --brand-ivory: #F6F6F4;
+      --brand-mist: #DEEEEE;
+    }
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background: var(--brand-ivory);
+      color: var(--brand-ink);
+    }
+    .hero-fixed { position: fixed; inset: 0; z-index: -1; }
+    .btn {
+      padding: .6rem 1rem;
+      border-radius: 9999px;
+      border: 1px solid rgb(214 211 209);
+      transition: transform .06s ease, box-shadow .12s ease, background-color .15s;
+    }
+    .btn-dark { background: var(--brand-ink); color: #fff; border-color: #1b1b1b; }
+    .btn-olive { background: var(--brand-olive); color: #202020; border-color: #8f945a; }
+  </style>
 </head>
 
-<body class="text-stone-900">
-    <!-- Hero Image -->
-    <div class="hero-fixed">
-        <img src="https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80" alt="Lapin erämaa"
-            class="w-full h-full object-cover" style="object-position:center 60%" onerror="this.onerror=null;this.src='https://placehold.co/2400x1600?text=Lapin+taustakuva'">
-        <div class="absolute inset-0 bg-gradient-to-b from-black/5 via-black/10 to-black/22"></div>
+<body>
+
+  <!-- Hero-image -->
+  <div class="hero-fixed">
+    <img src="https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80"
+         alt="Lapin erämaa"
+         class="w-full h-full object-cover"
+         style="object-position:center 60%">
+    <div class="absolute inset-0 bg-gradient-to-b from-black/5 via-black/10 to-black/22"></div>
+  </div>
+
+  <!-- Yläpalkki -->
+  <header class="fixed top-0 left-0 right-0 z-50 text-white">
+    <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
+      <a href="#etusivu" class="flex items-center gap-3">
+        <div class="h-9 w-9 grid place-items-center rounded-xl ring-1 ring-stone-300 bg-white/85">
+          <span class="-rotate-90 serif text-2xl font-black text-stone-900">R</span>
+        </div>
+        <span class="hidden sm:inline text-sm uppercase tracking-wide font-semibold">RUMAT.STUDIO</span>
+      </a>
+      <nav class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
+        <a href="#etusivu" class="hover:underline font-semibold">Etusivu</a>
+        <a href="#tuotteet" class="hover:underline font-semibold">Tuotteet</a>
+        <a href="#tarina" class="hover:underline font-semibold">Tarina</a>
+        <a href="#yhteys" class="hover:underline font-semibold">Yhteystiedot</a>
+      </nav>
     </div>
+  </header>
 
-    <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 z-50">
-        <div id="header-bg" class="absolute inset-0 bg-stone-50/0 backdrop-blur-sm border-b border-stone-200/0 transition-all"></div>
-        <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
-            <a href="#etusivu" class="flex items-center gap-3">
-                <div class="h-9 w-9 grid place-items-center rounded-xl ring-1 ring-stone-300 bg-white/85">
-                    <span class="-rotate-90 serif text-2xl font-black text-stone-900">R</span>
-                </div>
-                <span class="hidden sm:inline text-sm uppercase tracking-wide font-semibold">RUMAT.STUDIO</span>
-            </a>
-            <nav class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
-                <a href="#etusivu" class="hover:underline underline-offset-4 font-semibold">Etusivu</a>
-                <a href="#tuotteet" class="hover:underline underline-offset-4 font-semibold">Tuotteet</a>
-                <a href="#tarina" class="hover:underline underline-offset-4 font-semibold">Tarina</a>
-                <a href="#yhteys" class="hover:underline underline-offset-4 font-semibold">Yhteystiedot</a>
-            </nav>
+  <!-- Etusivun tekstit -->
+  <section id="etusivu" class="h-screen grid place-items-center text-stone-50 px-4">
+    <div id="hero-text" class="text-center transition-transform">
+      <h1 class="uppercase font-semibold tracking-[0.30em] text-4xl sm:text-6xl md:text-7xl lg:text-8xl drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
+        LIIAN RUMAT OLLAKSEEN TOTTA
+      </h1>
+      <div class="mt-8 flex justify-center">
+        <div class="h-20 w-20 sm:h-24 sm:w-24 grid place-items-center rounded-full bg-white/90 ring-1 ring-white/70 shadow-soft">
+          <span class="-rotate-90 serif text-4xl sm:text-5xl font-black text-stone-900">R</span>
         </div>
-    </header>
+      </div>
+    </div>
+  </section>
 
-    <!-- Hero Section -->
-    <section id="etusivu" class="h-screen grid place-items-center text-stone-50 px-4">
-        <div id="hero-text" class="text-center transition-transform">
-            <h1 class="uppercase font-semibold tracking-[0.30em] text-4xl sm:text-6xl md:text-7xl lg:text-8xl drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
-                LIIAN RUMAT OLLAKSEEN TOTTA
-            </h1>
-            <div class="mt-8 flex justify-center">
-                <div class="h-20 w-20 sm:h-24 sm:w-24 grid place-items-center rounded-full bg-white/90 ring-1 ring-white/70 shadow-soft">
-                    <span class="-rotate-90 serif text-4xl sm:text-5xl font-black text-stone-900">R</span>
-                </div>
-            </div>
+  <!-- Tuotteet (kokosivun levyiset esittelypalkit) -->
+  <section id="tuotteet" class="py-14" style="background: var(--brand-mist);">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 class="serif text-3xl">Tuotteet</h2>
+      <div class="relative grid md:grid-cols-2 gap-4 md:gap-6 mt-8">
+        <!-- Tuote 1: Laukku -->
+        <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200">
+          <img id="p1a" class="w-full h-full object-cover" alt="Laukku 1">
         </div>
-    </section>
-
-    <!-- Tuotteet Section -->
-    <section id="tuotteet" class="py-14 bg-white">
-        <div class="mx-auto max-w-6xl px-4">
-            <div class="flex items-center justify-between mb-2">
-                <h2 class="serif text-3xl">Tuotteet</h2>
-                <div class="text-xs text-stone-500">Hinnat sis. ALV • Palautus 14 vrk</div>
-            </div>
-
-            <!-- Tuote 1: LAUKKU -->
-            <div class="mb-12">
-                <div class="relative">
-                    <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-                        <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200">
-                            <img id="p1a" class="w-full h-full object-cover" alt="Laukku 1" loading="lazy" decoding="async">
-                        </div>
-                        <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200">
-                            <img id="p1b" class="w-full h-full object-cover" alt="Laukku 2" loading="lazy" decoding="async">
-                        </div>
-                    </div>
-                    <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
-                    <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
-                </div>
-                <div class="mt-6 text-center">
-                    <h3 class="serif text-2xl">Laukku</h3>
-                    <p class="mt-1 text-stone-700">
-                        Täysin kierrätysmateriaaleista valmistettu sling-laukku. Kierrätetty purjekangas/tekstiili, hihna käytetystä turvavyöstä, metalliosat uudelleenkäytettyä varastoa.
-                        Ulkomitat: 28 × 16 × 7 cm. Valmistettu Suomessa.
-                    </p>
-                    <div class="mt-2 font-semibold">€149,00</div>
-
-                    <!-- Toimitusvaihtoehdot -->
-                    <div class="mt-4 flex items-center justify-center gap-2">
-                        <span class="chip">Nouto (sovitusti) — 0 €</span>
-                        <span class="chip chip-olive">Posti — 6,90 €</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tuote 2: PIPO -->
-            <div class="mb-6">
-                <div class="relative">
-                    <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-                        <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200">
-                            <img id="p2a" class="w-full h-full object-cover" alt="RUMAT Pipo 1" loading="lazy" decoding="async">
-                        </div>
-                        <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200">
-                            <img id="p2b" class="w-full h-full object-cover" alt="RUMAT Pipo 2" loading="lazy" decoding="async">
-                        </div>
-                    </div>
-                    <button id="prev2" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
-                    <button id="next2" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
-                </div>
-                <div class="mt-6 text-center">
-                    <h3 class="serif text-2xl">RUMAT Pipo</h3>
-                    <p class="mt-1 text-stone-700">Käsinneulottu mohair-sekoite. Korkeus n. 22 cm. Päänympärys 54–58 cm (joustava).</p>
-                    <div class="mt-2 font-semibold">€59,00</div>
-
-                    <div class="mt-4 flex items-center justify-center gap-2">
-                        <span class="chip">Nouto (sovitusti) — 0 €</span>
-                        <span class="chip chip-olive">Posti — 6,90 €</span>
-                    </div>
-                </div>
-            </div>
+        <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200">
+          <img id="p1b" class="w-full h-full object-cover" alt="Laukku 2">
         </div>
-    </section>
+      </div>
+      <!-- Karuselli ja painikkeet -->
+      <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft">◀</button>
+      <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft">▶</button>
+    </div>
+  </section>
 
-    <!-- TARINA -->
-    <section id="tarina" class="py-14 bg-stone-50/90">
-        <div class="mx-auto max-w-3xl px-6">
-            <h2 class="serif text-3xl mb-4">Tarina</h2>
-            <p>
-                Kirjoita tähän yrityksen matkaa: miksi perustit, mitä opit, minne olet menossa.
-                Tekstiä voi muuttaa milloin vain päivittämällä tämän tiedoston.
-            </p>
-        </div>
-    </section>
+  <!-- Footer -->
+  <footer id="yhteys" class="py-14 bg-stone-900 text-white">
+    <div class="mx-auto max-w-6xl px-4">
+      <h5 class="text-lg">Yhteystiedot</h5>
+      <ul class="mt-4 space-y-2">
+        <li><a href="mailto:hello@rumat.fi" class="hover:underline">hello@rumat.fi</a></li>
+        <li><a href="https://instagram.com/rumat.studio" target="_blank" class="hover:underline">Instagram</a></li>
+        <li>Rovaniemi — Helsinki</li>
+      </ul>
+    </div>
+  </footer>
 
-    <!-- FOOTER -->
-    <footer id="yhteys" class="pt-14 bg-stone-900 text-stone-200">
-        <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
-            <div>
-                <div class="uppercase tracking-wide">RUMAT.STUDIO</div>
-                <div class="text-stone-400 text-sm mt-1">Helsinki — Contemporary textiles, built to last.</div>
-            </div>
-            <div>
-                <h5 class="text-sm text-stone-400">Yhteys</h5>
-                <ul class="mt-2 space-y-2 text-sm">
-                    <li><a href="mailto:hello@rumat.fi" class="hover:underline">hello@rumat.fi</a></li>
-                    <li><a href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer" class="hover:underline">Instagram</a></li>
-                    <li>Rovaniemi — Helsinki</li>
-                </ul>
-            </div>
-            <div>
-                <h5 class="text-sm text-stone-400">Tilaukset</h5>
-                <ul class="mt-2 space-y-2 text-sm">
-                    <li>Nouto (sovitusti) — 0 €</li>
-                    <li>Posti — 6,90 € (lisätään kassalla)</li>
-                    <li>Hinnat sisältävät ALV:n • Palautus 14 vrk</li>
-                </ul>
-            </div>
-        </div>
-        <div class="py-8 text-center text-xs text-stone-500">© <span id="year"></span> RUMAT.STUDIO</div>
-    </footer>
+  <script>
+    // Tuotekuvien karuselli
+    const slingImgs = [
+      "https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1600&q=80"
+    ];
+    let i1 = 0;
 
-    <!-- Skriptit -->
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
+    function setWithFallback(imgEl, url) {
+      imgEl.src = url;
+    }
+
+    function setPair(arr, aId, bId, i) {
+      const a = document.getElementById(aId), b = document.getElementById(bId);
+      setWithFallback(a, arr[(i % arr.length + arr.length) % arr.length]);
+      setWithFallback(b, arr[((i + 1) % arr.length + arr.length) % arr.length]);
+    }
+
+    setPair(slingImgs, "p1a", "p1b", i1);
+
+    document.getElementById('next1').addEventListener('click', () => { i1 = (i1 + 1) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
+    document.getElementById('prev1').addEventListener('click', () => { i1 = (i1 - 1 + slingImgs.length) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
+  </script>
 </body>
-
 </html>
