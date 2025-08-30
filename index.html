@@ -14,163 +14,242 @@
 
   <style>
     :root{
-      --brand-green:#0E2016;
-      --footer-black:#0B0F0E;
-      --brand-ivory:#F6F6F4;
-      --band-pale:#DEEEEE;
+      /* Brändi + sivun värit */
+      --brand-green: #0E2016;  /* Spruce tumma (kuvabändien otsikoissa aiemmin) */
+      --footer-black:#0B0F0E;  /* footerin musta */
+      --brand-ink:   #202020;  /* mustanharmaa teksti */
+      --brand-ivory: #F6F6F4;  /* kuvapalkkien tausta */
+      --band-pale:   #DEEEEE;  /* esittelypalkkien tausta */
     }
-    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;background:var(--brand-ivory);color:#1f2937;}
+    body{
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
+      background:var(--brand-ivory);
+      color:#1f2937;
+      overscroll-behavior-y:none;
+    }
     .serif{font-family:"Libre Baskerville",serif}
+    /* Hero-canvaksen kontti: aina taustalla */
     .hero-fixed{position:fixed;inset:0;z-index:-1}
     .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
-    .btn{border-radius:9999px;padding:.65rem 1.05rem;border:1px solid rgb(214 211 209);transition:transform .06s ease, box-shadow .12s ease, background-color .15s;}
-    .btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.12)}
-    .btn-dark{background:#0b0f0e;color:#f8fafb;border-color:#0b0f0e}
-    .btn-olive{background:#A1A266;color:#202020;border-color:#8f945a}
-    .chip{font-size:.78rem;padding:.28rem .6rem;border-radius:9999px;border:1px solid rgb(214 211 209);background:#fff;color:#374151}
-    .chip-olive{border-color:#A1A266;color:#A1A266}
-    #aurora{position:absolute;inset:0;display:block;width:100vw;height:100vh}
+    .btn{border-radius:9999px;padding:.65rem 1.05rem;border:1px solid rgb(214 211 209);
+         transition:transform .06s ease, box-shadow .12s ease, background-color .15s;}
+    .btn:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(0,0,0,.12); }
+    .btn-dark{ background:#0b0f0e; color:#f8fafb; border-color:#0b0f0e; }
+    .btn-olive{ background:#A1A266; color:#202020; border-color:#8f945a; }
+    .chip{font-size:.78rem; padding:.28rem .6rem; border-radius:9999px; border:1px solid rgb(214 211 209); background:#fff; color:#374151;}
+    .chip-olive{ border-color:#A1A266; color:#A1A266; }
   </style>
 </head>
+
 <body class="text-stone-900">
-  <!-- HERO: Aurora canvas + fallback-kuva -->
+  <!-- ===== HERO: WebGL revontulet ===== -->
   <div class="hero-fixed">
-    <canvas id="aurora"></canvas>
+    <canvas id="aurora" style="width:100%;height:100%;display:block"></canvas>
+    <!-- Fallback-kuva jos WebGL ei toimi -->
     <img id="hero-fallback"
-         src="https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80"
-         alt="Lapin erämaa" class="w-full h-full object-cover hidden"
-         style="object-position:center 60%"
-         onerror="this.onerror=null;this.src='https://placehold.co/2400x1600?text=Lapin+taustakuva'">
-    <div class="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/5 via-black/10 to-black/22"></div>
+         alt="Lapin yö"
+         style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none"
+         src="https://images.unsplash.com/photo-1564857170582-80855988d55e?auto=format&fit=crop&w=2400&q=80">
   </div>
 
-  <!-- Yläreunan väripalkki -->
-  <div class="h-14 md:h-16 w-full" style="background:var(--brand-green);opacity:.92;"></div>
+  <!-- Yläpalkin värikaista joka liikkuu heron mukana (ohut) -->
+  <div class="h-14 md:h-16 w-full" style="background:rgba(14,32,22,.92);"></div>
 
-  <!-- Header -->
+  <!-- ===== Kiinteä HEADER (logo + navigaatio) ===== -->
   <header class="fixed top-0 left-0 right-0 z-50 text-white">
     <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
       <a href="#etusivu" class="flex items-center gap-3">
+        <!-- Paksu R kaadettuna 90° -->
         <div class="h-10 w-10 grid place-items-center rounded-xl border border-white/55 bg-white/92">
           <span class="font-black text-[22px] leading-none text-[color:var(--brand-green)] transform rotate-90 select-none">R</span>
         </div>
         <span class="hidden sm:inline text-sm uppercase tracking-widest font-semibold drop-shadow">RUMAT.STUDIO</span>
       </a>
+
       <nav class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
-        <a href="#etusivu" class="font-semibold hover:underline underline-offset-4">Etusivu</a>
-        <a href="#tuotteet" class="font-semibold hover:underline underline-offset-4">Tuotteet</a>
-        <a href="#tarina" class="font-semibold hover:underline underline-offset-4">Tarina</a>
-        <a href="#yhteys" class="font-semibold hover:underline underline-offset-4">Yhteystiedot</a>
+        <a href="#etusivu"   class="font-semibold hover:underline underline-offset-4">Etusivu</a>
+        <a href="#tuotteet"  class="font-semibold hover:underline underline-offset-4">Tuotteet</a>
+        <a href="#tarina"    class="font-semibold hover:underline underline-offset-4">Tarina</a>
+        <a href="#yhteys"    class="font-semibold hover:underline underline-offset-4">Yhteystiedot</a>
       </nav>
       <div></div>
     </div>
   </header>
 
-  <!-- Hero-tekstit -->
+  <!-- ===== HERO-tekstit ===== -->
   <section id="etusivu" class="h-[calc(100vh-56px)] md:h-[calc(100vh-64px)] grid place-items-center text-stone-50 px-4">
     <div id="hero-text" class="text-center transition-transform">
-      <h1 class="uppercase font-semibold tracking-[0.28em] text-[clamp(22px,4.1vw,48px)] drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
+      <h1 class="uppercase font-semibold tracking-[0.28em]
+                 text-[clamp(22px,4.2vw,52px)]
+                 drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
         LIIAN RUMAT OLLAKSEEN TOTTA
       </h1>
       <div class="mt-9 flex justify-center">
-        <div class="h-28 w-28 sm:h-32 sm:w-32 grid place-items-center rounded-full bg-white/92 ring-1 ring-white/70 shadow-soft">
+        <div class="h-28 w-28 sm:h-32 sm:w-32 grid place-items-center
+                    rounded-full bg-white/92 ring-1 ring-white/70 shadow-soft">
           <span class="font-black text-6xl sm:text-7xl leading-none text-stone-900 transform rotate-90 select-none">R</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Intro -->
-  <section class="py-12 bg-stone-50/90">
+  <!-- ===== Esittelypalkki (kokosivuinen, #DEEEEE) ===== -->
+  <section class="py-12" style="background:var(--band-pale)">
     <div class="mx-auto max-w-3xl px-6 text-center">
-      <p class="text-xl sm:text-2xl">Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Valmistamme pieniä eriä Suomessa ja EU:ssa, jotta vaate kestää vuosia ja tekijät näkyvät.</p>
+      <p class="text-xl sm:text-2xl">
+        Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Valmistamme pieniä eriä Suomessa ja EU:ssa, jotta vaate kestää vuosia ja tekijät näkyvät.
+      </p>
     </div>
   </section>
 
-  <!-- Tuotteet (vihreä kuvapalkki) -->
-  <section id="tuotteet" style="background:var(--brand-green)">
-    <div class="mx-auto max-w-6xl px-4 py-14 text-white">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="serif text-3xl">Tuotteet</h2>
-        <div class="text-xs text-white/80">Hinnat sis. ALV • Palautus 14 vrk</div>
-      </div>
-      <div class="relative">
-        <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-white/20 bg-black/10">
-            <img id="p1a" class="w-full h-full object-cover" alt="Laukku 1" loading="lazy" decoding="async">
-          </div>
-          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-white/20 bg-black/10">
-            <img id="p1b" class="w-full h-full object-cover" alt="Laukku 2" loading="lazy" decoding="async">
-          </div>
+  <!-- ===== TUOTTEET ===== -->
+  <section id="tuotteet">
+    <!-- Kuvapalkki (tausta #F6F6F4) -->
+    <div style="background:var(--brand-ivory)">
+      <div class="mx-auto max-w-6xl px-4 py-14">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="serif text-3xl">Tuotteet</h2>
+          <div class="text-xs text-stone-600">Hinnat sis. ALV • Palautus 14 vrk</div>
         </div>
-        <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft" aria-label="Edelliset kuvat">◀</button>
-        <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
-      </div>
-    </div>
-  </section>
 
-  <!-- Esittelypalkki -->
-  <section style="background:var(--band-pale)">
-    <div class="mx-auto max-w-6xl px-4 py-12">
-      <div class="text-center">
-        <h3 class="serif text-2xl">Laukku</h3>
-        <p class="mt-1 text-stone-700">Täysin kierrätysmateriaaleista valmistettu sling-laukku. Kierrätetty purjekangas/tekstiili, hihna käytetystä turvavyöstä, metalliosat uudelleenkäytettyä varastoa. Ulkomitat: 28 × 16 × 7 cm. Valmistettu Suomessa.</p>
-        <div class="mt-2 font-semibold">€149,00</div>
-        <div class="mt-4 flex items-center justify-center gap-2">
-          <span class="chip">Nouto (sovitusti) — 0 €</span>
-          <span class="chip chip-olive">Posti — 6,90 €</span>
+        <!-- Karuselli: LAUKKU -->
+        <div class="relative">
+          <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-white">
+              <img id="p1a" class="w-full h-full object-cover" alt="Laukku 1" loading="lazy" decoding="async">
+            </div>
+            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-white">
+              <img id="p1b" class="w-full h-full object-cover" alt="Laukku 2" loading="lazy" decoding="async">
+            </div>
+          </div>
+          <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
+          <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- Toinen kuvapalkki -->
-  <section style="background:var(--brand-green)">
-    <div class="mx-auto max-w-6xl px-4 py-14 text-white">
-      <div class="relative">
-        <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-white/20 bg-black/10">
-            <img id="p2a" class="w-full h-full object-cover" alt="RUMAT Pipo 1" loading="lazy" decoding="async">
+    <!-- Esittelypalkki (kokosivuinen #DEEEEE) -->
+    <section style="background:var(--band-pale)">
+      <div class="mx-auto max-w-6xl px-4 py-12">
+        <div class="text-center">
+          <h3 class="serif text-2xl">Laukku</h3>
+          <p class="mt-1 text-stone-700">
+            Täysin kierrätysmateriaaleista valmistettu sling-laukku. Kierrätetty purjekangas/tekstiili, hihna käytetystä turvavyöstä, metalliosat uudelleenkäytettyä varastoa.
+            Ulkomitat: 28 × 16 × 7 cm. Valmistettu Suomessa.
+          </p>
+          <div class="mt-2 font-semibold">€149,00</div>
+
+          <div class="mt-4 flex items-center justify-center gap-2">
+            <span class="chip">Nouto (sovitusti) — 0 €</span>
+            <span class="chip chip-olive">Posti — 6,90 €</span>
           </div>
-          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-white/20 bg-black/10">
-            <img id="p2b" class="w-full h-full object-cover" alt="RUMAT Pipo 2" loading="lazy" decoding="async">
+
+          <div class="mt-3 flex items-center justify-center gap-3 flex-wrap">
+            <!-- NOUTO 0 € -->
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+              <input type="hidden" name="cmd" value="_xclick">
+              <input type="hidden" name="business" value="kauppa@esimerkki.fi"><!-- VAIHDA OMA PAYPAL -->
+              <input type="hidden" name="item_name" value="Laukku (nouto)">
+              <input type="hidden" name="amount" value="149.00">
+              <input type="hidden" name="currency_code" value="EUR">
+              <input type="hidden" name="shipping" value="0.00">
+              <input type="hidden" name="no_shipping" value="1">
+              <input type="submit" value="Osta – Nouto 0 €" class="btn btn-dark cursor-pointer">
+            </form>
+            <!-- POSTI 6,90 € -->
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+              <input type="hidden" name="cmd" value="_xclick">
+              <input type="hidden" name="business" value="kauppa@esimerkki.fi">
+              <input type="hidden" name="item_name" value="Laukku (posti)">
+              <input type="hidden" name="amount" value="149.00">
+              <input type="hidden" name="currency_code" value="EUR">
+              <input type="hidden" name="shipping" value="6.90">
+              <input type="hidden" name="no_shipping" value="2">
+              <input type="submit" value="Osta – Posti 6,90 €" class="btn btn-olive cursor-pointer">
+            </form>
           </div>
         </div>
-        <button id="prev2" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft" aria-label="Edelliset kuvat">◀</button>
-        <button id="next2" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-white/40 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Pipo-esittelypalkki -->
-  <section style="background:var(--band-pale)">
-    <div class="mx-auto max-w-6xl px-4 py-12">
-      <div class="text-center">
-        <h3 class="serif text-2xl">RUMAT Pipo</h3>
-        <p class="mt-1 text-stone-700">Käsinneulottu mohair-sekoite. Korkeus n. 22 cm. Päänympärys 54–58 cm (joustava).</p>
-        <div class="mt-2 font-semibold">€59,00</div>
-        <div class="mt-4 flex items-center justify-center gap-2">
-          <span class="chip">Nouto (sovitusti) — 0 €</span>
-          <span class="chip chip-olive">Posti — 6,90 €</span>
+    <!-- Kuvapalkki: PIPO (tausta #F6F6F4) -->
+    <div style="background:var(--brand-ivory)">
+      <div class="mx-auto max-w-6xl px-4 py-14">
+        <div class="relative">
+          <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-white">
+              <img id="p2a" class="w-full h-full object-cover" alt="RUMAT Pipo 1" loading="lazy" decoding="async">
+            </div>
+            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200 bg-white">
+              <img id="p2b" class="w-full h-full object-cover" alt="RUMAT Pipo 2" loading="lazy" decoding="async">
+            </div>
+          </div>
+
+          <button id="prev2" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
+          <button id="next2" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
         </div>
       </div>
     </div>
+
+    <!-- Esittelypalkki: PIPO (#DEEEEE) -->
+    <section style="background:var(--band-pale)">
+      <div class="mx-auto max-w-6xl px-4 py-12">
+        <div class="text-center">
+          <h3 class="serif text-2xl">RUMAT Pipo</h3>
+          <p class="mt-1 text-stone-700">Käsinneulottu mohair-sekoite. Korkeus n. 22 cm. Päänympärys 54–58 cm (joustava).</p>
+          <div class="mt-2 font-semibold">€59,00</div>
+
+          <div class="mt-4 flex items-center justify-center gap-2">
+            <span class="chip">Nouto (sovitusti) — 0 €</span>
+            <span class="chip chip-olive">Posti — 6,90 €</span>
+          </div>
+
+          <div class="mt-3 flex items-center justify-center gap-3 flex-wrap">
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+              <input type="hidden" name="cmd" value="_xclick">
+              <input type="hidden" name="business" value="kauppa@esimerkki.fi">
+              <input type="hidden" name="item_name" value="RUMAT Pipo (nouto)">
+              <input type="hidden" name="amount" value="59.00">
+              <input type="hidden" name="currency_code" value="EUR">
+              <input type="hidden" name="shipping" value="0.00">
+              <input type="hidden" name="no_shipping" value="1">
+              <input type="submit" value="Osta – Nouto 0 €" class="btn btn-dark cursor-pointer">
+            </form>
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+              <input type="hidden" name="cmd" value="_xclick">
+              <input type="hidden" name="business" value="kauppa@esimerkki.fi">
+              <input type="hidden" name="item_name" value="RUMAT Pipo (posti)">
+              <input type="hidden" name="amount" value="59.00">
+              <input type="hidden" name="currency_code" value="EUR">
+              <input type="hidden" name="shipping" value="6.90">
+              <input type="hidden" name="no_shipping" value="2">
+              <input type="submit" value="Osta – Posti 6,90 €" class="btn btn-olive cursor-pointer">
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
   </section>
 
-  <!-- Tarina -->
+  <!-- ===== TARINA ===== -->
   <section id="tarina" class="py-14 bg-stone-50/90">
     <div class="mx-auto max-w-3xl px-6">
       <h2 class="serif text-3xl">Tarina</h2>
-      <p>Kirjoita tähän yrityksen matkaa: miksi perustit, mitä opit, minne olet menossa. Tekstiä voi muuttaa milloin vain.</p>
+      <p>
+        Kirjoita tähän yrityksen matkaa: miksi perustit, mitä opit, minne olet menossa.
+        Tekstiä voi muuttaa milloin vain (admin tai koodimuutos).
+      </p>
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- ===== FOOTER ===== -->
   <footer id="yhteys" class="pt-14 text-[color:var(--brand-ivory)]" style="background:var(--footer-black)">
     <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
       <div>
         <div class="uppercase tracking-wide">RUMAT.STUDIO</div>
-        <div class="text-sm mt-1 text-white/70">Helsinki — Contemporary textiles, built to last.</div>
+        <div class="text-sm mt-1 text-white/70">
+          Helsinki — Contemporary textiles, built to last.
+        </div>
       </div>
       <div>
         <h5 class="text-sm text-white/70">Yhteys</h5>
@@ -189,56 +268,103 @@
         </ul>
       </div>
     </div>
-    <div class="py-8 text-center text-xs text-white/65">© <span id="year"></span> RUMAT.STUDIO</div>
+    <div class="py-8 text-center text-xs text-white/65">
+      © <span id="year"></span> RUMAT.STUDIO
+    </div>
   </footer>
 
-  <!-- Three.js -->
-  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <!-- ===== Skriptit ===== -->
   <script>
-    // Hero-tekstin pehmeä nosto
-    (function(){
-      const heroText=document.getElementById('hero-text'); if(!heroText) return;
-      let last=-1;
-      const onScroll=()=>{const y=window.scrollY||0;if(y===last) return;last=y;const vh=window.innerHeight||1;const t=-22*Math.min(1,y/(vh*0.9));heroText.style.transform=`translateY(${t}vh)`};
-      window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
-      const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();
-    })();
+    /* ---------------- Hero-tekstin pehmeä nosto ---------------- */
+    const heroText = document.getElementById('hero-text');
+    let lastY = -1;
+    const onScroll = () => {
+      const y = window.scrollY || 0;
+      if (y === lastY) return; lastY = y;
+      const vh = window.innerHeight || 1;
+      const t = -22 * Math.min(1, y / (vh * 0.9));
+      heroText.style.transform = `translateY(${t}vh)`;
+      if (window.__aurora && window.__aurora.setScroll) {
+        window.__aurora.setScroll(Math.min(1, y / (vh * 0.9)));
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Tuotekuvat (placeholderit)
-    (function(){
-      const sling=["https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80","https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1600&q=80","https://images.unsplash.com/photo-1511389026070-a14ae610a1be?auto=format&fit=crop&w=1600&q=80"];
-      const pipo=["https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80","https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1600&q=80","https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1600&q=80"];
-      const F="https://placehold.co/1400x1750?text=Kuva";
-      function set(img,url){ if(!img) return; img.onerror=()=>{img.onerror=null;img.src=F}; img.src=url }
-      let i1=0,i2=0; function pair(arr,a,b,i){ const A=document.getElementById(a),B=document.getElementById(b); if(!A||!B) return; const n=arr.length; set(A,arr[(i%n+n)%n]); set(B,arr[((i+1)%n+n)%n]) }
-      pair(sling,"p1a","p1b",i1); pair(pipo,"p2a","p2b",i2);
-      const n1=document.getElementById('next1'),p1=document.getElementById('prev1'); if(n1) n1.addEventListener('click',()=>{i1=(i1+1)%sling.length;pair(sling,"p1a","p1b",i1)}); if(p1) p1.addEventListener('click',()=>{i1=(i1-1+sling.length)%sling.length;pair(sling,"p1a","p1b",i1)});
-      const n2=document.getElementById('next2'),p2=document.getElementById('prev2'); if(n2) n2.addEventListener('click',()=>{i2=(i2+1)%pipo.length;pair(pipo,"p2a","p2b",i2)}); if(p2) p2.addEventListener('click',()=>{i2=(i2-1+pipo.length)%pipo.length;pair(pipo,"p2a","p2b",i2)});
-    })();
+    /* ---------------- Tuotekuvakarusellit ---------------- */
+    const slingImgs = [
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1511389026070-a14ae610a1be?auto=format&fit=crop&w=1600&q=80"
+    ];
+    const pipoImgs = [
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1600&q=80"
+    ];
+    const FALLBACK = "https://placehold.co/1400x1750?text=Kuva";
 
-    // ===== Aurora: varma yhden passin shader =====
-    (function(){
-      const canvas=document.getElementById('aurora'); const fallback=document.getElementById('hero-fallback');
-      const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const glOK=(()=>{ try{ const c=document.createElement('canvas'); return !!(window.WebGLRenderingContext&&(c.getContext('webgl')||c.getContext('experimental-webgl')))}catch{return false} })();
-      if(reduce || !glOK || !window.THREE){ canvas.style.display='none'; fallback.classList.remove('hidden'); return; }
+    function setWithFallback(imgEl, url){
+      if(!imgEl) return;
+      imgEl.onerror = ()=>{ imgEl.onerror=null; imgEl.src = FALLBACK; };
+      imgEl.src = url;
+    }
 
-      const THREE=window.THREE;
-      const renderer=new THREE.WebGLRenderer({canvas,alpha:false,antialias:false,powerPreference:'high-performance'});
-      renderer.setClearColor(0x0a1622,1);
-      const cam=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
-      const quad=new THREE.PlaneGeometry(2,2);
+    let i1 = 0, i2 = 0;
+    const setPair = (arr, aId, bId, i) => {
+      const a = document.getElementById(aId), b = document.getElementById(bId);
+      if (!a || !b) return;
+      const n = arr.length;
+      setWithFallback(a, arr[(i % n + n) % n]);
+      setWithFallback(b, arr[((i + 1) % n + n) % n]);
+    };
+
+    setPair(slingImgs, "p1a", "p1b", i1);
+    setPair(pipoImgs,  "p2a", "p2b", i2);
+
+    document.getElementById('next1').addEventListener('click', () => { i1 = (i1 + 1) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
+    document.getElementById('prev1').addEventListener('click', () => { i1 = (i1 - 1 + slingImgs.length) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
+
+    document.getElementById('next2').addEventListener('click', () => { i2 = (i2 + 1) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
+    document.getElementById('prev2').addEventListener('click', () => { i2 = (i2 - 1 + pipoImgs.length) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
+
+    /* ---------------- WebGL Revontulet (raw WebGL) ---------------- */
+    (function initAurora(){
+      const prefersReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const canvas = document.getElementById('aurora');
+      const fallback = document.getElementById('hero-fallback');
+
+      function fail(){ fallback.style.display='block'; }
+
+      if (prefersReduce) { fail(); return; }
+
+      const gl = canvas.getContext('webgl', { premultipliedAlpha:false, antialias:false });
+      if (!gl) { fail(); return; }
+
+      const DPR = Math.min(2, window.devicePixelRatio || 1);
+      function resize(){
+        const w = canvas.clientWidth, h = canvas.clientHeight;
+        const W = Math.floor(w * DPR), H = Math.floor(h * DPR);
+        if (canvas.width !== W || canvas.height !== H) {
+          canvas.width = W; canvas.height = H;
+          gl.viewport(0, 0, W, H);
+          gl.uniform2f(u_res, W, H);
+        }
+      }
 
       const VS = `
-        precision mediump float;
-        attribute vec3 position;
-        attribute vec2 uv;
+        attribute vec2 p;
         varying vec2 vUv;
-        void main(){ vUv = uv; gl_Position = vec4(position,1.0); }
+        void main(){
+          vUv = p*0.5 + 0.5;
+          gl_Position = vec4(p, 0.0, 1.0);
+        }
       `;
 
+      /* ——— PARANNETTU FRAGMENT-SHADER (näkyvät verhot) ——— */
       const FS = `
-        precision mediump float;
+        precision highp float;
         varying vec2 vUv;
         uniform vec2  u_res;
         uniform float u_time;
@@ -267,63 +393,102 @@
 
         void main(){
           vec2 uv = vUv;
-          // taustagradientti
+
+          // Syvä sininen tausta
           vec3 base = mix(vec3(0.02,0.05,0.10), vec3(0.01,0.02,0.05), uv.y);
 
-          // ajastin & skrolli
-          float t = u_time*0.35;
+          float t = u_time*0.40;
           float s = u_scroll;
 
-          // verhojen kohina ja pystysuuntainen aalto
           float curtain = 0.0;
-          for(int k=0;k<3;k++){
-            float o = float(k)*0.33;
-            vec2 p = vec2(uv.x*3.0 + sin((uv.y+o+t)*2.0)*0.15, uv.y*2.0 - t*0.8 - o);
+          for (int k=0; k<4; k++) {
+            float o = float(k)*0.27;
+            vec2 p = vec2(
+              uv.x*3.2 + sin((uv.y + o + t*0.7)*2.3)*0.20,
+              uv.y*2.3 - t*0.9 - o
+            );
             float n = fbm(p);
-            float band = smoothstep(0.35,0.95,n) * (1.0 - pow(uv.y, 0.65));
+            float ridges = abs(n - 0.5);
+            float band   = smoothstep(0.05, 0.45, 0.5 - ridges);
+            band *= (1.0 - pow(uv.y, 0.75));
+            float columns = 0.7 + 0.3 * (sin(uv.x*12.0 + t*0.8 + o*3.14)*0.5 + 0.5);
+            band *= columns;
             curtain += band;
           }
           curtain = clamp(curtain, 0.0, 1.0);
 
-          // värit (vihreä–turkoosi)
-          vec3 aur = mix(vec3(0.08,0.55,0.25), vec3(0.10,0.78,0.85), uv.y) * curtain;
-
-          // pehmeä "glow" ilman jälkikäsittelyä (laskennallinen sumennus)
-          float glow = curtain * (0.6 + 0.4*noise(uv*8.0 + t));
-          vec3 color = base + (aur*1.2 + vec3(0.05,0.12,0.18)*glow) * (u_intensity*(1.0+0.2*s));
+          vec3 aur = mix(vec3(0.10,0.68,0.30), vec3(0.10,0.85,0.95), uv.y) * curtain;
+          float glow = curtain * (0.7 + 0.3*noise(uv*9.0 + t));
+          vec3 color = base + (aur*2.0 + vec3(0.06,0.13,0.20)*glow) * (u_intensity*(1.0+0.25*s));
 
           gl_FragColor = vec4(color, 1.0);
         }
       `;
 
-      const uniforms={
-        u_res:{value:new THREE.Vector2(1,1)},
-        u_time:{value:0},
-        u_intensity:{value:1.6},
-        u_scroll:{value:0.0},
-      };
-
-      const mat=new THREE.ShaderMaterial({uniforms,vertexShader:VS,fragmentShader:FS,depthWrite:false});
-      const scene=new THREE.Scene(); scene.add(new THREE.Mesh(quad,mat));
-
-      function resize(){
-        const DPR=Math.min(2, window.devicePixelRatio||1);
-        renderer.setPixelRatio(DPR);
-        renderer.setSize(window.innerWidth, window.innerHeight, false);
-        uniforms.u_res.value.set(renderer.domElement.width, renderer.domElement.height);
+      function compile(type, src){
+        const sh = gl.createShader(type);
+        gl.shaderSource(sh, src);
+        gl.compileShader(sh);
+        if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+          console.error(gl.getShaderInfoLog(sh));
+          return null;
+        }
+        return sh;
       }
-      window.addEventListener('resize',resize,{passive:true}); resize();
-
-      function onScroll(){ const k=Math.max(0,Math.min(1,(window.pageYOffset||0)/(0.7*window.innerHeight))); uniforms.u_scroll.value=k; }
-      window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
-
-      let last=performance.now();
-      function loop(){
-        const now=performance.now(); uniforms.u_time.value += (now-last)/1000.0; last=now;
-        renderer.render(scene,cam);
-        requestAnimationFrame(loop);
+      function program(vs, fs){
+        const p = gl.createProgram();
+        gl.attachShader(p, compile(gl.VERTEX_SHADER, vs));
+        gl.attachShader(p, compile(gl.FRAGMENT_SHADER, fs));
+        gl.linkProgram(p);
+        if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
+          console.error(gl.getProgramInfoLog(p));
+          return null;
+        }
+        return p;
       }
-      requestAnimationFrame(loop);
+
+      const prog = program(VS, FS);
+      if (!prog) { fail(); return; }
+      gl.useProgram(prog);
+
+      // Fullscreen kolmio (vähemmän reunoja kuin neliössä)
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+        -1,-1,  3,-1,  -1, 3
+      ]), gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(prog, 'p');
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+      // Uniformit
+      const u_res      = gl.getUniformLocation(prog, 'u_res');
+      const u_time     = gl.getUniformLocation(prog, 'u_time');
+      const u_intens   = gl.getUniformLocation(prog, 'u_intensity');
+      const u_scroll   = gl.getUniformLocation(prog, 'u_scroll');
+
+      gl.uniform1f(u_intens, 2.2);     // nostettu jotta verhot varmasti näkyvät
+      gl.uniform1f(u_scroll, 0.0);
+
+      function setScroll(v){ gl.uniform1f(u_scroll, v); }
+      window.__aurora = { setScroll };
+
+      function raf(t0){
+        resize();
+        gl.uniform1f(u_time, (performance.now()/1000));
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        req = requestAnimationFrame(raf);
+      }
+      let req = requestAnimationFrame(raf);
+
+      // Koko/visibility
+      let on = true;
+      document.addEventListener('visibilitychange', ()=>{
+        if(document.hidden && on){ cancelAnimationFrame(req); on=false; }
+        else if(!document.hidden && !on){ req=requestAnimationFrame(raf); on=true; }
+      });
+      addEventListener('resize', resize);
+      resize();
     })();
   </script>
 </body>
