@@ -5,21 +5,16 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>RUMAT.STUDIO</title>
   <meta name="description" content="Helsinki — Contemporary textiles, built to last."/>
-
-  <!-- Fontit + Tailwind -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
     :root{
-      --brand-deep:  #345563;  /* tumma sinivihreä (footer) */
-      --brand-ink:   #202020;  /* mustanharmaa */
-      --brand-olive: #A1A266;  /* oliivi aksentti */
-      --brand-slate: #789FAB;  /* vaaleansininen (headerin sävy) */
-      --brand-ivory: #F6F6F4;  /* kuvapalkkien tausta */
-      --brand-band:  #DEEEEE;  /* esittelypalkkien tausta */
+      --brand-deep:  #345563;
+      --brand-ink:   #202020;
+      --brand-olive: #A1A266;
+      --brand-slate: #789FAB;
+      --brand-ivory: #F6F6F4; /* = kuvapalkkien tausta */
     }
     body{
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
@@ -27,13 +22,9 @@
       color:#1f2937;
     }
     .serif{font-family:"Libre Baskerville",serif}
-
-    /* Hero-tausta pysyy paikallaan */
     .hero-fixed{position:fixed;inset:0;z-index:-1}
-
     .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
-    .btn{border-radius:9999px;padding:.65rem 1.05rem;border:1px solid rgb(214 211 209);
-         transition:transform .06s ease, box-shadow .12s ease, background-color .15s;}
+    .btn{border-radius:9999px;padding:.65rem 1.05rem;border:1px solid rgb(214 211 209);transition:transform .06s ease, box-shadow .12s ease, background-color .15s;}
     .btn:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(0,0,0,.12); }
     .btn-dark{ background:#0b0f0e; color:#f8fafb; border-color:#0b0f0e; }
     .btn-olive{ background:var(--brand-olive); color:#202020; border-color:#8f945a; }
@@ -58,21 +49,13 @@
   <header class="fixed top-0 left-0 right-0 z-50 text-white">
     <div id="header-bg" class="absolute inset-0 backdrop-blur-sm transition-all"
          style="background:rgba(120,159,171,.26); border-bottom:1px solid rgba(32,32,32,.0)"></div>
-
     <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
       <a href="#etusivu" class="flex items-center gap-3">
-        <!-- UUSI RR-monogrammi (compact) -->
-        <div class="h-10 w-[72px] grid place-items-center rounded-xl border border-white/55 bg-white/92">
-          <svg class="h-6" viewBox="0 0 124 64" aria-label="RUMAT monogram" style="color:#345563">
-            <g fill="currentColor">
-              <path d="M4 6H26Q50 6 50 24T26 42H4V6Z M26 42L50 58H32L4 42Z"/>
-              <path d="M64 6H86Q110 6 110 24T86 42H64V6Z M86 42L110 58H92L64 42Z"/>
-            </g>
-          </svg>
+        <div class="h-10 w-10 grid place-items-center rounded-xl border border-white/55 bg-white/90">
+          <span class="-rotate-90 serif text-[26px] leading-none font-black text-stone-900">R</span>
         </div>
         <span class="hidden sm:inline text-sm uppercase tracking-widest font-semibold">RUMAT.STUDIO</span>
       </a>
-
       <nav class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
         <a href="#etusivu"   class="font-semibold hover:underline underline-offset-4">Etusivu</a>
         <a href="#tuotteet"  class="font-semibold hover:underline underline-offset-4">Tuotteet</a>
@@ -92,16 +75,9 @@
         LIIAN RUMAT OLLAKSEEN TOTTA
       </h1>
       <div class="mt-9 flex justify-center">
-        <!-- Iso ympyrälogo + RR-monogrammi -->
         <div class="h-28 w-28 sm:h-32 sm:w-32 grid place-items-center
                     rounded-full bg-white/92 ring-1 ring-white/70 shadow-soft">
-          <svg class="h-12 sm:h-14" viewBox="0 0 124 64" aria-label="RUMAT monogram"
-               style="color:#202020">
-            <g fill="currentColor">
-              <path d="M4 6H26Q50 6 50 24T26 42H4V6Z M26 42L50 58H32L4 42Z"/>
-              <path d="M64 6H86Q110 6 110 24T86 42H64V6Z M86 42L110 58H92L64 42Z"/>
-            </g>
-          </svg>
+          <span class="-rotate-90 serif text-5xl sm:text-6xl font-black text-stone-900">R</span>
         </div>
       </div>
     </div>
@@ -135,7 +111,6 @@
             <img id="p1b" class="w-full h-full object-cover" alt="Laukku 2" loading="lazy" decoding="async">
           </div>
         </div>
-
         <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
         <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
       </div>
@@ -198,7 +173,6 @@
             <img id="p2b" class="w-full h-full object-cover" alt="RUMAT Pipo 2" loading="lazy" decoding="async">
           </div>
         </div>
-
         <button id="prev2" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
         <button id="next2" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
       </div>
@@ -286,9 +260,8 @@
     </div>
   </footer>
 
-  <!-- Skriptit -->
   <script>
-    // Header-sävy + hero-tekstin kevyt nosto (ilman "pomppua")
+    // Header-sävy + hero-tekstin kevyt nosto
     const headerBg = document.getElementById('header-bg');
     const heroText = document.getElementById('hero-text');
     let lastY = -1;
@@ -307,26 +280,24 @@
     onScroll();
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Tuotekuvat — käytä vapaasti vaihdettavia lähteitä (Unsplash). Voit vaihtaa URL:t omiin.
+    // Tuotekuvat (vaihda omiin URL:eihin)
     const slingImgs = [
-      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80", // laukku lähikuva
-      "https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1600&q=80", // sling olalla
-      "https://images.unsplash.com/photo-1511389026070-a14ae610a1be?auto=format&fit=crop&w=1600&q=80"  // laukku asetelma
+      "https://placehold.co/1400x1750?text=Laukku+1",
+      "https://placehold.co/1400x1750?text=Laukku+2",
+      "https://placehold.co/1400x1750?text=Laukku+3"
     ];
     const pipoImgs = [
-      "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",  // pipo/tekstiili
-      "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1600&q=80",  // pipo ulkona
-      "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1600&q=80"   // neule lähikuva
+      "https://placehold.co/1400x1750?text=Pipo+1",
+      "https://placehold.co/1400x1750?text=Pipo+2",
+      "https://placehold.co/1400x1750?text=Pipo+3"
     ];
     const FALLBACK = "https://placehold.co/1400x1750?text=Kuva";
-
+    let i1 = 0, i2 = 0;
     function setWithFallback(imgEl, url){
       if(!imgEl) return;
       imgEl.onerror = ()=>{ imgEl.onerror=null; imgEl.src = FALLBACK; };
       imgEl.src = url;
     }
-
-    let i1 = 0, i2 = 0;
     const setPair = (arr, aId, bId, i) => {
       const a = document.getElementById(aId), b = document.getElementById(bId);
       if (!a || !b) return;
@@ -334,13 +305,10 @@
       setWithFallback(a, arr[(i % n + n) % n]);
       setWithFallback(b, arr[((i + 1) % n + n) % n]);
     };
-
     setPair(slingImgs, "p1a", "p1b", i1);
     setPair(pipoImgs,  "p2a", "p2b", i2);
-
     document.getElementById('next1').addEventListener('click', () => { i1 = (i1 + 1) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
     document.getElementById('prev1').addEventListener('click', () => { i1 = (i1 - 1 + slingImgs.length) % slingImgs.length; setPair(slingImgs, "p1a", "p1b", i1); });
-
     document.getElementById('next2').addEventListener('click', () => { i2 = (i2 + 1) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
     document.getElementById('prev2').addEventListener('click', () => { i2 = (i2 - 1 + pipoImgs.length) % pipoImgs.length; setPair(pipoImgs, "p2a", "p2b", i2); });
   </script>
