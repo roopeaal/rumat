@@ -15,7 +15,7 @@
       --dark-forest:#0E2016;     /* header tausta */
       --olive:#A1A266;           /* accent */
       --ivory:#F6F6F4;           /* vaalea */
-      --mist:#DEEEEE;            /* blog / pehmeä osio */
+      --mist:#DEEEEE;            /* pehmeä osio (blogi tms.) */
       --gallery:#F6F6F4;         /* kuvapalkkien tausta */
       --footer:#0B0F0E;          /* footer musta */
     }
@@ -27,17 +27,26 @@
     .btn-dark{background:#111827;color:#fff;border-color:#111827}
     .chip{font-size:.78rem;padding:.25rem .55rem;border-radius:9999px;border:1px solid rgb(214,211,209);background:#fff}
 
-    /* ===== HERO ===== */
-    .hero{ position:relative; height:100vh; isolation:isolate; overflow:hidden; }
-    .hero-media{
-      position: fixed;   /* KIINNITETTY TAUSTA */
+    /* ===== AURORA: kiinteä tausta ===== */
+    .aurora-fixed{
+      position: fixed;
       inset: 0;
       width: 100%;
       height: 100%;
       display: block;
-      z-index: 0;
-      pointer-events: none; /* ei estä klikkauksia */
+      z-index: 0;             /* jää taustalle */
+      pointer-events: none;   /* ei blokkaa klikkauksia */
     }
+
+    /* Kaikki varsinainen sisältö tämän päällä */
+    .site-content{
+      position: relative;
+      z-index: 2;  /* varmistaa että osiot ovat kanvaasin päällä */
+      background: transparent;
+    }
+
+    /* HERO */
+    .hero{ position:relative; height:100vh; isolation:isolate; overflow:hidden; }
     .hero-overlay{
       position:absolute; inset:0; z-index:1; pointer-events:none;
       background:
@@ -46,7 +55,7 @@
     }
     #hero-text{ position:relative; z-index:2; }
 
-    /* Cart drawer */
+    /* Ostoskori */
     .drawer{position:fixed;inset:0;z-index:60;display:none}
     .drawer.open{display:block}
     .drawer .panel{position:absolute;top:0;right:0;width:min(420px,90vw);height:100%;background:#fff;box-shadow:-10px 0 30px rgba(0,0,0,.2)}
@@ -64,8 +73,10 @@
 </head>
 
 <body class="text-stone-900">
+  <!-- KIINTEÄ REVONTULI-TAUSTA -->
+  <canvas id="auroraCanvas" class="aurora-fixed"></canvas>
 
-  <!-- Header -->
+  <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50">
     <div class="bg-[color:var(--dark-forest)] text-white">
       <div class="mx-auto max-w-6xl px-4 py-3 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
@@ -90,114 +101,116 @@
     </div>
   </header>
 
-  <!-- ===== HERO ===== -->
-  <section id="etusivu" class="hero grid place-items-center text-stone-50 px-4">
-    <canvas id="auroraCanvas" class="hero-media"></canvas>
-    <div class="hero-overlay"></div>
+  <!-- KOKO SIVUN SISÄLTÖ -->
+  <main class="site-content">
 
-    <div id="hero-text" class="text-center transition-transform mt-24 md:mt-28">
-      <h1 class="uppercase font-black tracking-[0.32em] text-[clamp(26px,6.2vw,84px)] drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
-        LIIAN RUMAT OLLAKSEEN TOTTA
-      </h1>
-      <div class="mt-8 flex justify-center">
-        <div class="h-24 w-24 sm:h-28 sm:w-28 grid place-items-center rounded-full bg-white/92 ring-1 ring-white/70 shadow-soft">
-          <span class="-rotate-90 serif text-5xl sm:text-6xl font-black text-stone-900">R</span>
+    <!-- HERO -->
+    <section id="etusivu" class="hero grid place-items-center text-stone-50 px-4">
+      <div class="hero-overlay"></div>
+      <div id="hero-text" class="text-center transition-transform mt-24 md:mt-28">
+        <h1 class="uppercase font-black tracking-[0.32em] text-[clamp(26px,6.2vw,84px)] drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
+          LIIAN RUMAT OLLAKSEEN TOTTA
+        </h1>
+        <div class="mt-8 flex justify-center">
+          <div class="h-24 w-24 sm:h-28 sm:w-28 grid place-items-center rounded-full bg-white/92 ring-1 ring-white/70 shadow-soft">
+            <span class="-rotate-90 serif text-5xl sm:text-6xl font-black text-stone-900">R</span>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Esittely -->
-  <section class="py-12 bg-white">
-    <div class="mx-auto max-w-3xl px-6 text-center">
-      <p id="intro-text" class="text-xl sm:text-2xl">
-        <strong>Luonnosta syntynyt. Reissuissa testattu.</strong>
-        Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – jotta sinulla on päälläsi jotain, joka istuu, hengittää ja kestää jokaisella askeleella.
-      </p>
-    </div>
-  </section>
-
-  <!-- TUOTTEET -->
-  <section id="tuotteet" class="py-14 bg-white">
-    <div class="mx-auto max-w-6xl px-4">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="serif text-3xl">Tuotteet</h2>
-        <div class="text-xs text-stone-500">Hinnat sis. ALV • Palautus 14 vrk • Toimitus valitaan kassalla</div>
+    <!-- Esittely (peittävä valkoinen, ettei aurora “syö” sisältöä) -->
+    <section class="py-12 bg-white">
+      <div class="mx-auto max-w-3xl px-6 text-center">
+        <p id="intro-text" class="text-xl sm:text-2xl">
+          <strong>Luonnosta syntynyt. Reissuissa testattu.</strong>
+          Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – jotta sinulla on päälläsi jotain, joka istuu, hengittää ja kestää jokaisella askeleella.
+        </p>
       </div>
-      <div id="productsRoot" class="space-y-14"></div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Blogi -->
-  <section id="blogi" class="py-14" style="background:var(--mist)">
-    <div class="mx-auto max-w-4xl px-6">
-      <h2 class="serif text-3xl mb-6">Blogi</h2>
-      <div id="blogRoot" class="grid gap-6"></div>
-    </div>
-  </section>
-
-  <!-- Some -->
-  <section id="some" class="py-14 bg-white">
-    <div class="mx-auto max-w-6xl px-4">
-      <h2 class="serif text-3xl mb-6">Some</h2>
-      <div class="grid md:grid-cols-2 gap-6">
-        <!-- Instagram -->
-        <div class="aspect-[4/5] rounded-xl ring-1 ring-stone-200 overflow-hidden">
-          <iframe id="igEmbed" class="w-full h-full" allowtransparency="true" frameborder="0" scrolling="no" loading="lazy"
-                  src="https://www.instagram.com/p/DMXVRgGC1Bv/embed"></iframe>
+    <!-- TUOTTEET -->
+    <section id="tuotteet" class="py-14 bg-white">
+      <div class="mx-auto max-w-6xl px-4">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="serif text-3xl">Tuotteet</h2>
+          <div class="text-xs text-stone-500">Hinnat sis. ALV • Palautus 14 vrk • Toimitus valitaan kassalla</div>
         </div>
-        <!-- TikTok -->
-        <div class="rounded-xl ring-1 ring-stone-200 overflow-hidden bg-white p-2">
-          <blockquote id="tiktokEmbed"
-            class="tiktok-embed"
-            cite="https://www.tiktok.com/@rumat.studio/video/7525414518562753814"
-            data-video-id="7525414518562753814"
-            style="max-width:100%;min-width:325px;margin:0 auto;">
-            <section></section>
-          </blockquote>
+        <div id="productsRoot" class="space-y-14"></div>
+      </div>
+    </section>
+
+    <!-- Blogi -->
+    <section id="blogi" class="py-14" style="background:var(--mist)">
+      <div class="mx-auto max-w-4xl px-6">
+        <h2 class="serif text-3xl mb-6">Blogi</h2>
+        <div id="blogRoot" class="grid gap-6"></div>
+      </div>
+    </section>
+
+    <!-- Some -->
+    <section id="some" class="py-14 bg-white">
+      <div class="mx-auto max-w-6xl px-4">
+        <h2 class="serif text-3xl mb-6">Some</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Instagram -->
+          <div class="aspect-[4/5] rounded-xl ring-1 ring-stone-200 overflow-hidden">
+            <iframe id="igEmbed" class="w-full h-full" allowtransparency="true" frameborder="0" scrolling="no" loading="lazy"
+                    src="https://www.instagram.com/p/DMXVRgGC1Bv/embed"></iframe>
+          </div>
+          <!-- TikTok -->
+          <div class="rounded-xl ring-1 ring-stone-200 overflow-hidden bg-white p-2">
+            <blockquote id="tiktokEmbed"
+              class="tiktok-embed"
+              cite="https://www.tiktok.com/@rumat.studio/video/7525414518562753814"
+              data-video-id="7525414518562753814"
+              style="max-width:100%;min-width:325px;margin:0 auto;">
+              <section></section>
+            </blockquote>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Tarina -->
-  <section id="tarina" class="py-14 bg-stone-50">
-    <div class="mx-auto max-w-3xl px-6">
-      <h2 class="serif text-3xl mb-4">Tarina</h2>
-      <p id="story">
-        Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Valmistamme pieniä eriä Suomessa ja EU:ssa, jotta vaate kestää vuosia ja tekijät näkyvät.
-      </p>
-    </div>
-  </section>
+    <!-- Tarina -->
+    <section id="tarina" class="py-14 bg-stone-50">
+      <div class="mx-auto max-w-3xl px-6">
+        <h2 class="serif text-3xl mb-4">Tarina</h2>
+        <p id="story">
+          Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Valmistamme pieniä eriä Suomessa ja EU:ssa, jotta vaate kestää vuosia ja tekijät näkyvät.
+        </p>
+      </div>
+    </section>
 
-  <!-- Footer -->
-  <footer id="yhteys" class="pt-14 text-[color:var(--ivory)]" style="background:var(--footer)">
-    <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
-      <div>
-        <div class="uppercase tracking-wide">RUMAT.STUDIO</div>
-        <div id="tagline" class="text-sm mt-1 text-white/70">Helsinki — Contemporary textiles, built to last.</div>
+    <!-- FOOTER -->
+    <footer id="yhteys" class="pt-14 text-[color:var(--ivory)]" style="background:var(--footer)">
+      <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
+        <div>
+          <div class="uppercase tracking-wide">RUMAT.STUDIO</div>
+          <div id="tagline" class="text-sm mt-1 text-white/70">Helsinki — Contemporary textiles, built to last.</div>
+        </div>
+        <div>
+          <h5 class="text-sm text-white/70">Yhteys</h5>
+          <ul class="mt-2 space-y-2 text-sm">
+            <li><a id="mailLink" href="mailto:hello@rumat.fi" class="hover:underline">hello@rumat.fi</a></li>
+            <li><a id="igLink" href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer" class="hover:underline">Instagram</a></li>
+            <li id="location">Rovaniemi — Helsinki</li>
+          </ul>
+        </div>
+        <div>
+          <h5 class="text-sm text-white/70">Toimitus</h5>
+          <ul class="mt-2 space-y-2 text-sm" id="shipInfo">
+            <li>Toimitus valitaan kassalla</li>
+            <li>Nouto (sovitusti) — 0 €</li>
+            <li>Posti — 6,90 €</li>
+          </ul>
+        </div>
       </div>
-      <div>
-        <h5 class="text-sm text-white/70">Yhteys</h5>
-        <ul class="mt-2 space-y-2 text-sm">
-          <li><a id="mailLink" href="mailto:hello@rumat.fi" class="hover:underline">hello@rumat.fi</a></li>
-          <li><a id="igLink" href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer" class="hover:underline">Instagram</a></li>
-          <li id="location">Rovaniemi — Helsinki</li>
-        </ul>
-      </div>
-      <div>
-        <h5 class="text-sm text-white/70">Toimitus</h5>
-        <ul class="mt-2 space-y-2 text-sm" id="shipInfo">
-          <li>Toimitus valitaan kassalla</li>
-          <li>Nouto (sovitusti) — 0 €</li>
-          <li>Posti — 6,90 €</li>
-        </ul>
-      </div>
-    </div>
-    <div class="py-8 text-center text-xs text-white/65">© <span id="year"></span> RUMAT.STUDIO</div>
-  </footer>
+      <div class="py-8 text-center text-xs text-white/65">© <span id="year"></span> RUMAT.STUDIO</div>
+    </footer>
+  </main>
 
-  <!-- Cart Drawer -->
+  <!-- OSTOSKORI -->
   <div id="cartDrawer" class="drawer">
     <div class="absolute inset-0 bg-black/40" id="closeCart"></div>
     <div class="panel p-5 flex flex-col">
@@ -222,7 +235,7 @@
     </div>
   </div>
 
-  <!-- Success/Cancel -->
+  <!-- SUCCESS/CANCEL -->
   <div id="resultModal" class="modal">
     <div class="bg-white rounded-2xl p-6 shadow-soft w-[min(92vw,480px)] text-center">
       <h3 id="resultTitle" class="serif text-2xl mb-2">Kiitos tilauksesta!</h3>
@@ -231,7 +244,7 @@
     </div>
   </div>
 
-  <!-- Scripts -->
+  <!-- SCRIPTS -->
   <script>
   const API_BASE = ""; // esim. "https://rumat-backend.<tunnus>.workers.dev"
   const fmtEUR = x => new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
@@ -241,7 +254,7 @@
       else n.setAttribute(k,v);
     }); kids.forEach(k=>{ if(k==null) return; if(typeof k==='string') n.appendChild(document.createTextNode(k)); else n.appendChild(k);}); return n;};
 
-  // Hero-tekstin pehmeä liike vain hero-alueella
+  // Hero-tekstin pehmeä liike (vain teksti nousee)
   (function(){
     const hero   = document.getElementById('etusivu');
     const textEl = document.getElementById('hero-text');
@@ -308,7 +321,7 @@
   }
 
   function applyContent(d){
-    // Hero + tekstit
+    // Tekstit
     if(d?.hero?.headline) document.querySelector('#hero-text h1').textContent = d.hero.headline;
     if(d?.pitch) document.getElementById('intro-text').textContent = d.pitch;
     if(d?.story) document.getElementById('story').textContent = d.story;
@@ -515,17 +528,17 @@
     modal.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // ===== WebGL Revontulet – JÄÄDYTETTY (ei sisäistä liikettä) =====
+  // ===== WebGL Revontulet – kevyt elävä liike, ei scrollaa =====
   (function(){
     const SETTINGS = {
-      PAL_COL1:[0.02,0.70,0.95],
-      PAL_COL2:[0.00,1.00,0.60],
+      PAL_COL1:[0.02,0.70,0.95], // sinertävä
+      PAL_COL2:[0.00,1.00,0.60], // vihreä
       BRIGHTNESS:1.00,
-      CURTAIN_Y:0.55,
-      HEIGHT:0.52,
-      SPEED:0.00,           // 0 = ei virtausta
-      STRIPE_STRENGTH:0.00, // 0 = ei raitojen liikettä
-      STAR_DENS:0.006       // harvemmat tähdet
+      CURTAIN_Y:0.58,
+      HEIGHT:0.55,
+      SPEED:0.055,          // pieni, jatkuva liike
+      STRIPE_STRENGTH:0.22, // hillitty raitailu
+      STAR_DENS:0.0035      // harvemmat tähdet → vähemmän "rakeisuutta"
     };
 
     function init(){
@@ -538,21 +551,22 @@
       float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
       float noise(vec2 p){vec2 i=floor(p),f=fract(p); float a=hash(i),b=hash(i+vec2(1,0)),c=hash(i+vec2(0,1)),d=hash(i+vec2(1,1));
         vec2 u=f*f*(3.-2.*f); return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}
-      float fbm(vec2 p){float v=0.,a=0.5;for(int i=0;i<5;i++){v+=a*noise(p);p*=2.03;a*=0.48;}return v;}
-      float stars(vec2 uv){ vec2 p=floor(uv*900.); float rnd=hash(p); return step(1.-u_star,rnd); } // ei twinkleä
+      float fbm(vec2 p){float v=0.,a=0.5;for(int i=0;i<6;i++){v+=a*noise(p);p*=2.03;a*=0.47;}return v;}
+      float stars(vec2 uv){ vec2 p=floor(uv*900.); float rnd=hash(p); return step(1.-u_star,rnd); } // harva tähtikenttä
       void main(){
         vec2 uv=gl_FragCoord.xy/u_res.xy, suv=vec2(uv.x*(u_res.x/u_res.y),uv.y);
         vec3 col=vec3(.02,.06,.12);
         float band=1.-smoothstep(0.,u_height,abs(uv.y-u_y));
-        float t=u_time*u_speed; // u_time=0 → staattinen
+        float t=u_time*u_speed;
         float flow=fbm(vec2(suv.x*1.6 - t, suv.y*1.2 + t*.35));
-        float stripes=smoothstep(.35,1., fbm(vec2(suv.x*10.+t*1.2,t*2.)))*u_stripes;
+        float stripes=smoothstep(.38,1., fbm(vec2(suv.x*10.+t*1.2,t*2.)))*u_stripes;
         float inten=band*(.52+.72*flow)+stripes*band;
         float skyfade=smoothstep(0.,.25,uv.y); inten*=skyfade;
-        vec3 pal=mix(u_c1,u_c2, clamp(uv.y + 0.25*flow,0.,1.));
-        col=mix(col,pal, clamp(inten*1.22,0.,1.));
-        float g=0.; g+=band*.23; g+=fbm(vec2(suv.x*2.-t*.6,suv.y*2.))*.13; col += pal*g*1.05;
-        float st=stars(uv); col+=vec3(st)*.35; col*=u_brightness;
+        vec3 pal=mix(u_c1,u_c2, clamp(uv.y + 0.22*flow,0.,1.));
+        col=mix(col,pal, clamp(inten*1.18,0.,1.));
+        float g=0.; g+=band*.20; g+=fbm(vec2(suv.x*1.8 - t*.4,suv.y*1.8))*.12; col += pal*g*1.03;
+        float st=stars(uv); col+=vec3(st)*.28;
+        col*=u_brightness;
         gl_FragColor=vec4(col,1.);
       }`;
 
@@ -570,7 +584,7 @@
             uStr=gl.getUniformLocation(prog,'u_stripes'), uStar=gl.getUniformLocation(prog,'u_star'),
             uC1=gl.getUniformLocation(prog,'u_c1'), uC2=gl.getUniformLocation(prog,'u_c2');
 
-      function uniforms(t){
+      function setUniforms(t){
         gl.uniform2f(uRes,canvas.width,canvas.height);
         gl.uniform1f(uTime,t);
         gl.uniform1f(uBr,SETTINGS.BRIGHTNESS);
@@ -583,20 +597,19 @@
         gl.uniform3fv(uC2,SETTINGS.PAL_COL2);
       }
 
-      function render(t){
-        uniforms(t);
+      function draw(t){
+        setUniforms(t*0.001); // sekunteina
         gl.drawArrays(gl.TRIANGLES,0,3);
+        requestAnimationFrame(draw);
       }
 
       const ro=new ResizeObserver(()=>{ const DPR=Math.min(devicePixelRatio||1,2);
         const rect=canvas.getBoundingClientRect(); const dw=Math.floor(rect.width*DPR), dh=Math.floor(rect.height*DPR);
         if(canvas.width!==dw||canvas.height!==dh){ canvas.width=dw; canvas.height=dh; gl.viewport(0,0,dw,dh); }
-        render(0.0); // piirrä uudelleen vain koon muuttuessa
       });
       ro.observe(canvas);
 
-      // Piirrä KERRAN → täysin staattinen
-      render(0.0);
+      requestAnimationFrame(draw);
     }
 
     if(document.readyState==='loading') addEventListener('DOMContentLoaded',init,{once:true}); else init();
