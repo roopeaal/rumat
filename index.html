@@ -73,29 +73,27 @@
   <!-- KIINTEÄ REVONTULI-TAUSTA -->
   <canvas id="auroraCanvas" class="aurora-fixed"></canvas>
 
-  <!-- ALAREUNAN SILUETTI (kuuset pienemmät, mökki näkyvä) -->
+  <!-- ALAREUNAN SILUETTI (rungot piilossa, latvus yhtyy horisonttiin) -->
   <div class="bottom-sil" aria-hidden="true">
     <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
       <defs>
         <filter id="windowGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <!-- Peruspuidut -->
+
+        <!-- PUUT – rungot poistettu, alin "oksakerros" pidennetty jotta osuu horisonttiin -->
         <g id="treeTall" fill="var(--silhouette)">
           <path d="M0,0 l-18,22 h36 z" transform="translate(0,0)"/>
           <path d="M0,0 l-20,24 h40 z" transform="translate(0,10)"/>
           <path d="M0,0 l-22,26 h44 z" transform="translate(0,22)"/>
-          <path d="M0,0 l-24,28 h48 z" transform="translate(0,36)"/>
-          <rect x="-3.2" y="60" width="6.4" height="12" rx="1"/>
+          <path d="M0,0 l-26,32 h52 z" transform="translate(0,34)"/> <!-- pidennetty alin kerros -->
         </g>
         <g id="treeMed" fill="var(--silhouette)">
           <path d="M0,0 l-14,18 h28 z" transform="translate(0,2)"/>
           <path d="M0,0 l-16,20 h32 z" transform="translate(0,12)"/>
-          <path d="M0,0 l-18,22 h36 z" transform="translate(0,24)"/>
-          <rect x="-2.8" y="48" width="5.6" height="10" rx="1"/>
+          <path d="M0,0 l-20,26 h40 z" transform="translate(0,22)"/> <!-- pidennetty alin kerros -->
         </g>
         <g id="treeSmall" fill="var(--silhouette)">
           <path d="M0,0 l-11,14 h22 z" transform="translate(0,4)"/>
-          <path d="M0,0 l-13,16 h26 z" transform="translate(0,12)"/>
-          <rect x="-2.4" y="40" width="4.8" height="8" rx="1"/>
+          <path d="M0,0 l-15,20 h30 z" transform="translate(0,12)"/> <!-- pidennetty alin kerros -->
         </g>
       </defs>
 
@@ -104,7 +102,7 @@
       <path d="M0,122 C120,118 190,110 260,118 C340,126 420,106 500,116 C580,126 670,108 760,120 C850,132 980,110 1100,118 C1220,126 1330,112 1440,120 L1440,160 L0,160 Z" fill="var(--silhouette-mid)" opacity=".44"/>
       <path d="M0,130 C160,128 320,132 480,130 C640,128 800,131 960,129 C1120,128 1280,131 1440,129 L1440,160 L0,160 Z" fill="var(--silhouette)"/>
 
-      <!-- Kuuset (skaala ~0.75, tyhjä vyöhyke mökin edessä 1180–1275) -->
+      <!-- Kuuset (ei runkoja; tyhjä vyöhyke mökin edessä 1180–1275) -->
       <g>
         <use href="#treeTall"  transform="translate(55,76) scale(0.75)"/>
         <use href="#treeMed"   transform="translate(95,82) scale(0.75)"/>
@@ -134,17 +132,14 @@
 
       <!-- Mökki (nostettu ja ilman ääriviivoja) -->
       <g>
-        <!-- talo + katto -->
         <rect x="1203" y="115" width="44" height="22" rx="1" fill="var(--silhouette)"/>
         <path d="M1198,116 L1225,100 L1252,116 Z" fill="var(--silhouette)"/>
-        <!-- piippu -->
         <rect x="1232" y="102" width="6" height="12" fill="var(--silhouette)"/>
-        <!-- lämmin ikkuna -->
         <rect x="1226" y="110" width="14" height="11" rx="1.5"
               fill="var(--window-warm)" opacity=".9" filter="url(#windowGlow)"/>
       </g>
 
-      <!-- Savu (siirretty ylemmäs) -->
+      <!-- Savu -->
       <g fill="#b7c7c1">
         <circle class="smoke"  cx="1235" cy="98" r="2.8"/>
         <circle class="smoke s2" cx="1239" cy="93" r="2.2"/>
@@ -207,7 +202,7 @@
       </div>
     </section>
 
-    <!-- TUOTTEET -->
+    <!-- TUOTTEET (renderöidään JS:llä) -->
     <section id="tuotteet" class="py-14 bg-white">
       <div class="mx-auto max-w-6xl px-4">
         <div class="flex items-center justify-between mb-6">
