@@ -137,11 +137,16 @@
           <iframe id="igEmbed" class="w-full h-full" allowtransparency="true" frameborder="0" scrolling="no" loading="lazy"
                   src="https://www.instagram.com/p/DMXVRgGC1Bv/embed"></iframe>
         </div>
-        <!-- TikTok -->
-        <div class="aspect-[9/16] md:aspect-[4/5] rounded-xl ring-1 ring-stone-200 overflow-hidden">
-          <iframe id="ttEmbed" class="w-full h-full" frameborder="0" allowfullscreen loading="lazy"
-                  referrerpolicy="strict-origin-when-cross-origin"
-                  src="https://www.tiktok.com/embed/v2/video/7525414518562753814"></iframe>
+
+        <!-- TikTok (virallinen embed) -->
+        <div class="rounded-xl ring-1 ring-stone-200 overflow-hidden bg-white p-2">
+          <blockquote
+            class="tiktok-embed"
+            cite="https://www.tiktok.com/@rumat.studio/video/7525414518562753814"
+            data-video-id="7525414518562753814"
+            style="max-width:100%;min-width:325px;margin:0 auto;">
+            <section></section>
+          </blockquote>
         </div>
       </div>
     </div>
@@ -242,7 +247,7 @@
     hero:{ headline:"LIIAN RUMAT OLLAKSEEN TOTTA" },
     paypalBusiness:"",
     contact:{ email:"hello@rumat.fi", instagram:"https://instagram.com/rumat.studio", location:"Rovaniemi — Helsinki" },
-    embed:{ instagramPost:"https://www.instagram.com/p/DMXVRgGC1Bv/embed", tiktokVideo:"https://www.tiktok.com/embed/v2/video/7525414518562753814" },
+    embed:{ instagramPost:"https://www.instagram.com/p/DMXVRgGC1Bv/embed", tiktokVideo:"https://www.tiktok.com/@rumat.studio/video/7525414518562753814" },
     pitch:"Luonnosta syntynyt. Reissuissa testattu. Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – jotta sinulla on päälläsi jotain, joka istuu, hengittää ja kestää jokaisella askeleella.",
     products:[
       { id:"laukku", name:"Laukku", price:149.00, blurb:"Täysin kierrätysmateriaaleista valmistettu sling-laukku. Kierrätetty purjekangas/tekstiili, hihna käytetystä turvavyöstä, metalliosat uudelleenkäytettyä varastoa. Ulkomitat: 28 × 16 × 7 cm. Valmistettu Suomessa.", images:[
@@ -295,18 +300,17 @@
 
     // Embeds
     if(d?.embed?.instagramPost) $('#igEmbed').src = d.embed.instagramPost;
-    if(d?.embed?.tiktokVideo)   $('#ttEmbed').src = d.embed.tiktokVideo;
-
-    // Shipping (UI + info)
-    const methods = d?.payment?.shipping?.methods || defaultContent.payment.shipping.methods;
-    const defId   = d?.payment?.shipping?.defaultMethodId || methods[0]?.id;
-    renderShipping(methods, defId);
 
     // Products (täysin dynaaminen määrä)
     renderProducts(d.products || defaultContent.products);
 
     // Blog
     renderBlog(d.blog || defaultContent.blog);
+
+    // Shipping (UI + info)
+    const methods = d?.payment?.shipping?.methods || defaultContent.payment.shipping.methods;
+    const defId   = d?.payment?.shipping?.defaultMethodId || methods[0]?.id;
+    renderShipping(methods, defId);
 
     // PayPal email varoitus
     const warn = $('#paypalWarn');
@@ -538,5 +542,8 @@
   // ----------- Käynnistys -----------
   loadContent();
   </script>
+
+  <!-- TikTokin virallinen embed-skripti (lisää vain kerran sivulle) -->
+  <script async src="https://www.tiktok.com/embed.js"></script>
 </body>
 </html>
