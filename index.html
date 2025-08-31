@@ -70,23 +70,69 @@
   <!-- KIINTEÄ REVONTULI-TAUSTA -->
   <canvas id="auroraCanvas" class="aurora-fixed"></canvas>
 
-  <!-- ALAREUNAN SILUETTI -->
+  <!-- ALAREUNAN SILUETTI (kuuset pienemmät, mökin edestä tyhjää) -->
   <div class="bottom-sil" aria-hidden="true">
     <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
       <defs>
         <filter id="windowGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        <g id="treeTall" fill="var(--silhouette)"><path d="M0,0 l-18,22 h36 z" transform="translate(0,0)"/><path d="M0,0 l-20,24 h40 z" transform="translate(0,10)"/><path d="M0,0 l-22,26 h44 z" transform="translate(0,22)"/><path d="M0,0 l-24,28 h48 z" transform="translate(0,36)"/><rect x="-3.2" y="60" width="6.4" height="12" rx="1"/></g>
-        <g id="treeMed" fill="var(--silhouette)"><path d="M0,0 l-14,18 h28 z" transform="translate(0,2)"/><path d="M0,0 l-16,20 h32 z" transform="translate(0,12)"/><path d="M0,0 l-18,22 h36 z" transform="translate(0,24)"/><rect x="-2.8" y="48" width="5.6" height="10" rx="1"/></g>
-        <g id="treeSmall" fill="var(--silhouette)"><path d="M0,0 l-11,14 h22 z" transform="translate(0,4)"/><path d="M0,0 l-13,16 h26 z" transform="translate(0,12)"/><rect x="-2.4" y="40" width="4.8" height="8" rx="1"/></g>
+        <!-- Peruspuidut -->
+        <g id="treeTall" fill="var(--silhouette)">
+          <path d="M0,0 l-18,22 h36 z" transform="translate(0,0)"/>
+          <path d="M0,0 l-20,24 h40 z" transform="translate(0,10)"/>
+          <path d="M0,0 l-22,26 h44 z" transform="translate(0,22)"/>
+          <path d="M0,0 l-24,28 h48 z" transform="translate(0,36)"/>
+          <rect x="-3.2" y="60" width="6.4" height="12" rx="1"/>
+        </g>
+        <g id="treeMed" fill="var(--silhouette)">
+          <path d="M0,0 l-14,18 h28 z" transform="translate(0,2)"/>
+          <path d="M0,0 l-16,20 h32 z" transform="translate(0,12)"/>
+          <path d="M0,0 l-18,22 h36 z" transform="translate(0,24)"/>
+          <rect x="-2.8" y="48" width="5.6" height="10" rx="1"/>
+        </g>
+        <g id="treeSmall" fill="var(--silhouette)">
+          <path d="M0,0 l-11,14 h22 z" transform="translate(0,4)"/>
+          <path d="M0,0 l-13,16 h26 z" transform="translate(0,12)"/>
+          <rect x="-2.4" y="40" width="4.8" height="8" rx="1"/>
+        </g>
       </defs>
+
+      <!-- Vuoriharjanteet -->
       <path d="M0,120 C180,105 240,108 340,114 C460,121 520,110 640,116 C760,122 880,108 1000,114 C1160,122 1280,110 1440,118 L1440,160 L0,160 Z" fill="var(--silhouette-mid)" opacity=".28"/>
       <path d="M0,122 C120,118 190,110 260,118 C340,126 420,106 500,116 C580,126 670,108 760,120 C850,132 980,110 1100,118 C1220,126 1330,112 1440,120 L1440,160 L0,160 Z" fill="var(--silhouette-mid)" opacity=".44"/>
       <path d="M0,130 C160,128 320,132 480,130 C640,128 800,131 960,129 C1120,128 1280,131 1440,129 L1440,160 L0,160 Z" fill="var(--silhouette)"/>
+
+      <!-- Kuuset (pienennetty ~0.75x, mökin kohdalla tyhjä vyöhyke 1180–1275) -->
+      <!-- CHANGED: trees scaled & cleared around cabin -->
       <g>
-        <use href="#treeTall"  x="55"   y="76"/><use href="#treeMed"   x="95"   y="82"/><use href="#treeSmall" x="128"  y="88"/><use href="#treeTall"  x="168"  y="74"/><use href="#treeMed"   x="210"  y="82"/>
-        <use href="#treeTall"  x="520"  y="74"/><use href="#treeMed"   x="558"  y="82"/><use href="#treeSmall" x="592"  y="88"/><use href="#treeTall"  x="632"  y="72"/><use href="#treeMed"   x="674"  y="82"/><use href="#treeSmall" x="706"  y="90"/><use href="#treeTall"  x="748"  y="74"/><use href="#treeMed"   x="786"  y="82"/>
-        <use href="#treeTall"  x="1086" y="76"/><use href="#treeMed"   x="1122" y="84"/><use href="#treeSmall" x="1156" y="90"/><use href="#treeTall"  x="1196" y="74"/><use href="#treeMed"   x="1236" y="82"/><use href="#treeSmall" x="1272" y="90"/><use href="#treeTall"  x="1312" y="76"/>
+        <!-- Vasenta reunaa -->
+        <use href="#treeTall"  transform="translate(55,76) scale(0.75)"/>
+        <use href="#treeMed"   transform="translate(95,82) scale(0.75)"/>
+        <use href="#treeSmall" transform="translate(128,88) scale(0.75)"/>
+        <use href="#treeTall"  transform="translate(168,74) scale(0.75)"/>
+        <use href="#treeMed"   transform="translate(210,82) scale(0.75)"/>
+
+        <use href="#treeTall"  transform="translate(520,74) scale(0.75)"/>
+        <use href="#treeMed"   transform="translate(558,82) scale(0.75)"/>
+        <use href="#treeSmall" transform="translate(592,88) scale(0.75)"/>
+        <use href="#treeTall"  transform="translate(632,72) scale(0.75)"/>
+        <use href="#treeMed"   transform="translate(674,82) scale(0.75)"/>
+        <use href="#treeSmall" transform="translate(706,90) scale(0.75)"/>
+        <use href="#treeTall"  transform="translate(748,74) scale(0.75)"/>
+        <use href="#treeMed"   transform="translate(786,82) scale(0.75)"/>
+
+        <use href="#treeTall"  transform="translate(1086,76) scale(0.75)"/>
+        <use href="#treeMed"   transform="translate(1122,84) scale(0.75)"/>
+        <use href="#treeSmall" transform="translate(1156,90) scale(0.75)"/>
+
+        <!-- Tyhjä alue mökille: 1180–1275 (ei puita tässä) -->
+
+        <!-- Jatketaan mökin jälkeen oikealle, puita hiukan etäämmälle -->
+        <use href="#treeMed"   transform="translate(1300,84) scale(0.75)"/>
+        <use href="#treeSmall" transform="translate(1340,90) scale(0.75)"/>
+        <use href="#treeTall"  transform="translate(1380,76) scale(0.75)"/>
       </g>
+
+      <!-- Mökki -->
       <g>
         <rect x="1226" y="118" width="14" height="11" rx="1.5" fill="var(--window-warm)" opacity=".85" filter="url(#windowGlow)"/>
         <g fill="none" stroke="var(--silhouette-line)" stroke-width="1.6" stroke-linejoin="round">
@@ -96,7 +142,10 @@
         </g>
         <rect x="1232" y="110" width="6" height="12" fill="var(--silhouette)"/>
       </g>
-      <g fill="#b7c7c1"><circle class="smoke"  cx="1235" cy="106" r="2.8"/><circle class="smoke s2" cx="1239" cy="101" r="2.2"/></g>
+      <g fill="#b7c7c1">
+        <circle class="smoke"  cx="1235" cy="106" r="2.8"/>
+        <circle class="smoke s2" cx="1239" cy="101" r="2.2"/>
+      </g>
     </svg>
   </div>
 
@@ -119,7 +168,6 @@
           <a href="#yhteys"    class="hover:underline underline-offset-4 font-semibold">Yhteystiedot</a>
         </nav>
         <div class="justify-self-end flex items-center gap-2">
-          <!-- Ostoskori-teksti (emoji poistettu) -->
           <button id="openCart" class="px-3 py-2 rounded-full bg-white/10 ring-1 ring-white/30 hover:bg-white/20">
             Ostoskori (<span id="cartCount">0</span>)
           </button>
@@ -180,12 +228,10 @@
       <div class="mx-auto max-w-6xl px-4">
         <h2 class="serif text-3xl mb-6">Some</h2>
         <div class="grid md:grid-cols-2 gap-6">
-          <!-- Instagram: sama koko kuin TikTok (9:16) -->
           <div class="aspect-[9/16] rounded-xl ring-1 ring-stone-200 overflow-hidden bg-black">
             <iframe id="igEmbed" class="w-full h-full" allowtransparency="true" frameborder="0" scrolling="no" loading="lazy"
                     src="https://www.instagram.com/p/DMXVRgGC1Bv/embed" style="display:block"></iframe>
           </div>
-          <!-- TikTok: sama koko -->
           <div class="aspect-[9/16] rounded-xl ring-1 ring-stone-200 overflow-hidden bg-black">
             <iframe id="ttEmbed"
               src="https://www.tiktok.com/embed/v2/7525414518562753814"
@@ -289,7 +335,6 @@
     addEventListener('scroll', onScroll, {passive:true}); addEventListener('resize', onScroll, {passive:true}); onScroll();
   })();
 
-  // Oletussisältö
   const defaultContent = {
     hero:{ headline:"Liian rumat ollakseen totta" },
     paypalBusiness:"",
@@ -430,7 +475,7 @@
   const $count  = $('#cartCount');
   const $shipOpts = $('#shipOptions');
 
-  let CART = JSON.parse(localStorage.getItem('cart')||'{}'); // { productId: qty }
+  let CART = JSON.parse(localStorage.getItem('cart')||'{}');
   function saveCart(){ localStorage.setItem('cart', JSON.stringify(CART)); updateBadge(); }
   function updateBadge(){ $count.textContent = Object.values(CART).reduce((a,b)=>a+b,0); }
   function openCart(){ $cart.classList.add('open'); renderCart(); }
