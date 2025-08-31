@@ -28,20 +28,27 @@
     .chip{font-size:.78rem;padding:.25rem .55rem;border-radius:9999px;border:1px solid rgb(214,211,209);background:#fff}
 
     /* ===== HERO =====
-       Canvas + overlay kiinteinä taustalla; vain tekstit liikkuvat scrollissa */
-    .hero{ position:relative; min-height:100vh; isolation:isolate; }
+       Canvas + overlay näkyvät vain herossa (sticky). Vain teksti liikkuu. */
+    .hero{
+      position:relative;
+      height:100vh;
+      isolation:isolate;
+      overflow:clip; /* rajaa canvaksen heroon */
+    }
     .hero-media{
-      position:fixed;  /* <-- kiinteä */
-      inset:0;
+      position:sticky;   /* <-- ennen fixed */
+      top:0;
       width:100%;
-      height:100%;
+      height:100vh;      /* täyttää näkymän */
       display:block;
       z-index:0;
     }
     .hero-overlay{
-      position:fixed;  /* <-- kiinteä */
-      inset:0;
-      z-index:1;       /* canvasin päälle, tekstin alle */
+      position:sticky;   /* <-- ennen fixed */
+      top:0;
+      width:100%;
+      height:100vh;
+      z-index:1;
       pointer-events:none;
       background:
         radial-gradient(60% 40% at 50% 18%, rgba(255,255,255,.08), transparent 55%),
@@ -92,7 +99,7 @@
     </div>
   </header>
 
-  <!-- HERO (WebGL revontulet kiinteänä taustana) -->
+  <!-- HERO (WebGL revontulet vain herossa) -->
   <section id="etusivu" class="hero grid place-items-center text-stone-50 px-4">
     <canvas id="auroraCanvas" class="hero-media"></canvas>
     <div class="hero-overlay"></div>
@@ -109,7 +116,7 @@
     </div>
   </section>
 
-  <!-- Esittely (tehdään peittäväksi, ettei tausta näy tämän jälkeen) -->
+  <!-- Esittely (peittävä tausta) -->
   <section class="py-12 bg-white">
     <div class="mx-auto max-w-3xl px-6 text-center">
       <p id="intro-text" class="text-xl sm:text-2xl">
@@ -235,7 +242,7 @@
 
   <!-- Scripts -->
   <script>
-  const API_BASE = ""; // esim. "https://rumat-backend.<tunnus>.workers.dev" (jätä tyhjäksi jos ei backendia)
+  const API_BASE = ""; // esim. "https://rumat-backend.<tunnus>.workers.dev"
   const fmtEUR = x => new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
   const $ = sel => document.querySelector(sel);
   const el = (tag,attrs={},...kids)=>{ const n=document.createElement(tag); Object.entries(attrs).forEach(([k,v])=>{
@@ -243,7 +250,7 @@
       else n.setAttribute(k,v);
     }); kids.forEach(k=>{ if(k==null) return; if(typeof k==='string') n.appendChild(document.createTextNode(k)); else n.appendChild(k);}); return n;};
 
-  // Hero-tekstin liike (vain teksti liikkuu)
+  // Hero-tekstin liike (vain teksti nousee)
   (function(){ const heroText = document.getElementById('hero-text'); let lastY=-1;
     function onScroll(){ const y=window.scrollY||0; if(y===lastY) return; lastY=y; const vh=innerHeight||1; const t=-18*Math.min(1,y/(vh*0.9)); heroText.style.transform=`translateY(${t}vh)`; }
     addEventListener('scroll', onScroll, {passive:true}); onScroll();
@@ -365,8 +372,8 @@
         )
       );
 
-      root.appendChild(gallery);
-      root.appendChild(details);
+      document.getElementById('productsRoot').appendChild(gallery);
+      document.getElementById('productsRoot').appendChild(details);
 
       const imgs = Array.isArray(p.images)&&p.images.length ? p.images : ["https://placehold.co/1400x1750?text=Kuva+1","https://placehold.co/1400x1750?text=Kuva+2","https://placehold.co/1400x1750?text=Kuva+3"];
       let i=0; const setPair=(k)=>{ const a=$(`#${leftId}`), b=$(`#${rightId}`); const n=imgs.length; a.src=imgs[(k%n+n)%n]; b.src=imgs[((k+1)%n+n)%n]; };
@@ -375,7 +382,7 @@
       $(`#${prevId}`).addEventListener('click',()=>{i=(i-1+imgs.length)%imgs.length; setPair(i);});
     });
 
-    root.addEventListener('click', e=>{
+    document.getElementById('productsRoot').addEventListener('click', e=>{
       const btn = e.target.closest('[data-add]');
       if(!btn) return;
       addToCart(btn.getAttribute('data-add'));
@@ -504,15 +511,14 @@
     modal.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // WebGL Revontulet (kiinteä tausta)
+  // WebGL Revontulet – näkyvät vain hero-alueella (sticky)
   (function(){
-    const SETTINGS = { PAL_COL1:[0.02,0.70,0.95], PAL_COL2:[0.00,1.00,0.60], BRIGHTNESS:1.05, CURTAIN_Y:0.52, HEIGHT:0.50, SPEED:0.22, STRIPE_STRENGTH:0.45, STAR_DENS:0.04 };
+    const SETTINGS = { PAL_COL1:[0.02,0.70,0.95], PAL_COL2:[0.00,1.00,0.60], BRIGHTNESS:1.05, CURTAIN_Y:0.52, HEIGHT:0.50, SPEED:0.22, STRIPE_STRENGTH:0.45, STAR_DENS:0.03 };
     function init(){
       const canvas = document.getElementById('auroraCanvas'); if(!canvas) return;
       const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches; if(prefersReduced) SETTINGS.SPEED*=0.3;
       const gl = canvas.getContext('webgl',{antialias:false,depth:false,stencil:false,preserveDrawingBuffer:false});
       if(!gl){ canvas.style.background='linear-gradient(#0a1e2a,#0b3824)'; return; }
-      const DPR=Math.min(devicePixelRatio||1,2);
       const vert=`attribute vec2 a_pos; void main(){ gl_Position=vec4(a_pos,0.,1.); }`;
       const frag=`precision highp float; uniform vec2 u_res; uniform float u_time,u_brightness,u_y,u_height,u_speed,u_stripes,u_star; uniform vec3 u_c1,u_c2;
       float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);} float noise(vec2 p){vec2 i=floor(p),f=fract(p);
