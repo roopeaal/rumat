@@ -4,13 +4,19 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>RUMAT.STUDIO</title>
-  <meta name="description" content="Luonnosta syntynyt. Reissuissa testattu. Neuleita ja asusteita poluille ja kaupunkiin.">
+  <meta name="description" content="Luonnosta syntynyt. Reissuissa testattu. Neuleet ja asusteet poluille ja kaupunkiin – istuvat, hengittävät ja kestävät."/>
 
   <!-- Fontit + Tailwind -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- OG -->
+  <meta property="og:title" content="RUMAT.STUDIO – Luonnosta syntynyt. Reissuissa testattu.">
+  <meta property="og:description" content="Neuleet ja asusteet poluille ja kaupunkiin – istuvat, hengittävät ja kestävät.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://placehold.co/1200x630?text=RUMAT.STUDIO">
+  <meta name="twitter:card" content="summary_large_image">
 
   <style>
     :root{
@@ -167,7 +173,7 @@
     <div class="mx-auto max-w-6xl px-4">
       <h2 class="serif text-3xl mb-6">Seuraa</h2>
       <div class="grid md:grid-cols-2 gap-6">
-        <!-- Instagram (esimerkkipostaus) -->
+        <!-- Instagram (virallinen embed) -->
         <div class="embed-card">
           <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DMXVRgGC1Bv/" data-instgrm-version="14" style="background:#fff;"></blockquote>
         </div>
@@ -189,8 +195,7 @@
     <div class="mx-auto max-w-3xl px-4">
       <h2 class="serif text-3xl mb-3">Tarina</h2>
       <p>
-        Kirjoita tähän yrityksen matkaa: miksi perustit, mitä opit, minne olet menossa.
-        Tekstiä voi muuttaa myöhemmin Adminin kautta.
+        Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Valmistamme pieniä eriä Suomessa ja EU:ssa, jotta vaate kestää vuosia ja tekijät näkyvät.
       </p>
     </div>
   </section>
@@ -312,7 +317,7 @@
       const shipVal = Number(document.querySelector('input[name="ship"]:checked')?.value || 0);
       el('ship').textContent = fmt(cart.length ? shipVal : 0);
       el('total').textContent = fmt(cart.length ? (sub + shipVal) : 0);
-      el('cart-count').textContent = cart.reduce((a,b)=>a+b.qty,0);
+      document.getElementById('cart-count').textContent = cart.reduce((a,b)=>a+b.qty,0);
 
       // qty-napit
       list.querySelectorAll('[data-inc]').forEach(b=>b.onclick = ()=>{ cart[+b.dataset.inc].qty++; renderCart(); });
