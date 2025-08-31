@@ -30,7 +30,7 @@
       --silhouette:#08110d;
       --silhouette-mid:#0c1a15;
       --silhouette-line:#9fb1a9;
-      --window-warm:#FFD780;
+      --window-warm:#FFD780;     /* (ei käytössä enää) */
     }
     body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#111827;background:#fff}
     .serif{font-family:"Libre Baskerville",serif}
@@ -130,13 +130,12 @@
         <use href="#treeTall"  transform="translate(1380,76) scale(0.75)"/>
       </g>
 
-      <!-- Mökki (nostettu ja ilman ääriviivoja) -->
+      <!-- Mökki (nostettu ja ilman ikkunaa/ääriviivoja) -->
       <g>
         <rect x="1203" y="115" width="44" height="22" rx="1" fill="var(--silhouette)"/>
         <path d="M1198,116 L1225,100 L1252,116 Z" fill="var(--silhouette)"/>
         <rect x="1232" y="102" width="6" height="12" fill="var(--silhouette)"/>
-        <rect x="1226" y="110" width="14" height="11" rx="1.5"
-              fill="var(--window-warm)" opacity=".9" filter="url(#windowGlow)"/>
+        <!-- ikkuna poistettu -->
       </g>
 
       <!-- Savu -->
