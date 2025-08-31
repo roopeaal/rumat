@@ -5,9 +5,18 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>RUMAT.STUDIO</title>
   <meta name="description" content="Luonnosta syntynyt. Reissuissa testattu. Neuleet ja asusteet poluille ja kaupunkiin – istuvat, hengittävät ja kestävät."/>
+
+  <!-- Fontit + Tailwind -->
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;600;700&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- OG -->
+  <meta property="og:title" content="RUMAT.STUDIO – Luonnosta syntynyt. Reissuissa testattu.">
+  <meta property="og:description" content="Neuleet ja asusteet poluille ja kaupunkiin – istuvat, hengittävät ja kestävät.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://placehold.co/1200x630?text=RUMAT.STUDIO">
+  <meta name="twitter:card" content="summary_large_image">
 
   <style>
     :root{
@@ -15,8 +24,8 @@
       --dark-forest:#0B0F0E;     /* header tausta */
       --olive:#A1A266;
       --ivory:#F6F6F4;
-      --mist:#DEEEEE;
-      --gallery:#F6F6F4;
+      --mist:#DEEEEE;            /* esittelypalkkien tausta */
+      --gallery:#F6F6F4;         /* kuvapalkkien tausta */
       --footer:#0B0F0E;
       --silhouette:#08110d;
       --silhouette-mid:#0c1a15;
@@ -31,7 +40,7 @@
     .btn-dark{background:#111827;color:#fff;border-color:#111827}
     .chip{font-size:.78rem;padding:.25rem .55rem;border-radius:9999px;border:1px solid rgb(214,211,209);background:#fff}
 
-    /* Aurora tausta (kiinteä) */
+    /* Aurora (kiinteä tausta) */
     .aurora-fixed{ position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; display:block; }
     .site-content{ position:relative; z-index:2; background:transparent; }
 
@@ -58,19 +67,13 @@
     .modal{position:fixed;inset:0;z-index:70;display:none}
     .modal.open{display:grid;place-items:center}
   </style>
-
-  <meta property="og:title" content="RUMAT.STUDIO – Luonnosta syntynyt. Reissuissa testattu.">
-  <meta property="og:description" content="Neuleet ja asusteet poluille ja kaupunkiin – istuvat, hengittävät ja kestävät.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://placehold.co/1200x630?text=RUMAT.STUDIO">
-  <meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="text-stone-900">
   <!-- KIINTEÄ REVONTULI-TAUSTA -->
   <canvas id="auroraCanvas" class="aurora-fixed"></canvas>
 
-  <!-- ALAREUNAN SILUETTI (kuuset pienemmät, mökin edestä tyhjää) -->
+  <!-- ALAREUNAN SILUETTI (kuuset pienemmät, mökki näkyvä) -->
   <div class="bottom-sil" aria-hidden="true">
     <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
       <defs>
@@ -101,10 +104,8 @@
       <path d="M0,122 C120,118 190,110 260,118 C340,126 420,106 500,116 C580,126 670,108 760,120 C850,132 980,110 1100,118 C1220,126 1330,112 1440,120 L1440,160 L0,160 Z" fill="var(--silhouette-mid)" opacity=".44"/>
       <path d="M0,130 C160,128 320,132 480,130 C640,128 800,131 960,129 C1120,128 1280,131 1440,129 L1440,160 L0,160 Z" fill="var(--silhouette)"/>
 
-      <!-- Kuuset (pienennetty ~0.75x, mökin kohdalla tyhjä vyöhyke 1180–1275) -->
-      <!-- CHANGED: trees scaled & cleared around cabin -->
+      <!-- Kuuset (skaala ~0.75, tyhjä vyöhyke mökin edessä 1180–1275) -->
       <g>
-        <!-- Vasenta reunaa -->
         <use href="#treeTall"  transform="translate(55,76) scale(0.75)"/>
         <use href="#treeMed"   transform="translate(95,82) scale(0.75)"/>
         <use href="#treeSmall" transform="translate(128,88) scale(0.75)"/>
@@ -124,27 +125,29 @@
         <use href="#treeMed"   transform="translate(1122,84) scale(0.75)"/>
         <use href="#treeSmall" transform="translate(1156,90) scale(0.75)"/>
 
-        <!-- Tyhjä alue mökille: 1180–1275 (ei puita tässä) -->
+        <!-- tyhjä mökille -->
 
-        <!-- Jatketaan mökin jälkeen oikealle, puita hiukan etäämmälle -->
         <use href="#treeMed"   transform="translate(1300,84) scale(0.75)"/>
         <use href="#treeSmall" transform="translate(1340,90) scale(0.75)"/>
         <use href="#treeTall"  transform="translate(1380,76) scale(0.75)"/>
       </g>
 
-      <!-- Mökki -->
+      <!-- Mökki (nostettu ja ilman ääriviivoja) -->
       <g>
-        <rect x="1226" y="118" width="14" height="11" rx="1.5" fill="var(--window-warm)" opacity=".85" filter="url(#windowGlow)"/>
-        <g fill="none" stroke="var(--silhouette-line)" stroke-width="1.6" stroke-linejoin="round">
-          <rect x="1203" y="123" width="44" height="22" rx="1" fill="var(--silhouette)"/>
-          <path d="M1198,124 L1225,108 L1252,124 Z" fill="var(--silhouette)"/>
-          <rect x="1224.5" y="118" width="17" height="14" rx="2" fill="transparent"/>
-        </g>
-        <rect x="1232" y="110" width="6" height="12" fill="var(--silhouette)"/>
+        <!-- talo + katto -->
+        <rect x="1203" y="115" width="44" height="22" rx="1" fill="var(--silhouette)"/>
+        <path d="M1198,116 L1225,100 L1252,116 Z" fill="var(--silhouette)"/>
+        <!-- piippu -->
+        <rect x="1232" y="102" width="6" height="12" fill="var(--silhouette)"/>
+        <!-- lämmin ikkuna -->
+        <rect x="1226" y="110" width="14" height="11" rx="1.5"
+              fill="var(--window-warm)" opacity=".9" filter="url(#windowGlow)"/>
       </g>
+
+      <!-- Savu (siirretty ylemmäs) -->
       <g fill="#b7c7c1">
-        <circle class="smoke"  cx="1235" cy="106" r="2.8"/>
-        <circle class="smoke s2" cx="1239" cy="101" r="2.2"/>
+        <circle class="smoke"  cx="1235" cy="98" r="2.8"/>
+        <circle class="smoke s2" cx="1239" cy="93" r="2.2"/>
       </g>
     </svg>
   </div>
@@ -335,6 +338,7 @@
     addEventListener('scroll', onScroll, {passive:true}); addEventListener('resize', onScroll, {passive:true}); onScroll();
   })();
 
+  // ----- CMS / sisältö (paikallinen oletus, voi hakea backendistä) -----
   const defaultContent = {
     hero:{ headline:"Liian rumat ollakseen totta" },
     paypalBusiness:"",
@@ -568,22 +572,24 @@
     modal.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // ===== WebGL Revontulet =====
+  // ===== WebGL Revontulet – kevyt elävä liike, ei scrollaa =====
   (function(){
     const SETTINGS = {
-      PAL_COL1:[0.02,0.70,0.95],
-      PAL_COL2:[0.00,1.00,0.60],
+      PAL_COL1:[0.02,0.70,0.95], // sinertävä
+      PAL_COL2:[0.00,1.00,0.60], // vihreä
       BRIGHTNESS:1.00,
       CURTAIN_Y:0.58,
       HEIGHT:0.55,
-      SPEED:0.18,
-      STRIPE_STRENGTH:0.22,
-      STAR_DENS:0.0001
+      SPEED:0.18,           // pieni, jatkuva liike
+      STRIPE_STRENGTH:0.22, // hillitty raitailu
+      STAR_DENS:0.0001      // harvat tähdet → vähemmän "rakeisuutta"
     };
+
     function init(){
       const canvas = document.getElementById('auroraCanvas'); if(!canvas) return;
       const gl = canvas.getContext('webgl',{antialias:false,depth:false,stencil:false,preserveDrawingBuffer:false});
       if(!gl){ canvas.style.background='linear-gradient(#0a1e2a,#0b3824)'; return; }
+
       const vert=`attribute vec2 a_pos; void main(){ gl_Position=vec4(a_pos,0.,1.); }`;
       const frag=`precision highp float; uniform vec2 u_res; uniform float u_time,u_brightness,u_y,u_height,u_speed,u_stripes,u_star; uniform vec3 u_c1,u_c2;
       float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
@@ -607,6 +613,7 @@
         col*=u_brightness;
         gl_FragColor=vec4(col,1.);
       }`;
+
       const sh=(t,s)=>{const o=gl.createShader(t); gl.shaderSource(o,s); gl.compileShader(o);
         if(!gl.getShaderParameter(o,gl.COMPILE_STATUS)){console.error(gl.getShaderInfoLog(o));} return o;};
       const prog=gl.createProgram();
@@ -636,7 +643,6 @@
         gl.uniform3fv(uC1,SETTINGS.PAL_COL1);
         gl.uniform3fv(uC2,SETTINGS.PAL_COL2);
       }
-
       function draw(t){ setUniforms(t*0.001); gl.drawArrays(gl.TRIANGLES,0,3); requestAnimationFrame(draw); }
 
       const ro=new ResizeObserver(()=>{ const DPR=Math.min(devicePixelRatio||1,2);
