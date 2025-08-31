@@ -6,18 +6,19 @@
   <title>RUMAT.STUDIO</title>
   <meta name="description" content="Luonnosta syntynyt. Reissuissa testattu. Neuleet ja asusteet poluille ja kaupunkiin – istuvat, hengittävät ja kestävät."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;600;700&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     :root{
       --ink:#202020;
       --dark-forest:#0B0F0E;     /* header tausta */
-      --olive:#A1A266;           /* accent */
-      --ivory:#F6F6F4;           /* vaalea */
-      --mist:#DEEEEE;            /* pehmeä osio (blogi tms.) */
-      --gallery:#F6F6F4;         /* kuvapalkkien tausta */
-      --footer:#0B0F0E;          /* footer musta */
+      --olive:#A1A266;
+      --ivory:#F6F6F4;
+      --mist:#DEEEEE;
+      --gallery:#F6F6F4;
+      --footer:#0B0F0E;
+      --silhouette:#08110d;      /* silhuetin väri */
     }
     body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#111827;background:#fff}
     .serif{font-family:"Libre Baskerville",serif}
@@ -33,17 +34,11 @@
       inset: 0;
       width: 100%;
       height: 100%;
-      display: block;
-      z-index: 0;             /* jää taustalle */
-      pointer-events: none;   /* ei blokkaa klikkauksia */
+      z-index: 0;
+      pointer-events: none;
+      display:block;
     }
-
-    /* Kaikki varsinainen sisältö tämän päällä */
-    .site-content{
-      position: relative;
-      z-index: 2;  /* varmistaa että osiot ovat kanvaasin päällä */
-      background: transparent;
-    }
+    .site-content{ position:relative; z-index:2; background:transparent; }
 
     /* HERO */
     .hero{ position:relative; height:100vh; isolation:isolate; overflow:hidden; }
@@ -55,12 +50,20 @@
     }
     #hero-text{ position:relative; z-index:2; }
 
-    /* Ostoskori */
+    /* Header silhouette */
+    .header-sil{ position:absolute; left:0; right:0; bottom:-1px; height:74px; pointer-events:none; }
+    .header-sil svg{ width:100%; height:100%; display:block; }
+    .smoke{ animation:smoke 6s ease-in-out infinite; transform-origin:center; opacity:.6 }
+    .smoke.s2{ animation-delay:1.4s }
+    @keyframes smoke{
+      0%{ transform:translateY(0) scale(1); opacity:.6 }
+      100%{ transform:translateY(-28px) scale(1.4); opacity:0 }
+    }
+
+    /* Drawer & Modal */
     .drawer{position:fixed;inset:0;z-index:60;display:none}
     .drawer.open{display:block}
     .drawer .panel{position:absolute;top:0;right:0;width:min(420px,90vw);height:100%;background:#fff;box-shadow:-10px 0 30px rgba(0,0,0,.2)}
-
-    /* Modal */
     .modal{position:fixed;inset:0;z-index:70;display:none}
     .modal.open{display:grid;place-items:center}
   </style>
@@ -78,7 +81,7 @@
 
   <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50">
-    <div class="bg-[color:var(--dark-forest)] text-white">
+    <div class="relative bg-[color:var(--dark-forest)] text-white">
       <div class="mx-auto max-w-6xl px-4 py-3 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
         <a href="#etusivu" class="flex items-center gap-3">
           <div class="h-9 w-9 grid place-items-center rounded-xl ring-1 ring-white/40 bg-white/90">
@@ -98,6 +101,37 @@
           <button id="openCart" class="px-3 py-2 rounded-full bg-white/10 ring-1 ring-white/30 hover:bg-white/20">🧺&nbsp;<span id="cartCount">0</span></button>
         </div>
       </div>
+
+      <!-- Headerin silhuetti (vuori + kuusia + mökki) -->
+      <div class="header-sil">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+          <!-- Vuorijono -->
+          <path d="M0,88 L120,76 L220,92 L320,64 L420,98 L540,54 L660,100 L780,68 L900,90 L1020,62 L1140,98 L1260,78 L1440,92 L1440,120 L0,120 Z" fill="var(--silhouette)"/>
+          <!-- Kuusia (kolmioita) -->
+          <g fill="var(--silhouette)">
+            <path d="M210,92 l14,-22 l14,22 z"/>
+            <path d="M260,90 l16,-24 l16,24 z"/>
+            <path d="M310,96 l12,-20 l12,20 z"/>
+            <path d="M980,94 l15,-24 l15,24 z"/>
+            <path d="M1030,90 l12,-20 l12,20 z"/>
+            <path d="M1080,96 l14,-22 l14,22 z"/>
+          </g>
+          <!-- Mökki -->
+          <g fill="var(--silhouette)">
+            <!-- runko -->
+            <rect x="1185" y="83" width="34" height="16" rx="1"/>
+            <!-- katto -->
+            <path d="M1180,83 L1202,70 L1224,83 Z"/>
+            <!-- piippu -->
+            <rect x="1206" y="72" width="5" height="10"/>
+          </g>
+          <!-- Savu (kevyesti animoitu) -->
+          <g fill="#9fb1a9">
+            <circle class="smoke" cx="1209" cy="68" r="2.6"/>
+            <circle class="smoke s2" cx="1212" cy="64" r="2.0"/>
+          </g>
+        </svg>
+      </div>
     </div>
   </header>
 
@@ -108,8 +142,11 @@
     <section id="etusivu" class="hero grid place-items-center text-stone-50 px-4">
       <div class="hero-overlay"></div>
       <div id="hero-text" class="text-center transition-transform mt-24 md:mt-28">
-        <h1 class="uppercase font-black tracking-[0.32em] text-[clamp(26px,6.2vw,84px)] drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
-          LIIAN RUMAT OLLAKSEEN TOTTA
+        <!-- Sirompi tyyli -->
+        <h1 class="serif font-semibold tracking-[0.08em]
+                   text-[clamp(22px,4.8vw,58px)]
+                   drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
+          Liian rumat ollakseen totta
         </h1>
         <div class="mt-8 flex justify-center">
           <div class="h-24 w-24 sm:h-28 sm:w-28 grid place-items-center rounded-full bg-white/92 ring-1 ring-white/70 shadow-soft">
@@ -119,7 +156,7 @@
       </div>
     </section>
 
-    <!-- Esittely (peittävä valkoinen, ettei aurora “syö” sisältöä) -->
+    <!-- Esittely -->
     <section class="py-12 bg-white">
       <div class="mx-auto max-w-3xl px-6 text-center">
         <p id="intro-text" class="text-xl sm:text-2xl">
@@ -158,15 +195,14 @@
             <iframe id="igEmbed" class="w-full h-full" allowtransparency="true" frameborder="0" scrolling="no" loading="lazy"
                     src="https://www.instagram.com/p/DMXVRgGC1Bv/embed"></iframe>
           </div>
-          <!-- TikTok -->
-          <div class="rounded-xl ring-1 ring-stone-200 overflow-hidden bg-white p-2">
-            <blockquote id="tiktokEmbed"
-              class="tiktok-embed"
-              cite="https://www.tiktok.com/@rumat.studio/video/7525414518562753814"
-              data-video-id="7525414518562753814"
-              style="max-width:100%;min-width:325px;margin:0 auto;">
-              <section></section>
-            </blockquote>
+          <!-- TikTok: käytä v2-iframeä (luotettavampi) -->
+          <div class="aspect-[9/16] rounded-xl ring-1 ring-stone-200 overflow-hidden bg-black">
+            <iframe id="ttEmbed"
+              src="https://www.tiktok.com/embed/v2/7525414518562753814"
+              style="width:100%;height:100%;border:0;display:block"
+              allow="encrypted-media;"
+              allowfullscreen
+              title="TikTok video"></iframe>
           </div>
         </div>
       </div>
@@ -275,7 +311,7 @@
 
   // Oletussisältö
   const defaultContent = {
-    hero:{ headline:"LIIAN RUMAT OLLAKSEEN TOTTA" },
+    hero:{ headline:"Liian rumat ollakseen totta" },
     paypalBusiness:"",
     contact:{ email:"hello@rumat.fi", instagram:"https://instagram.com/rumat.studio", location:"Rovaniemi — Helsinki" },
     embed:{ instagramPost:"https://www.instagram.com/p/DMXVRgGC1Bv/embed", tiktokVideo:"https://www.tiktok.com/@rumat.studio/video/7525414518562753814" },
@@ -335,11 +371,7 @@
     if(d?.embed?.instagramPost) $('#igEmbed').src = d.embed.instagramPost;
     if(d?.embed?.tiktokVideo){
       const id = parseTikTokId(d.embed.tiktokVideo);
-      const q = $('#tiktokEmbed');
-      if(q && id){
-        q.setAttribute('cite', d.embed.tiktokVideo);
-        q.setAttribute('data-video-id', id);
-      }
+      if(id){ $('#ttEmbed').src = `https://www.tiktok.com/embed/v2/${id}`; }
     }
 
     // Tuotteet & toimitus
@@ -536,7 +568,7 @@
       BRIGHTNESS:1.00,
       CURTAIN_Y:0.58,
       HEIGHT:0.55,
-      SPEED:0.18,          // pieni, jatkuva liike
+      SPEED:0.18,           // pieni, jatkuva liike
       STRIPE_STRENGTH:0.22, // hillitty raitailu
       STAR_DENS:0.0001      // harvemmat tähdet → vähemmän "rakeisuutta"
     };
@@ -552,7 +584,7 @@
       float noise(vec2 p){vec2 i=floor(p),f=fract(p); float a=hash(i),b=hash(i+vec2(1,0)),c=hash(i+vec2(0,1)),d=hash(i+vec2(1,1));
         vec2 u=f*f*(3.-2.*f); return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}
       float fbm(vec2 p){float v=0.,a=0.5;for(int i=0;i<6;i++){v+=a*noise(p);p*=2.03;a*=0.47;}return v;}
-      float stars(vec2 uv){ vec2 p=floor(uv*900.); float rnd=hash(p); return step(1.-u_star,rnd); } // harva tähtikenttä
+      float stars(vec2 uv){ vec2 p=floor(uv*900.); float rnd=hash(p); return step(1.-u_star,rnd); }
       void main(){
         vec2 uv=gl_FragCoord.xy/u_res.xy, suv=vec2(uv.x*(u_res.x/u_res.y),uv.y);
         vec3 col=vec3(.02,.06,.12);
@@ -565,14 +597,17 @@
         vec3 pal=mix(u_c1,u_c2, clamp(uv.y + 0.22*flow,0.,1.));
         col=mix(col,pal, clamp(inten*1.18,0.,1.));
         float g=0.; g+=band*.20; g+=fbm(vec2(suv.x*1.8 - t*.4,suv.y*1.8))*.12; col += pal*g*1.03;
-        float st=stars(uv); col+=vec3(st)*.28;
+        float st=stars(uv); col+=vec3(st)*.32;
         col*=u_brightness;
         gl_FragColor=vec4(col,1.);
       }`;
 
       const sh=(t,s)=>{const o=gl.createShader(t); gl.shaderSource(o,s); gl.compileShader(o);
-        if(!gl.getShaderParameter(o,gl.COMPILE_STATUS)){console.error(gl.getShaderInfoLog(o));} return o;};
-      const prog=gl.createProgram(); gl.attachShader(prog,sh(gl.VERTEX_SHADER,vert)); gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,frag)); gl.linkProgram(prog);
+        if(!gl.getShaderParameter(o,gl.COMPPILE_STATUS)){console.error(gl.getShaderInfoLog(o));} return o;};
+      const prog=gl.createProgram();
+      gl.attachShader(prog,sh(gl.VERTEX_SHADER,vert));
+      gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,frag));
+      gl.linkProgram(prog);
       if(!gl.getProgramParameter(prog,gl.LINK_STATUS)){ console.error(gl.getProgramInfoLog(prog)); return; }
       gl.useProgram(prog);
 
@@ -598,7 +633,7 @@
       }
 
       function draw(t){
-        setUniforms(t*0.001); // sekunteina
+        setUniforms(t*0.001);
         gl.drawArrays(gl.TRIANGLES,0,3);
         requestAnimationFrame(draw);
       }
@@ -618,8 +653,5 @@
   // ===== Start =====
   loadContent();
   </script>
-
-  <!-- TikTok embed -->
-  <script async src="https://www.tiktok.com/embed.js"></script>
 </body>
 </html>
