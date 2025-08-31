@@ -26,14 +26,29 @@
     .btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.12)}
     .btn-dark{background:#111827;color:#fff;border-color:#111827}
     .chip{font-size:.78rem;padding:.25rem .55rem;border-radius:9999px;border:1px solid rgb(214,211,209);background:#fff}
-    .hero{position:relative;min-height:100vh;isolation:isolate}
-    .hero-media{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0}
-    .hero-overlay{position:absolute;inset:0;z-index:1;pointer-events:none;
+
+    /* ===== HERO =====
+       Canvas + overlay kiinteinä taustalla; vain tekstit liikkuvat scrollissa */
+    .hero{ position:relative; min-height:100vh; isolation:isolate; }
+    .hero-media{
+      position:fixed;  /* <-- kiinteä */
+      inset:0;
+      width:100%;
+      height:100%;
+      display:block;
+      z-index:0;
+    }
+    .hero-overlay{
+      position:fixed;  /* <-- kiinteä */
+      inset:0;
+      z-index:1;       /* canvasin päälle, tekstin alle */
+      pointer-events:none;
       background:
         radial-gradient(60% 40% at 50% 18%, rgba(255,255,255,.08), transparent 55%),
         linear-gradient(to bottom, rgba(0,0,0,.16), rgba(0,0,0,.36) 72%);
     }
-    #hero-text{position:relative;z-index:2}
+    #hero-text{ position:relative; z-index:2; } /* tekstit ylimmäksi */
+
     /* Cart drawer */
     .drawer{position:fixed;inset:0;z-index:60;display:none}
     .drawer.open{display:block}
@@ -77,7 +92,7 @@
     </div>
   </header>
 
-  <!-- HERO (WebGL revontulet) -->
+  <!-- HERO (WebGL revontulet kiinteänä taustana) -->
   <section id="etusivu" class="hero grid place-items-center text-stone-50 px-4">
     <canvas id="auroraCanvas" class="hero-media"></canvas>
     <div class="hero-overlay"></div>
@@ -94,8 +109,8 @@
     </div>
   </section>
 
-  <!-- Esittely -->
-  <section class="py-12 bg-stone-50/90">
+  <!-- Esittely (tehdään peittäväksi, ettei tausta näy tämän jälkeen) -->
+  <section class="py-12 bg-white">
     <div class="mx-auto max-w-3xl px-6 text-center">
       <p id="intro-text" class="text-xl sm:text-2xl">
         <strong>Luonnosta syntynyt. Reissuissa testattu.</strong>
@@ -133,7 +148,7 @@
           <iframe id="igEmbed" class="w-full h-full" allowtransparency="true" frameborder="0" scrolling="no" loading="lazy"
                   src="https://www.instagram.com/p/DMXVRgGC1Bv/embed"></iframe>
         </div>
-        <!-- TikTok: data täytetään sisällöstä ennen embed.js latausta -->
+        <!-- TikTok -->
         <div class="rounded-xl ring-1 ring-stone-200 overflow-hidden bg-white p-2">
           <blockquote id="tiktokEmbed"
             class="tiktok-embed"
@@ -148,7 +163,7 @@
   </section>
 
   <!-- Tarina -->
-  <section id="tarina" class="py-14 bg-stone-50/90">
+  <section id="tarina" class="py-14 bg-stone-50">
     <div class="mx-auto max-w-3xl px-6">
       <h2 class="serif text-3xl mb-4">Tarina</h2>
       <p id="story">
@@ -228,14 +243,14 @@
       else n.setAttribute(k,v);
     }); kids.forEach(k=>{ if(k==null) return; if(typeof k==='string') n.appendChild(document.createTextNode(k)); else n.appendChild(k);}); return n;};
 
-  // Hero text motion
+  // Hero-tekstin liike (vain teksti liikkuu)
   (function(){ const heroText = document.getElementById('hero-text'); let lastY=-1;
     function onScroll(){ const y=window.scrollY||0; if(y===lastY) return; lastY=y; const vh=innerHeight||1; const t=-18*Math.min(1,y/(vh*0.9)); heroText.style.transform=`translateY(${t}vh)`; }
     addEventListener('scroll', onScroll, {passive:true}); onScroll();
     document.getElementById('year').textContent = new Date().getFullYear();
   })();
 
-  // Default content
+  // Oletussisältö
   const defaultContent = {
     hero:{ headline:"LIIAN RUMAT OLLAKSEEN TOTTA" },
     paypalBusiness:"",
@@ -283,7 +298,7 @@
   }
 
   function applyContent(d){
-    // Hero + texts
+    // Hero + tekstit
     if(d?.hero?.headline) document.querySelector('#hero-text h1').textContent = d.hero.headline;
     if(d?.pitch) document.getElementById('intro-text').textContent = d.pitch;
     if(d?.story) document.getElementById('story').textContent = d.story;
@@ -293,7 +308,7 @@
     if(d?.contact?.instagram){ const ig=$('#igLink'); ig.href=d.contact.instagram; }
     if(d?.contact?.location){ $('#location').textContent = d.contact.location; }
 
-    // Embeds (IG iframe src + TikTok blockquote attribuutit)
+    // Upotukset
     if(d?.embed?.instagramPost) $('#igEmbed').src = d.embed.instagramPost;
     if(d?.embed?.tiktokVideo){
       const id = parseTikTokId(d.embed.tiktokVideo);
@@ -304,22 +319,20 @@
       }
     }
 
-    // Products
+    // Tuotteet & toimitus
     renderProducts(d.products || defaultContent.products);
-
-    // Blog
-    renderBlog(d.blog || defaultContent.blog);
-
-    // Shipping UI + footer info
     const methods = d?.payment?.shipping?.methods || defaultContent.payment.shipping.methods;
     const defId   = d?.payment?.shipping?.defaultMethodId || methods[0]?.id;
     renderShipping(methods, defId);
 
-    // PayPal warn
+    // Blogi
+    renderBlog(d.blog || defaultContent.blog);
+
+    // PayPal-varoitus
     $('#paypalWarn').textContent = d.paypalBusiness ? "" : "Aseta PayPal-sähköposti backendissä (ADMIN) ennen julkaisuversiota.";
   }
 
-  // Products
+  // Tuotelistaus
   function renderProducts(list){
     const root = document.getElementById('productsRoot');
     root.innerHTML = "";
@@ -369,7 +382,7 @@
     });
   }
 
-  // Blog
+  // Blogi
   function renderBlog(posts){
     const root = document.getElementById('blogRoot');
     root.innerHTML='';
@@ -383,7 +396,7 @@
     });
   }
 
-  // Cart (one price; shipping chosen in cart)
+  // Ostoskori
   const $cart   = $('#cartDrawer');
   const $items  = $('#cartItems');
   const $open   = $('#openCart');
@@ -491,7 +504,7 @@
     modal.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // WebGL Revontulet
+  // WebGL Revontulet (kiinteä tausta)
   (function(){
     const SETTINGS = { PAL_COL1:[0.02,0.70,0.95], PAL_COL2:[0.00,1.00,0.60], BRIGHTNESS:1.05, CURTAIN_Y:0.52, HEIGHT:0.50, SPEED:0.22, STRIPE_STRENGTH:0.45, STAR_DENS:0.04 };
     function init(){
@@ -500,9 +513,6 @@
       const gl = canvas.getContext('webgl',{antialias:false,depth:false,stencil:false,preserveDrawingBuffer:false});
       if(!gl){ canvas.style.background='linear-gradient(#0a1e2a,#0b3824)'; return; }
       const DPR=Math.min(devicePixelRatio||1,2);
-      const resize=()=>{ const w=canvas.clientWidth||canvas.parentElement.clientWidth, h=canvas.clientHeight||canvas.parentElement.clientHeight||innerHeight;
-        const dw=Math.floor(w*DPR), dh=Math.floor(h*DPR); if(canvas.width!==dw||canvas.height!==dh){ canvas.width=dw; canvas.height=dh; gl.viewport(0,0,dw,dh); } };
-      new ResizeObserver(resize).observe(canvas);
       const vert=`attribute vec2 a_pos; void main(){ gl_Position=vec4(a_pos,0.,1.); }`;
       const frag=`precision highp float; uniform vec2 u_res; uniform float u_time,u_brightness,u_y,u_height,u_speed,u_stripes,u_star; uniform vec3 u_c1,u_c2;
       float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);} float noise(vec2 p){vec2 i=floor(p),f=fract(p);
@@ -517,7 +527,7 @@
         float g=0.; g+=band*.25; g+=fbm(vec2(suv.x*2.-t*.6,suv.y*2.))*.15; col += pal*g*1.2;
         float st=stars(uv); col+=vec3(st)*.55; col*=u_brightness; float v=smoothstep(1.45,.85,length(uv-.5)); col*=mix(.88,1.,v);
         gl_FragColor=vec4(col,1.); }`;
-      const sh=(t,s)=>{const o=gl.createShader(t); gl.shaderSource(o,s); gl.compileShader(o); if(!gl.getShaderParameter(o,gl.COMPILE_STATUS)){console.error(gl.getShaderInfoLog(o));return null;} return o;};
+      const sh=(t,s)=>{const o=gl.createShader(t); gl.shaderSource(o,s); gl.compileShader(o); if(!gl.getShaderParameter(o,gl.COMPLETE_STATUS)&&!gl.getShaderParameter(o,gl.COMPILE_STATUS)){console.error(gl.getShaderInfoLog(o));return null;} return o;};
       const prog=gl.createProgram(); gl.attachShader(prog,sh(gl.VERTEX_SHADER,vert)); gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,frag)); gl.linkProgram(prog);
       if(!gl.getProgramParameter(prog,gl.LINK_STATUS)){ console.error(gl.getProgramInfoLog(prog)); return; }
       gl.useProgram(prog);
@@ -533,7 +543,7 @@
         gl.uniform3fv(uC1,SETTINGS.PAL_COL1); gl.uniform3fv(uC2,SETTINGS.PAL_COL2); };
       const frame=now=>{ const t=now*0.001; uniforms(t); gl.drawArrays(gl.TRIANGLES,0,3); requestAnimationFrame(frame); };
       const ro=new ResizeObserver(()=>{ const DPR=Math.min(devicePixelRatio||1,2);
-        const w=canvas.clientWidth||canvas.parentElement.clientWidth, h=canvas.clientHeight||canvas.parentElement.clientHeight||innerHeight;
+        const w=canvas.clientWidth||canvas.parentElement.clientWidth||innerWidth, h=canvas.clientHeight||canvas.parentElement.clientHeight||innerHeight;
         const dw=Math.floor(w*DPR), dh=Math.floor(h*DPR); if(canvas.width!==dw||canvas.height!==dh){ canvas.width=dw; canvas.height=dh; gl.viewport(0,0,dw,dh); }
       }); ro.observe(canvas);
       requestAnimationFrame(frame);
@@ -545,7 +555,7 @@
   loadContent();
   </script>
 
-  <!-- TikTok embed (virallinen) -->
+  <!-- TikTok embed -->
   <script async src="https://www.tiktok.com/embed.js"></script>
 </body>
 </html>
