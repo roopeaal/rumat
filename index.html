@@ -508,7 +508,7 @@
     modal.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // ===== WebGL Revontulet – vain herossa, ei liiku skrollissa =====
+  // ===== WebGL Revontulet – JÄÄDYTETTY (ei sisäistä liikettä) =====
   (function(){
     const SETTINGS = {
       PAL_COL1:[0.02,0.70,0.95],
@@ -516,56 +516,82 @@
       BRIGHTNESS:1.00,
       CURTAIN_Y:0.55,
       HEIGHT:0.52,
-      SPEED:0.18,
-      STRIPE_STRENGTH:0.36,
-      STAR_DENS:0.008   // pienempi -> vähemmän “rakeita”
+      SPEED:0.00,           // 0 = ei virtausta
+      STRIPE_STRENGTH:0.00, // 0 = ei raitojen liikettä
+      STAR_DENS:0.006       // harvemmat tähdet
     };
+
     function init(){
       const canvas = document.getElementById('auroraCanvas'); if(!canvas) return;
-      const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches; if(prefersReduced) SETTINGS.SPEED*=0.35;
       const gl = canvas.getContext('webgl',{antialias:false,depth:false,stencil:false,preserveDrawingBuffer:false});
       if(!gl){ canvas.style.background='linear-gradient(#0a1e2a,#0b3824)'; return; }
+
       const vert=`attribute vec2 a_pos; void main(){ gl_Position=vec4(a_pos,0.,1.); }`;
       const frag=`precision highp float; uniform vec2 u_res; uniform float u_time,u_brightness,u_y,u_height,u_speed,u_stripes,u_star; uniform vec3 u_c1,u_c2;
-      float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);} float noise(vec2 p){vec2 i=floor(p),f=fract(p);
-      float a=hash(i),b=hash(i+vec2(1,0)),c=hash(i+vec2(0,1)),d=hash(i+vec2(1,1)); vec2 u=f*f*(3.-2.*f); return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}
+      float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
+      float noise(vec2 p){vec2 i=floor(p),f=fract(p); float a=hash(i),b=hash(i+vec2(1,0)),c=hash(i+vec2(0,1)),d=hash(i+vec2(1,1));
+        vec2 u=f*f*(3.-2.*f); return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}
       float fbm(vec2 p){float v=0.,a=0.5;for(int i=0;i<5;i++){v+=a*noise(p);p*=2.03;a*=0.48;}return v;}
-      float stars(vec2 uv){vec2 p=floor(uv*900.);float rnd=hash(p);float s=step(1.-u_star,rnd);float tw=.5+.5*sin(u_time*2.+rnd*6.2831);return s*tw;}
-      void main(){vec2 uv=gl_FragCoord.xy/u_res.xy, suv=vec2(uv.x*(u_res.x/u_res.y),uv.y); vec3 col=vec3(.02,.06,.12);
-        float band=1.-smoothstep(0.,u_height,abs(uv.y-u_y)); float t=u_time*u_speed;
+      float stars(vec2 uv){ vec2 p=floor(uv*900.); float rnd=hash(p); return step(1.-u_star,rnd); } // ei twinkleä
+      void main(){
+        vec2 uv=gl_FragCoord.xy/u_res.xy, suv=vec2(uv.x*(u_res.x/u_res.y),uv.y);
+        vec3 col=vec3(.02,.06,.12);
+        float band=1.-smoothstep(0.,u_height,abs(uv.y-u_y));
+        float t=u_time*u_speed; // u_time=0 → staattinen
         float flow=fbm(vec2(suv.x*1.6 - t, suv.y*1.2 + t*.35));
         float stripes=smoothstep(.35,1., fbm(vec2(suv.x*10.+t*1.2,t*2.)))*u_stripes;
         float inten=band*(.52+.72*flow)+stripes*band;
         float skyfade=smoothstep(0.,.25,uv.y); inten*=skyfade;
         vec3 pal=mix(u_c1,u_c2, clamp(uv.y + 0.25*flow,0.,1.));
         col=mix(col,pal, clamp(inten*1.22,0.,1.));
-        float g=0.; g+=band*.23; g+=fbm(vec2(suv.x*2.-t*.6,suv.y*2.))*.13; col += pal*g*1.15;
-        float st=stars(uv); col+=vec3(st)*.45; col*=u_brightness;
-        float v=smoothstep(1.45,.85,length(uv-.5)); col*=mix(.9,1.,v);
-        gl_FragColor=vec4(col,1.); }`;
-      const sh=(t,s)=>{const o=gl.createShader(t); gl.shaderSource(o,s); gl.compileShader(o); if(!gl.getShaderParameter(o,gl.COMPILE_STATUS)){console.error(gl.getShaderInfoLog(o));return null;} return o;};
+        float g=0.; g+=band*.23; g+=fbm(vec2(suv.x*2.-t*.6,suv.y*2.))*.13; col += pal*g*1.05;
+        float st=stars(uv); col+=vec3(st)*.35; col*=u_brightness;
+        gl_FragColor=vec4(col,1.);
+      }`;
+
+      const sh=(t,s)=>{const o=gl.createShader(t); gl.shaderSource(o,s); gl.compileShader(o);
+        if(!gl.getShaderParameter(o,gl.COMPILE_STATUS)){console.error(gl.getShaderInfoLog(o));} return o;};
       const prog=gl.createProgram(); gl.attachShader(prog,sh(gl.VERTEX_SHADER,vert)); gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,frag)); gl.linkProgram(prog);
       if(!gl.getProgramParameter(prog,gl.LINK_STATUS)){ console.error(gl.getProgramInfoLog(prog)); return; }
       gl.useProgram(prog);
+
       const buf=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,buf); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
       const aPos=gl.getAttribLocation(prog,'a_pos'); gl.enableVertexAttribArray(aPos); gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
+
       const uRes=gl.getUniformLocation(prog,'u_res'), uTime=gl.getUniformLocation(prog,'u_time'), uBr=gl.getUniformLocation(prog,'u_brightness'),
             uY=gl.getUniformLocation(prog,'u_y'), uH=gl.getUniformLocation(prog,'u_height'), uSpd=gl.getUniformLocation(prog,'u_speed'),
             uStr=gl.getUniformLocation(prog,'u_stripes'), uStar=gl.getUniformLocation(prog,'u_star'),
             uC1=gl.getUniformLocation(prog,'u_c1'), uC2=gl.getUniformLocation(prog,'u_c2');
-      const uniforms = t=>{ gl.uniform2f(uRes,canvas.width,canvas.height); gl.uniform1f(uTime,t);
-        gl.uniform1f(uBr,SETTINGS.BRIGHTNESS); gl.uniform1f(uY,SETTINGS.CURTAIN_Y); gl.uniform1f(uH,SETTINGS.HEIGHT);
-        gl.uniform1f(uSpd,SETTINGS.SPEED); gl.uniform1f(uStr,SETTINGS.STRIPE_STRENGTH); gl.uniform1f(uStar,SETTINGS.STAR_DENS);
-        gl.uniform3fv(uC1,SETTINGS.PAL_COL1); gl.uniform3fv(uC2,SETTINGS.PAL_COL2); };
-      const frame=now=>{ uniforms(now*0.001); gl.drawArrays(gl.TRIANGLES,0,3); requestAnimationFrame(frame); };
+
+      function uniforms(t){
+        gl.uniform2f(uRes,canvas.width,canvas.height);
+        gl.uniform1f(uTime,t);
+        gl.uniform1f(uBr,SETTINGS.BRIGHTNESS);
+        gl.uniform1f(uY,SETTINGS.CURTAIN_Y);
+        gl.uniform1f(uH,SETTINGS.HEIGHT);
+        gl.uniform1f(uSpd,SETTINGS.SPEED);
+        gl.uniform1f(uStr,SETTINGS.STRIPE_STRENGTH);
+        gl.uniform1f(uStar,SETTINGS.STAR_DENS);
+        gl.uniform3fv(uC1,SETTINGS.PAL_COL1);
+        gl.uniform3fv(uC2,SETTINGS.PAL_COL2);
+      }
+
+      function render(t){
+        uniforms(t);
+        gl.drawArrays(gl.TRIANGLES,0,3);
+      }
+
       const ro=new ResizeObserver(()=>{ const DPR=Math.min(devicePixelRatio||1,2);
-        const rect = canvas.getBoundingClientRect();
-        const dw=Math.floor(rect.width*DPR), dh=Math.floor(rect.height*DPR);
+        const rect=canvas.getBoundingClientRect(); const dw=Math.floor(rect.width*DPR), dh=Math.floor(rect.height*DPR);
         if(canvas.width!==dw||canvas.height!==dh){ canvas.width=dw; canvas.height=dh; gl.viewport(0,0,dw,dh); }
+        render(0.0); // piirrä uudelleen vain koon muuttuessa
       });
       ro.observe(canvas);
-      requestAnimationFrame(frame);
+
+      // Piirrä KERRAN → täysin staattinen
+      render(0.0);
     }
+
     if(document.readyState==='loading') addEventListener('DOMContentLoaded',init,{once:true}); else init();
   })();
 
