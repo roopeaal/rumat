@@ -50,12 +50,12 @@
     }
     #hero-text{ position:relative; z-index:2; }
 
-    /* Sivun alareunan siluetti (metsäisempi) auroran päällä */
+    /* Sivun alareunan siluetti – KOROTETTU (160px), vuoret + suuremmat kuuset */
     .bottom-sil{
-      position:fixed; left:0; right:0; bottom:-1px; height:120px;
+      position:fixed; left:0; right:0; bottom:-1px; height:160px;
       z-index:1; pointer-events:none;
-      mask-image: linear-gradient(to top, black 70%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to top, black 70%, transparent 100%);
+      mask-image: linear-gradient(to top, black 72%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to top, black 72%, transparent 100%);
     }
     .bottom-sil svg{ width:100%; height:100%; display:block; }
     .smoke{ animation:smoke 6s ease-in-out infinite; transform-origin:center; opacity:.6 }
@@ -84,62 +84,74 @@
   <!-- KIINTEÄ REVONTULI-TAUSTA -->
   <canvas id="auroraCanvas" class="aurora-fixed"></canvas>
 
-  <!-- SIVUN ALAREUNAN SILUETTI (enemmän kuusia, vähemmän vuoria) -->
+  <!-- SIVUN ALAREUNAN SILUETTI – tunturimaisema: vuoria + suurempia kuusia -->
   <div class="bottom-sil" aria-hidden="true">
-    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
-      <!-- Matalat kumpareet -->
-      <path d="M0,100 
-               C160,98  320,102 480,100
-               C640,98  800,101 960,99
-               C1120,98 1280,101 1440,99
-               L1440,120 L0,120 Z"
+    <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
+      <!-- Kaukana: pehmeä tunturiselänne (matalampi, haalea) -->
+      <path d="M0,120 
+               C180,105 240,108 340,114 
+               C460,121 520,110 640,116
+               C760,122 880,108 1000,114
+               C1160,122 1280,110 1440,118
+               L1440,160 L0,160 Z"
+            fill="var(--silhouette)" opacity=".28"/>
+
+      <!-- Keskietäisyys: selkeämpi tunturiketju (muutama huippu, mutta loivat) -->
+      <path d="M0,122
+               C120,118 190,110 260,118
+               C340,126 420,106 500,116
+               C580,126 670,108 760,120
+               C850,132 980,110 1100,118
+               C1220,126 1330,112 1440,120
+               L1440,160 L0,160 Z"
+            fill="var(--silhouette)" opacity=".44"/>
+
+      <!-- Lähin maa/harjanne (tummaa täyttöä) -->
+      <path d="M0,130 
+               C160,128  320,132 480,130
+               C640,128  800,131 960,129
+               C1120,128 1280,131 1440,129
+               L1440,160 L0,160 Z"
             fill="var(--silhouette)"/>
-      <!-- Kuusikko (paljon puita eri kokoina) -->
+
+      <!-- Kuusikko: suurempia puita etualalle (kolmiopolut) -->
       <g fill="var(--silhouette)">
-        <!-- vasen ryhmä -->
-        <path d="M40,102 l10,-18 l10,18 z"/>
-        <path d="M70,101 l12,-20 l12,20 z"/>
-        <path d="M105,103 l8,-14 l8,14 z"/>
-        <path d="M135,100 l12,-22 l12,22 z"/>
-        <path d="M168,102 l10,-18 l10,18 z"/>
-        <path d="M200,101 l11,-19 l11,19 z"/>
-        <path d="M232,103 l8,-15 l8,15 z"/>
-        <path d="M260,100 l13,-22 l13,22 z"/>
-        <path d="M294,102 l10,-18 l10,18 z"/>
-        <path d="M324,101 l11,-19 l11,19 z"/>
-        <!-- keskiryhmä -->
-        <path d="M560,102 l10,-18 l10,18 z"/>
-        <path d="M590,101 l12,-20 l12,20 z"/>
-        <path d="M622,103 l8,-14 l8,14 z"/>
-        <path d="M652,100 l12,-22 l12,22 z"/>
-        <path d="M684,102 l10,-18 l10,18 z"/>
-        <path d="M716,101 l11,-19 l11,19 z"/>
-        <path d="M748,103 l8,-15 l8,15 z"/>
-        <path d="M776,100 l13,-22 l13,22 z"/>
-        <path d="M810,102 l10,-18 l10,18 z"/>
-        <!-- oikea ryhmä -->
-        <path d="M1020,102 l10,-18 l10,18 z"/>
-        <path d="M1050,101 l12,-20 l12,20 z"/>
-        <path d="M1082,103 l8,-14 l8,14 z"/>
-        <path d="M1112,100 l12,-22 l12,22 z"/>
-        <path d="M1144,102 l10,-18 l10,18 z"/>
-        <path d="M1176,101 l11,-19 l11,19 z"/>
-        <path d="M1206,103 l8,-15 l8,15 z"/>
-        <path d="M1234,100 l13,-22 l13,22 z"/>
-        <path d="M1268,102 l10,-18 l10,18 z"/>
-        <path d="M1298,101 l11,-19 l11,19 z"/>
-        <path d="M1328,103 l8,-14 l8,14 z"/>
+        <!-- vasen ryhmä – isot kuuset -->
+        <path d="M40,132 l15,-30 l15,30 z"/>
+        <path d="M80,131 l18,-36 l18,36 z"/>
+        <path d="M126,133 l12,-24 l12,24 z"/>
+        <path d="M160,130 l20,-40 l20,40 z"/>
+        <path d="M206,132 l14,-28 l14,28 z"/>
+        <!-- keskiryhmä – vaihtelevia kokoja -->
+        <path d="M520,133 l14,-28 l14,28 z"/>
+        <path d="M560,131 l18,-36 l18,36 z"/>
+        <path d="M604,134 l12,-24 l12,24 z"/>
+        <path d="M640,130 l20,-40 l20,40 z"/>
+        <path d="M686,132 l14,-28 l14,28 z"/>
+        <path d="M716,131 l18,-36 l18,36 z"/>
+        <path d="M760,133 l14,-28 l14,28 z"/>
+        <path d="M796,130 l20,-40 l20,40 z"/>
+        <!-- oikea ryhmä – harvempi -->
+        <path d="M1080,133 l14,-28 l14,28 z"/>
+        <path d="M1118,131 l18,-36 l18,36 z"/>
+        <path d="M1162,134 l12,-24 l12,24 z"/>
+        <path d="M1196,130 l20,-40 l20,40 z"/>
+        <path d="M1242,132 l14,-28 l14,28 z"/>
+        <path d="M1280,131 l18,-36 l18,36 z"/>
+        <path d="M1324,133 l14,-28 l14,28 z"/>
       </g>
-      <!-- Mökki -->
+
+      <!-- Pieni mökki etualalla -->
       <g fill="var(--silhouette)">
-        <rect x="1185" y="83" width="34" height="16" rx="1"/>
-        <path d="M1180,83 L1202,70 L1224,83 Z"/>
-        <rect x="1206" y="72" width="5" height="10"/>
+        <rect x="1205" y="123" width="36" height="18" rx="1"/>
+        <path d="M1200,124 L1223,110 L1246,124 Z"/>
+        <rect x="1228" y="112" width="6" height="11"/>
       </g>
-      <!-- Savu -->
+
+      <!-- Kevyt savu -->
       <g fill="#9fb1a9">
-        <circle class="smoke" cx="1209" cy="68" r="2.6"/>
-        <circle class="smoke s2" cx="1212" cy="64" r="2.0"/>
+        <circle class="smoke" cx="1231" cy="108" r="2.8"/>
+        <circle class="smoke s2" cx="1235" cy="103" r="2.2"/>
       </g>
     </svg>
   </div>
@@ -178,7 +190,7 @@
         <h1 class="serif font-semibold tracking-[0.08em]
                    text-[clamp(22px,4.8vw,58px)]
                    drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
-          LIIAN RUMAT OLLAKSEEN TOTTA
+          Liian rumat ollakseen totta
         </h1>
         <div class="mt-8 flex justify-center">
           <div class="h-24 w-24 sm:h-28 sm:w-28 grid place-items-center rounded-full bg-white/92 ring-1 ring-white/70 shadow-soft">
