@@ -14,13 +14,9 @@
 
   <style>
     :root{
-      --brand-green: #0E2016;  /* headerin tumma vihreä */
-      --footer-black:#0B0F0E;  /* aiempi musta footer */
-      --ink:#202020;
-      --ivory:#F6F6F4;
-      --mist:#DEEEEE;
+      --footer-black:#0B0F0E;
       --olive:#A1A266;
-      --slate:#789FAB;
+      --ivory:#F6F6F4;
     }
     html,body{height:100%}
     body{
@@ -35,13 +31,6 @@
       position:fixed; inset:0; z-index:-2; display:block; width:100vw; height:100vh;
     }
 
-    /* Siluetti hero-osion alareunaan */
-    .silhouette-wrap{
-      position:absolute; left:0; right:0; bottom:0;
-      height:min(34vh, 380px);
-      pointer-events:none;
-      z-index:0;
-    }
     .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
     .btn{border-radius:9999px;padding:.6rem 1rem;border:1px solid rgb(214 211 209);
          transition:transform .06s ease, box-shadow .12s ease, background-color .15s;}
@@ -51,19 +40,18 @@
 
     /* Header background fade kun skrollataan */
     #header-bg{transition:background-color .25s ease, border-color .25s ease, border-bottom-width .25s ease;}
-
     /* Hero-tekstin kevyt nousu */
     #hero-text{transition:transform .12s ease-out;}
 
     /* Some upotusten yhtenäiset kortit */
     .embed-card{
-      width:100%; aspect-ratio: 1 / 1.25; /* yhtenäinen mitta IG & TikTok */
+      width:100%; aspect-ratio: 1 / 1.25;
       border:1px solid rgba(0,0,0,.12); border-radius:1rem; overflow:hidden; background:#fff;
     }
     .embed-card iframe{width:100%; height:100%; border:0;}
     .embed-card blockquote{margin:0;}
 
-    /* Cart-pohja (pieni, toimiva demoksi) */
+    /* Cart-pohja */
     .cart-backdrop{position:fixed; inset:0; background:rgba(0,0,0,.45); display:none; z-index:60;}
     .cart-panel{position:fixed; right:0; top:0; bottom:0; width:min(420px,92vw); background:#fff; box-shadow:-8px 0 24px rgba(0,0,0,.15); transform:translateX(100%); transition:transform .28s ease; z-index:61;}
     .cart-open .cart-backdrop{display:block;}
@@ -80,7 +68,7 @@
     <div id="header-bg" class="absolute inset-0 bg-stone-900/40 backdrop-blur-[2px] border-b border-stone-200/0"></div>
     <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
       <a href="#etusivu" class="flex items-center gap-3">
-        <!-- Pyöreä brändilogo -->
+        <!-- UUSI PYÖREÄ LOGO -->
         <img src="assets/logo-round.svg" alt="RUMAT.STUDIO" class="h-9 w-9 rounded-full ring-1 ring-stone-300/60 bg-white/90 object-cover" loading="eager" decoding="async">
         <span class="hidden sm:inline text-sm uppercase tracking-wide font-semibold">RUMAT.STUDIO</span>
       </a>
@@ -100,45 +88,6 @@
 
   <!-- ===== HERO ===== -->
   <section id="etusivu" class="relative h-[100svh] grid place-items-center text-stone-50 px-4">
-    <!-- Siluetti hero-osion alareunassa -->
-    <div class="silhouette-wrap">
-      <svg viewBox="0 0 1200 400" preserveAspectRatio="none" width="100%" height="100%">
-        <!-- Horisontti (tumma) -->
-        <rect x="0" y="260" width="1200" height="140" fill="#0A0D0C"></rect>
-
-        <!-- Tunturilinja (pehmeä aalto) -->
-        <path d="M0,260 C150,220 250,240 380,220 C510,200 640,240 780,210 C940,175 1080,230 1200,205 L1200,260 L0,260 Z"
-              fill="#0A0D0C"></path>
-
-        <!-- Kuuset (isompia, ilman runkoja, yhdistyvät horisonttiin) -->
-        <g fill="#0A0D0C">
-          <!-- ryhmä 1 -->
-          <path d="M80 250 l40 -80 l40 80 Z"></path>
-          <path d="M140 255 l36 -70 l36 70 Z"></path>
-          <path d="M210 252 l48 -96 l48 96 Z"></path>
-
-          <!-- ryhmä 2 -->
-          <path d="M420 256 l42 -84 l42 84 Z"></path>
-          <path d="M486 252 l34 -68 l34 68 Z"></path>
-          <path d="M540 258 l50 -100 l50 100 Z"></path>
-
-          <!-- ryhmä 3 -->
-          <path d="M780 250 l44 -88 l44 88 Z"></path>
-          <path d="M848 255 l36 -72 l36 72 Z"></path>
-          <path d="M910 248 l56 -112 l56 112 Z"></path>
-        </g>
-
-        <!-- Pieni mökki (ilman ikkunoita/ääriä) – nostettu ylemmäs ja näkyvissä -->
-        <g fill="#0A0D0C" transform="translate(630,200)">
-          <rect x="0" y="0" width="90" height="55"></rect>
-          <polygon points="0,0 45,-28 90,0"></polygon>
-          <!-- matala savupiippu -->
-          <rect x="62" y="-18" width="10" height="14"></rect>
-        </g>
-      </svg>
-    </div>
-
-    <!-- Hero-tekstit -->
     <div id="hero-text" class="relative z-10 text-center">
       <h1 class="uppercase font-semibold tracking-[0.22em]
                  text-[clamp(24px,5.4vw,68px)]
@@ -148,6 +97,7 @@
       <div class="mt-8 flex justify-center">
         <div class="h-24 w-24 sm:h-28 sm:w-28 grid place-items-center
                     rounded-full bg-white/92 ring-1 ring-white/70 shadow-soft">
+          <!-- UUSI PYÖREÄ LOGO HERO-YMPYRÄÄN -->
           <img src="assets/logo-round.svg" alt="RUMAT.STUDIO" class="h-14 w-14 rounded-full object-cover">
         </div>
       </div>
@@ -219,10 +169,9 @@
       <div class="grid md:grid-cols-2 gap-6">
         <!-- Instagram (esimerkkipostaus) -->
         <div class="embed-card">
-          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DMXVRgGC1Bv/" data-instgrm-version="14" style="background:#fff;">
-          </blockquote>
+          <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DMXVRgGC1Bv/" data-instgrm-version="14" style="background:#fff;"></blockquote>
         </div>
-        <!-- TikTok – korjattu embed v2 -->
+        <!-- TikTok – embed v2 -->
         <div class="embed-card">
           <iframe
             src="https://www.tiktok.com/embed/v2/video/7525414518562753814?lang=fi-FI"
@@ -309,7 +258,7 @@
         <button id="clear-cart" class="btn">Tyhjennä</button>
         <button id="checkout" class="btn btn-olive">Jatka kassalle</button>
       </div>
-      <p class="mt-2 text-xs text-stone-500">Kassa-ohje: tällä demolla kassalla pyydetään sinua vahvistamaan tilaus sähköpostitse.</p>
+      <p class="mt-2 text-xs text-stone-500">Demo: lisäämme oikean kassaratkaisun, kun haluat.</p>
     </div>
   </aside>
 
@@ -317,7 +266,7 @@
   <script async src="https://www.instagram.com/embed.js"></script>
 
   <script>
-    // ===== Headerin tausta vahvistuu kevyesti scrollissa & hero-tekstin pehmeä nousu
+    // ===== Headerin tausta & hero-tekstin pehmeä nousu
     const headerBg = document.getElementById('header-bg');
     const heroText = document.getElementById('hero-text');
     let lastY = -1;
@@ -384,18 +333,15 @@
 
     document.querySelectorAll('input[name="ship"]').forEach(r=>r.onchange=renderCart);
     el('clear-cart').onclick = ()=>{ cart.splice(0,cart.length); renderCart(); };
-    el('checkout').onclick = ()=>{
-      alert('Demo-kassa: lähetä tilaus sähköpostitse hello@rumat.fi – lisäämme oikean kassaratkaisun, kun haluat.');
-    };
+    el('checkout').onclick = ()=>{ alert('Demo-kassa: viimeistelemme maksutavan kun haluat.'); };
 
-    // Cart drawer open/close
     const openCart = ()=>{ document.body.classList.add('cart-open'); renderCart(); }
     const closeCart = ()=>{ document.body.classList.remove('cart-open'); }
     el('open-cart').onclick = openCart;
     el('close-cart').onclick = closeCart;
     el('cart-backdrop').onclick = closeCart;
 
-    // ===== WebGL Revontulet – kiinteä, pehmeä, vähemmän rakeisuutta
+    // ===== WebGL Revontulet – kiinteä, pehmeä
     (function(){
       const SETTINGS = {
         PAL_COL1:[0.02,0.70,0.95],
@@ -441,23 +387,19 @@
           float aspect = res.x/res.y;
           vec2 p = vec2(uv.x*aspect, uv.y);
 
-          // verhot
           float base = fbm(vec2(p.x*1.6, p.y*1.2 + t*sp));
           float wave = fbm(vec2(p.x*0.6 + t*0.06, p.y*0.8 - t*0.04));
           float curtain = smoothstep(cy+h, cy, p.y + 0.15*wave - 0.10*base);
 
-          // hillitty pystyraita
           float stripes = pow(0.5+0.5*sin((p.x*3.1415*3.0) + t*0.8), 3.0) * stripe;
 
           vec3 col = mix(c1, c2, clamp(0.2 + 0.8*base + stripes, 0.0, 1.0));
           col *= (0.6 + 0.4*curtain);
           col *= bright;
 
-          // pehmeä vignette
           float d = distance(uv, vec2(0.5));
           col *= 0.6 + 0.4*smoothstep(0.95, 0.2, d);
 
-          // vähän “tähtiä” (harva, pieni)
           float st = step(1.0 - stars, fract(sin(dot(uv*res.xy + t*10.0, vec2(12.9898,78.233))) * 43758.5453));
           col += st * 0.08;
 
