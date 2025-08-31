@@ -47,17 +47,17 @@
     #hero-text{ position:relative; z-index:2; }
 
     /* ——— Siluetti esittelyosion mukana ——— */
-    .section-sil-wrap{ position:relative; }
+    .section-sil-wrap{ position:relative; z-index:10; }  /* nostetaan yli heron */
     .section-sil{
-      position:absolute; left:0; right:0; top:calc(var(--sil-height) * -1);
-      height:var(--sil-height);
-      display:block; pointer-events:none;
-      /* pehmeä yläreuna */
-      mask-image:linear-gradient(to top, black 78%, transparent 100%);
-      -webkit-mask-image:linear-gradient(to top, black 78%, transparent 100%);
-      z-index:3; /* yli heron overlayn (z:1) */
+      position:absolute; left:0; right:0;
+      top: calc(-1 * var(--sil-height));                 /* varma negatiivinen siirto */
+      height: var(--sil-height);
+      pointer-events:none;
+      mask-image: linear-gradient(to top, black 78%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to top, black 78%, transparent 100%);
+      z-index: 11;                                       /* yli hero overlayn */
     }
-    .section-body{ position:relative; z-index:4; } /* teksti siluetin päällä */
+    .section-body{ position:relative; z-index:12; }      /* teksti siluetin päällä */
 
     /* Drawer & Modal */
     .drawer{position:fixed;inset:0;z-index:60;display:none}
@@ -120,8 +120,8 @@
       </div>
     </section>
 
-    <!-- Esittely (siluetti kiinni tämän osion yläreunassa, näkyy heron alareunassa aloituksessa) -->
-    <section class="py-12 bg-white">
+    <!-- Esittely (siluetti näkyy heti aloituksessa, nousee osion mukana) -->
+    <section class="py-12 bg-white relative z-10">
       <div class="section-sil-wrap">
         <!-- Siluetti -->
         <svg class="section-sil" viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden="true">
@@ -642,8 +642,6 @@
   })();
 
   // ===== Start =====
-  const defaultTikTok = "https://www.tiktok.com/@rumat.studio/video/7525414518562753814";
-  function parseTikTokId(url){ const m=String(url||"").match(/video\/(\d+)/); return m?m[1]:null; }
   loadContent();
   </script>
 </body>
