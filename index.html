@@ -14,94 +14,60 @@
 
   <style>
     :root{
-      --nav-green:#0E2016;            /* yläpalkki */
-      --ink:#202020;                   /* tumma teksti */
-      --ivory:#F6F6F4;                /* lämmin valkoinen */
-      --band:#DEEEEE;                 /* kokolevyiset esittelypalkit */
-      --card:#F6F6F4;                 /* kuvakorttien tausta */
-      --accent:#A1A266;               /* oliivi aksentti */
-      --footer:#0B0F0E;               /* footerin tumma */
-      --grainAlpha: .05;              /* rakeen läpinäkyvyys */
-      --grainAlphaMobile: .03;        /* mobiilissa vielä pienempi */
+      --nav-green:#0E2016;
+      --ink:#202020;
+      --ivory:#F6F6F4;
+      --band:#DEEEEE;
+      --card:#F6F6F4;
+      --accent:#A1A266;
+      --footer:#0B0F0E;
+      --grainAlpha:.05;
+      --grainAlphaMobile:.03;
     }
-    body{ font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;background:var(--ivory);color:#1f2937; }
-
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;background:var(--ivory);color:#1f2937}
     .serif{font-family:"Libre Baskerville",serif}
     .shadow-soft{box-shadow:0 8px 28px rgba(0,0,0,.12)}
-    .btn{border-radius:9999px;padding:.65rem 1.05rem;border:1px solid rgb(214 211 209);
-         transition:transform .06s ease, box-shadow .12s ease, background-color .15s;}
-    .btn:hover{ transform:translateY(-1px); box-shadow:0 8px 26px rgba(0,0,0,.12); }
-    .btn-dark{ background:var(--footer); color:#f8fafb; border-color:var(--footer); }
-    .btn-olive{ background:var(--accent); color:#202020; border-color:#8f945a; }
-    .chip{font-size:.78rem; padding:.28rem .6rem; border-radius:9999px; border:1px solid rgb(214 211 209); background:#fff; color:#374151;}
-    .chip-olive{ border-color:var(--accent); color:var(--accent); }
+    .btn{border-radius:9999px;padding:.65rem 1.05rem;border:1px solid rgb(214 211 209);transition:transform .06s ease, box-shadow .12s ease, background-color .15s}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 8px 26px rgba(0,0,0,.12)}
+    .btn-dark{background:var(--footer);color:#f8fafb;border-color:var(--footer)}
+    .btn-olive{background:var(--accent);color:#202020;border-color:#8f945a}
+    .chip{font-size:.78rem;padding:.28rem .6rem;border-radius:9999px;border:1px solid rgb(214 211 209);background:#fff;color:#374151}
+    .chip-olive{border-color:var(--accent);color:var(--accent)}
 
-    /* --- HERO LAYERING --- */
+    /* HERO tausta + revontuli-efekti */
     .hero-fixed{position:fixed;inset:0;z-index:-2;overflow:hidden}
     .hero-gradient{position:absolute;inset:0;background:
-      radial-gradient(1200px 600px at 50% -10%, rgba(41, 212, 182, .18), transparent 60%),
-      radial-gradient(1200px 700px at 50% 110%, rgba(0, 138, 116, .18), transparent 60%),
-      linear-gradient(180deg, #0b2430 0%, #0c2e3e 35%, #0b3f44 55%, #0b2d2b 100%)
-    }
-    .aurora-layer{position:absolute;left:-10vw;right:-10vw;height:70vh;
-      background:radial-gradient(80% 180% at 50% 10%, rgba(74, 255, 175, .25), rgba(0,0,0,0) 60%);
-      filter:blur(22px) saturate(120%);
-      animation: drift 18s ease-in-out infinite alternate;
-      mix-blend-mode:screen; opacity:.75;
-    }
-    .aurora-layer.l2{ top:22vh; height:70vh;
-      background:radial-gradient(90% 220% at 40% 0%, rgba(20, 255, 187, .25), rgba(0,0,0,0) 60%);
-      animation-duration: 26s; animation-delay:-8s; opacity:.70;
-    }
-    .aurora-layer.l3{ top:44vh; height:70vh;
-      background:radial-gradient(90% 240% at 60% 10%, rgba(40, 220, 255, .18), rgba(0,0,0,0) 60%);
-      animation-duration: 34s; animation-delay:-14s; opacity:.55;
-    }
-    @keyframes drift{
-      0%   { transform:translateY(0) translateX(-2%) skewY(-2deg); }
-      50%  { transform:translateY(-1.5%) translateX(2%)  skewY(2deg); }
-      100% { transform:translateY(0.5%) translateX(-1%) skewY(-1deg); }
-    }
+      radial-gradient(1200px 600px at 50% -10%, rgba(41,212,182,.18), transparent 60%),
+      radial-gradient(1200px 700px at 50% 110%, rgba(0,138,116,.18), transparent 60%),
+      linear-gradient(180deg,#0b2430 0%,#0c2e3e 35%,#0b3f44 55%,#0b2d2b 100%)}
+    .aurora-layer{position:absolute;left:-10vw;right:-10vw;height:70vh;background:radial-gradient(80% 180% at 50% 10%, rgba(74,255,175,.25), rgba(0,0,0,0) 60%);filter:blur(22px) saturate(120%);animation:drift 18s ease-in-out infinite alternate;mix-blend-mode:screen;opacity:.75}
+    .aurora-layer.l2{top:22vh;height:70vh;background:radial-gradient(90% 220% at 40% 0%, rgba(20,255,187,.25), rgba(0,0,0,0) 60%);animation-duration:26s;animation-delay:-8s;opacity:.70}
+    .aurora-layer.l3{top:44vh;height:70vh;background:radial-gradient(90% 240% at 60% 10%, rgba(40,220,255,.18), rgba(0,0,0,0) 60%);animation-duration:34s;animation-delay:-14s;opacity:.55}
+    @keyframes drift{0%{transform:translateY(0) translateX(-2%) skewY(-2deg)}50%{transform:translateY(-1.5%) translateX(2%) skewY(2deg)}100%{transform:translateY(.5%) translateX(-1%) skewY(-1deg)}}
+    .film{position:absolute;inset:-10vh 0 -10vh 0;pointer-events:none;mix-blend-mode:overlay;opacity:var(--grainAlpha)}
+    @media (max-width:820px){.film{opacity:var(--grainAlphaMobile)}}
+    .rain-lines{position:absolute;inset:0;background-image:
+      repeating-linear-gradient(180deg, rgba(255,255,255,.10) 0 1px, transparent 1px 110px),
+      repeating-linear-gradient(180deg, rgba(255,255,255,.06) 0 1px, transparent 1px 60px);
+      background-size:100% 130px,100% 90px;opacity:.12;filter:blur(.3px);animation:rain 14s linear infinite}
+    @keyframes rain{from{background-position:0 0,0 0}to{background-position:0 130px,0 90px}}
 
-    /* Hento pystysate/noise */
-    .film{position:absolute;inset:-10vh 0 -10vh 0; pointer-events:none; mix-blend-mode:overlay;
-          opacity:var(--grainAlpha);}
-    @media (max-width: 820px){
-      .film{ opacity: var(--grainAlphaMobile); }
-    }
-    .rain-lines{
-      position:absolute;inset:0;background-image:
-        repeating-linear-gradient(180deg, rgba(255,255,255,.10) 0 1px, transparent 1px 110px),
-        repeating-linear-gradient(180deg, rgba(255,255,255,.06) 0 1px, transparent 1px 60px);
-      background-size:100% 130px, 100% 90px;
-      opacity:.12; filter:blur(.3px);
-      animation: rain 14s linear infinite;
-    }
-    @keyframes rain{ from{background-position:0 0, 0 0} to{background-position:0 130px, 0 90px} }
+    /* lasimainen header */
+    .glass-header:before{content:"";position:absolute;inset:0;background:rgba(10,26,20,.88);border-bottom:1px solid rgba(255,255,255,.06);z-index:-1}
 
-    /* header */
-    .glass-header:before{
-      content:""; position:absolute; inset:0; background:rgba(10, 26, 20, .88);
-      border-bottom:1px solid rgba(255,255,255,.06); z-index:-1;
-    }
-
-    /* Cart drawer */
-    .drawer{ position:fixed; top:0; right:0; width:min(440px, 92vw); height:100vh; background:#fff;
-             box-shadow:-20px 0 50px rgba(0,0,0,.2); transform:translateX(100%); transition:transform .28s ease; z-index:60;}
-    .drawer.open{ transform:translateX(0); }
+    /* kori */
+    .drawer{position:fixed;top:0;right:0;width:min(440px,92vw);height:100vh;background:#fff;box-shadow:-20px 0 50px rgba(0,0,0,.2);transform:translateX(100%);transition:transform .28s ease;z-index:60}
+    .drawer.open{transform:translateX(0)}
     .cart-count{min-width:1.25rem;height:1.25rem;border-radius:9999px;display:inline-grid;place-items:center;background:#fff;color:#111;padding:0 .25rem;font-size:.75rem;font-weight:700}
 
-    /* Responsive embed wrappers */
+    /* sosiaalisten medioiden upotukset */
     .embed{position:relative;width:100%;border-radius:16px;overflow:hidden}
-    .embed-1x1{padding-top:100%}
-    .embed-9x16{padding-top:177.78%}
-    .embed iframe, .embed blockquote, .embed .tiktok-embed{position:absolute;top:0;left:0;width:100%;height:100%}
+    .embed-1x1{padding-top:100%}.embed-9x16{padding-top:177.78%}
+    .embed iframe,.embed blockquote,.embed .tiktok-embed{position:absolute;top:0;left:0;width:100%;height:100%}
   </style>
 </head>
-
 <body class="text-stone-900">
-
-  <!-- ===== FIXED HERO (ei liiku) ===== -->
+  <!-- HERO-tausta (pysyy paikallaan) -->
   <div class="hero-fixed" aria-hidden="true">
     <div class="hero-gradient"></div>
     <div class="aurora-layer l1"></div>
@@ -111,10 +77,10 @@
     <div class="rain-lines"></div>
   </div>
 
-  <!-- spacer navin alla -->
-  <div class="h-14 md:h-16 w-full" style="background:var(--nav-green); opacity:.92;"></div>
+  <!-- “yläpalkki-nauha”, joka nousee pois kuvan päältä -->
+  <div class="h-14 md:h-16 w-full" style="background:var(--nav-green);opacity:.92"></div>
 
-  <!-- ===== HEADER ===== -->
+  <!-- Header (logo+linkit jäävät) -->
   <header class="fixed top-0 left-0 right-0 z-50 text-white glass-header">
     <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
       <a href="#etusivu" class="flex items-center gap-3">
@@ -123,29 +89,25 @@
         </div>
         <span class="hidden sm:inline text-sm uppercase tracking-widest font-semibold drop-shadow">RUMAT.STUDIO</span>
       </a>
-
       <nav class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
-        <a href="#etusivu"   class="font-semibold hover:underline underline-offset-4">Etusivu</a>
-        <a href="#tuotteet"  class="font-semibold hover:underline underline-offset-4">Tuotteet</a>
-        <a href="#blogi"     class="font-semibold hover:underline underline-offset-4">Blogi</a>
-        <a href="#some"      class="font-semibold hover:underline underline-offset-4">Some</a>
-        <a href="#yhteys"    class="font-semibold hover:underline underline-offset-4">Yhteystiedot</a>
+        <a href="#etusivu" class="font-semibold hover:underline underline-offset-4">Etusivu</a>
+        <a href="#tuotteet" class="font-semibold hover:underline underline-offset-4">Tuotteet</a>
+        <a href="#blogi" class="font-semibold hover:underline underline-offset-4">Blogi</a>
+        <a href="#some" class="font-semibold hover:underline underline-offset-4">Some</a>
+        <a href="#yhteys" class="font-semibold hover:underline underline-offset-4">Yhteystiedot</a>
       </nav>
-
       <div class="justify-self-end">
         <button id="openCart" class="inline-flex items-center gap-2 rounded-full border border-white/30 px-3 py-1.5 bg-white/10 hover:bg-white/15">
-          <span>Kori</span>
-          <span id="cartCount" class="cart-count">0</span>
+          <span>Kori</span><span id="cartCount" class="cart-count">0</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- ===== HERO CONTENT (otsikko + logo keskitetään yhdessä) ===== -->
+  <!-- HERO: teksti + logo, jotka liikkuvat skrollin mukana (tausta fixed) -->
   <section id="etusivu" class="h-[calc(100vh-56px)] md:h-[calc(100vh-64px)] grid place-items-center text-stone-50 px-4">
     <div id="heroStack" class="text-center will-change-transform">
-      <h1 class="uppercase font-extrabold tracking-[0.30em]
-                 text-[clamp(20px,5.2vw,56px)]
+      <h1 class="uppercase font-extrabold tracking-[0.30em] text-[clamp(20px,5.2vw,56px)]
                  drop-shadow-[0_2px_20px_rgba(0,0,0,0.44)]">
         LIIAN RUMAT OLLAKSEEN TOTTA
       </h1>
@@ -157,17 +119,18 @@
     </div>
   </section>
 
-  <!-- ===== Intro (kokolevyinen tekstipalkki) ===== -->
+  <!-- Intro-esittely – PÄIVITETTY TEKSTI -->
   <section class="py-12" style="background:var(--band)">
     <div class="mx-auto max-w-3xl px-6 text-center">
-      <p class="text-xl sm:text-2xl">
-        Luonnosta syntynyt. Reissuissa testattu.
-Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – jotta sinulla on päälläsi jotain, joka istuu, hengittää ja kestää jokaisella askeleella.
+      <p class="text-xl sm:text-2xl">Luonnosta syntynyt. Reissuissa testattu.</p>
+      <p class="text-xl sm:text-2xl mt-2">
+        Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – jotta sinulla on päälläsi jotain,
+        joka istuu, hengittää ja kestää jokaisella askeleella.
       </p>
     </div>
   </section>
 
-  <!-- ===== TUOTTEET ===== -->
+  <!-- TUOTTEET -->
   <section id="tuotteet" class="py-14">
     <div class="mx-auto max-w-6xl px-4">
       <div class="flex items-center justify-between mb-6">
@@ -175,7 +138,7 @@ Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – 
         <div class="text-xs text-stone-500">Hinnat sis. ALV • Palautus 14 vrk</div>
       </div>
 
-      <!-- Tuote 1: LAUKKU -->
+      <!-- Tuote 1: Laukku -->
       <article class="mb-12">
         <div class="grid md:grid-cols-2 gap-4 md:gap-6">
           <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200" style="background:var(--card)">
@@ -193,16 +156,12 @@ Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – 
             Ulkomitat: 28 × 16 × 7 cm. Valmistettu Suomessa.
           </p>
           <div class="mt-2 font-semibold text-lg">€149,00</div>
-          <div class="mt-4">
-            <button class="btn btn-dark" data-add="laukku">Lisää koriin</button>
-          </div>
-          <div class="mt-3 text-sm text-stone-500">
-            Toimitustapa valitaan korissa (Nouto 0 € / Posti 6,90 €)
-          </div>
+          <div class="mt-4"><button class="btn btn-dark" data-add="laukku">Lisää koriin</button></div>
+          <div class="mt-3 text-sm text-stone-500">Toimitustapa valitaan korissa (Nouto 0 € / Posti 6,90 €)</div>
         </div>
       </article>
 
-      <!-- Tuote 2: PIPO -->
+      <!-- Tuote 2: Pipo -->
       <article class="mb-6">
         <div class="grid md:grid-cols-2 gap-4 md:gap-6">
           <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200" style="background:var(--card)">
@@ -216,83 +175,52 @@ Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – 
           <h3 class="serif text-2xl">RUMAT Pipo</h3>
           <p class="mt-1 text-stone-700 max-w-3xl mx-auto">Käsinneulottu mohair-sekoite. Korkeus n. 22 cm. Päänympärys 54–58 cm (joustava).</p>
           <div class="mt-2 font-semibold text-lg">€59,00</div>
-          <div class="mt-4">
-            <button class="btn btn-dark" data-add="pipo">Lisää koriin</button>
-          </div>
-          <div class="mt-3 text-sm text-stone-500">
-            Toimitustapa valitaan korissa (Nouto 0 € / Posti 6,90 €)
-          </div>
+          <div class="mt-4"><button class="btn btn-dark" data-add="pipo">Lisää koriin</button></div>
+          <div class="mt-3 text-sm text-stone-500">Toimitustapa valitaan korissa (Nouto 0 € / Posti 6,90 €)</div>
         </div>
       </article>
     </div>
   </section>
 
-  <!-- ===== BLOGI ===== -->
+  <!-- BLOGI -->
   <section id="blogi" class="py-16 bg-white">
     <div class="mx-auto max-w-3xl px-6">
       <h2 class="serif text-3xl mb-6">Blogi</h2>
-
       <article class="prose prose-stone max-w-none">
         <h3 class="!mt-0">Miksi RUMAT syntyi: “liian rumat ollakseen totta”</h3>
         <p class="text-sm text-stone-500">Julkaistu <time datetime="2025-08-31">31.8.2025</time></p>
-        <p>
-          RUMAT.STUDIO syntyi tarpeesta tehdä asioita hitaasti ja oikein. Emme halua piilottaa saumoja,
-          historiaa tai rehellisiä pintoja – vaan nostaa ne esiin. <em>Liian rumat ollakseen totta</em>
-          on meille lupaus: kun jokin näyttää tavalliselta, käännämme sen ympäri ja etsimme siitä uuden
-          kulman, paremman materiaalin ja pidemmän elinkaaren.
-        </p>
-        <p>
-          Ensimmäiset tuotteemme ovat laukku ja pipo. Laukussa käytämme kierrätettyä purjemateriaalia
-          ja turvavyötä, pipossa käsinneulottua sekoitetta – pieninä erinä, jotta jokainen kappale ehtii
-          hengittää. Tämä on pienen studion etuoikeus: jokainen tuote on henkilökohtainen.
-        </p>
-        <p>
-          Toivon, että tämä tarina näkyy myös sivuilla – pienissä yksityiskohdissa, jotka eivät selitä
-          itseään puhki. Kiitos että olet täällä.
-        </p>
+        <p>RUMAT.STUDIO syntyi tarpeesta tehdä asioita hitaasti ja oikein. Emme halua piilottaa saumoja, historiaa tai rehellisiä pintoja – vaan nostaa ne esiin. <em>Liian rumat ollakseen totta</em> on meille lupaus: kun jokin näyttää tavalliselta, käännämme sen ympäri ja etsimme siitä uuden kulman, paremman materiaalin ja pidemmän elinkaaren.</p>
+        <p>Ensimmäiset tuotteemme ovat laukku ja pipo. Laukussa käytämme kierrätettyä purjemateriaalia ja turvavyötä, pipossa käsinneulottua sekoitetta – pieninä erinä, jotta jokainen kappale ehtii hengittää. Tämä on pienen studion etuoikeus: jokainen tuote on henkilökohtainen.</p>
+        <p>Toivon, että tämä tarina näkyy myös sivuilla – pienissä yksityiskohdissa, jotka eivät selitä itseään puhki. Kiitos että olet täällä.</p>
       </article>
     </div>
   </section>
 
-  <!-- ===== SOME ===== -->
+  <!-- SOME -->
   <section id="some" class="py-16" style="background:var(--band)">
     <div class="mx-auto max-w-6xl px-4">
       <h2 class="serif text-3xl mb-6">Some</h2>
-
       <div class="grid md:grid-cols-2 gap-6">
-        <!-- Instagram post – käytetään julkista linkkiäsi -->
         <div>
           <div class="embed embed-1x1 bg-white">
-            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DMlK18qiE5O/" data-instgrm-version="14" style="margin:0 auto;">
-            </blockquote>
+            <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DMlK18qiE5O/" data-instgrm-version="14" style="margin:0 auto;"></blockquote>
           </div>
-          <div class="mt-2 text-sm">
-            Jos upotus ei lataudu, avaa <a class="underline" href="https://www.instagram.com/p/DMlK18qiE5O/" target="_blank" rel="noreferrer">Instagram-postaus</a>.
-          </div>
+          <div class="mt-2 text-sm">Jos upotus ei lataudu, avaa <a class="underline" href="https://www.instagram.com/p/DMlK18qiE5O/" target="_blank" rel="noreferrer">Instagram-postaus</a>.</div>
         </div>
-
-        <!-- TikTok video – linkkisi -->
         <div>
           <div class="embed embed-9x16 bg-white">
-            <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@rumat.studio/video/7525414518562753814" data-video-id="7525414518562753814" style="margin:0;">
-              <section></section>
-            </blockquote>
+            <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@rumat.studio/video/7525414518562753814" data-video-id="7525414518562753814" style="margin:0;"><section></section></blockquote>
           </div>
-          <div class="mt-2 text-sm">
-            Jos upotus ei lataudu, avaa <a class="underline" href="https://www.tiktok.com/@rumat.studio/video/7525414518562753814" target="_blank" rel="noreferrer">TikTok-video</a>.
-          </div>
+          <div class="mt-2 text-sm">Jos upotus ei lataudu, avaa <a class="underline" href="https://www.tiktok.com/@rumat.studio/video/7525414518562753814" target="_blank" rel="noreferrer">TikTok-video</a>.</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== YHTEYS / FOOTER ===== -->
+  <!-- FOOTER -->
   <footer id="yhteys" class="pt-14 text-[color:var(--ivory)]" style="background:var(--footer)">
     <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
-      <div>
-        <div class="uppercase tracking-wide">RUMAT.STUDIO</div>
-        <div class="text-sm mt-1 text-white/70">Helsinki — Contemporary textiles, built to last.</div>
-      </div>
+      <div><div class="uppercase tracking-wide">RUMAT.STUDIO</div><div class="text-sm mt-1 text-white/70">Helsinki — Contemporary textiles, built to last.</div></div>
       <div>
         <h5 class="text-sm text-white/70">Yhteys</h5>
         <ul class="mt-2 space-y-2 text-sm">
@@ -310,12 +238,10 @@ Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – 
         </ul>
       </div>
     </div>
-    <div class="py-8 text-center text-xs text-white/65">
-      © <span id="year"></span> RUMAT.STUDIO
-    </div>
+    <div class="py-8 text-center text-xs text-white/65">© <span id="year"></span> RUMAT.STUDIO</div>
   </footer>
 
-  <!-- ===== KORI (drawer) ===== -->
+  <!-- Kori (valinta toimitustavasta vasta korissa) -->
   <aside id="cart" class="drawer">
     <div class="h-16 flex items-center justify-between px-4 border-b">
       <div class="text-lg font-semibold">Kori</div>
@@ -323,192 +249,96 @@ Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – 
     </div>
     <div class="p-4 grid gap-4 h-[calc(100vh-8rem)] overflow-auto">
       <div id="cartItems" class="grid gap-3"></div>
-
       <div class="mt-2">
         <div class="text-sm font-semibold mb-1">Toimitustapa</div>
-        <label class="flex items-center gap-2 text-sm mb-1">
-          <input type="radio" name="ship" value="0" checked> Nouto (0 €)
-        </label>
-        <label class="flex items-center gap-2 text-sm">
-          <input type="radio" name="ship" value="6.90"> Posti (6,90 €)
-        </label>
+        <label class="flex items-center gap-2 text-sm mb-1"><input type="radio" name="ship" value="0" checked> Nouto (0 €)</label>
+        <label class="flex items-center gap-2 text-sm"><input type="radio" name="ship" value="6.90"> Posti (6,90 €)</label>
       </div>
-
       <div class="mt-2 border-t pt-3 text-sm">
         <div class="flex justify-between"><span>Välisumma</span><span id="sub">—</span></div>
         <div class="flex justify-between"><span>Toimitus</span><span id="ship">—</span></div>
         <div class="flex justify-between font-semibold text-lg mt-1"><span>Yhteensä</span><span id="total">—</span></div>
       </div>
-
       <div class="flex gap-2 mt-1">
         <button id="checkout" class="btn btn-olive flex-1">Maksa PayPalilla</button>
         <button id="clear" class="btn flex-1">Tyhjennä</button>
       </div>
-      <div class="text-[11px] text-stone-500">
-        Maksu toteutetaan PayPalin kautta yhtenä maksuna. Vaihda <code>business</code>-sähköposti omaan PayPal-tiliisi koodissa.
-      </div>
+      <div class="text-[11px] text-stone-500">Maksu toteutetaan PayPalin kautta yhtenä maksuna. Vaihda <code>business</code>-sähköposti omaan PayPal-tiliisi koodissa.</div>
     </div>
   </aside>
 
-  <!-- ===== Skriptit ===== -->
-  <!-- Instagram & TikTok embed-skriptit -->
+  <!-- Instagram & TikTok -->
   <script async src="https://www.instagram.com/embed.js"></script>
   <script async src="https://www.tiktok.com/embed.js"></script>
 
   <script>
-  // ---------- Hero scroll: vain tekstit + logo liikkuu, aurora on fixed ----------
-  (() => {
-    const stack = document.getElementById('heroStack');
-    let target = 0, current = 0;
+  /* Parallax: teksti+logo liikkuu, tausta fixed */
+  (()=>{const stack=document.getElementById('heroStack');let t=0,c=0;function onS(){const y=scrollY||0,h=innerHeight||1;t=-22*Math.min(1,y/(h*.9))}addEventListener('scroll',onS,{passive:true});onS();(function tick(){c+=(t-c)*.12;stack.style.transform=`translateY(${c}vh)`;requestAnimationFrame(tick)})()})();
 
-    function onScroll(){
-      const y = window.scrollY || 0, h = innerHeight || 1;
-      target = -22 * Math.min(1, y / (h * 0.9));
-    }
-    window.addEventListener('scroll', onScroll, {passive:true});
-    onScroll();
+  /* Film grain: säädetty harvemmaksi rakeen vähentämiseksi */
+  (()=>{const c=document.getElementById('film');const pr=Math.min(1.5,devicePixelRatio||1);
+    function R(){c.width=Math.floor(innerWidth*pr);c.height=Math.floor(innerHeight*pr);D()}
+    function D(){const x=c.getContext('2d',{alpha:true}),w=c.width,h=c.height,i=x.createImageData(w,h),d=i.data;
+      for(let p=0;p<w*h;p+=4){const r=Math.random();const v=(r<.07)?255:0;d[p*4]=v;d[p*4+1]=v;d[p*4+2]=v;d[p*4+3]=(r<.07?10:0)}
+      x.putImageData(i,0,0)}
+    addEventListener('resize',R);R()})();
 
-    function tick(){
-      current += (target - current) * 0.12;
-      stack.style.transform = `translateY(${current}vh)`;
-      requestAnimationFrame(tick);
-    }
-    tick();
-  })();
+  /* apurit */
+  const fmtEUR=n=>(n||0).toLocaleString('fi-FI',{style:'currency',currency:'EUR'});
 
-  // ---------- Hento film grain canvas ----------
-  (() => {
-    const c = document.getElementById('film');
-    const pr = Math.min(1.5, window.devicePixelRatio || 1);
-    function resize(){
-      c.width = Math.floor(innerWidth * pr);
-      c.height = Math.floor(innerHeight * pr);
-      draw();
-    }
-    function draw(){
-      const ctx = c.getContext('2d', {alpha:true});
-      const w=c.width,h=c.height; const imgData=ctx.createImageData(w,h);
-      const data=imgData.data;
-      for(let i=0;i<w*h;i+=4){
-        const r = Math.random();
-        const v = (r<0.12) ? 255 : 0;
-        data[i*4+0]=v; data[i*4+1]=v; data[i*4+2]=v; data[i*4+3]= (r<0.12? 10:0);
-      }
-      ctx.putImageData(imgData,0,0);
-    }
-    addEventListener('resize', resize);
-    resize();
-  })();
+  /* Tuotekuvat (vaihda näihin omat polut tarvittaessa) */
+  const slingImgs=["https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80","https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1600&q=80","https://images.unsplash.com/photo-1511389026070-a14ae610a1be?auto=format&fit=crop&w=1600&q=80"];
+  const pipoImgs =["https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80","https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1600&q=80","https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1600&q=80"];
+  const FALLBACK="https://placehold.co/1400x1750?text=Kuva";
+  function setWithFallback(id,url){const el=document.getElementById(id);if(!el)return;el.onerror=()=>{el.onerror=null;el.src=FALLBACK};el.src=url}
+  setWithFallback("p1a",slingImgs[0]);setWithFallback("p1b",slingImgs[1]);
+  setWithFallback("p2a",pipoImgs[0]); setWithFallback("p2b",pipoImgs[1]);
 
-  // ---------- Helperit ----------
-  const fmtEUR = n => (n||0).toLocaleString('fi-FI',{style:'currency',currency:'EUR'});
-
-  // ---------- Tuotekuvat (Unsplash) + fallback ----------
-  const slingImgs = [
-    "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80",
-    "https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1600&q=80",
-    "https://images.unsplash.com/photo-1511389026070-a14ae610a1be?auto=format&fit=crop&w=1600&q=80"
-  ];
-  const pipoImgs = [
-    "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",
-    "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1600&q=80",
-    "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1600&q=80"
-  ];
-  const FALLBACK = "https://placehold.co/1400x1750?text=Kuva";
-  function setWithFallback(id,url){ const el=document.getElementById(id); if(!el) return; el.onerror=()=>{el.onerror=null;el.src=FALLBACK}; el.src=url; }
-  setWithFallback("p1a", slingImgs[0]); setWithFallback("p1b", slingImgs[1]);
-  setWithFallback("p2a", pipoImgs[0]);  setWithFallback("p2b",  pipoImgs[1]);
-
-  // ---------- Kevyt ostoskori (toimitus valitaan korissa) ----------
-  const PRODUCTS = {
-    laukku:{ id:"laukku", name:"Laukku", price:149.00 },
-    pipo:{   id:"pipo",   name:"RUMAT Pipo", price:59.00 }
-  };
-  const CART_KEY = "rumat.cart.v1";
-  const $ = sel => document.querySelector(sel);
-  const cartEl = $("#cart"), itemsEl = $("#cartItems"), countEl=$("#cartCount");
-
-  let cart = [];
-  try{ cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]"); }catch{ cart=[]; }
-
-  function save(){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
-  function add(id){ const it=cart.find(i=>i.id===id); it? it.qty++ : cart.push({id,qty:1}); save(); render(); }
-  function inc(i){ cart[i].qty++; save(); render(); }
-  function dec(i){ cart[i].qty=Math.max(1,cart[i].qty-1); save(); render(); }
-  function remove(i){ cart.splice(i,1); save(); render(); }
-  function clear(){ cart.length=0; save(); render(); }
-
-  function totals(){
-    const sub = cart.reduce((s,it)=> s + PRODUCTS[it.id].price*it.qty, 0);
-    const ship = Number(document.querySelector('input[name="ship"]:checked')?.value || 0);
-    return {sub, ship, total: sub + ship};
-  }
+  /* Kori: tuotteille yksi hinta, toimitus valitaan korissa */
+  const PRODUCTS={laukku:{id:"laukku",name:"Laukku",price:149.00},pipo:{id:"pipo",name:"RUMAT Pipo",price:59.00}};
+  const CART_KEY="rumat.cart.v1";const $=s=>document.querySelector(s);const cartEl=$("#cart"),itemsEl=$("#cartItems"),countEl=$("#cartCount");
+  let cart=[];try{cart=JSON.parse(localStorage.getItem(CART_KEY)||"[]")}catch{cart=[]}
+  function save(){localStorage.setItem(CART_KEY,JSON.stringify(cart))}
+  function add(id){const it=cart.find(i=>i.id===id);it?it.qty++:cart.push({id,qty:1});save();render()}
+  function inc(i){cart[i].qty++;save();render()}
+  function dec(i){cart[i].qty=Math.max(1,cart[i].qty-1);save();render()}
+  function remove(i){cart.splice(i,1);save();render()}
+  function clear(){cart.length=0;save();render()}
+  function totals(){const sub=cart.reduce((s,it)=>s+PRODUCTS[it.id].price*it.qty,0);const ship=Number(document.querySelector('input[name="ship"]:checked')?.value||0);return{sub,ship,total:sub+ship}}
   function render(){
-    countEl.textContent = cart.reduce((s,i)=>s+i.qty,0);
-    if(!itemsEl) return;
-    itemsEl.innerHTML = cart.length ? "" : `<div class="text-stone-500">Kori on tyhjä.</div>`;
-    cart.forEach((it,idx)=>{
-      const p = PRODUCTS[it.id];
-      const row = document.createElement('div');
-      row.className="flex items-center justify-between border rounded-lg p-3";
-      row.innerHTML = `
-        <div>
-          <div class="font-semibold">${p.name}</div>
-          <div class="text-sm text-stone-500">${fmtEUR(p.price)} / kpl</div>
-        </div>
-        <div class="flex items-center gap-2">
-          <button class="px-2 py-1 border rounded" aria-label="Vähennä">-</button>
-          <div class="w-8 text-center">${it.qty}</div>
-          <button class="px-2 py-1 border rounded" aria-label="Lisää">+</button>
-          <div class="w-20 text-right font-semibold">${fmtEUR(p.price*it.qty)}</div>
-          <button class="ml-2 text-stone-500 hover:text-stone-800" aria-label="Poista">✕</button>
-        </div>`;
-      const [btnDec, , , btnInc, , btnDel] = row.querySelectorAll('button');
-      btnDec.onclick=()=>dec(idx); btnInc.onclick=()=>inc(idx); btnDel.onclick=()=>remove(idx);
-      itemsEl.appendChild(row);
-    });
-    const t = totals();
-    $("#sub").textContent = fmtEUR(t.sub);
-    $("#ship").textContent = fmtEUR(t.ship);
-    $("#total").textContent = fmtEUR(t.total);
+    countEl.textContent=cart.reduce((s,i)=>s+i.qty,0);
+    if(!itemsEl)return;itemsEl.innerHTML=cart.length?"":"<div class='text-stone-500'>Kori on tyhjä.</div>";
+    cart.forEach((it,idx)=>{const p=PRODUCTS[it.id];const row=document.createElement('div');row.className="flex items-center justify-between border rounded-lg p-3";
+      row.innerHTML=`<div><div class="font-semibold">${p.name}</div><div class="text-sm text-stone-500">${fmtEUR(p.price)} / kpl</div></div>
+      <div class="flex items-center gap-2">
+        <button class="px-2 py-1 border rounded" aria-label="Vähennä">-</button>
+        <div class="w-8 text-center">${it.qty}</div>
+        <button class="px-2 py-1 border rounded" aria-label="Lisää">+</button>
+        <div class="w-20 text-right font-semibold">${fmtEUR(p.price*it.qty)}</div>
+        <button class="ml-2 text-stone-500 hover:text-stone-800" aria-label="Poista">✕</button>
+      </div>`;
+      const [btnDec,,,btnInc,,btnDel]=row.querySelectorAll('button');btnDec.onclick=()=>dec(idx);btnInc.onclick=()=>inc(idx);btnDel.onclick=()=>remove(idx);itemsEl.appendChild(row)});
+    const t=totals();$("#sub").textContent=fmtEUR(t.sub);$("#ship").textContent=fmtEUR(t.ship);$("#total").textContent=fmtEUR(t.total)
   }
   render();
-
-  document.querySelectorAll('[data-add]').forEach(b=> b.addEventListener('click', ()=> add(b.dataset.add)));
-  $("#openCart").onclick = ()=> cartEl.classList.add('open');
-  $("#closeCart").onclick = ()=> cartEl.classList.remove('open');
-  $("#clear").onclick = ()=> clear();
-  document.querySelectorAll('input[name="ship"]').forEach(r=> r.addEventListener('change', render));
-
-  // PayPal checkout (yksi maksu, toimitus handling_cart -rivillä)
-  $("#checkout").onclick = () => {
-    if(!cart.length) return alert("Kori on tyhjä.");
-    const t = totals();
-    const form = document.createElement('form');
-    form.method = "POST";
-    form.action = "https://www.paypal.com/cgi-bin/webscr";
-    form.target = "_blank";
-    form.innerHTML = `
-      <input type="hidden" name="cmd" value="_cart">
-      <input type="hidden" name="upload" value="1">
-      <input type="hidden" name="business" value="kauppa@esimerkki.fi"> <!-- VAIHDA omaksi -->
-      <input type="hidden" name="currency_code" value="EUR">
-      <input type="hidden" name="handling_cart" value="${t.ship.toFixed(2)}">
-    `;
-    cart.forEach((it,idx)=>{
-      const p = PRODUCTS[it.id]; const n = idx+1;
-      form.insertAdjacentHTML('beforeend', `
-        <input type="hidden" name="item_name_${n}" value="${p.name}">
-        <input type="hidden" name="amount_${n}" value="${p.price.toFixed(2)}">
-        <input type="hidden" name="quantity_${n}" value="${it.qty}">
-      `);
-    });
-    document.body.appendChild(form);
-    form.submit(); form.remove();
-  };
-
-  // footer vuosi
-  document.getElementById('year').textContent = new Date().getFullYear();
+  document.querySelectorAll('[data-add]').forEach(b=>b.addEventListener('click',()=>add(b.dataset.add)));
+  $("#openCart").onclick=()=>cartEl.classList.add('open');
+  $("#closeCart").onclick=()=>cartEl.classList.remove('open');
+  $("#clear").onclick=()=>clear();
+  document.querySelectorAll('input[name="ship"]').forEach(r=>r.addEventListener('change',render));
+  $("#checkout").onclick=()=>{if(!cart.length)return alert("Kori on tyhjä.");const t=totals();const f=document.createElement('form');f.method="POST";f.action="https://www.paypal.com/cgi-bin/webscr";f.target="_blank";
+    f.innerHTML=`<input type="hidden" name="cmd" value="_cart"><input type="hidden" name="upload" value="1">
+      <input type="hidden" name="business" value="kauppa@esimerkki.fi">
+      <input type="hidden" name="currency_code" value="EUR"><input type="hidden" name="handling_cart" value="${t.ship.toFixed(2)}">`;
+    cart.forEach((it,i)=>{const p=PRODUCTS[it.id],n=i+1;f.insertAdjacentHTML('beforeend',`
+      <input type="hidden" name="item_name_${n}" value="${p.name}">
+      <input type="hidden" name="amount_${n}" value="${p.price.toFixed(2)}">
+      <input type="hidden" name="quantity_${n}" value="${it.qty}">`)});document.body.appendChild(f);f.submit();f.remove()}
+  document.getElementById('year').textContent=new Date().getFullYear()
   </script>
+
+  <!-- (varmistus upotuksille) -->
+  <script async src="https://www.instagram.com/embed.js"></script>
+  <script async src="https://www.tiktok.com/embed.js"></script>
 </body>
 </html>
