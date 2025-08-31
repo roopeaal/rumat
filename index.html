@@ -18,7 +18,8 @@
       --mist:#DEEEEE;
       --gallery:#F6F6F4;
       --footer:#0B0F0E;
-      --silhouette:#08110d;      /* siluetin väri */
+      --silhouette:#08110d;      /* siluetin pääväri */
+      --silhouette-top:#0a1d17;  /* siluetin yläreunan häivytys */
     }
     body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#111827;background:#fff}
     .serif{font-family:"Libre Baskerville",serif}
@@ -34,7 +35,7 @@
       inset: 0;
       width: 100%;
       height: 100%;
-      z-index: 0;
+      z-index: 0;             /* taustalla */
       pointer-events: none;
       display:block;
     }
@@ -50,21 +51,20 @@
     }
     #hero-text{ position:relative; z-index:2; }
 
-    /* Sivun alareunan siluetti (vuori+kuuset+mökki) auroran päällä */
-    .bottom-sil{
-      position:fixed; left:0; right:0; bottom:-1px; height:120px;
-      z-index:1; pointer-events:none;
-      /* kevyt ylös häivytys */
-      mask-image: linear-gradient(to top, black 70%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to top, black 70%, transparent 100%);
+    /* ——— Siluetti, joka on kiinni esittelypalkissa ja liikkuu sen mukana ——— */
+    .section-sil-wrap{ position:relative; }
+    .section-sil{
+      position:absolute;
+      left:0; right:0; top:-140px;   /* nousee esittelypalkin yläreunan ylle */
+      height:140px;                  /* voit muuttaa korkeutta */
+      display:block;
+      pointer-events:none;
+      /* kevyt häivytys ylöspäin, ettei reuna ole liian kova */
+      mask-image: linear-gradient(to top, black 78%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to top, black 78%, transparent 100%);
+      z-index: 0;                    /* osion sisällä, tekstin alla */
     }
-    .bottom-sil svg{ width:100%; height:100%; display:block; }
-    .smoke{ animation:smoke 6s ease-in-out infinite; transform-origin:center; opacity:.6 }
-    .smoke.s2{ animation-delay:1.4s }
-    @keyframes smoke{
-      0%{ transform:translateY(0) scale(1); opacity:.6 }
-      100%{ transform:translateY(-28px) scale(1.4); opacity:0 }
-    }
+    .section-body{ position:relative; z-index:1; } /* varmistaa että teksti on siluetin päällä */
 
     /* Drawer & Modal */
     .drawer{position:fixed;inset:0;z-index:60;display:none}
@@ -84,35 +84,6 @@
 <body class="text-stone-900">
   <!-- KIINTEÄ REVONTULI-TAUSTA -->
   <canvas id="auroraCanvas" class="aurora-fixed"></canvas>
-
-  <!-- SIVUN ALAREUNAN SILUETTI (revontulien päällä, sisällön alla) -->
-  <div class="bottom-sil" aria-hidden="true">
-    <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
-      <!-- Vuorijono -->
-      <path d="M0,88 L120,76 L220,92 L320,64 L420,98 L540,54 L660,100 L780,68 L900,90 L1020,62 L1140,98 L1260,78 L1440,92 L1440,120 L0,120 Z"
-            fill="var(--silhouette)"/>
-      <!-- Kuusia -->
-      <g fill="var(--silhouette)">
-        <path d="M210,92 l14,-22 l14,22 z"/>
-        <path d="M260,90 l16,-24 l16,24 z"/>
-        <path d="M310,96 l12,-20 l12,20 z"/>
-        <path d="M980,94 l15,-24 l15,24 z"/>
-        <path d="M1030,90 l12,-20 l12,20 z"/>
-        <path d="M1080,96 l14,-22 l14,22 z"/>
-      </g>
-      <!-- Mökki -->
-      <g fill="var(--silhouette)">
-        <rect x="1185" y="83" width="34" height="16" rx="1"/>
-        <path d="M1180,83 L1202,70 L1224,83 Z"/>
-        <rect x="1206" y="72" width="5" height="10"/>
-      </g>
-      <!-- Savu -->
-      <g fill="#9fb1a9">
-        <circle class="smoke" cx="1209" cy="68" r="2.6"/>
-        <circle class="smoke s2" cx="1212" cy="64" r="2.0"/>
-      </g>
-    </svg>
-  </div>
 
   <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50">
@@ -145,9 +116,7 @@
     <section id="etusivu" class="hero grid place-items-center text-stone-50 px-4">
       <div class="hero-overlay"></div>
       <div id="hero-text" class="text-center transition-transform mt-24 md:mt-28">
-        <h1 class="serif font-semibold tracking-[0.08em]
-                   text-[clamp(22px,4.8vw,58px)]
-                   drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
+        <h1 class="serif font-semibold tracking-[0.08em] text-[clamp(22px,4.8vw,58px)] drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
           Liian rumat ollakseen totta
         </h1>
         <div class="mt-8 flex justify-center">
@@ -158,13 +127,51 @@
       </div>
     </section>
 
-    <!-- Esittely -->
+    <!-- Esittely (siluetti kiinni tämän osion yläreunassa) -->
     <section class="py-12 bg-white">
-      <div class="mx-auto max-w-3xl px-6 text-center">
-        <p id="intro-text" class="text-xl sm:text-2xl">
-          <strong>Luonnosta syntynyt. Reissuissa testattu.</strong>
-          Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – jotta sinulla on päälläsi jotain, joka istuu, hengittää ja kestää jokaisella askeleella.
-        </p>
+      <div class="section-sil-wrap">
+        <!-- Siluetti: nousee osion mukana -->
+        <svg class="section-sil" viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="silGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="var(--silhouette-top)" />
+              <stop offset="1" stop-color="var(--silhouette)" />
+            </linearGradient>
+          </defs>
+          <!-- taaempi pehmeä harjanne -->
+          <path d="M0,110 L90,100 L190,108 L300,88 L420,112 L530,82 L650,116 L770,92 L900,108 L1010,86 L1160,114 L1280,96 L1440,110 L1440,140 L0,140 Z"
+                fill="url(#silGrad)" opacity="0.85"/>
+          <!-- etummaisen harjanteen terävämpi reuna -->
+          <path d="M0,120 L80,114 L160,122 L240,112 L320,126 L410,108 L520,130 L630,110 L760,124 L880,114 L1020,128 L1160,116 L1300,124 L1440,120 L1440,140 L0,140 Z"
+                fill="var(--silhouette)"/>
+          <!-- muutama kuusi -->
+          <g fill="var(--silhouette)" opacity=".95">
+            <path d="M210,118 l14,-22 l14,22 z"/>
+            <path d="M260,116 l16,-24 l16,24 z"/>
+            <path d="M980,118 l15,-24 l15,24 z"/>
+            <path d="M1030,116 l12,-20 l12,20 z"/>
+          </g>
+          <!-- mökki + savua kevyt -->
+          <g>
+            <g fill="var(--silhouette)">
+              <rect x="1185" y="111" width="34" height="14" rx="1"/>
+              <path d="M1180,111 L1202,100 L1224,111 Z"/>
+              <rect x="1206" y="101" width="5" height="9"/>
+            </g>
+            <g fill="#a7bbb4" opacity=".7">
+              <circle cx="1209" cy="96" r="2.4"/>
+              <circle cx="1212" cy="92" r="1.8"/>
+            </g>
+          </g>
+        </svg>
+
+        <!-- Varsinainen esittelyteksti -->
+        <div class="section-body mx-auto max-w-3xl px-6 text-center">
+          <p id="intro-text" class="text-xl sm:text-2xl">
+            <strong>Luonnosta syntynyt. Reissuissa testattu.</strong>
+            Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – jotta sinulla on päälläsi jotain, joka istuu, hengittää ja kestää jokaisella askeleella.
+          </p>
+        </div>
       </div>
     </section>
 
@@ -562,7 +569,7 @@
     modal.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // ===== WebGL Revontulet – kevyt elävä liike, ei scrollaa =====
+  // ===== WebGL Revontulet – kiinteä tausta =====
   (function(){
     const SETTINGS = {
       PAL_COL1:[0.02,0.70,0.95], // sinertävä
