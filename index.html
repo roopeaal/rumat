@@ -18,10 +18,10 @@
       --mist:#DEEEEE;
       --gallery:#F6F6F4;
       --footer:#0B0F0E;
-      --silhouette:#08110d;      /* siluetin tumma */
-      --silhouette-mid:#0c1a15;  /* vuoriin/varjoihin */
-      --silhouette-line:#9fb1a9; /* mökin ääriviiva */
-      --window-warm:#FFD780;     /* mökin ikkuna */
+      --silhouette:#08110d;
+      --silhouette-mid:#0c1a15;
+      --silhouette-line:#9fb1a9;
+      --window-warm:#FFD780;
     }
     body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#111827;background:#fff}
     .serif{font-family:"Libre Baskerville",serif}
@@ -31,42 +31,25 @@
     .btn-dark{background:#111827;color:#fff;border-color:#111827}
     .chip{font-size:.78rem;padding:.25rem .55rem;border-radius:9999px;border:1px solid rgb(214,211,209);background:#fff}
 
-    /* ===== AURORA: kiinteä tausta ===== */
-    .aurora-fixed{
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-      display:block;
-    }
+    /* Aurora tausta (kiinteä) */
+    .aurora-fixed{ position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; display:block; }
     .site-content{ position:relative; z-index:2; background:transparent; }
 
-    /* HERO */
+    /* Hero */
     .hero{ position:relative; height:100vh; isolation:isolate; overflow:hidden; }
-    .hero-overlay{
-      position:absolute; inset:0; z-index:1; pointer-events:none;
-      background:
-        radial-gradient(58% 42% at 50% 18%, rgba(255,255,255,.06), transparent 55%),
-        linear-gradient(to bottom, rgba(0,0,0,.16), rgba(0,0,0,.36) 72%);
-    }
+    .hero-overlay{ position:absolute; inset:0; z-index:1; pointer-events:none;
+      background: radial-gradient(58% 42% at 50% 18%, rgba(255,255,255,.06), transparent 55%),
+                  linear-gradient(to bottom, rgba(0,0,0,.16), rgba(0,0,0,.36) 72%); }
     #hero-text{ position:relative; z-index:2; }
 
-    /* Sivun alareunan siluetti */
-    .bottom-sil{
-      position:fixed; left:0; right:0; bottom:-1px; height:160px;
-      z-index:1; pointer-events:none;
+    /* Alareunan siluetti */
+    .bottom-sil{ position:fixed; left:0; right:0; bottom:-1px; height:160px; z-index:1; pointer-events:none;
       mask-image: linear-gradient(to top, black 72%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to top, black 72%, transparent 100%);
-    }
+      -webkit-mask-image: linear-gradient(to top, black 72%, transparent 100%);}
     .bottom-sil svg{ width:100%; height:100%; display:block; }
     .smoke{ animation:smoke 6s ease-in-out infinite; transform-origin:center; opacity:.6 }
     .smoke.s2{ animation-delay:1.4s }
-    @keyframes smoke{
-      0%{ transform:translateY(0) scale(1); opacity:.6 }
-      100%{ transform:translateY(-28px) scale(1.4); opacity:0 }
-    }
+    @keyframes smoke{ 0%{transform:translateY(0) scale(1);opacity:.6} 100%{transform:translateY(-28px) scale(1.4);opacity:0} }
 
     /* Drawer & Modal */
     .drawer{position:fixed;inset:0;z-index:60;display:none}
@@ -87,113 +70,33 @@
   <!-- KIINTEÄ REVONTULI-TAUSTA -->
   <canvas id="auroraCanvas" class="aurora-fixed"></canvas>
 
-  <!-- SIVUN ALAREUNAN SILUETTI – tunturimaisema: vuoria + kuusia + mökki (paremmin erottuva) -->
+  <!-- ALAREUNAN SILUETTI -->
   <div class="bottom-sil" aria-hidden="true">
     <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
       <defs>
-        <!-- Lämmin ikkunahehku -->
-        <filter id="windowGlow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-
-        <!-- Kuuset: oksakerrokset + runko (ei pelkkiä kolmioita) -->
-        <g id="treeTall" fill="var(--silhouette)">
-          <!-- oksakerrokset (trapezoidimaiset) -->
-          <path d="M0,0 l-18,22 h36 z" transform="translate(0,0)"/>
-          <path d="M0,0 l-20,24 h40 z" transform="translate(0,10)"/>
-          <path d="M0,0 l-22,26 h44 z" transform="translate(0,22)"/>
-          <path d="M0,0 l-24,28 h48 z" transform="translate(0,36)"/>
-          <!-- runko -->
-          <rect x="-3.2" y="60" width="6.4" height="12" rx="1"/>
-        </g>
-        <g id="treeMed" fill="var(--silhouette)">
-          <path d="M0,0 l-14,18 h28 z" transform="translate(0,2)"/>
-          <path d="M0,0 l-16,20 h32 z" transform="translate(0,12)"/>
-          <path d="M0,0 l-18,22 h36 z" transform="translate(0,24)"/>
-          <rect x="-2.8" y="48" width="5.6" height="10" rx="1"/>
-        </g>
-        <g id="treeSmall" fill="var(--silhouette)">
-          <path d="M0,0 l-11,14 h22 z" transform="translate(0,4)"/>
-          <path d="M0,0 l-13,16 h26 z" transform="translate(0,12)"/>
-          <rect x="-2.4" y="40" width="4.8" height="8" rx="1"/>
-        </g>
+        <filter id="windowGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <g id="treeTall" fill="var(--silhouette)"><path d="M0,0 l-18,22 h36 z" transform="translate(0,0)"/><path d="M0,0 l-20,24 h40 z" transform="translate(0,10)"/><path d="M0,0 l-22,26 h44 z" transform="translate(0,22)"/><path d="M0,0 l-24,28 h48 z" transform="translate(0,36)"/><rect x="-3.2" y="60" width="6.4" height="12" rx="1"/></g>
+        <g id="treeMed" fill="var(--silhouette)"><path d="M0,0 l-14,18 h28 z" transform="translate(0,2)"/><path d="M0,0 l-16,20 h32 z" transform="translate(0,12)"/><path d="M0,0 l-18,22 h36 z" transform="translate(0,24)"/><rect x="-2.8" y="48" width="5.6" height="10" rx="1"/></g>
+        <g id="treeSmall" fill="var(--silhouette)"><path d="M0,0 l-11,14 h22 z" transform="translate(0,4)"/><path d="M0,0 l-13,16 h26 z" transform="translate(0,12)"/><rect x="-2.4" y="40" width="4.8" height="8" rx="1"/></g>
       </defs>
-
-      <!-- Kaukana: pehmeä tunturiselänne -->
-      <path d="M0,120 
-               C180,105 240,108 340,114 
-               C460,121 520,110 640,116
-               C760,122 880,108 1000,114
-               C1160,122 1280,110 1440,118
-               L1440,160 L0,160 Z"
-            fill="var(--silhouette-mid)" opacity=".28"/>
-
-      <!-- Keskietäisyys: loivia huippuja -->
-      <path d="M0,122
-               C120,118 190,110 260,118
-               C340,126 420,106 500,116
-               C580,126 670,108 760,120
-               C850,132 980,110 1100,118
-               C1220,126 1330,112 1440,120
-               L1440,160 L0,160 Z"
-            fill="var(--silhouette-mid)" opacity=".44"/>
-
-      <!-- Lähin harjanne -->
-      <path d="M0,130 
-               C160,128  320,132 480,130
-               C640,128  800,131 960,129
-               C1120,128 1280,131 1440,129
-               L1440,160 L0,160 Z"
-            fill="var(--silhouette)"/>
-
-      <!-- Kuusikko: useita kokoja -->
+      <path d="M0,120 C180,105 240,108 340,114 C460,121 520,110 640,116 C760,122 880,108 1000,114 C1160,122 1280,110 1440,118 L1440,160 L0,160 Z" fill="var(--silhouette-mid)" opacity=".28"/>
+      <path d="M0,122 C120,118 190,110 260,118 C340,126 420,106 500,116 C580,126 670,108 760,120 C850,132 980,110 1100,118 C1220,126 1330,112 1440,120 L1440,160 L0,160 Z" fill="var(--silhouette-mid)" opacity=".44"/>
+      <path d="M0,130 C160,128 320,132 480,130 C640,128 800,131 960,129 C1120,128 1280,131 1440,129 L1440,160 L0,160 Z" fill="var(--silhouette)"/>
       <g>
-        <!-- vasen ryhmä -->
-        <use href="#treeTall"  x="55"   y="76"/>
-        <use href="#treeMed"   x="95"   y="82"/>
-        <use href="#treeSmall" x="128"  y="88"/>
-        <use href="#treeTall"  x="168"  y="74"/>
-        <use href="#treeMed"   x="210"  y="82"/>
-        <!-- keskiryhmä -->
-        <use href="#treeTall"  x="520"  y="74"/>
-        <use href="#treeMed"   x="558"  y="82"/>
-        <use href="#treeSmall" x="592"  y="88"/>
-        <use href="#treeTall"  x="632"  y="72"/>
-        <use href="#treeMed"   x="674"  y="82"/>
-        <use href="#treeSmall" x="706"  y="90"/>
-        <use href="#treeTall"  x="748"  y="74"/>
-        <use href="#treeMed"   x="786"  y="82"/>
-        <!-- oikea ryhmä -->
-        <use href="#treeTall"  x="1086" y="76"/>
-        <use href="#treeMed"   x="1122" y="84"/>
-        <use href="#treeSmall" x="1156" y="90"/>
-        <use href="#treeTall"  x="1196" y="74"/>
-        <use href="#treeMed"   x="1236" y="82"/>
-        <use href="#treeSmall" x="1272" y="90"/>
-        <use href="#treeTall"  x="1312" y="76"/>
+        <use href="#treeTall"  x="55"   y="76"/><use href="#treeMed"   x="95"   y="82"/><use href="#treeSmall" x="128"  y="88"/><use href="#treeTall"  x="168"  y="74"/><use href="#treeMed"   x="210"  y="82"/>
+        <use href="#treeTall"  x="520"  y="74"/><use href="#treeMed"   x="558"  y="82"/><use href="#treeSmall" x="592"  y="88"/><use href="#treeTall"  x="632"  y="72"/><use href="#treeMed"   x="674"  y="82"/><use href="#treeSmall" x="706"  y="90"/><use href="#treeTall"  x="748"  y="74"/><use href="#treeMed"   x="786"  y="82"/>
+        <use href="#treeTall"  x="1086" y="76"/><use href="#treeMed"   x="1122" y="84"/><use href="#treeSmall" x="1156" y="90"/><use href="#treeTall"  x="1196" y="74"/><use href="#treeMed"   x="1236" y="82"/><use href="#treeSmall" x="1272" y="90"/><use href="#treeTall"  x="1312" y="76"/>
       </g>
-
-      <!-- Mökki: vaalea ääriviiva + lämmin ikkunahehku -->
       <g>
-        <!-- ikkuna glow -->
-        <rect x="1226" y="118" width="14" height="11" rx="1.5"
-              fill="var(--window-warm)" opacity=".85" filter="url(#windowGlow)"/>
-        <!-- mökin runko ja katto -->
+        <rect x="1226" y="118" width="14" height="11" rx="1.5" fill="var(--window-warm)" opacity=".85" filter="url(#windowGlow)"/>
         <g fill="none" stroke="var(--silhouette-line)" stroke-width="1.6" stroke-linejoin="round">
           <rect x="1203" y="123" width="44" height="22" rx="1" fill="var(--silhouette)"/>
           <path d="M1198,124 L1225,108 L1252,124 Z" fill="var(--silhouette)"/>
           <rect x="1224.5" y="118" width="17" height="14" rx="2" fill="transparent"/>
         </g>
-        <!-- savupiippu -->
         <rect x="1232" y="110" width="6" height="12" fill="var(--silhouette)"/>
       </g>
-
-      <!-- Kevyt savu -->
-      <g fill="#b7c7c1">
-        <circle class="smoke"  cx="1235" cy="106" r="2.8"/>
-        <circle class="smoke s2" cx="1239" cy="101" r="2.2"/>
-      </g>
+      <g fill="#b7c7c1"><circle class="smoke"  cx="1235" cy="106" r="2.8"/><circle class="smoke s2" cx="1239" cy="101" r="2.2"/></g>
     </svg>
   </div>
 
@@ -216,20 +119,22 @@
           <a href="#yhteys"    class="hover:underline underline-offset-4 font-semibold">Yhteystiedot</a>
         </nav>
         <div class="justify-self-end flex items-center gap-2">
-          <button id="openCart" class="px-3 py-2 rounded-full bg-white/10 ring-1 ring-white/30 hover:bg-white/20">🧺&nbsp;<span id="cartCount">0</span></button>
+          <!-- Ostoskori-teksti (emoji poistettu) -->
+          <button id="openCart" class="px-3 py-2 rounded-full bg-white/10 ring-1 ring-white/30 hover:bg-white/20">
+            Ostoskori (<span id="cartCount">0</span>)
+          </button>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- KOKO SIVUN SISÄLTÖ -->
+  <!-- SISÄLTÖ -->
   <main class="site-content">
     <!-- HERO -->
     <section id="etusivu" class="hero grid place-items-center text-stone-50 px-4">
       <div class="hero-overlay"></div>
       <div id="hero-text" class="text-center transition-transform mt-24 md:mt-28">
-        <h1 class="serif font-semibold tracking-[0.08em]
-                   text-[clamp(22px,4.8vw,58px)]
+        <h1 class="serif font-semibold tracking-[0.08em] text-[clamp(22px,4.8vw,58px)]
                    drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
           Liian rumat ollakseen totta
         </h1>
@@ -262,7 +167,7 @@
       </div>
     </section>
 
-    <!-- Blogi -->
+    <!-- BLOGI -->
     <section id="blogi" class="py-14" style="background:var(--mist)">
       <div class="mx-auto max-w-4xl px-6">
         <h2 class="serif text-3xl mb-6">Blogi</h2>
@@ -270,17 +175,17 @@
       </div>
     </section>
 
-    <!-- Some -->
+    <!-- SOME -->
     <section id="some" class="py-14 bg-white">
       <div class="mx-auto max-w-6xl px-4">
         <h2 class="serif text-3xl mb-6">Some</h2>
         <div class="grid md:grid-cols-2 gap-6">
-          <!-- Instagram -->
-          <div class="aspect-[4/5] rounded-xl ring-1 ring-stone-200 overflow-hidden">
+          <!-- Instagram: sama koko kuin TikTok (9:16) -->
+          <div class="aspect-[9/16] rounded-xl ring-1 ring-stone-200 overflow-hidden bg-black">
             <iframe id="igEmbed" class="w-full h-full" allowtransparency="true" frameborder="0" scrolling="no" loading="lazy"
-                    src="https://www.instagram.com/p/DMXVRgGC1Bv/embed"></iframe>
+                    src="https://www.instagram.com/p/DMXVRgGC1Bv/embed" style="display:block"></iframe>
           </div>
-          <!-- TikTok -->
+          <!-- TikTok: sama koko -->
           <div class="aspect-[9/16] rounded-xl ring-1 ring-stone-200 overflow-hidden bg-black">
             <iframe id="ttEmbed"
               src="https://www.tiktok.com/embed/v2/7525414518562753814"
@@ -293,7 +198,7 @@
       </div>
     </section>
 
-    <!-- Tarina -->
+    <!-- TARINA -->
     <section id="tarina" class="py-14 bg-stone-50">
       <div class="mx-auto max-w-3xl px-6">
         <h2 class="serif text-3xl mb-4">Tarina</h2>
@@ -315,6 +220,7 @@
           <ul class="mt-2 space-y-2 text-sm">
             <li><a id="mailLink" href="mailto:hello@rumat.fi" class="hover:underline">hello@rumat.fi</a></li>
             <li><a id="igLink" href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer" class="hover:underline">Instagram</a></li>
+            <li><a id="ttLink" href="https://www.tiktok.com/@rumat.studio" target="_blank" rel="noreferrer" class="hover:underline">TikTok</a></li>
             <li id="location">Rovaniemi — Helsinki</li>
           </ul>
         </div>
@@ -356,7 +262,7 @@
     </div>
   </div>
 
-  <!-- SUCCESS/CANCEL -->
+  <!-- SUCCESS/CANCEL MODAL -->
   <div id="resultModal" class="modal">
     <div class="bg-white rounded-2xl p-6 shadow-soft w-[min(92vw,480px)] text-center">
       <h3 id="resultTitle" class="serif text-2xl mb-2">Kiitos tilauksesta!</h3>
@@ -375,30 +281,24 @@
       else n.setAttribute(k,v);
     }); kids.forEach(k=>{ if(k==null) return; if(typeof k==='string') n.appendChild(document.createTextNode(k)); else n.appendChild(k);}); return n;};
 
-  // Hero-tekstin pehmeä liike (vain teksti nousee)
+  // Hero-tekstin liike (vain teksti nousee)
   (function(){
-    const hero   = document.getElementById('etusivu');
-    const textEl = document.getElementById('hero-text');
-    const yearEl = document.getElementById('year');
+    const hero=document.getElementById('etusivu'); const textEl=document.getElementById('hero-text'); const yearEl=document.getElementById('year');
     yearEl.textContent = new Date().getFullYear();
-
-    function onScroll(){
-      const r = hero.getBoundingClientRect();
-      const h = Math.max(1, r.height);
-      const progress = Math.min(1, Math.max(0, -r.top / h));
-      const ty = -18 * Math.min(1, progress / 0.9);
-      textEl.style.transform = `translateY(${ty}vh)`;
-    }
-    addEventListener('scroll', onScroll, {passive:true});
-    addEventListener('resize', onScroll, {passive:true});
-    onScroll();
+    function onScroll(){ const r=hero.getBoundingClientRect(); const h=Math.max(1,r.height); const p=Math.min(1,Math.max(0,-r.top/h)); const ty=-18*Math.min(1,p/0.9); textEl.style.transform=`translateY(${ty}vh)`; }
+    addEventListener('scroll', onScroll, {passive:true}); addEventListener('resize', onScroll, {passive:true}); onScroll();
   })();
 
   // Oletussisältö
   const defaultContent = {
     hero:{ headline:"Liian rumat ollakseen totta" },
     paypalBusiness:"",
-    contact:{ email:"hello@rumat.fi", instagram:"https://instagram.com/rumat.studio", location:"Rovaniemi — Helsinki" },
+    contact:{
+      email:"hello@rumat.fi",
+      instagram:"https://instagram.com/rumat.studio",
+      tiktok:"https://www.tiktok.com/@rumat.studio",
+      location:"Rovaniemi — Helsinki"
+    },
     embed:{ instagramPost:"https://www.instagram.com/p/DMXVRgGC1Bv/embed", tiktokVideo:"https://www.tiktok.com/@rumat.studio/video/7525414518562753814" },
     pitch:"Luonnosta syntynyt. Reissuissa testattu. Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – jotta sinulla on päälläsi jotain, joka istuu, hengittää ja kestää jokaisella askeleella.",
     products:[
@@ -431,48 +331,33 @@
     applyContent(CONTENT);
   }
 
-  function priceNum(s){
-    if(typeof s==='number') return s;
-    const m = String(s||"").replace(/\s/g,"").match(/([0-9]+(?:[.,][0-9]{1,2})?)/);
-    return m ? parseFloat(m[1].replace(',','.')) : 0;
-  }
-  function parseTikTokId(url){
-    const m = String(url||"").match(/video\/(\d+)/);
-    return m ? m[1] : null;
-  }
+  function priceNum(s){ if(typeof s==='number') return s; const m=String(s||"").replace(/\s/g,"").match(/([0-9]+(?:[.,][0-9]{1,2})?)/); return m?parseFloat(m[1].replace(',','.')):0; }
+  function parseTikTokId(url){ const m=String(url||"").match(/video\/(\d+)/); return m?m[1]:null; }
 
   function applyContent(d){
-    // Tekstit
     if(d?.hero?.headline) document.querySelector('#hero-text h1').textContent = d.hero.headline;
     if(d?.pitch) document.getElementById('intro-text').textContent = d.pitch;
     if(d?.story) document.getElementById('story').textContent = d.story;
 
-    // Footer contact
     if(d?.contact?.email){ const ml=$('#mailLink'); ml.href=`mailto:${d.contact.email}`; ml.textContent=d.contact.email; }
     if(d?.contact?.instagram){ const ig=$('#igLink'); ig.href=d.contact.instagram; }
+    if(d?.contact?.tiktok){ const tt=$('#ttLink'); if(tt) tt.href=d.contact.tiktok; }
     if(d?.contact?.location){ $('#location').textContent = d.contact.location; }
 
-    // Upotukset
     if(d?.embed?.instagramPost) $('#igEmbed').src = d.embed.instagramPost;
-    if(d?.embed?.tiktokVideo){
-      const id = parseTikTokId(d.embed.tiktokVideo);
-      if(id){ $('#ttEmbed').src = `https://www.tiktok.com/embed/v2/${id}`; }
-    }
+    if(d?.embed?.tiktokVideo){ const id=parseTikTokId(d.embed.tiktokVideo); if(id){ $('#ttEmbed').src=`https://www.tiktok.com/embed/v2/${id}`; } }
 
-    // Tuotteet & toimitus
     renderProducts(d.products || defaultContent.products);
+
     const methods = d?.payment?.shipping?.methods || defaultContent.payment.shipping.methods;
     const defId   = d?.payment?.shipping?.defaultMethodId || methods[0]?.id;
     renderShipping(methods, defId);
 
-    // Blogi
     renderBlog(d.blog || defaultContent.blog);
 
-    // PayPal-varoitus
     $('#paypalWarn').textContent = d.paypalBusiness ? "" : "Aseta PayPal-sähköposti backendissä (ADMIN) ennen julkaisuversiota.";
   }
 
-  // Tuotteet
   function renderProducts(list){
     const root = document.getElementById('productsRoot');
     root.innerHTML = "";
@@ -500,9 +385,7 @@
         el('h3',{class:'serif text-2xl'}, p.name||'Tuote'),
         el('p',{class:'mt-1 text-stone-700 max-w-2xl mx-auto'}, p.blurb||''),
         el('div',{class:'mt-2 font-semibold text-lg'}, fmtEUR(Number(p.price||0))),
-        el('div',{class:'mt-3'},
-          el('button',{'data-add':p.id,class:'btn btn-dark'},'Lisää koriin')
-        )
+        el('div',{class:'mt-3'}, el('button',{'data-add':p.id,class:'btn btn-dark'},'Lisää koriin'))
       );
 
       const wrap = el('div',{}, gallery, details);
@@ -522,7 +405,6 @@
     });
   }
 
-  // Blogi
   function renderBlog(posts){
     const root = document.getElementById('blogRoot');
     root.innerHTML='';
@@ -555,10 +437,7 @@
   function closeCart(){ $cart.classList.remove('open'); }
   $open.onclick=openCart; $close.onclick=closeCart; $closeX.onclick=closeCart;
 
-  function catalogFromContent(){
-    const cat={}; (CONTENT.products||[]).forEach(p=>{ cat[p.id]={id:p.id,name:p.name,price:Number(p.price||0)}; });
-    return cat;
-  }
+  function catalogFromContent(){ const cat={}; (CONTENT.products||[]).forEach(p=>{ cat[p.id]={id:p.id,name:p.name,price:Number(p.price||0)}; }); return cat; }
 
   function renderShipping(methods, defId){
     $shipOpts.innerHTML='';
@@ -636,7 +515,6 @@
     document.body.appendChild(form); form.submit(); form.remove();
   });
 
-  // Success/Cancel
   (function(){
     const modal = $('#resultModal'); const title=$('#resultTitle'); const text=$('#resultText');
     function show(t,msg){ title.textContent=t; text.textContent=msg; modal.classList.add('open'); }
@@ -645,24 +523,22 @@
     modal.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // ===== WebGL Revontulet – kevyt elävä liike, ei scrollaa =====
+  // ===== WebGL Revontulet =====
   (function(){
     const SETTINGS = {
-      PAL_COL1:[0.02,0.70,0.95], // sinertävä
-      PAL_COL2:[0.00,1.00,0.60], // vihreä
+      PAL_COL1:[0.02,0.70,0.95],
+      PAL_COL2:[0.00,1.00,0.60],
       BRIGHTNESS:1.00,
       CURTAIN_Y:0.58,
       HEIGHT:0.55,
-      SPEED:0.18,           // pieni, jatkuva liike
-      STRIPE_STRENGTH:0.22, // hillitty raitailu
-      STAR_DENS:0.0001      // harvemmat tähdet → vähemmän "rakeisuutta"
+      SPEED:0.18,
+      STRIPE_STRENGTH:0.22,
+      STAR_DENS:0.0001
     };
-
     function init(){
       const canvas = document.getElementById('auroraCanvas'); if(!canvas) return;
       const gl = canvas.getContext('webgl',{antialias:false,depth:false,stencil:false,preserveDrawingBuffer:false});
       if(!gl){ canvas.style.background='linear-gradient(#0a1e2a,#0b3824)'; return; }
-
       const vert=`attribute vec2 a_pos; void main(){ gl_Position=vec4(a_pos,0.,1.); }`;
       const frag=`precision highp float; uniform vec2 u_res; uniform float u_time,u_brightness,u_y,u_height,u_speed,u_stripes,u_star; uniform vec3 u_c1,u_c2;
       float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
@@ -686,9 +562,8 @@
         col*=u_brightness;
         gl_FragColor=vec4(col,1.);
       }`;
-
       const sh=(t,s)=>{const o=gl.createShader(t); gl.shaderSource(o,s); gl.compileShader(o);
-        if(!gl.getShaderParameter(o,gl.COMPPILE_STATUS)){console.error(gl.getShaderInfoLog(o));} return o;};
+        if(!gl.getShaderParameter(o,gl.COMPILE_STATUS)){console.error(gl.getShaderInfoLog(o));} return o;};
       const prog=gl.createProgram();
       gl.attachShader(prog,sh(gl.VERTEX_SHADER,vert));
       gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,frag));
@@ -717,11 +592,7 @@
         gl.uniform3fv(uC2,SETTINGS.PAL_COL2);
       }
 
-      function draw(t){
-        setUniforms(t*0.001);
-        gl.drawArrays(gl.TRIANGLES,0,3);
-        requestAnimationFrame(draw);
-      }
+      function draw(t){ setUniforms(t*0.001); gl.drawArrays(gl.TRIANGLES,0,3); requestAnimationFrame(draw); }
 
       const ro=new ResizeObserver(()=>{ const DPR=Math.min(devicePixelRatio||1,2);
         const rect=canvas.getBoundingClientRect(); const dw=Math.floor(rect.width*DPR), dh=Math.floor(rect.height*DPR);
@@ -731,11 +602,10 @@
 
       requestAnimationFrame(draw);
     }
-
     if(document.readyState==='loading') addEventListener('DOMContentLoaded',init,{once:true}); else init();
   })();
 
-  // ===== Start =====
+  // Start
   loadContent();
   </script>
 </body>
