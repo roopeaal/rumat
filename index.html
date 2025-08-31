@@ -17,12 +17,11 @@
       --nav-green:#0E2016;
       --ink:#202020;
       --ivory:#F6F6F4;
-      --band:#DEEEEE;
-      --card:#F6F6F4;
+      --band:#DEEEEE;   /* esittelypalkit */
+      --card:#F6F6F4;   /* kuvakortin tausta */
       --accent:#A1A266;
       --footer:#0B0F0E;
-      --grainAlpha:.05;
-      --grainAlphaMobile:.03;
+      --grainAlpha:.04;
     }
     body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;background:var(--ivory);color:#1f2937}
     .serif{font-family:"Libre Baskerville",serif}
@@ -34,40 +33,55 @@
     .chip{font-size:.78rem;padding:.28rem .6rem;border-radius:9999px;border:1px solid rgb(214 211 209);background:#fff;color:#374151}
     .chip-olive{border-color:var(--accent);color:var(--accent)}
 
-    /* HERO tausta + revontuli-efekti */
-    .hero-fixed{position:fixed;inset:0;z-index:-2;overflow:hidden}
-    .hero-gradient{position:absolute;inset:0;background:
-      radial-gradient(1200px 600px at 50% -10%, rgba(41,212,182,.18), transparent 60%),
-      radial-gradient(1200px 700px at 50% 110%, rgba(0,138,116,.18), transparent 60%),
-      linear-gradient(180deg,#0b2430 0%,#0c2e3e 35%,#0b3f44 55%,#0b2d2b 100%)}
-    .aurora-layer{position:absolute;left:-10vw;right:-10vw;height:70vh;background:radial-gradient(80% 180% at 50% 10%, rgba(74,255,175,.25), rgba(0,0,0,0) 60%);filter:blur(22px) saturate(120%);animation:drift 18s ease-in-out infinite alternate;mix-blend-mode:screen;opacity:.75}
-    .aurora-layer.l2{top:22vh;height:70vh;background:radial-gradient(90% 220% at 40% 0%, rgba(20,255,187,.25), rgba(0,0,0,0) 60%);animation-duration:26s;animation-delay:-8s;opacity:.70}
-    .aurora-layer.l3{top:44vh;height:70vh;background:radial-gradient(90% 240% at 60% 10%, rgba(40,220,255,.18), rgba(0,0,0,0) 60%);animation-duration:34s;animation-delay:-14s;opacity:.55}
-    @keyframes drift{0%{transform:translateY(0) translateX(-2%) skewY(-2deg)}50%{transform:translateY(-1.5%) translateX(2%) skewY(2deg)}100%{transform:translateY(.5%) translateX(-1%) skewY(-1deg)}}
-    .film{position:absolute;inset:-10vh 0 -10vh 0;pointer-events:none;mix-blend-mode:overlay;opacity:var(--grainAlpha)}
-    @media (max-width:820px){.film{opacity:var(--grainAlphaMobile)}}
-    .rain-lines{position:absolute;inset:0;background-image:
-      repeating-linear-gradient(180deg, rgba(255,255,255,.10) 0 1px, transparent 1px 110px),
-      repeating-linear-gradient(180deg, rgba(255,255,255,.06) 0 1px, transparent 1px 60px);
-      background-size:100% 130px,100% 90px;opacity:.12;filter:blur(.3px);animation:rain 14s linear infinite}
+    /* ===== AURORA v2 (näkyvyys varma) ===== */
+    .hero-fixed{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+    .hero-gradient{
+      position:absolute;inset:0;
+      background:
+        radial-gradient(1200px 600px at 50% -10%, rgba(41,212,182,.22), transparent 60%),
+        radial-gradient(1200px 700px at 50% 110%, rgba(0,138,116,.22), transparent 60%),
+        linear-gradient(180deg,#0b2430 0%,#0c2e3e 35%,#0b3f44 55%,#0b2d2b 100%);
+    }
+    .aurora-layer{
+      position:absolute;left:-10vw;right:-10vw;height:70vh;
+      filter:blur(20px) saturate(130%);
+      mix-blend-mode:screen;opacity:.78;animation:drift 18s ease-in-out infinite alternate;
+    }
+    .aurora-layer.l1{top:8vh;  background:radial-gradient(80% 180% at 50% 10%, rgba(74,255,175,.30), rgba(0,0,0,0) 60%)}
+    .aurora-layer.l2{top:26vh; background:radial-gradient(90% 220% at 40% 0%, rgba(20,255,187,.26), rgba(0,0,0,0) 60%); animation-duration:26s;animation-delay:-8s;opacity:.72}
+    .aurora-layer.l3{top:44vh; background:radial-gradient(90% 240% at 60% 10%, rgba(40,220,255,.20), rgba(0,0,0,0) 60%); animation-duration:34s;animation-delay:-14s;opacity:.62}
+    @keyframes drift{
+      0%  {transform:translateY(0) translateX(-2%) skewY(-2deg)}
+      50% {transform:translateY(-1.2%) translateX(2%)  skewY(2deg)}
+      100%{transform:translateY(.4%)  translateX(-1%)  skewY(-1deg)}
+    }
+    .film{position:absolute;inset:-10vh 0 -10vh 0;opacity:var(--grainAlpha);mix-blend-mode:overlay}
+    .rain-lines{
+      position:absolute;inset:0;opacity:.10;filter:blur(.3px);
+      background-image:
+        repeating-linear-gradient(180deg, rgba(255,255,255,.09) 0 1px, transparent 1px 110px),
+        repeating-linear-gradient(180deg, rgba(255,255,255,.05) 0 1px, transparent 1px 60px);
+      background-size:100% 130px,100% 90px;animation:rain 14s linear infinite;
+    }
     @keyframes rain{from{background-position:0 0,0 0}to{background-position:0 130px,0 90px}}
 
     /* lasimainen header */
     .glass-header:before{content:"";position:absolute;inset:0;background:rgba(10,26,20,.88);border-bottom:1px solid rgba(255,255,255,.06);z-index:-1}
 
-    /* kori */
+    /* Kori */
     .drawer{position:fixed;top:0;right:0;width:min(440px,92vw);height:100vh;background:#fff;box-shadow:-20px 0 50px rgba(0,0,0,.2);transform:translateX(100%);transition:transform .28s ease;z-index:60}
     .drawer.open{transform:translateX(0)}
     .cart-count{min-width:1.25rem;height:1.25rem;border-radius:9999px;display:inline-grid;place-items:center;background:#fff;color:#111;padding:0 .25rem;font-size:.75rem;font-weight:700}
 
-    /* sosiaalisten medioiden upotukset */
-    .embed{position:relative;width:100%;border-radius:16px;overflow:hidden}
+    /* Some-upotukset */
+    .embed{position:relative;width:100%;border-radius:16px;overflow:hidden;background:#fff}
     .embed-1x1{padding-top:100%}.embed-9x16{padding-top:177.78%}
     .embed iframe,.embed blockquote,.embed .tiktok-embed{position:absolute;top:0;left:0;width:100%;height:100%}
   </style>
 </head>
 <body class="text-stone-900">
-  <!-- HERO-tausta (pysyy paikallaan) -->
+
+  <!-- ===== HERO-tausta (pysyy paikallaan) ===== -->
   <div class="hero-fixed" aria-hidden="true">
     <div class="hero-gradient"></div>
     <div class="aurora-layer l1"></div>
@@ -77,10 +91,10 @@
     <div class="rain-lines"></div>
   </div>
 
-  <!-- “yläpalkki-nauha”, joka nousee pois kuvan päältä -->
+  <!-- kapea värinauha, joka “nousee” pois kuvan päältä -->
   <div class="h-14 md:h-16 w-full" style="background:var(--nav-green);opacity:.92"></div>
 
-  <!-- Header (logo+linkit jäävät) -->
+  <!-- Yläpalkki -->
   <header class="fixed top-0 left-0 right-0 z-50 text-white glass-header">
     <div class="relative mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
       <a href="#etusivu" class="flex items-center gap-3">
@@ -104,7 +118,7 @@
     </div>
   </header>
 
-  <!-- HERO: teksti + logo, jotka liikkuvat skrollin mukana (tausta fixed) -->
+  <!-- ===== HERO: teksti + logo (liikkuu skrollin vauhtia) ===== -->
   <section id="etusivu" class="h-[calc(100vh-56px)] md:h-[calc(100vh-64px)] grid place-items-center text-stone-50 px-4">
     <div id="heroStack" class="text-center will-change-transform">
       <h1 class="uppercase font-extrabold tracking-[0.30em] text-[clamp(20px,5.2vw,56px)]
@@ -119,7 +133,7 @@
     </div>
   </section>
 
-  <!-- Intro-esittely – PÄIVITETTY TEKSTI -->
+  <!-- ===== Esittely (uusi teksti) ===== -->
   <section class="py-12" style="background:var(--band)">
     <div class="mx-auto max-w-3xl px-6 text-center">
       <p class="text-xl sm:text-2xl">Luonnosta syntynyt. Reissuissa testattu.</p>
@@ -130,7 +144,7 @@
     </div>
   </section>
 
-  <!-- TUOTTEET -->
+  <!-- ===== TUOTTEET ===== -->
   <section id="tuotteet" class="py-14">
     <div class="mx-auto max-w-6xl px-4">
       <div class="flex items-center justify-between mb-6">
@@ -140,13 +154,17 @@
 
       <!-- Tuote 1: Laukku -->
       <article class="mb-12">
-        <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200" style="background:var(--card)">
-            <img id="p1a" class="w-full h-full object-cover" alt="Laukku 1" loading="lazy">
+        <div class="relative">
+          <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200" style="background:var(--card)">
+              <img id="p1a" class="w-full h-full object-cover" alt="Laukku 1" loading="lazy">
+            </div>
+            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200" style="background:var(--card)">
+              <img id="p1b" class="w-full h-full object-cover" alt="Laukku 2" loading="lazy">
+            </div>
           </div>
-          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200" style="background:var(--card)">
-            <img id="p1b" class="w-full h-full object-cover" alt="Laukku 2" loading="lazy">
-          </div>
+          <button id="prev1" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
+          <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
         </div>
         <div class="mt-6 text-center">
           <h3 class="serif text-2xl">Laukku</h3>
@@ -163,13 +181,17 @@
 
       <!-- Tuote 2: Pipo -->
       <article class="mb-6">
-        <div class="grid md:grid-cols-2 gap-4 md:gap-6">
-          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200" style="background:var(--card)">
-            <img id="p2a" class="w-full h-full object-cover" alt="RUMAT Pipo 1" loading="lazy">
+        <div class="relative">
+          <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200" style="background:var(--card)">
+              <img id="p2a" class="w-full h-full object-cover" alt="RUMAT Pipo 1" loading="lazy">
+            </div>
+            <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200" style="background:var(--card)">
+              <img id="p2b" class="w-full h-full object-cover" alt="RUMAT Pipo 2" loading="lazy">
+            </div>
           </div>
-          <div class="aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200" style="background:var(--card)">
-            <img id="p2b" class="w-full h-full object-cover" alt="RUMAT Pipo 2" loading="lazy">
-          </div>
+          <button id="prev2" class="absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Edelliset kuvat">◀</button>
+          <button id="next2" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
         </div>
         <div class="mt-6 text-center">
           <h3 class="serif text-2xl">RUMAT Pipo</h3>
@@ -182,7 +204,7 @@
     </div>
   </section>
 
-  <!-- BLOGI -->
+  <!-- ===== BLOGI ===== -->
   <section id="blogi" class="py-16 bg-white">
     <div class="mx-auto max-w-3xl px-6">
       <h2 class="serif text-3xl mb-6">Blogi</h2>
@@ -196,19 +218,20 @@
     </div>
   </section>
 
-  <!-- SOME -->
+  <!-- ===== SOME ===== -->
   <section id="some" class="py-16" style="background:var(--band)">
     <div class="mx-auto max-w-6xl px-4">
       <h2 class="serif text-3xl mb-6">Some</h2>
       <div class="grid md:grid-cols-2 gap-6">
         <div>
-          <div class="embed embed-1x1 bg-white">
+          <div class="embed embed-1x1">
             <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DMlK18qiE5O/" data-instgrm-version="14" style="margin:0 auto;"></blockquote>
           </div>
           <div class="mt-2 text-sm">Jos upotus ei lataudu, avaa <a class="underline" href="https://www.instagram.com/p/DMlK18qiE5O/" target="_blank" rel="noreferrer">Instagram-postaus</a>.</div>
         </div>
         <div>
-          <div class="embed embed-9x16 bg-white">
+          <div class="embed embed-1x1">
+            <!-- TikTok upotus 1:1-kehykseen (skaalaa sisällön) -->
             <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@rumat.studio/video/7525414518562753814" data-video-id="7525414518562753814" style="margin:0;"><section></section></blockquote>
           </div>
           <div class="mt-2 text-sm">Jos upotus ei lataudu, avaa <a class="underline" href="https://www.tiktok.com/@rumat.studio/video/7525414518562753814" target="_blank" rel="noreferrer">TikTok-video</a>.</div>
@@ -217,7 +240,7 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
+  <!-- ===== FOOTER ===== -->
   <footer id="yhteys" class="pt-14 text-[color:var(--ivory)]" style="background:var(--footer)">
     <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
       <div><div class="uppercase tracking-wide">RUMAT.STUDIO</div><div class="text-sm mt-1 text-white/70">Helsinki — Contemporary textiles, built to last.</div></div>
@@ -241,7 +264,7 @@
     <div class="py-8 text-center text-xs text-white/65">© <span id="year"></span> RUMAT.STUDIO</div>
   </footer>
 
-  <!-- Kori (valinta toimitustavasta vasta korissa) -->
+  <!-- ===== KORI ===== -->
   <aside id="cart" class="drawer">
     <div class="h-16 flex items-center justify-between px-4 border-b">
       <div class="text-lg font-semibold">Kori</div>
@@ -267,36 +290,47 @@
     </div>
   </aside>
 
-  <!-- Instagram & TikTok -->
+  <!-- Instagram & TikTok upotukset -->
   <script async src="https://www.instagram.com/embed.js"></script>
   <script async src="https://www.tiktok.com/embed.js"></script>
 
   <script>
   /* Parallax: teksti+logo liikkuu, tausta fixed */
-  (()=>{const stack=document.getElementById('heroStack');let t=0,c=0;function onS(){const y=scrollY||0,h=innerHeight||1;t=-22*Math.min(1,y/(h*.9))}addEventListener('scroll',onS,{passive:true});onS();(function tick(){c+=(t-c)*.12;stack.style.transform=`translateY(${c}vh)`;requestAnimationFrame(tick)})()})();
+  (()=>{const stack=document.getElementById('heroStack');let target=0,cur=0;
+    function onS(){const y=scrollY||0,h=innerHeight||1;target=-22*Math.min(1,y/(h*.9))}
+    addEventListener('scroll',onS,{passive:true});onS();
+    (function tick(){cur+=(target-cur)*.12;stack.style.transform=`translateY(${cur}vh)`;requestAnimationFrame(tick)})()})();
 
-  /* Film grain: säädetty harvemmaksi rakeen vähentämiseksi */
-  (()=>{const c=document.getElementById('film');const pr=Math.min(1.5,devicePixelRatio||1);
-    function R(){c.width=Math.floor(innerWidth*pr);c.height=Math.floor(innerHeight*pr);D()}
-    function D(){const x=c.getContext('2d',{alpha:true}),w=c.width,h=c.height,i=x.createImageData(w,h),d=i.data;
-      for(let p=0;p<w*h;p+=4){const r=Math.random();const v=(r<.07)?255:0;d[p*4]=v;d[p*4+1]=v;d[p*4+2]=v;d[p*4+3]=(r<.07?10:0)}
+  /* Film grain – kevyt, ettei tule liikaa rakeisuutta */
+  (()=>{const c=document.getElementById('film');if(!c) return;const pr=Math.min(1.5,devicePixelRatio||1);
+    function resize(){c.width=Math.floor(innerWidth*pr);c.height=Math.floor(innerHeight*pr);draw()}
+    function draw(){const x=c.getContext('2d',{alpha:true}),w=c.width,h=c.height,i=x.createImageData(w,h),d=i.data;
+      for(let p=0;p<w*h;p++){const n=Math.random();const a=n<.03?14:0;const o=p*4;d[o]=255;d[o+1]=255;d[o+2]=255;d[o+3]=a}
       x.putImageData(i,0,0)}
-    addEventListener('resize',R);R()})();
+    addEventListener('resize',resize);resize()})();
 
-  /* apurit */
+  /* Apurit */
   const fmtEUR=n=>(n||0).toLocaleString('fi-FI',{style:'currency',currency:'EUR'});
 
-  /* Tuotekuvat (vaihda näihin omat polut tarvittaessa) */
+  /* Tuotekuvat + karusellinuolet */
   const slingImgs=["https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80","https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1600&q=80","https://images.unsplash.com/photo-1511389026070-a14ae610a1be?auto=format&fit=crop&w=1600&q=80"];
   const pipoImgs =["https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80","https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1600&q=80","https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1600&q=80"];
   const FALLBACK="https://placehold.co/1400x1750?text=Kuva";
-  function setWithFallback(id,url){const el=document.getElementById(id);if(!el)return;el.onerror=()=>{el.onerror=null;el.src=FALLBACK};el.src=url}
-  setWithFallback("p1a",slingImgs[0]);setWithFallback("p1b",slingImgs[1]);
-  setWithFallback("p2a",pipoImgs[0]); setWithFallback("p2b",pipoImgs[1]);
+  function setWithFallback(imgEl,url){if(!imgEl)return;imgEl.onerror=()=>{imgEl.onerror=null;imgEl.src=FALLBACK};imgEl.src=url}
+  let i1=0,i2=0;
+  function setPair(arr,aId,bId,i){const a=document.getElementById(aId),b=document.getElementById(bId);if(!a||!b)return;const n=arr.length;setWithFallback(a,arr[(i%n+n)%n]);setWithFallback(b,arr[((i+1)%n+n)%n])}
+  setPair(slingImgs,"p1a","p1b",i1);setPair(pipoImgs,"p2a","p2b",i2);
+  document.getElementById('next1').addEventListener('click',()=>{i1=(i1+1)%slingImgs.length;setPair(slingImgs,"p1a","p1b",i1)});
+  document.getElementById('prev1').addEventListener('click',()=>{i1=(i1-1+slingImgs.length)%slingImgs.length;setPair(slingImgs,"p1a","p1b",i1)});
+  document.getElementById('next2').addEventListener('click',()=>{i2=(i2+1)%pipoImgs.length;setPair(pipoImgs,"p2a","p2b",i2)});
+  document.getElementById('prev2').addEventListener('click',()=>{i2=(i2-1+pipoImgs.length)%pipoImgs.length;setPair(pipoImgs,"p2a","p2b",i2)});
 
-  /* Kori: tuotteille yksi hinta, toimitus valitaan korissa */
+  /* Kori: yksi hinta/tuote, toimitus valitaan korissa */
   const PRODUCTS={laukku:{id:"laukku",name:"Laukku",price:149.00},pipo:{id:"pipo",name:"RUMAT Pipo",price:59.00}};
-  const CART_KEY="rumat.cart.v1";const $=s=>document.querySelector(s);const cartEl=$("#cart"),itemsEl=$("#cartItems"),countEl=$("#cartCount");
+  const CART_KEY="rumat.cart.v1";
+  const $=s=>document.querySelector(s);
+  const cartEl=$("#cart"),itemsEl=$("#cartItems"),countEl=$("#cartCount");
+  document.getElementById('year').textContent=new Date().getFullYear();
   let cart=[];try{cart=JSON.parse(localStorage.getItem(CART_KEY)||"[]")}catch{cart=[]}
   function save(){localStorage.setItem(CART_KEY,JSON.stringify(cart))}
   function add(id){const it=cart.find(i=>i.id===id);it?it.qty++:cart.push({id,qty:1});save();render()}
@@ -307,8 +341,9 @@
   function totals(){const sub=cart.reduce((s,it)=>s+PRODUCTS[it.id].price*it.qty,0);const ship=Number(document.querySelector('input[name="ship"]:checked')?.value||0);return{sub,ship,total:sub+ship}}
   function render(){
     countEl.textContent=cart.reduce((s,i)=>s+i.qty,0);
-    if(!itemsEl)return;itemsEl.innerHTML=cart.length?"":"<div class='text-stone-500'>Kori on tyhjä.</div>";
-    cart.forEach((it,idx)=>{const p=PRODUCTS[it.id];const row=document.createElement('div');row.className="flex items-center justify-between border rounded-lg p-3";
+    if(!itemsEl)return;
+    itemsEl.innerHTML=cart.length?"":"<div class='text-stone-500'>Kori on tyhjä.</div>";
+    cart.forEach((it,idx)=>{const p=PRODUCTS[it.id];const row=document.createElement('div');row.className="flex items-center justify-between border rounded-lg p-3 bg-white";
       row.innerHTML=`<div><div class="font-semibold">${p.name}</div><div class="text-sm text-stone-500">${fmtEUR(p.price)} / kpl</div></div>
       <div class="flex items-center gap-2">
         <button class="px-2 py-1 border rounded" aria-label="Vähennä">-</button>
@@ -329,15 +364,15 @@
   $("#checkout").onclick=()=>{if(!cart.length)return alert("Kori on tyhjä.");const t=totals();const f=document.createElement('form');f.method="POST";f.action="https://www.paypal.com/cgi-bin/webscr";f.target="_blank";
     f.innerHTML=`<input type="hidden" name="cmd" value="_cart"><input type="hidden" name="upload" value="1">
       <input type="hidden" name="business" value="kauppa@esimerkki.fi">
-      <input type="hidden" name="currency_code" value="EUR"><input type="hidden" name="handling_cart" value="${t.ship.toFixed(2)}">`;
+      <input type="hidden" name="currency_code" value="EUR">
+      <input type="hidden" name="handling_cart" value="${t.ship.toFixed(2)}">`;
     cart.forEach((it,i)=>{const p=PRODUCTS[it.id],n=i+1;f.insertAdjacentHTML('beforeend',`
       <input type="hidden" name="item_name_${n}" value="${p.name}">
       <input type="hidden" name="amount_${n}" value="${p.price.toFixed(2)}">
       <input type="hidden" name="quantity_${n}" value="${it.qty}">`)});document.body.appendChild(f);f.submit();f.remove()}
-  document.getElementById('year').textContent=new Date().getFullYear()
   </script>
 
-  <!-- (varmistus upotuksille) -->
+  <!-- varmistetaan upotukset -->
   <script async src="https://www.instagram.com/embed.js"></script>
   <script async src="https://www.tiktok.com/embed.js"></script>
 </body>
