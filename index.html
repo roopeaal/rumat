@@ -9,16 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Perusvärit ja util-luokat -->
   <style>
     :root{
       --ink:#202020;
-      --dark-forest:#0E2016;     /* header */
-      --olive:#A1A266;           /* korostus */
-      --ivory:#F6F6F4;           /* vaalea */
-      --mist:#DEEEEE;            /* esittelypalkit / blogi */
-      --gallery:#F6F6F4;         /* kuvapalkkien tausta */
-      --footer:#0B0F0E;          /* footer musta */
+      --dark-forest:#A1A266;     /* header */
+      --olive:#A1A266;           /* accent */
+      --ivory:#F6F6F4;           /* light */
+      --mist:#DEEEEE;            /* blog / soft section */
+      --gallery:#F6F6F4;         /* product image band */
+      --footer:#0B0F0E;          /* footer black */
     }
     body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:#fff;color:#111827}
     .serif{font-family:"Libre Baskerville",serif}
@@ -44,7 +43,6 @@
     .modal.open{display:grid;place-items:center}
   </style>
 
-  <!-- OG / Twitter -->
   <meta property="og:title" content="RUMAT.STUDIO – Luonnosta syntynyt. Reissuissa testattu.">
   <meta property="og:description" content="Neuleet ja asusteet poluille ja kaupunkiin – istuvat, hengittävät ja kestävät.">
   <meta property="og:type" content="website">
@@ -54,7 +52,7 @@
 
 <body class="text-stone-900">
 
-  <!-- ===== Header (pysyy ylhäällä) ===== -->
+  <!-- Header -->
   <header class="fixed top-0 left-0 right-0 z-50">
     <div class="bg-[color:var(--dark-forest)] text-white">
       <div class="mx-auto max-w-6xl px-4 py-3 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
@@ -79,15 +77,13 @@
     </div>
   </header>
 
-  <!-- ===== HERO (WebGL revontulet) ===== -->
+  <!-- HERO (WebGL revontulet) -->
   <section id="etusivu" class="hero grid place-items-center text-stone-50 px-4">
     <canvas id="auroraCanvas" class="hero-media"></canvas>
     <div class="hero-overlay"></div>
 
     <div id="hero-text" class="text-center transition-transform mt-24 md:mt-28">
-      <h1 class="uppercase font-black tracking-[0.32em]
-                 text-[clamp(26px,6.2vw,84px)]
-                 drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
+      <h1 class="uppercase font-black tracking-[0.32em] text-[clamp(26px,6.2vw,84px)] drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
         LIIAN RUMAT OLLAKSEEN TOTTA
       </h1>
       <div class="mt-8 flex justify-center">
@@ -98,7 +94,7 @@
     </div>
   </section>
 
-  <!-- ===== Esittely ===== -->
+  <!-- Esittely -->
   <section class="py-12 bg-stone-50/90">
     <div class="mx-auto max-w-3xl px-6 text-center">
       <p id="intro-text" class="text-xl sm:text-2xl">
@@ -108,7 +104,7 @@
     </div>
   </section>
 
-  <!-- ===== TUOTTEET (generoidaan dynaamisesti) ===== -->
+  <!-- TUOTTEET -->
   <section id="tuotteet" class="py-14 bg-white">
     <div class="mx-auto max-w-6xl px-4">
       <div class="flex items-center justify-between mb-6">
@@ -119,7 +115,7 @@
     </div>
   </section>
 
-  <!-- ===== Blogi ===== -->
+  <!-- Blogi -->
   <section id="blogi" class="py-14" style="background:var(--mist)">
     <div class="mx-auto max-w-4xl px-6">
       <h2 class="serif text-3xl mb-6">Blogi</h2>
@@ -127,7 +123,7 @@
     </div>
   </section>
 
-  <!-- ===== Some ===== -->
+  <!-- Some -->
   <section id="some" class="py-14 bg-white">
     <div class="mx-auto max-w-6xl px-4">
       <h2 class="serif text-3xl mb-6">Some</h2>
@@ -137,10 +133,9 @@
           <iframe id="igEmbed" class="w-full h-full" allowtransparency="true" frameborder="0" scrolling="no" loading="lazy"
                   src="https://www.instagram.com/p/DMXVRgGC1Bv/embed"></iframe>
         </div>
-
-        <!-- TikTok (virallinen embed) -->
+        <!-- TikTok: data täytetään sisällöstä ennen embed.js latausta -->
         <div class="rounded-xl ring-1 ring-stone-200 overflow-hidden bg-white p-2">
-          <blockquote
+          <blockquote id="tiktokEmbed"
             class="tiktok-embed"
             cite="https://www.tiktok.com/@rumat.studio/video/7525414518562753814"
             data-video-id="7525414518562753814"
@@ -152,7 +147,7 @@
     </div>
   </section>
 
-  <!-- ===== Tarina ===== -->
+  <!-- Tarina -->
   <section id="tarina" class="py-14 bg-stone-50/90">
     <div class="mx-auto max-w-3xl px-6">
       <h2 class="serif text-3xl mb-4">Tarina</h2>
@@ -162,7 +157,7 @@
     </div>
   </section>
 
-  <!-- ===== Footer ===== -->
+  <!-- Footer -->
   <footer id="yhteys" class="pt-14 text-[color:var(--ivory)]" style="background:var(--footer)">
     <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
       <div>
@@ -189,7 +184,7 @@
     <div class="py-8 text-center text-xs text-white/65">© <span id="year"></span> RUMAT.STUDIO</div>
   </footer>
 
-  <!-- ===== Cart Drawer ===== -->
+  <!-- Cart Drawer -->
   <div id="cartDrawer" class="drawer">
     <div class="absolute inset-0 bg-black/40" id="closeCart"></div>
     <div class="panel p-5 flex flex-col">
@@ -198,7 +193,6 @@
         <button id="closeCartX" class="text-stone-500 hover:text-stone-800">✕</button>
       </div>
       <div id="cartItems" class="flex-1 overflow-auto divide-y"></div>
-
       <div class="mt-4 space-y-3">
         <div>
           <div class="text-sm font-medium mb-1">Toimitus</div>
@@ -215,7 +209,7 @@
     </div>
   </div>
 
-  <!-- ===== Success/Cancel ilmoitus ===== -->
+  <!-- Success/Cancel -->
   <div id="resultModal" class="modal">
     <div class="bg-white rounded-2xl p-6 shadow-soft w-[min(92vw,480px)] text-center">
       <h3 id="resultTitle" class="serif text-2xl mb-2">Kiitos tilauksesta!</h3>
@@ -224,10 +218,9 @@
     </div>
   </div>
 
-  <!-- ===== Scripts ===== -->
+  <!-- Scripts -->
   <script>
-  // ----------- Perus apurit -----------
-  const API_BASE = ""; // esim. "https://rumat-backend.your-worker.workers.dev" (jätä tyhjäksi jos ei backendia)
+  const API_BASE = ""; // esim. "https://rumat-backend.<tunnus>.workers.dev" (jätä tyhjäksi jos ei backendia)
   const fmtEUR = x => new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
   const $ = sel => document.querySelector(sel);
   const el = (tag,attrs={},...kids)=>{ const n=document.createElement(tag); Object.entries(attrs).forEach(([k,v])=>{
@@ -235,14 +228,14 @@
       else n.setAttribute(k,v);
     }); kids.forEach(k=>{ if(k==null) return; if(typeof k==='string') n.appendChild(document.createTextNode(k)); else n.appendChild(k);}); return n;};
 
-  // ----------- Hero-parallax (ei pomppua) -----------
+  // Hero text motion
   (function(){ const heroText = document.getElementById('hero-text'); let lastY=-1;
     function onScroll(){ const y=window.scrollY||0; if(y===lastY) return; lastY=y; const vh=innerHeight||1; const t=-18*Math.min(1,y/(vh*0.9)); heroText.style.transform=`translateY(${t}vh)`; }
     addEventListener('scroll', onScroll, {passive:true}); onScroll();
     document.getElementById('year').textContent = new Date().getFullYear();
   })();
 
-  // ----------- Dynaaminen sisältö (fallback: oletukset) -----------
+  // Default content
   const defaultContent = {
     hero:{ headline:"LIIAN RUMAT OLLAKSEEN TOTTA" },
     paypalBusiness:"",
@@ -284,12 +277,14 @@
     const m = String(s||"").replace(/\s/g,"").match(/([0-9]+(?:[.,][0-9]{1,2})?)/);
     return m ? parseFloat(m[1].replace(',','.')) : 0;
   }
+  function parseTikTokId(url){
+    const m = String(url||"").match(/video\/(\d+)/);
+    return m ? m[1] : null;
+  }
 
   function applyContent(d){
-    // Hero
+    // Hero + texts
     if(d?.hero?.headline) document.querySelector('#hero-text h1').textContent = d.hero.headline;
-
-    // Intro & story
     if(d?.pitch) document.getElementById('intro-text').textContent = d.pitch;
     if(d?.story) document.getElementById('story').textContent = d.story;
 
@@ -298,26 +293,33 @@
     if(d?.contact?.instagram){ const ig=$('#igLink'); ig.href=d.contact.instagram; }
     if(d?.contact?.location){ $('#location').textContent = d.contact.location; }
 
-    // Embeds
+    // Embeds (IG iframe src + TikTok blockquote attribuutit)
     if(d?.embed?.instagramPost) $('#igEmbed').src = d.embed.instagramPost;
+    if(d?.embed?.tiktokVideo){
+      const id = parseTikTokId(d.embed.tiktokVideo);
+      const q = $('#tiktokEmbed');
+      if(q && id){
+        q.setAttribute('cite', d.embed.tiktokVideo);
+        q.setAttribute('data-video-id', id);
+      }
+    }
 
-    // Products (täysin dynaaminen määrä)
+    // Products
     renderProducts(d.products || defaultContent.products);
 
     // Blog
     renderBlog(d.blog || defaultContent.blog);
 
-    // Shipping (UI + info)
+    // Shipping UI + footer info
     const methods = d?.payment?.shipping?.methods || defaultContent.payment.shipping.methods;
     const defId   = d?.payment?.shipping?.defaultMethodId || methods[0]?.id;
     renderShipping(methods, defId);
 
-    // PayPal email varoitus
-    const warn = $('#paypalWarn');
-    warn.textContent = d.paypalBusiness ? "" : "Aseta PayPal-sähköposti backendissä (ADMIN) ennen julkaisuversiota.";
+    // PayPal warn
+    $('#paypalWarn').textContent = d.paypalBusiness ? "" : "Aseta PayPal-sähköposti backendissä (ADMIN) ennen julkaisuversiota.";
   }
 
-  // ----------- Rakenna tuotteet -----------
+  // Products
   function renderProducts(list){
     const root = document.getElementById('productsRoot');
     root.innerHTML = "";
@@ -353,7 +355,6 @@
       root.appendChild(gallery);
       root.appendChild(details);
 
-      // kuvasarja + nuolet
       const imgs = Array.isArray(p.images)&&p.images.length ? p.images : ["https://placehold.co/1400x1750?text=Kuva+1","https://placehold.co/1400x1750?text=Kuva+2","https://placehold.co/1400x1750?text=Kuva+3"];
       let i=0; const setPair=(k)=>{ const a=$(`#${leftId}`), b=$(`#${rightId}`); const n=imgs.length; a.src=imgs[(k%n+n)%n]; b.src=imgs[((k+1)%n+n)%n]; };
       setPair(i);
@@ -361,7 +362,6 @@
       $(`#${prevId}`).addEventListener('click',()=>{i=(i-1+imgs.length)%imgs.length; setPair(i);});
     });
 
-    // Lisää korin käsittelijä (delegointi)
     root.addEventListener('click', e=>{
       const btn = e.target.closest('[data-add]');
       if(!btn) return;
@@ -369,7 +369,7 @@
     });
   }
 
-  // ----------- Blogi -----------
+  // Blog
   function renderBlog(posts){
     const root = document.getElementById('blogRoot');
     root.innerHTML='';
@@ -383,7 +383,7 @@
     });
   }
 
-  // ----------- Ostoskori (yksi hinta; toimitus valitaan korissa) -----------
+  // Cart (one price; shipping chosen in cart)
   const $cart   = $('#cartDrawer');
   const $items  = $('#cartItems');
   const $open   = $('#openCart');
@@ -418,7 +418,6 @@
       $shipOpts.appendChild(radio);
     });
     $shipOpts.querySelectorAll('input[name="ship"]').forEach(r=>r.addEventListener('change', renderCart));
-    // Päivitä footeri-info
     const ul = document.getElementById('shipInfo'); ul.innerHTML='';
     methods.forEach(m=>ul.appendChild(el('li',{}, `${m.name} — ${typeof m.price==='number'?fmtEUR(m.price):m.price}`)));
   }
@@ -462,7 +461,6 @@
     if(ids.length===0) return alert('Lisää tuotteita koriin.');
     const cat = catalogFromContent();
     const email = CONTENT.paypalBusiness || "kauppa@esimerkki.fi";
-    // PayPal _cart + handling_cart (toimitus), return/cancel → hash
     const form = el('form',{method:'POST', action:'https://www.paypal.com/cgi-bin/webscr', target:'_blank'},
       el('input',{type:'hidden',name:'cmd',value:'_cart'}),
       el('input',{type:'hidden',name:'upload',value:'1'}),
@@ -484,7 +482,7 @@
     document.body.appendChild(form); form.submit(); form.remove();
   });
 
-  // ----------- Success/Cancel overlay (+ tyhjennys onnistuessa) -----------
+  // Success/Cancel
   (function(){
     const modal = $('#resultModal'); const title=$('#resultTitle'); const text=$('#resultText');
     function show(t,msg){ title.textContent=t; text.textContent=msg; modal.classList.add('open'); }
@@ -493,7 +491,7 @@
     modal.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // ----------- WebGL Revontulet (vähemmän rakeisuutta) -----------
+  // WebGL Revontulet
   (function(){
     const SETTINGS = { PAL_COL1:[0.02,0.70,0.95], PAL_COL2:[0.00,1.00,0.60], BRIGHTNESS:1.05, CURTAIN_Y:0.52, HEIGHT:0.50, SPEED:0.22, STRIPE_STRENGTH:0.45, STAR_DENS:0.04 };
     function init(){
@@ -533,17 +531,21 @@
         gl.uniform1f(uBr,SETTINGS.BRIGHTNESS); gl.uniform1f(uY,SETTINGS.CURTAIN_Y); gl.uniform1f(uH,SETTINGS.HEIGHT);
         gl.uniform1f(uSpd,SETTINGS.SPEED); gl.uniform1f(uStr,SETTINGS.STRIPE_STRENGTH); gl.uniform1f(uStar,SETTINGS.STAR_DENS);
         gl.uniform3fv(uC1,SETTINGS.PAL_COL1); gl.uniform3fv(uC2,SETTINGS.PAL_COL2); };
-      const frame=now=>{ resize(); const t=now*0.001; uniforms(t); gl.drawArrays(gl.TRIANGLES,0,3); requestAnimationFrame(frame); };
+      const frame=now=>{ const t=now*0.001; uniforms(t); gl.drawArrays(gl.TRIANGLES,0,3); requestAnimationFrame(frame); };
+      const ro=new ResizeObserver(()=>{ const DPR=Math.min(devicePixelRatio||1,2);
+        const w=canvas.clientWidth||canvas.parentElement.clientWidth, h=canvas.clientHeight||canvas.parentElement.clientHeight||innerHeight;
+        const dw=Math.floor(w*DPR), dh=Math.floor(h*DPR); if(canvas.width!==dw||canvas.height!==dh){ canvas.width=dw; canvas.height=dh; gl.viewport(0,0,dw,dh); }
+      }); ro.observe(canvas);
       requestAnimationFrame(frame);
     }
     if(document.readyState==='loading') addEventListener('DOMContentLoaded',init,{once:true}); else init();
   })();
 
-  // ----------- Käynnistys -----------
+  // Start
   loadContent();
   </script>
 
-  <!-- TikTokin virallinen embed-skripti (lisää vain kerran sivulle) -->
+  <!-- TikTok embed (virallinen) -->
   <script async src="https://www.tiktok.com/embed.js"></script>
 </body>
 </html>
