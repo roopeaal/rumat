@@ -9,15 +9,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
     :root{
       --brand-green:#0E2016;     /* header/kuvapalkit tumma vihreä */
       --footer-black:#0B0F0E;     /* footer */
-      --ink:#202020;              /* teksti */
-      --ivory:#F6F6F4;            /* lämmin vaalea */
+      --ink:#202020;
+      --ivory:#F6F6F4;
       --pale:#DEEEEE;             /* esittelypalkit */
-      --accent:#A1A266;           /* oliivi aksentti */
+      --accent:#A1A266;           /* oliivi */
     }
     body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;background:#F8F8F6;color:#111827}
     .serif{font-family:"Libre Baskerville",serif}
@@ -28,22 +27,20 @@
     .btn-olive{background:var(--accent);color:#202020;border-color:#8f945a}
     .chip{font-size:.8rem;padding:.28rem .6rem;border-radius:9999px;border:1px solid rgb(214 211 209);background:#fff;color:#374151}
 
-    /* Kiinteä hero */
     .hero-fixed{position:fixed;inset:0;z-index:-1}
-    /* Kori (modal) */
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:60}
     .modal.open{display:flex}
   </style>
 </head>
 
 <body class="text-stone-900">
-  <!-- HERO: tausta + aurora-canvas (toimiva nykyinen versio säilyy) -->
+  <!-- HERO tausta + aurora -->
   <div class="hero-fixed">
     <canvas id="aurora" class="w-full h-full"></canvas>
-    <div class="absolute inset-0 bg-[radial-gradient(100%_60%_at_50%_0%,rgba(0,0,0,.35),rgba(0,0,0,.55))] pointer-events-none"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(100%_60%_at_50%_0%,rgba(0,0,0,.30),rgba(0,0,0,.55))] pointer-events-none"></div>
   </div>
 
-  <!-- Header: tumma vihreä tausta nousee ylös kuvan mukana, tekstit ja logo sticky -->
+  <!-- Header -->
   <header class="fixed top-0 left-0 right-0 z-50 text-white">
     <div class="bg-[color:var(--brand-green)]/95 border-b border-white/5">
       <div class="mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
@@ -53,7 +50,6 @@
           </div>
           <span class="hidden sm:inline text-sm uppercase tracking-widest font-semibold">RUMAT.STUDIO</span>
         </a>
-
         <nav class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
           <a href="#etusivu"   class="hover:underline underline-offset-4 font-semibold">Etusivu</a>
           <a href="#tuotteet"  class="hover:underline underline-offset-4 font-semibold">Tuotteet</a>
@@ -62,7 +58,6 @@
           <a href="#blogi"     class="hover:underline underline-offset-4 font-semibold">Blogi</a>
           <a href="#yhteys"    class="hover:underline underline-offset-4 font-semibold">Yhteystiedot</a>
         </nav>
-
         <div class="justify-self-end">
           <button id="openCart" class="px-3 py-2 rounded-full bg-white/90 text-stone-900 text-sm font-semibold ring-1 ring-white/60">
             👜 Kori <span id="cartCount" class="ml-1">0</span>
@@ -72,7 +67,7 @@
     </div>
   </header>
 
-  <!-- HERO – otsikko + R -->
+  <!-- HERO – otsikko -->
   <section id="etusivu" class="h-[100svh] grid place-items-center text-white px-4">
     <div id="hero-text" class="text-center transition-transform">
       <h1 class="uppercase font-extrabold tracking-[0.30em]
@@ -87,7 +82,7 @@
     </div>
   </section>
 
-  <!-- Esittelypalkki (uusi teksti) -->
+  <!-- Esittelypalkki -->
   <section class="py-12 bg-[color:var(--pale)]">
     <div class="mx-auto max-w-3xl px-6 text-center">
       <p class="text-xl sm:text-2xl">
@@ -105,7 +100,7 @@
         <div class="text-xs text-stone-500">Hinnat sis. ALV • Palautus 14 vrk</div>
       </div>
 
-      <!-- LAUKKU – kuvapalkki -->
+      <!-- LAUKKU -->
       <div class="mb-12">
         <div class="relative">
           <div class="grid md:grid-cols-2 gap-4 md:gap-6">
@@ -120,17 +115,11 @@
           <button id="next1" class="absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft" aria-label="Seuraavat kuvat">▶</button>
         </div>
 
-        <!-- LAUKKU – esittely (kokosivun leveä palkki #DEEEEE) -->
         <div class="mt-6 text-center bg-[color:var(--pale)] rounded-xl p-6">
           <h3 class="serif text-2xl">Laukku</h3>
-          <p class="mt-1 text-stone-700">
-            Täysin kierrätysmateriaaleista valmistettu sling-laukku. Purjekangas/tekstiili, turvavyöhihna, uudelleenkäytetyt metalliosat.
-            Ulkomitat: 28 × 16 × 7 cm. Valmistettu Suomessa.
-          </p>
+          <p class="mt-1 text-stone-700">Täysin kierrätysmateriaaleista valmistettu sling-laukku. Purjekangas/tekstiili, turvavyöhihna, uudelleenkäytetyt metalliosat. Ulkomitat: 28 × 16 × 7 cm. Valmistettu Suomessa.</p>
           <div class="mt-2 font-semibold text-xl">€149,00</div>
-          <div class="mt-4">
-            <button class="btn btn-dark" onclick="addToCart('laukku','Laukku',149)">Lisää koriin</button>
-          </div>
+          <div class="mt-4"><button class="btn btn-dark" onclick="addToCart('laukku','Laukku',149)">Lisää koriin</button></div>
           <div class="mt-2 text-sm text-stone-600">Toimitustapa valitaan korissa (Nouto 0 € / Posti 6,90 €)</div>
         </div>
       </div>
@@ -154,9 +143,7 @@
           <h3 class="serif text-2xl">RUMAT Pipo</h3>
           <p class="mt-1 text-stone-700">Käsinneulottu mohair-sekoite. Korkeus n. 22 cm. Päänympärys 54–58 cm (joustava).</p>
           <div class="mt-2 font-semibold text-xl">€59,00</div>
-          <div class="mt-4">
-            <button class="btn btn-dark" onclick="addToCart('pipo','RUMAT Pipo',59)">Lisää koriin</button>
-          </div>
+          <div class="mt-4"><button class="btn btn-dark" onclick="addToCart('pipo','RUMAT Pipo',59)">Lisää koriin</button></div>
           <div class="mt-2 text-sm text-stone-600">Toimitustapa valitaan korissa (Nouto 0 € / Posti 6,90 €)</div>
         </div>
       </div>
@@ -171,19 +158,30 @@
     </div>
   </section>
 
-  <!-- SOME (palautettu IG) -->
+  <!-- SOME: Instagram + TikTok (sama leveys, fallback-linkit) -->
   <section id="some" class="py-14 bg-white">
     <div class="mx-auto max-w-4xl px-4">
       <h2 class="serif text-3xl mb-6">Somessa</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Instagram -->
+        <div id="igWrap" class="max-w-[540px] mx-auto w-full">
+          <blockquote class="instagram-media"
+            data-instgrm-permalink="https://www.instagram.com/p/DMXVRgGC1Bv/"
+            data-instgrm-version="14"
+            style="background:#FFF;border:0; margin:0 auto; max-width:540px; width:100%;">
+          </blockquote>
+        </div>
 
-      <!-- Instagram upotus + fallback-kortti -->
-      <div id="igWrap" class="max-w-[540px]">
-        <blockquote class="instagram-media"
-          data-instgrm-permalink="https://www.instagram.com/p/DMXVRgGC1Bv/"
-          data-instgrm-version="14"
-          style="background:#FFF;border:0; margin: 0 auto; max-width:540px; width:100%;">
-        </blockquote>
+        <!-- TikTok -->
+        <div id="ttWrap" class="max-w-[540px] mx-auto w-full">
+          <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@rumat.studio/video/7525414518562753814"
+            data-video-id="7525414518562753814" style="max-width:540px;min-width:325px;">
+            <section> </section>
+          </blockquote>
+        </div>
       </div>
+
+      <!-- Upotusskriptit + fallbackit -->
       <script async src="https://www.instagram.com/embed.js" onerror="
         (function(){
           var w=document.getElementById('igWrap');
@@ -195,10 +193,21 @@
             '</a>';
         })();
       "></script>
+      <script async src="https://www.tiktok.com/embed.js" onerror="
+        (function(){
+          var w=document.getElementById('ttWrap');
+          if(!w) return;
+          w.innerHTML =
+            '<a class=&quot;block p-4 ring-1 ring-stone-200 rounded-xl hover:bg-stone-50 transition&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot; href=&quot;https://www.tiktok.com/@rumat.studio/video/7525414518562753814&quot;>' +
+              '<div class=&quot;font-semibold&quot;>TikTok-video</div>' +
+              '<div class=&quot;text-sm text-stone-500&quot;>Avaa TikTokissa</div>' +
+            '</a>';
+        })();
+      "></script>
     </div>
   </section>
 
-  <!-- BLOGI (palautettu) -->
+  <!-- BLOGI -->
   <section id="blogi" class="py-14 bg-stone-50/90">
     <div class="mx-auto max-w-3xl px-6">
       <h2 class="serif text-3xl mb-6">Blogi</h2>
@@ -241,7 +250,7 @@
     <div class="py-8 text-center text-xs text-white/65">© <span id="year"></span> RUMAT.STUDIO</div>
   </footer>
 
-  <!-- OSTOSKORI (modal) -->
+  <!-- OSTOSKORI -->
   <div id="cartModal" class="modal">
     <div class="bg-white rounded-2xl w-[min(92vw,720px)] p-5 shadow-soft">
       <div class="flex items-center justify-between mb-3">
@@ -250,21 +259,38 @@
       </div>
       <div id="cartItems" class="divide-y divide-stone-200"></div>
 
-      <div class="flex items-center justify-between mt-4">
-        <div class="text-lg font-semibold">Yhteensä: <span id="cartTotal">€0,00</span></div>
-        <div class="text-sm text-stone-600">Toimitustapa valitaan alla</div>
+      <div class="mt-4 grid sm:grid-cols-3 gap-3 items-start">
+        <div class="sm:col-span-2">
+          <div class="text-sm font-semibold mb-1">Toimitustapa</div>
+          <label class="flex items-center gap-2 text-sm">
+            <input type="radio" name="ship" value="0" checked> Nouto (0 €)
+          </label>
+          <label class="flex items-center gap-2 text-sm mt-1">
+            <input type="radio" name="ship" value="6.9"> Posti (6,90 €)
+          </label>
+        </div>
+        <div class="text-right">
+          <div class="text-sm text-stone-500">Välisumma</div>
+          <div id="subtotal" class="font-semibold">€0,00</div>
+          <div class="text-sm text-stone-500 mt-1">Toimitus</div>
+          <div id="shipping" class="font-semibold">€0,00</div>
+          <div class="text-sm text-stone-500 mt-1">Yhteensä</div>
+          <div id="grand" class="text-lg font-bold">€0,00</div>
+        </div>
       </div>
 
-      <div class="mt-4 grid sm:grid-cols-2 gap-3">
-        <button class="btn btn-dark" onclick="checkout(0)">Maksa noudolla (0 €)</button>
-        <button class="btn btn-olive" onclick="checkout(6.90)">Maksa Postilla (6,90 €)</button>
+      <div class="mt-4 grid sm:grid-cols-3 gap-3">
+        <button id="clearCart" class="btn">Tyhjennä kori</button>
+        <div class="sm:col-span-2">
+          <button class="btn btn-olive w-full" onclick="checkout()">Maksa</button>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- Scripts -->
   <script>
-    /* --------- HERO liike --------- */
+    /* Hero liike */
     const heroText = document.getElementById('hero-text');
     let lastY = -1;
     const onScroll = () => {
@@ -278,7 +304,7 @@
     onScroll();
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    /* --------- Kuvakarusellit (Unsplash + fallback) --------- */
+    /* Kuvakarusellit */
     const slingImgs = [
       "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80",
       "https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1600&q=80",
@@ -308,30 +334,27 @@
     document.getElementById('next2').onclick=()=>{i2=(i2+1)%pipoImgs.length;setPair(pipoImgs,"p2a","p2b",i2)};
     document.getElementById('prev2').onclick=()=>{i2=(i2-1+pipoImgs.length)%pipoImgs.length;setPair(pipoImgs,"p2a","p2b",i2)};
 
-    /* --------- Ostoskori (localStorage) --------- */
+    /* Ostoskori */
     const PAYPAL_BUSINESS = "kauppa@esimerkki.fi"; // VAIHDA OMAAN
     const CART_KEY = "rumat_cart_v1";
     const $ = (id)=>document.getElementById(id);
     const fmtEUR = v => v.toLocaleString('fi-FI',{style:'currency',currency:'EUR'});
-
     function readCart(){ try{ return JSON.parse(localStorage.getItem(CART_KEY)||"[]"); }catch{ return []; } }
     function writeCart(items){ localStorage.setItem(CART_KEY, JSON.stringify(items)); updateCartUI(); }
     function addToCart(id,name,price){
-      const items = readCart();
-      const i = items.findIndex(x=>x.id===id);
+      const items = readCart(); const i = items.findIndex(x=>x.id===id);
       if(i>=0){ items[i].qty+=1; } else { items.push({id,name,price,qty:1}); }
       writeCart(items);
       $('openCart').classList.add('ring-2','ring-emerald-400');
       setTimeout(()=>$('openCart').classList.remove('ring-emerald-400','ring-2'),700);
     }
-    function removeFromCart(idx){
-      const items = readCart(); items.splice(idx,1); writeCart(items);
-    }
+    function removeFromCart(idx){ const items = readCart(); items.splice(idx,1); writeCart(items); }
     function changeQty(idx,delta){
       const items = readCart(); if(!items[idx]) return;
       items[idx].qty = Math.max(1, items[idx].qty + delta); writeCart(items);
     }
     function cartTotal(items){ return items.reduce((s,x)=>s+x.price*x.qty,0); }
+    function selectedShipping(){ const r = document.querySelector('input[name="ship"]:checked'); return r?Number(r.value):0; }
     function updateCartUI(){
       const items=readCart();
       $('cartCount').textContent = items.reduce((s,x)=>s+x.qty,0);
@@ -358,68 +381,71 @@
           wrap.appendChild(row);
         });
       }
-      $('cartTotal').textContent = fmtEUR(cartTotal(items));
+      const sub = cartTotal(items), ship = selectedShipping(), grand = sub + ship;
+      $('subtotal').textContent = fmtEUR(sub);
+      $('shipping').textContent = fmtEUR(ship);
+      $('grand').textContent = fmtEUR(grand);
     }
     updateCartUI();
-
     $('openCart').onclick = ()=> $('cartModal').classList.add('open');
     $('closeCart').onclick = ()=> $('cartModal').classList.remove('open');
+    $('clearCart').onclick = ()=>{ localStorage.removeItem(CART_KEY); updateCartUI(); };
+    document.addEventListener('change', e=>{ if(e.target.name==='ship') updateCartUI(); });
     document.addEventListener('keydown', e=>{ if(e.key==='Escape') $('cartModal').classList.remove('open'); });
 
-    // PayPal checkout: _cart upload (toimitus valitaan tässä)
-    function checkout(shipping){
+    function checkout(){
       const items = readCart(); if(items.length===0) return alert('Kori on tyhjä');
+      const shipping = selectedShipping();
       const f = document.createElement('form');
       f.method='POST'; f.target='_blank';
       f.action='https://www.paypal.com/cgi-bin/webscr';
       const add=(n,v)=>{ const i=document.createElement('input'); i.type='hidden'; i.name=n; i.value=v; f.appendChild(i); };
-
       add('cmd','_cart'); add('upload','1'); add('business',PAYPAL_BUSINESS);
-      add('currency_code','EUR'); add('no_shipping','2'); // pyydä osoite kassalla
+      add('currency_code','EUR'); add('no_shipping','2'); // pyydä osoite PayPalissa
       items.forEach((x,idx)=>{
-        const n = idx+1;
-        add(`item_name_${n}`, x.name);
-        add(`amount_${n}`, x.price.toFixed(2));
-        add(`quantity_${n}`, x.qty);
+        const n = idx+1; add(`item_name_${n}`, x.name);
+        add(`amount_${n}`, x.price.toFixed(2)); add(`quantity_${n}`, x.qty);
       });
-      add('shipping', shipping.toFixed(2));  // koko tilauksen toimitus
+      add('shipping', shipping.toFixed(2));
       document.body.appendChild(f); f.submit(); f.remove();
     }
 
-    /* --------- Aurora canvaksella (nykyinen toimiva, säädetty maltilliseen rakeeseen) --------- */
+    /* Aurora (kevyempi ja vähemmän “rakeita”) */
     (function(){
       const c = document.getElementById('aurora'); const ctx = c.getContext('2d');
-      let w,h, t=0, raf;
-      function resize(){ w = c.width = innerWidth*2; h = c.height = innerHeight*2; }
+      let w,h,t=0,last=0, raf;
+      function resize(){ w=c.width=innerWidth*2; h=c.height=innerHeight*2; }
       resize(); addEventListener('resize', resize, {passive:true});
 
-      function noise(x,y,s=150){ return (Math.sin(x/s)+Math.cos(y/s*1.7)+Math.sin((x+y)/s*0.7))*0.5; }
-      function draw(){
-        t += 0.6; // nopeus
+      function noise(x,y,s=180){ return (Math.sin(x/s)+Math.cos(y/s*1.7)+Math.sin((x+y)/s*0.7))*0.5; }
+      function draw(ts){
+        if(ts-last<33){ raf=requestAnimationFrame(draw); return; } // ~30fps
+        last=ts; t += 0.6;
+
         // taivas
         const g = ctx.createLinearGradient(0,0,0,h);
         g.addColorStop(0,'#0d2330'); g.addColorStop(.55,'#0f2f45'); g.addColorStop(1,'#0b1d2a');
         ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
 
-        // vihreät "verhot"
+        // verhot
         for(let band=0; band<3; band++){
           ctx.beginPath();
-          for(let x=0; x<=w; x+=20){
-            const y = h*0.30 + band*120 + Math.sin((x*0.004 + t*0.01 + band))*80 + noise(x, t*12, 220)*60;
+          for(let x=0; x<=w; x+=18){
+            const y = h*0.28 + band*120 + Math.sin((x*0.004 + t*0.01 + band))*70 + noise(x, t*12, 240)*50;
             if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
           }
           ctx.lineTo(w,h); ctx.lineTo(0,h); ctx.closePath();
           const gg = ctx.createLinearGradient(0,h*0.2,0,h);
-          gg.addColorStop(0, 'rgba(0,255,200,0.12)');
-          gg.addColorStop(.5,'rgba(0,220,170,0.10)');
-          gg.addColorStop(1, 'rgba(0,140,90,0.10)');
+          gg.addColorStop(0, 'rgba(0,255,200,0.11)');
+          gg.addColorStop(.5,'rgba(0,220,170,0.09)');
+          gg.addColorStop(1, 'rgba(0,140,90,0.08)');
           ctx.fillStyle = gg; ctx.fill();
         }
 
         // pystysäteet
         ctx.globalCompositeOperation='screen';
-        for(let i=0;i<10;i++){
-          const x = (i/10)*w + Math.sin((t+i*13)*0.01)*120;
+        for(let i=0;i<8;i++){
+          const x = (i/8)*w + Math.sin((t+i*13)*0.01)*110;
           const grd = ctx.createLinearGradient(x,0,x,h);
           grd.addColorStop(0,'rgba(0,220,170,0)');
           grd.addColorStop(0.5,'rgba(0,220,170,0.06)');
@@ -428,18 +454,18 @@
         }
         ctx.globalCompositeOperation='source-over';
 
-        // tähtipöly – maltillinen (vähemmän rakeisuutta)
-        const density = Math.max(60, Math.min(120, Math.floor(w*h/300000))); // 60–120 pistettä
-        ctx.fillStyle='rgba(255,255,255,0.10)';
+        // “tähtipöly” vain ylä- ja ala-alueille, harvempi
+        const density = Math.max(40, Math.min(80, Math.floor(w*h/450000)));
+        ctx.fillStyle='rgba(255,255,255,0.08)';
         for(let i=0;i<density;i++){
-          const x = Math.random()*w, y = Math.random()*h;
-          if(y > h*0.25 && y < h*0.95) continue; // pidä pöly ylälaidassa ja alareunassa kevyenä
-          ctx.fillRect(x,y,1,1);
+          const yBand = Math.random()<0.7 ? (Math.random()*h*0.22) : (h*0.88 + Math.random()*h*0.12);
+          const x = Math.random()*w;
+          ctx.fillRect(x,yBand,1,1);
         }
 
-        raf = requestAnimationFrame(draw);
+        raf=requestAnimationFrame(draw);
       }
-      draw();
+      raf=requestAnimationFrame(draw);
     })();
   </script>
 </body>
