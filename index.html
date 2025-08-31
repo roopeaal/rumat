@@ -18,7 +18,10 @@
       --mist:#DEEEEE;
       --gallery:#F6F6F4;
       --footer:#0B0F0E;
-      --silhouette:#08110d;      /* siluetin väri */
+      --silhouette:#08110d;      /* siluetin tumma */
+      --silhouette-mid:#0c1a15;  /* vuoriin/varjoihin */
+      --silhouette-line:#9fb1a9; /* mökin ääriviiva */
+      --window-warm:#FFD780;     /* mökin ikkuna */
     }
     body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#111827;background:#fff}
     .serif{font-family:"Libre Baskerville",serif}
@@ -50,7 +53,7 @@
     }
     #hero-text{ position:relative; z-index:2; }
 
-    /* Sivun alareunan siluetti – KOROTETTU (160px), vuoret + suuremmat kuuset */
+    /* Sivun alareunan siluetti */
     .bottom-sil{
       position:fixed; left:0; right:0; bottom:-1px; height:160px;
       z-index:1; pointer-events:none;
@@ -84,19 +87,49 @@
   <!-- KIINTEÄ REVONTULI-TAUSTA -->
   <canvas id="auroraCanvas" class="aurora-fixed"></canvas>
 
-  <!-- SIVUN ALAREUNAN SILUETTI – tunturimaisema: vuoria + suurempia kuusia -->
+  <!-- SIVUN ALAREUNAN SILUETTI – tunturimaisema: vuoria + kuusia + mökki (paremmin erottuva) -->
   <div class="bottom-sil" aria-hidden="true">
     <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
-      <!-- Kaukana: pehmeä tunturiselänne (matalampi, haalea) -->
+      <defs>
+        <!-- Lämmin ikkunahehku -->
+        <filter id="windowGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+
+        <!-- Kuuset: oksakerrokset + runko (ei pelkkiä kolmioita) -->
+        <g id="treeTall" fill="var(--silhouette)">
+          <!-- oksakerrokset (trapezoidimaiset) -->
+          <path d="M0,0 l-18,22 h36 z" transform="translate(0,0)"/>
+          <path d="M0,0 l-20,24 h40 z" transform="translate(0,10)"/>
+          <path d="M0,0 l-22,26 h44 z" transform="translate(0,22)"/>
+          <path d="M0,0 l-24,28 h48 z" transform="translate(0,36)"/>
+          <!-- runko -->
+          <rect x="-3.2" y="60" width="6.4" height="12" rx="1"/>
+        </g>
+        <g id="treeMed" fill="var(--silhouette)">
+          <path d="M0,0 l-14,18 h28 z" transform="translate(0,2)"/>
+          <path d="M0,0 l-16,20 h32 z" transform="translate(0,12)"/>
+          <path d="M0,0 l-18,22 h36 z" transform="translate(0,24)"/>
+          <rect x="-2.8" y="48" width="5.6" height="10" rx="1"/>
+        </g>
+        <g id="treeSmall" fill="var(--silhouette)">
+          <path d="M0,0 l-11,14 h22 z" transform="translate(0,4)"/>
+          <path d="M0,0 l-13,16 h26 z" transform="translate(0,12)"/>
+          <rect x="-2.4" y="40" width="4.8" height="8" rx="1"/>
+        </g>
+      </defs>
+
+      <!-- Kaukana: pehmeä tunturiselänne -->
       <path d="M0,120 
                C180,105 240,108 340,114 
                C460,121 520,110 640,116
                C760,122 880,108 1000,114
                C1160,122 1280,110 1440,118
                L1440,160 L0,160 Z"
-            fill="var(--silhouette)" opacity=".28"/>
+            fill="var(--silhouette-mid)" opacity=".28"/>
 
-      <!-- Keskietäisyys: selkeämpi tunturiketju (muutama huippu, mutta loivat) -->
+      <!-- Keskietäisyys: loivia huippuja -->
       <path d="M0,122
                C120,118 190,110 260,118
                C340,126 420,106 500,116
@@ -104,9 +137,9 @@
                C850,132 980,110 1100,118
                C1220,126 1330,112 1440,120
                L1440,160 L0,160 Z"
-            fill="var(--silhouette)" opacity=".44"/>
+            fill="var(--silhouette-mid)" opacity=".44"/>
 
-      <!-- Lähin maa/harjanne (tummaa täyttöä) -->
+      <!-- Lähin harjanne -->
       <path d="M0,130 
                C160,128  320,132 480,130
                C640,128  800,131 960,129
@@ -114,44 +147,52 @@
                L1440,160 L0,160 Z"
             fill="var(--silhouette)"/>
 
-      <!-- Kuusikko: suurempia puita etualalle (kolmiopolut) -->
-      <g fill="var(--silhouette)">
-        <!-- vasen ryhmä – isot kuuset -->
-        <path d="M40,132 l15,-30 l15,30 z"/>
-        <path d="M80,131 l18,-36 l18,36 z"/>
-        <path d="M126,133 l12,-24 l12,24 z"/>
-        <path d="M160,130 l20,-40 l20,40 z"/>
-        <path d="M206,132 l14,-28 l14,28 z"/>
-        <!-- keskiryhmä – vaihtelevia kokoja -->
-        <path d="M520,133 l14,-28 l14,28 z"/>
-        <path d="M560,131 l18,-36 l18,36 z"/>
-        <path d="M604,134 l12,-24 l12,24 z"/>
-        <path d="M640,130 l20,-40 l20,40 z"/>
-        <path d="M686,132 l14,-28 l14,28 z"/>
-        <path d="M716,131 l18,-36 l18,36 z"/>
-        <path d="M760,133 l14,-28 l14,28 z"/>
-        <path d="M796,130 l20,-40 l20,40 z"/>
-        <!-- oikea ryhmä – harvempi -->
-        <path d="M1080,133 l14,-28 l14,28 z"/>
-        <path d="M1118,131 l18,-36 l18,36 z"/>
-        <path d="M1162,134 l12,-24 l12,24 z"/>
-        <path d="M1196,130 l20,-40 l20,40 z"/>
-        <path d="M1242,132 l14,-28 l14,28 z"/>
-        <path d="M1280,131 l18,-36 l18,36 z"/>
-        <path d="M1324,133 l14,-28 l14,28 z"/>
+      <!-- Kuusikko: useita kokoja -->
+      <g>
+        <!-- vasen ryhmä -->
+        <use href="#treeTall"  x="55"   y="76"/>
+        <use href="#treeMed"   x="95"   y="82"/>
+        <use href="#treeSmall" x="128"  y="88"/>
+        <use href="#treeTall"  x="168"  y="74"/>
+        <use href="#treeMed"   x="210"  y="82"/>
+        <!-- keskiryhmä -->
+        <use href="#treeTall"  x="520"  y="74"/>
+        <use href="#treeMed"   x="558"  y="82"/>
+        <use href="#treeSmall" x="592"  y="88"/>
+        <use href="#treeTall"  x="632"  y="72"/>
+        <use href="#treeMed"   x="674"  y="82"/>
+        <use href="#treeSmall" x="706"  y="90"/>
+        <use href="#treeTall"  x="748"  y="74"/>
+        <use href="#treeMed"   x="786"  y="82"/>
+        <!-- oikea ryhmä -->
+        <use href="#treeTall"  x="1086" y="76"/>
+        <use href="#treeMed"   x="1122" y="84"/>
+        <use href="#treeSmall" x="1156" y="90"/>
+        <use href="#treeTall"  x="1196" y="74"/>
+        <use href="#treeMed"   x="1236" y="82"/>
+        <use href="#treeSmall" x="1272" y="90"/>
+        <use href="#treeTall"  x="1312" y="76"/>
       </g>
 
-      <!-- Pieni mökki etualalla -->
-      <g fill="var(--silhouette)">
-        <rect x="1205" y="123" width="36" height="18" rx="1"/>
-        <path d="M1200,124 L1223,110 L1246,124 Z"/>
-        <rect x="1228" y="112" width="6" height="11"/>
+      <!-- Mökki: vaalea ääriviiva + lämmin ikkunahehku -->
+      <g>
+        <!-- ikkuna glow -->
+        <rect x="1226" y="118" width="14" height="11" rx="1.5"
+              fill="var(--window-warm)" opacity=".85" filter="url(#windowGlow)"/>
+        <!-- mökin runko ja katto -->
+        <g fill="none" stroke="var(--silhouette-line)" stroke-width="1.6" stroke-linejoin="round">
+          <rect x="1203" y="123" width="44" height="22" rx="1" fill="var(--silhouette)"/>
+          <path d="M1198,124 L1225,108 L1252,124 Z" fill="var(--silhouette)"/>
+          <rect x="1224.5" y="118" width="17" height="14" rx="2" fill="transparent"/>
+        </g>
+        <!-- savupiippu -->
+        <rect x="1232" y="110" width="6" height="12" fill="var(--silhouette)"/>
       </g>
 
       <!-- Kevyt savu -->
-      <g fill="#9fb1a9">
-        <circle class="smoke" cx="1231" cy="108" r="2.8"/>
-        <circle class="smoke s2" cx="1235" cy="103" r="2.2"/>
+      <g fill="#b7c7c1">
+        <circle class="smoke"  cx="1235" cy="106" r="2.8"/>
+        <circle class="smoke s2" cx="1239" cy="101" r="2.2"/>
       </g>
     </svg>
   </div>
