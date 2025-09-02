@@ -91,48 +91,46 @@
     .nav-measure{ position:absolute !important; visibility:hidden !important; display:flex !important; white-space:nowrap !important; }
     .nav-hidden{ position:absolute !important; left:-9999px !important; visibility:hidden !important; }
 
-    /* HEADER LAYOUT SAFETY */
+    /* HEADER SAFETY */
     #hdrRow{ grid-template-columns: 1fr auto 1fr; }
     #brandBlock{ min-width:0; }
     #brandText{
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
-      max-width:45vw; /* bränditeksti ei saa viedä liikaa tilaa */
+      max-width:45vw;
     }
-    /* Ääritilassa typistetään bränditeksti pois (logo jää), jotta napit mahtuvat */
     #hdrRow.compact #brandText{ display:none; }
 
-    /* Oikean reunan napit eivät koskaan mene päällekkäin */
+    /* Oikean reunan ikonipainikkeet (ei koskaan päällekkäin) */
     #rightBlock{
-      display:flex;
-      align-items:center;
-      gap:.5rem;
-      flex-wrap:nowrap;
-      white-space:nowrap;  /* ei rivinvaihtoja */
+      display:flex; align-items:center; gap:.5rem; flex-wrap:nowrap; white-space:nowrap;
     }
-    #rightBlock button{
-      display:inline-flex;
-      align-items:center;
-      white-space:nowrap;  /* teksti ei katkea */
+    .icon-btn{
+      position:relative;
+      width:38px; height:38px;
+      display:grid; place-items:center;
+      border-radius:9999px;
+      background:rgba(255,255,255,0.10);
+      border:1px solid rgba(255,255,255,0.30);
+      color:#fff;
+      transition:background .15s ease;
+    }
+    .icon-btn:hover{ background:rgba(255,255,255,0.20); }
+    .badge{
+      position:absolute; top:-4px; right:-4px;
+      min-width:18px; height:18px; padding:0 4px;
+      display:grid; place-items:center;
+      border-radius:9999px; background:#fff; color:#111827;
+      font-size:11px; line-height:1; font-weight:700;
+      border:1px solid rgba(0,0,0,.15);
     }
 
     /* Tuotekuvagalleria */
-    .product-gallery{
-      container-type:inline-size;
-      --pg-gap:1rem;
-    }
-    .pg-grid{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:var(--pg-gap);
-      justify-items:center;
-    }
+    .product-gallery{ container-type:inline-size; --pg-gap:1rem; }
+    .pg-grid{ display:grid; grid-template-columns:1fr; gap:var(--pg-gap); justify-items:center; }
     .pg-b{ display:none; }
-    .pg-grid > .img-wrap{
-      width:100%;
-      max-width: calc(50cqw - var(--pg-gap)/2);
-    }
+    .pg-grid > .img-wrap{ width:100%; max-width: calc(50cqw - var(--pg-gap)/2); }
     @container (min-width: 900px){
       .product-gallery{ --pg-gap:1.5rem; }
       .pg-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--pg-gap); }
@@ -153,25 +151,14 @@
     }
 
     /* Revontuliraot */
-    .aurora-gap{
-      height: var(--section-gap);
-      pointer-events: none;
-      background: transparent;
-    }
+    .aurora-gap{ height: var(--section-gap); pointer-events: none; background: transparent; }
 
     /* Pyöristetyt palkit */
-    .full-bleed{
-      margin-left: calc(50% - 50vw);
-      margin-right: calc(50% - 50vw);
-    }
-    .band{
-      background:#fff;
-      border-radius: var(--band-radius);
-      overflow: hidden;
-    }
+    .full-bleed{ margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
+    .band{ background:#fff; border-radius: var(--band-radius); overflow: hidden; }
     .band--mist{ background: var(--mist); }
     .band--stone{ background: #f5f5f4; }
-    .band-inner{ max-width: 72rem; margin: 0 auto; padding: 3rem 1rem; } /* = max-w-6xl + py-12 px-4 */
+    .band-inner{ max-width: 72rem; margin: 0 auto; padding: 3rem 1rem; }
   </style>
 </head>
 
@@ -266,12 +253,24 @@
           <a href="#yhteys"    class="hover:underline underline-offset-4 font-semibold">Yhteystiedot</a>
         </nav>
 
-        <!-- Oikea: Valikko + Ostoskori (ei koskaan päällekkäin) -->
+        <!-- Oikea: ikonit -->
         <div id="rightBlock" class="justify-self-end">
-          <button id="openMenu" class="px-3 py-2 rounded-full bg-white/10 ring-1 ring-white/30 hover:bg-white/20"
-                  aria-controls="menuDrawer" aria-expanded="false">Valikko</button>
-          <button id="openCart" class="px-3 py-2 rounded-full bg-white/10 ring-1 ring-white/30 hover:bg-white/20">
-            Ostoskori (<span id="cartCount">0</span>)
+          <!-- Valikko: ☰ -->
+          <button id="openMenu" class="icon-btn" aria-controls="menuDrawer" aria-expanded="false" aria-label="Valikko">
+            <span aria-hidden="true" style="font-size:20px;line-height:1">☰</span>
+            <span class="sr-only">Valikko</span>
+          </button>
+
+          <!-- Ostoskori: kärryikoni + lätkä -->
+          <button id="openCart" class="icon-btn" aria-label="Ostoskori">
+            <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="20" r="1.8"></circle>
+              <circle cx="17" cy="20" r="1.8"></circle>
+              <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 8H7.1"></path>
+            </svg>
+            <span class="badge" id="cartCount">0</span>
+            <span class="sr-only">Ostoskori</span>
           </button>
         </div>
       </div>
@@ -812,7 +811,7 @@
     modal?.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // ===== RESPONSIVE NAV + EI PÄÄLLEKKÄIN NAPEILLE =====
+  // ===== RESPONSIVE NAV + HEADER SAFETY =====
   (function(){
     const container = document.getElementById('hdrRow');
     const brand     = document.getElementById('brandBlock');
@@ -820,8 +819,6 @@
     const right     = document.getElementById('rightBlock');
     const menuBtn   = document.getElementById('openMenu');
 
-    const SLACK_SHOW = 40;
-    const SLACK_HIDE = 10;
     let navVisible = true;
 
     function setHeaderVar(){
@@ -837,9 +834,8 @@
     }
 
     function canShowNav(){
-      // simuloi tilannetta, jossa Valikko on piilossa (nav näkyy)
       const wasHidden = menuBtn.classList.contains('hidden');
-      menuBtn.classList.add('hidden');
+      menuBtn.classList.add('hidden'); // kun nav näkyy, menu-ikoni piilossa
       const cw = container.clientWidth;
       const bw = Math.ceil(brand.getBoundingClientRect().width);
       const rw = Math.ceil(right.getBoundingClientRect().width);
@@ -853,23 +849,22 @@
       navVisible = !!showNav;
       if (navVisible){
         nav.classList.remove('hidden','nav-hidden');
-        menuBtn.classList.add('hidden');           // desktop: Valikko piiloon
+        menuBtn.classList.add('hidden');           // desktop: menu-ikoni piiloon
         menuBtn.setAttribute('aria-expanded','false');
       }else{
-        nav.classList.add('nav-hidden');           // piiloon visuaalisesti
-        menuBtn.classList.remove('hidden');        // mobiili: Valikko näkyviin
+        nav.classList.add('nav-hidden');           // nav piiloon
+        menuBtn.classList.remove('hidden');        // mobiili: menu-ikoni näkyviin
       }
       setHeaderVar();
     }
 
     function ensureRightNeverOverlaps(){
-      // Näytä bränditeksti, mittaa -> jos ei mahdu, ota compact-tila (piilottaa bränditekstin)
       container.classList.remove('compact');
       const cw = container.clientWidth;
       const bw = Math.ceil(brand.getBoundingClientRect().width);
       const rw = Math.ceil(right.getBoundingClientRect().width);
       if (bw + rw + 16 > cw){
-        container.classList.add('compact');
+        container.classList.add('compact'); // piilottaa bränditekstin, logo jää
       }
     }
 
@@ -1008,7 +1003,8 @@
         if (rtid) return;
         rtid = setTimeout(()=>{ rtid=null; resizeNow(); }, 120);
       }
-      window.addEventListener('resize', scheduleResize, {passive:true});
+      window.addEventListener('resize,', scheduleResize, {passive:true});
+      window.addEventListener('resize', scheduleResize, {passive:true}); /* (korjaus: dupl.) */
       window.addEventListener('orientationchange', ()=>setTimeout(resizeNow, 250), {passive:true});
       if (window.visualViewport){
         let vvPrevW = Math.round(window.visualViewport.width||0);
