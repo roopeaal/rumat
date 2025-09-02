@@ -1,49 +1,378 @@
-<!-- SILUETTI – kuuset ja tunturi, puut yhdistyvät horisonttiin -->
-<svg viewBox="0 0 100 100" preserveAspectRatio="none"
-     class="absolute inset-x-0 bottom-0 h-[28vh] w-full pointer-events-none select-none">
-  <defs>
-    <!-- kevyt yläreunan häivytys -->
-    <linearGradient id="fadeDown" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="rgba(11,15,14,0)"/>
-      <stop offset="1" stop-color="rgba(11,15,14,1)"/>
-    </linearGradient>
-  </defs>
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RUMAT.STUDIO</title>
+  <meta name="description" content="Luonnosta syntynyt. Reissuissa testattu. Neuleet ja asusteet poluille ja kaupunkiin." />
 
-  <!-- Maaviiva / horisontti -->
-  <g fill="#0B0F0E">
-    <!-- maa -->
-    <rect x="0" y="68" width="100" height="32"></rect>
+  <!-- Fontit + Tailwind -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- kuusikolmiot: kaikkien pohja y=68 -> yhdistyy maahan -->
-    <!-- voit lisätä/poistaa kolmioita vapaasti, kunhan viimeinen piste on y=68 -->
-    <path d="M 2 68 L 4.8 56 L 7.6 68 Z" />
-    <path d="M 8 68 L 11 54 L 14 68 Z" />
-    <path d="M 14 68 L 17 57 L 20 68 Z" />
-    <path d="M 20 68 L 23.5 53 L 27 68 Z" />
-    <path d="M 27 68 L 30 55 L 33 68 Z" />
-    <path d="M 33 68 L 36.5 51 L 40 68 Z" />
-    <path d="M 40 68 L 43 56 L 46 68 Z" />
-    <path d="M 46 68 L 49.5 52 L 53 68 Z" />
-    <path d="M 53 68 L 56 57 L 59 68 Z" />
-    <path d="M 59 68 L 62.5 54 L 66 68 Z" />
-    <path d="M 66 68 L 69 58 L 72 68 Z" />
-    <path d="M 72 68 L 75.5 53 L 79 68 Z" />
-    <path d="M 79 68 L 82 56 L 85 68 Z" />
-    <path d="M 85 68 L 88.5 55 L 92 68 Z" />
-    <path d="M 92 68 L 95 57 L 98 68 Z" />
+  <style>
+    :root{
+      --ink:#202020;
+      --ivory:#F6F6F4;
+      --header:#0B0F0E; /* header tausta */
+    }
+    html,body{height:100%}
+    body{
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
+      color:#1f2937;
+      background:var(--ivory);
+      overflow-x:hidden;
+    }
+    .serif{font-family:"Libre Baskerville",serif}
+    .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
 
-    <!-- loiva tunturilinja taustalle (sama väri, sulautuu maahan) -->
-    <path d="
-      M 0 68
-      C 12 64, 22 65, 30 63
-      C 42 60, 55 62, 66 61
-      C 78 60, 88 63, 100 60
-      L 100 68 L 0 68 Z" />
-    
-    <!-- mökki ilman ääriviivoja/ikkunaa, hieman ylempänä -->
-    <path d="M 60 62 L 66 57 L 73 62 L 73 68 L 60 68 Z" />
-  </g>
+    /* Hero-taustakerros on fixed → revontulet eivät scrollaa */
+    .hero-layer{
+      position:fixed; inset:0; z-index:-1;
+      overflow:hidden; background:#07131A;
+    }
+    canvas#aurora{position:absolute; inset:0; width:100%; height:100%; display:block}
 
-  <!-- pehmeä häivytys ylöspäin -->
-  <rect x="0" y="0" width="100" height="68" fill="url(#fadeDown)"/>
-</svg>
+    /* Pieni tekstin parallax, ilman pomppua */
+    #hero-text{ will-change: transform; }
+
+    /* Header */
+    header.topbar{
+      background:var(--header);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+
+    /* TikTok/IG kortit samankokoisiksi */
+    .embed-card{ aspect-ratio: 1/1; background:#fff; border:1px solid #e5e7eb; border-radius:16px; overflow:hidden }
+
+    /* Osat, joita voi halutessa vielä säätää */
+    .hero-grad::after{
+      content:""; position:absolute; inset:0;
+      background:radial-gradient(120% 60% at 50% 10%, rgba(0,255,209,.08), rgba(0,0,0,0));
+      pointer-events:none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== Kiinteä hero-tausta (Revontulet + siluetti) ===== -->
+  <div class="hero-layer hero-grad">
+    <canvas id="aurora"></canvas>
+
+    <!-- SILUETTI – kuuset & tunturi yhdistyvät horisonttiin -->
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none"
+         class="absolute inset-x-0 bottom-0 h-[28vh] w-full pointer-events-none select-none">
+      <defs>
+        <linearGradient id="fadeDown" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="rgba(11,15,14,0)"/>
+          <stop offset="1" stop-color="rgba(11,15,14,1)"/>
+        </linearGradient>
+      </defs>
+
+      <g fill="#0B0F0E">
+        <!-- maa / horisontti -->
+        <rect x="0" y="68" width="100" height="32"></rect>
+
+        <!-- kuusikolmiot (kaikkien pohja y=68) -->
+        <path d="M 2 68 L 4.8 56 L 7.6 68 Z" />
+        <path d="M 8 68 L 11 54 L 14 68 Z" />
+        <path d="M 14 68 L 17 57 L 20 68 Z" />
+        <path d="M 20 68 L 23.5 53 L 27 68 Z" />
+        <path d="M 27 68 L 30 55 L 33 68 Z" />
+        <path d="M 33 68 L 36.5 51 L 40 68 Z" />
+        <path d="M 40 68 L 43 56 L 46 68 Z" />
+        <path d="M 46 68 L 49.5 52 L 53 68 Z" />
+        <path d="M 53 68 L 56 57 L 59 68 Z" />
+        <path d="M 59 68 L 62.5 54 L 66 68 Z" />
+        <path d="M 66 68 L 69 58 L 72 68 Z" />
+        <path d="M 72 68 L 75.5 53 L 79 68 Z" />
+        <path d="M 79 68 L 82 56 L 85 68 Z" />
+        <path d="M 85 68 L 88.5 55 L 92 68 Z" />
+        <path d="M 92 68 L 95 57 L 98 68 Z" />
+
+        <!-- loiva tunturi taustalle -->
+        <path d="
+          M 0 68
+          C 12 64, 22 65, 30 63
+          C 42 60, 55 62, 66 61
+          C 78 60, 88 63, 100 60
+          L 100 68 L 0 68 Z" />
+
+        <!-- mökki (ei ääriviivoja, ei ikkunaa), hiukan nostettu -->
+        <path d="M 60 62 L 66 57 L 73 62 L 73 68 L 60 68 Z" />
+      </g>
+
+      <!-- pehmeä häivytys ylöspäin -->
+      <rect x="0" y="0" width="100" height="68" fill="url(#fadeDown)"/>
+    </svg>
+  </div>
+
+  <!-- ===== Header ===== -->
+  <header class="topbar fixed top-0 left-0 right-0 z-40 text-white">
+    <div class="mx-auto max-w-6xl px-4 py-3 grid grid-cols-3 items-center">
+      <a href="#etusivu" class="flex items-center gap-3">
+        <!-- Pyöreä logokuva -->
+        <img
+          src="assets/logo-round.png"
+          alt="RUMAT.STUDIO logo"
+          class="h-9 w-9 rounded-full ring-1 ring-white/20 bg-white/90 object-cover"
+          decoding="async" loading="eager"
+        />
+        <span class="hidden sm:inline text-sm uppercase tracking-wide font-semibold">RUMAT.STUDIO</span>
+      </a>
+      <nav class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
+        <a href="#etusivu" class="hover:underline underline-offset-4 font-semibold">Etusivu</a>
+        <a href="#tuotteet" class="hover:underline underline-offset-4 font-semibold">Tuotteet</a>
+        <a href="#tarina" class="hover:underline underline-offset-4 font-semibold">Tarina</a>
+        <a href="#yhteys" class="hover:underline underline-offset-4 font-semibold">Yhteystiedot</a>
+      </nav>
+      <div class="justify-self-end">
+        <a href="#cart" class="text-sm font-semibold uppercase tracking-wide hover:underline">Ostoskori</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Hero (tekstit liikkuvat hienovaraisesti) ===== -->
+  <section id="etusivu" class="min-h-screen grid place-items-center text-stone-50 px-4">
+    <div id="hero-text" class="text-center transition-transform">
+      <h1 class="uppercase font-semibold tracking-[0.28em]
+                 text-[clamp(22px,4.2vw,64px)]
+                 drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
+        LIIAN RUMAT OLLAKSEEN TOTTA
+      </h1>
+      <div class="mt-8 flex justify-center">
+        <div class="h-24 w-24 grid place-items-center rounded-full bg-white/90 ring-1 ring-white/70 shadow-soft">
+          <span class="text-4xl font-black text-stone-900">R</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Intro-esittely ===== -->
+  <section class="py-12 bg-white/70 backdrop-blur-sm">
+    <div class="mx-auto max-w-3xl px-6 text-center">
+      <p class="text-xl sm:text-2xl">
+        <strong>Luonnosta syntynyt. Reissuissa testattu.</strong> Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa –
+        jotta sinulla on päälläsi jotain, joka istuu, hengittää ja kestää jokaisella askeleella.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== Tuotteet (tiivistetty – säilytä oma sisältösi jos sinulla on laajempi) ===== -->
+  <section id="tuotteet" class="py-16 bg-white">
+    <div class="mx-auto max-w-6xl px-4">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="serif text-3xl">Tuotteet</h2>
+        <div class="text-xs text-stone-500">Hinnat sis. ALV • Palautus 14 vrk</div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="rounded-xl overflow-hidden ring-1 ring-stone-200 aspect-[4/5] bg-stone-100">
+          <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80"
+               alt="Laukku" class="w-full h-full object-cover" loading="lazy" decoding="async">
+        </div>
+        <div class="rounded-xl overflow-hidden ring-1 ring-stone-200 aspect-[4/5] bg-stone-100">
+          <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80"
+               alt="Pipo" class="w-full h-full object-cover" loading="lazy" decoding="async">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Some upotukset (IG & TikTok samankokoiset kehykset) ===== -->
+  <section class="py-16 bg-stone-50" aria-labelledby="someots">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 id="someots" class="serif text-3xl mb-6">Somenostoja</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="embed-card">
+          <!-- Instagram oEmbed - esimerkki; voit vaihtaa URLin omiin postauksiin -->
+          <iframe
+            src="https://www.instagram.com/p/DMlK18qiE5O/embed"
+            style="border:0; width:100%; height:100%;"
+            allowtransparency="true" allow="encrypted-media" loading="lazy"></iframe>
+        </div>
+        <div class="embed-card">
+          <!-- TikTok - korjattu upotus: käytä official embed -endpointia -->
+          <iframe
+            src="https://www.tiktok.com/embed/v2/7525414518562753814"
+            style="border:0; width:100%; height:100%;"
+            allow="encrypted-media; clipboard-write"
+            loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Tarina ===== -->
+  <section id="tarina" class="py-14 bg-white/80">
+    <div class="mx-auto max-w-3xl px-6">
+      <h2 class="serif text-3xl mb-3">Tarina</h2>
+      <p>
+        Kirjoita tähän yrityksen matkaa: miksi perustit, mitä opit, minne olet menossa. Tekstiä voi muuttaa milloin vain.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer id="yhteys" class="pt-14 bg-stone-900 text-stone-200">
+    <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
+      <div>
+        <div class="uppercase tracking-wide">RUMAT.STUDIO</div>
+        <div class="text-stone-400 text-sm mt-1">Helsinki — Contemporary textiles, built to last.</div>
+      </div>
+      <div>
+        <h5 class="text-sm text-stone-400">Yhteys</h5>
+        <ul class="mt-2 space-y-2 text-sm">
+          <li><a href="mailto:hello@rumat.fi" class="hover:underline">hello@rumat.fi</a></li>
+          <li><a href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer" class="hover:underline">Instagram</a></li>
+          <li><a href="https://www.tiktok.com/@rumat.studio" target="_blank" rel="noreferrer" class="hover:underline">TikTok</a></li>
+          <li>Rovaniemi — Helsinki</li>
+        </ul>
+      </div>
+      <div>
+        <h5 class="text-sm text-stone-400">Tilaukset</h5>
+        <ul class="mt-2 space-y-2 text-sm">
+          <li>Nouto (sovitusti) — 0 €</li>
+          <li>Posti — 6,90 € (valitaan kassalla)</li>
+          <li>Hinnat sisältävät ALV:n • Palautus 14 vrk</li>
+        </ul>
+      </div>
+    </div>
+    <div class="py-8 text-center text-xs text-stone-500">© <span id="year"></span> RUMAT.STUDIO</div>
+  </footer>
+
+  <!-- ===== Skriptit ===== -->
+  <script>
+    // --- hero-tekstin pehmeä nosto (revontulet pysyy paikoillaan) ---
+    (function(){
+      const heroText = document.getElementById('hero-text');
+      let lastY = -1;
+      const onScroll = () => {
+        const y = window.scrollY || 0;
+        if (y === lastY) return; lastY = y;
+        const vh = window.innerHeight || 1;
+        const t = -22 * Math.min(1, y / (vh * 0.9));
+        heroText.style.transform = `translateY(${t}vh)`;
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    })();
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // --- WebGL Revontulet: kevyt, jatkuva liike; ei scrollaa ---
+    (function(){
+      const SETTINGS = {
+        PAL_COL1:[0.02,0.70,0.95],
+        PAL_COL2:[0.00,1.00,0.60],
+        BRIGHTNESS:1.00,
+        CURTAIN_Y:0.58,
+        HEIGHT:0.55,
+        SPEED:0.18,
+        STRIPE_STRENGTH:0.22,
+        STAR_DENS:0.0001
+      };
+
+      const c = document.getElementById('aurora');
+      const gl = c.getContext('webgl', { antialias:false, depth:false, stencil:false, preserveDrawingBuffer:false });
+      if(!gl){ console.warn('WebGL not available'); return; }
+
+      function resize(){
+        const dpr = Math.min(2, window.devicePixelRatio || 1);
+        const w = Math.floor(c.clientWidth * dpr);
+        const h = Math.floor(c.clientHeight * dpr);
+        if (c.width !== w || c.height !== h) {
+          c.width = w; c.height = h; gl.viewport(0,0,w,h);
+        }
+      }
+      const vs = `
+        attribute vec2 p;
+        void main(){ gl_Position = vec4(p,0.,1.); }
+      `;
+      const fs = `
+        precision mediump float;
+        uniform vec2  u_res;
+        uniform float u_time;
+
+        float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453123); }
+        float noise(vec2 p){
+          vec2 i=floor(p), f=fract(p);
+          float a=hash(i), b=hash(i+vec2(1.0,0.0)), c=hash(i+vec2(0.0,1.0)), d=hash(i+vec2(1.0,1.0));
+          vec2 u=f*f*(3.0-2.0*f);
+          return mix(a, b, u.x) + (c - a)*u.y*(1.0 - u.x) + (d - b)*u.x*u.y;
+        }
+
+        void main(){
+          vec2 uv = gl_FragCoord.xy / u_res.xy;
+          uv.y = 1.0 - uv.y;
+
+          // taustagradientti
+          vec3 colTop = vec3(${SETTINGS.PAL_COL1.join(',')});
+          vec3 colBot = vec3(${SETTINGS.PAL_COL2.join(',')});
+          vec3 bg = mix(colBot, colTop, smoothstep(0.0, 1.0, uv.y));
+          
+          // verho
+          float t = u_time * ${SETTINGS.SPEED.toFixed(3)};
+          float n = 0.0;
+          vec2 p = vec2(uv.x*3.0, uv.y*1.5 + t*0.2);
+          n += noise(p*1.0);
+          n += noise(p*2.1)*0.5;
+          n += noise(p*4.3)*0.25;
+          float curtain = smoothstep(${(SETTINGS.CURTAIN_Y-0.08).toFixed(2)},
+                                     ${(SETTINGS.CURTAIN_Y+SETTINGS.HEIGHT).toFixed(2)},
+                                     uv.y + n*0.12);
+          
+          // pystysuorat raidat (hillitty)
+          float stripes = sin(uv.x*120.0 + t*2.0)*${SETTINGS.STRIPE_STRENGTH.toFixed(2)};
+          
+          // tähdet (harva "rakeisuus")
+          float stars = step(1.0-${SETTINGS.STAR_DENS.toFixed(5)}, hash(uv*vec2(1024.0,2048.0)));
+          stars *= smoothstep(0.0, 0.25, uv.y); // vähän ylempänä
+
+          vec3 aur = mix(bg, vec3(0.0,0.8,0.6), curtain*0.65);
+          aur += stripes;
+          aur += stars*0.25;
+          aur *= ${SETTINGS.BRIGHTNESS.toFixed(2)};
+
+          gl_FragColor = vec4(aur, 1.0);
+        }
+      `;
+      function compile(type, src){
+        const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+        if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw gl.getShaderInfoLog(s);
+        return s;
+      }
+      const prog = gl.createProgram();
+      gl.attachShader(prog, compile(gl.VERTEX_SHADER, vs));
+      gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, fs));
+      gl.linkProgram(prog);
+      if(!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw gl.getProgramInfoLog(prog);
+      gl.useProgram(prog);
+
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(prog, 'p');
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+      const uRes = gl.getUniformLocation(prog, 'u_res');
+      const uTime= gl.getUniformLocation(prog, 'u_time');
+
+      function draw(t){
+        resize();
+        gl.uniform2f(uRes, c.width, c.height);
+        gl.uniform1f(uTime, (t||0)/1000.0);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        requestAnimationFrame(draw);
+      }
+      requestAnimationFrame(draw);
+      window.addEventListener('resize', resize);
+      resize();
+    })();
+  </script>
+</body>
+</html>
