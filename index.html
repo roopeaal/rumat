@@ -62,10 +62,22 @@
       -webkit-mask-image: linear-gradient(to top, black 72%, transparent 100%);}
     .bottom-sil svg{ width:100%; height:100%; display:block; }
 
+    /* Savun animaatio – korjaa transform-origin SVG:ssä */
+    .smoke{
+      animation:smoke 6s ease-in-out infinite;
+      opacity:.6;
+      transform-origin:50% 50%;
+      transform-box:fill-box; /* tärkeä */
+      will-change:transform,opacity;
+    }
+    .smoke.s2{ animation-delay:1.4s }
+    @keyframes smoke{ 0%{transform:translateY(0) scale(1);opacity:.6} 100%{transform:translateY(-28px) scale(1.4);opacity:0} }
+
     /* Drawer & Modal */
     .drawer{position:fixed;inset:0;z-index:60;display:none}
     .drawer.open{display:block}
     .drawer .panel{position:absolute;top:0;right:0;width:min(420px,90vw);height:100%;background:#fff;box-shadow:-10px 0 30px rgba(0,0,0,.2)}
+
     .modal{position:fixed;inset:0;z-index:70;display:none}
     .modal.open{display:grid;place-items:center}
   </style>
@@ -145,12 +157,14 @@
   <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50">
     <div class="relative bg-[color:var(--dark-forest)] text-white">
-      <div class="mx-auto max-w-6xl px-4 py-3 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
-        <a href="#etusivu" class="flex items-center gap-3">
+      <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-3 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+        <a id="brandBlock" href="#etusivu" class="flex items-center gap-3">
           <img alt="RUMAT.STUDIO logo" class="h-9 w-9 object-contain" src="assets/logo.svg">
           <span class="hidden sm:block text-sm uppercase tracking-widest font-semibold">RUMAT.STUDIO</span>
         </a>
-        <nav class="justify-self-center hidden md:flex items-center gap-6 text-[13px] uppercase tracking-widest">
+
+        <!-- Keskellä: varsinainen nav, jota piilotetaan jos ei mahdu -->
+        <nav id="mainNav" class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
           <a href="#etusivu"   class="hover:underline underline-offset-4 font-semibold">Etusivu</a>
           <a href="#tuotteet"  class="hover:underline underline-offset-4 font-semibold">Tuotteet</a>
           <a href="#tarina"    class="hover:underline underline-offset-4 font-semibold">Tarina</a>
@@ -158,7 +172,12 @@
           <a href="#some"      class="hover:underline underline-offset-4 font-semibold">Some</a>
           <a href="#yhteys"    class="hover:underline underline-offset-4 font-semibold">Yhteystiedot</a>
         </nav>
-        <div class="justify-self-end flex items-center gap-2">
+
+        <div id="rightBlock" class="justify-self-end flex items-center gap-2">
+          <!-- Näkyy kun nav ei mahdu -->
+          <button id="openMenu" class="px-3 py-2 rounded-full bg-white/10 ring-1 ring-white/30 hover:bg-white/20 hidden"
+                  aria-controls="menuDrawer" aria-expanded="false">Valikko</button>
+
           <button id="openCart" class="px-3 py-2 rounded-full bg-white/10 ring-1 ring-white/30 hover:bg-white/20">
             Ostoskori (<span id="cartCount">0</span>)
           </button>
@@ -297,6 +316,25 @@
     </div>
   </div>
 
+  <!-- VALIKKO (drawer) -->
+  <div id="menuDrawer" class="drawer">
+    <div class="absolute inset-0 bg-black/40" id="closeMenu"></div>
+    <div class="panel p-6 flex flex-col gap-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xl font-semibold">Valikko</h3>
+        <button id="closeMenuX" class="text-stone-500 hover:text-stone-800">✕</button>
+      </div>
+      <nav class="flex flex-col gap-3 text-lg">
+        <a href="#etusivu"   class="py-2 border-b" data-menu-close>Etusivu</a>
+        <a href="#tuotteet"  class="py-2 border-b" data-menu-close>Tuotteet</a>
+        <a href="#tarina"    class="py-2 border-b" data-menu-close>Tarina</a>
+        <a href="#blogi"     class="py-2 border-b" data-menu-close>Blogi</a>
+        <a href="#some"      class="py-2 border-b" data-menu-close>Some</a>
+        <a href="#yhteys"    class="py-2"          data-menu-close>Yhteystiedot</a>
+      </nav>
+    </div>
+  </div>
+
   <!-- SUCCESS/CANCEL MODAL -->
   <div id="resultModal" class="modal">
     <div class="bg-white rounded-2xl p-6 shadow-soft w-[min(92vw,480px)] text-center">
@@ -331,7 +369,7 @@
     addEventListener('scroll', onScroll, {passive:true}); addEventListener('resize', onScroll, {passive:true}); onScroll();
   })();
 
-  // ----- CMS / sisältö -----
+  // ----- CMS / sisältö (sama kuin aiemmin) -----
   const defaultContent = {
     hero:{ headline:"Liian rumat ollakseen totta" },
     paypalBusiness:"",
@@ -563,6 +601,61 @@
     if(location.hash==='#success'){ CART={}; saveCart(); show('Kiitos tilauksesta!','Vahvistus saapuu PayPal-sähköpostiisi.'); }
     if(location.hash==='#cancel'){ show('Maksu peruttu','Voit yrittää uudelleen tai muokata koria.'); }
     modal.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
+  })();
+
+  // ===== RESPONSIIVINEN "VALIKKO" – näytä kun nav ei mahdu =====
+  (function(){
+    const container = document.getElementById('hdrRow');
+    const brand = document.getElementById('brandBlock');
+    const nav   = document.getElementById('mainNav');
+    const right = document.getElementById('rightBlock');
+    const menuBtn = document.getElementById('openMenu');
+
+    function fits(){
+      // Lasketaan kokonaisleveys + pieni marginaalipuskuri
+      const cw = container.getBoundingClientRect().width;
+      const bw = brand.getBoundingClientRect().width;
+      const nw = nav.getBoundingClientRect().width;
+      const rw = right.getBoundingClientRect().width;
+      return (bw + nw + rw + 24) <= cw;
+    }
+    function apply(){
+      if (fits()){
+        nav.classList.remove('hidden');
+        menuBtn.classList.add('hidden');
+        menuBtn.setAttribute('aria-expanded','false');
+      }else{
+        nav.classList.add('hidden');
+        menuBtn.classList.remove('hidden');
+      }
+    }
+    // Tarkista kun ikkuna muuttuu / fontit latautuvat / zoomaillaan
+    let t=null;
+    const schedule=()=>{ if(t) return; t=setTimeout(()=>{ t=null; apply(); }, 80); };
+    window.addEventListener('resize', schedule, {passive:true});
+    window.addEventListener('orientationchange', ()=>setTimeout(apply,150), {passive:true});
+    if ('fonts' in document) document.fonts.ready.then(apply);
+    // Ensimmäinen ajo
+    apply();
+  })();
+
+  // ===== VALIKKO-DRAWER AVAA/SULKEE =====
+  (function(){
+    const drawer = document.getElementById('menuDrawer');
+    const openBtn = document.getElementById('openMenu');
+    const closeA = document.getElementById('closeMenu');
+    const closeX = document.getElementById('closeMenuX');
+
+    function open(){ drawer.classList.add('open'); openBtn.setAttribute('aria-expanded','true'); }
+    function close(){ drawer.classList.remove('open'); openBtn.setAttribute('aria-expanded','false'); }
+    openBtn.addEventListener('click', open);
+    closeA.addEventListener('click', close);
+    closeX.addEventListener('click', close);
+    drawer.addEventListener('click', e=>{ if(e.target===drawer) close(); });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
+
+    // Sulje kun valikko-linkkiä klikataan
+    drawer.querySelectorAll('[data-menu-close]').forEach(a=>a.addEventListener('click', close));
   })();
 
   // ===== WebGL Revontulet – alkuperäinen look, stabiili koonhallinta (ei välkkymistä) =====
