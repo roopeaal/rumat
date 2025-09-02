@@ -31,8 +31,8 @@
       --silhouette-mid:#0c1a15;
       --silhouette-line:#9fb1a9;
       --header-h:56px;
-      --section-gap: clamp(6px, 1vw, 12px);  /* ⬅️ hitusen pienempi rako */
-      --band-radius: 16px; /* hieman pyöristetty */
+      --section-gap: clamp(6px, 1vw, 12px);
+      --band-radius: 16px;
     }
 
     html{ scroll-padding-top: var(--header-h); }
@@ -45,7 +45,7 @@
     .btn-dark{background:#111827;color:#fff;border-color:#111827}
     .chip{font-size:.78rem;padding:.25rem .55rem;border-radius:9999px;border:1px solid rgb(214,211,209);background:#fff}
 
-    /* Aurora (kiinteä tausta) — ei gradienttia */
+    /* Aurora (kiinteä tausta) — ei overlayta */
     .aurora-fixed{
       position:fixed; inset:0; width:100%; height:100%;
       z-index:0; pointer-events:none; display:block;
@@ -57,9 +57,6 @@
 
     /* Hero */
     .hero{ position:relative; height:100vh; height:100svh; isolation:isolate; overflow:hidden; }
-    .hero-overlay{ position:absolute; inset:0; z-index:1; pointer-events:none;
-      background: radial-gradient(58% 42% at 50% 18%, rgba(255,255,255,.06), transparent 55%),
-                  linear-gradient(to bottom, rgba(0,0,0,.16), rgba(0,0,0,.36) 72%); }
 
     /* Parallax smooth */
     #hero-text{ will-change:transform; transform:translateZ(0); transition:none !important; }
@@ -90,11 +87,11 @@
     .modal{position:fixed;inset:0;z-index:70;display:none}
     .modal.open{display:grid;place-items:center}
 
-    /* Navin mittaus/flicker-fix */
+    /* Nav mittaus + “Valikko” togglaus */
     .nav-measure{ position:absolute !important; visibility:hidden !important; display:flex !important; white-space:nowrap !important; }
     .nav-hidden{ position:absolute !important; left:-9999px !important; visibility:hidden !important; }
 
-    /* Tuotekuvagalleria: 1 kuva oletuksena, 2 kuvaa kun tila riittää */
+    /* Tuotekuvagalleria */
     .product-gallery{
       container-type:inline-size;
       --pg-gap:1rem;
@@ -108,7 +105,7 @@
     .pg-b{ display:none; }
     .pg-grid > .img-wrap{
       width:100%;
-      max-width: calc(50cqw - var(--pg-gap)/2); /* yksipalsta = max puolikas leveys */
+      max-width: calc(50cqw - var(--pg-gap)/2);
     }
     @container (min-width: 900px){
       .product-gallery{ --pg-gap:1.5rem; }
@@ -117,7 +114,7 @@
       .pg-grid > .img-wrap{ max-width:none; }
     }
 
-    /* MYYTY-overlay */
+    /* MYYTY */
     .img-wrap{ position:relative; }
     .sold-badge{
       position:absolute; inset:0; display:grid; place-items:center;
@@ -227,13 +224,13 @@
   <header class="fixed top-0 left-0 right-0 z-50">
     <div class="relative bg-[color:var(--dark-forest)] text-white">
       <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-3 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+        <!-- Brändi: logo + teksti (näkyy myös puhelimessa) -->
         <a id="brandBlock" href="#etusivu" class="flex items-center gap-3">
           <img alt="RUMAT.STUDIO logo" class="h-9 w-9 object-contain" src="assets/logo.svg">
-          <span class="hidden sm:block text-sm uppercase tracking-widest font-semibold">RUMAT.STUDIO</span>
-          <button id="openMenu" class="ml-2 px-3 py-2 rounded-full bg-white/10 ring-1 ring-white/30 hover:bg-white/20 hidden"
-                  aria-controls="menuDrawer" aria-expanded="false">Valikko</button>
+          <span id="brandText" class="text-sm tracking-widest font-semibold">rumat.studio</span>
         </a>
 
+        <!-- Navigaatio (näytetään vain kun mahtuu) -->
         <nav id="mainNav" class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
           <a href="#etusivu"   class="hover:underline underline-offset-4 font-semibold">Etusivu</a>
           <a href="#tuotteet"  class="hover:underline underline-offset-4 font-semibold">Tuotteet</a>
@@ -243,7 +240,10 @@
           <a href="#yhteys"    class="hover:underline underline-offset-4 font-semibold">Yhteystiedot</a>
         </nav>
 
+        <!-- Oikea: Valikko + Ostoskori (mobiilissa aina näkyvissä; desktopilla Valikko piiloon kun nav näkyy) -->
         <div id="rightBlock" class="justify-self-end flex items-center gap-2">
+          <button id="openMenu" class="px-3 py-2 rounded-full bg-white/10 ring-1 ring-white/30 hover:bg-white/20"
+                  aria-controls="menuDrawer" aria-expanded="false">Valikko</button>
           <button id="openCart" class="px-3 py-2 rounded-full bg-white/10 ring-1 ring-white/30 hover:bg-white/20">
             Ostoskori (<span id="cartCount">0</span>)
           </button>
@@ -256,7 +256,6 @@
   <main class="site-content">
     <!-- HERO -->
     <section id="etusivu" class="hero grid place-items-center text-stone-50 px-4">
-      <div class="hero-overlay"></div>
       <div id="hero-text" class="text-center mt-24 md:mt-28">
         <h1 class="serif font-semibold tracking-[0.08em] text-[clamp(22px,4.8vw,58px)]
                    drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
@@ -329,7 +328,7 @@
         <div class="band-inner">
           <h2 class="serif text-3xl mb-4">Tarina</h2>
           <p id="story">
-            Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Valmistamme pieniä eriä Suomessa ja EU:ssa, jotta vaate kestää vuosia ja tekijät näkyvät.
+            Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Jokainen vaate neulotaan käsin Suomussalmella yhden tekijän toimesta — jotta se kestää vuosia ja tekijä näkyy.
           </p>
         </div>
       </div>
@@ -435,7 +434,7 @@
     return n;
   };
 
-  // Hero-tekstin liike – rAF-throttled, pikseleissä
+  // Hero-parallax
   (function(){
     const hero   = document.getElementById('etusivu');
     const textEl = document.getElementById('hero-text');
@@ -449,7 +448,7 @@
       const rect = hero.getBoundingClientRect();
       heroTop = rect.top + (window.scrollY || window.pageYOffset || 0);
       heroHeight = Math.max(1, hero.offsetHeight);
-      amplitudePx = heroHeight * 0.18; // ~18vh
+      amplitudePx = heroHeight * 0.18;
     }
     const clamp = (v,min,max)=>Math.min(max,Math.max(min,v));
     const easeOutQuad = t => 1 - (1 - t) * (1 - t);
@@ -489,6 +488,7 @@
     },
     embed:{ instagramPost:"https://www.instagram.com/p/DMXVRgGC1Bv/embed", tiktokVideo:"https://www.tiktok.com/@rumat.studio/video/7525414518562753814" },
     pitch:"Luonnosta syntynyt. Reissuissa testattu. Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – jotta sinulla on päälläsi jotain, joka istuu, hengittää ja kestää jokaisella askeleella.",
+    story:"Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Jokainen vaate neulotaan käsin Suomussalmella yhden tekijän toimesta — jotta se kestää vuosia ja tekijä näkyy.",
     products:[
       { id:"laukku", name:"Laukku", price:149.00, blurb:"Täysin kierrätysmateriaaleista valmistettu sling-laukku. Kierrätetty purjekangas/tekstiili, hihna käytetystä turvavyöstä, metalliosat uudelleenkäytettyä varastoa. Ulkomitat: 28 × 16 × 7 cm. Valmistettu Suomessa.", images:[
         "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80",
@@ -616,7 +616,6 @@
 
       // Pyöristetty valkoinen bandi tuotteen ympärille
       const inner = el('div',{class:'band-inner'});
-      // ⬇️ Ensimmäiseen tuotteeseen liitetään otsikkorivi + infoteksti
       if (idx === 0){
         const headerRow = el('div',{class:'flex items-center justify-between mb-6'},
           el('h2',{class:'serif text-3xl'}, 'Tuotteet'),
@@ -629,7 +628,7 @@
       const band = el('div',{class:'band full-bleed'}, inner);
       root.appendChild(band);
 
-      // kapea revontulirako palkkien väliin
+      // rako palkkien väliin
       root.appendChild(el('div',{class:'aurora-gap full-bleed'}));
 
       // galleriakuvat
@@ -663,7 +662,7 @@
     });
   }
 
-  // ----- Toimitusvaihtoehdot + ostoskori -----
+  // ----- Toimitus + ostoskori -----
   const $cart   = $('#cartDrawer');
   const $items  = $('#cartItems');
   const $open   = $('#openCart');
@@ -675,7 +674,7 @@
   const $count  = $('#cartCount');
   const $shipOpts = $('#shipOptions');
 
-  let CART = JSON.parse(localStorage.getItem('cart')||'{}'); // { id: 1 }
+  let CART = JSON.parse(localStorage.getItem('cart')||'{}');
   function saveCart(){ localStorage.setItem('cart', JSON.stringify(CART)); updateBadge(); }
   function updateBadge(){ if($count) $count.textContent = Object.values(CART).reduce((a,b)=>a+b,0); }
   function openCart(){ $cart.classList.add('open'); renderCart(); }
@@ -739,13 +738,13 @@
 
   function addToCart(id){
     if(isSold(id)) return alert('Tuote on jo myyty.');
-    CART[id] = 1;  // aina 1 kpl
+    CART[id] = 1;
     saveCart();
     openCart();
   }
   updateBadge();
 
-  // PayPal-lähetys: määrät aina 1; merkitse myydyksi #success jälkeen
+  // PayPal: merkitse myydyksi #success jälkeen (demo)
   document.getElementById('checkout').addEventListener('click', ()=>{
     const ids = Object.keys(CART).filter(id=>!isSold(id));
     if(ids.length===0) return alert('Lisää tuotteita koriin.');
@@ -773,7 +772,6 @@
     document.body.appendChild(form); form.submit(); form.remove();
   });
 
-  // Success / Cancel — MERKITSE MYYDYKSI ja päivitä UI
   (function(){
     const modal = $('#resultModal'); const title=$('#resultTitle'); const text=$('#resultText');
     function show(t,msg){ title.textContent=t; text.textContent=msg; modal.classList.add('open'); }
@@ -789,7 +787,7 @@
     modal?.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // ===== RESPONSIIVINEN "VALIKKO" (ei jää päälle) =====
+  // ===== RESPONSIVE NAV TOIMINTA =====
   (function(){
     const container = document.getElementById('hdrRow');
     const brand     = document.getElementById('brandBlock');
@@ -813,44 +811,37 @@
       return w;
     }
 
-    function brandWidth(simulateNavVisible){
+    function canShowNav(){
       const wasHidden = menuBtn.classList.contains('hidden');
-      if (simulateNavVisible && !wasHidden) menuBtn.classList.add('hidden');
-      const bw = Math.ceil(brand.getBoundingClientRect().width);
-      if (simulateNavVisible && !wasHidden) menuBtn.classList.remove('hidden');
-      return bw;
-    }
-
-    function widths(simulateNavVisible=false){
+      menuBtn.classList.add('hidden'); // simuloi tilannetta jossa nav näkyy ja Valikko piilossa
       const cw = container.clientWidth;
-      const bw = brandWidth(simulateNavVisible);
+      const bw = Math.ceil(brand.getBoundingClientRect().width);
       const rw = Math.ceil(right.getBoundingClientRect().width);
       const navW = measureNavWidth();
-      const avail = cw - bw - rw - 24;
-      return { navW, avail };
+      const fits = navW <= (cw - bw - rw - 24);
+      if(!wasHidden) menuBtn.classList.remove('hidden');
+      return fits;
     }
 
     function applyState(showNav){
       navVisible = !!showNav;
       if (navVisible){
         nav.classList.remove('hidden','nav-hidden');
-        menuBtn.classList.add('hidden');
+        menuBtn.classList.add('hidden');           // desktop: Valikko piiloon
         menuBtn.setAttribute('aria-expanded','false');
       }else{
-        nav.classList.add('nav-hidden');
-        menuBtn.classList.remove('hidden');
+        nav.classList.add('nav-hidden');           // piiloon visuaalisesti
+        menuBtn.classList.remove('hidden');        // mobiili: Valikko näkyviin
       }
       setHeaderVar();
     }
 
     function compute(){
       setHeaderVar();
-      const cur = widths(false);
-      const sim = widths(true);
       if (navVisible){
-        if (cur.navW > (cur.avail - SLACK_HIDE)) applyState(false);
+        if (!canShowNav() ) applyState(false);
       }else{
-        if (sim.navW <= (sim.avail - SLACK_SHOW)) applyState(true);
+        if (canShowNav() )  applyState(true);
       }
     }
 
@@ -862,7 +853,7 @@
     compute();
   })();
 
-  // ===== VALIKKO-DRAWER AVAA/SULKEE =====
+  // ===== VALIKKO-DRAWER =====
   (function(){
     const drawer = document.getElementById('menuDrawer');
     const openBtn = document.getElementById('openMenu');
@@ -876,11 +867,10 @@
     closeX.addEventListener('click', close);
     drawer.addEventListener('click', e=>{ if(e.target===drawer) close(); });
     document.addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
-
     drawer.querySelectorAll('[data-menu-close]').forEach(a=>a.addEventListener('click', close));
   })();
 
-  // ===== WebGL Revontulet – alkuperäinen look, ei gradient-fallbackia =====
+  // ===== WebGL Revontulet =====
   (function(){
     const SETTINGS = {
       PAL_COL1:[0.02,0.70,0.95],
