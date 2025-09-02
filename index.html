@@ -30,11 +30,12 @@
       --silhouette:#08110d;
       --silhouette-mid:#0c1a15;
       --silhouette-line:#9fb1a9;
-      --header-h:56px;              /* päivitetään JS:llä */
+      --header-h:56px;
       --section-gap: clamp(8px, 1.2vw, 14px);
+      --band-radius: 16px; /* himpun pyöristetty */
     }
 
-    html{ scroll-padding-top: var(--header-h); }  /* ankkurit eivät jää headerin alle */
+    html{ scroll-padding-top: var(--header-h); }
 
     body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#111827;background:#fff}
     .serif{font-family:"Libre Baskerville",serif}
@@ -44,11 +45,11 @@
     .btn-dark{background:#111827;color:#fff;border-color:#111827}
     .chip{font-size:.78rem;padding:.25rem .55rem;border-radius:9999px;border:1px solid rgb(214,211,209);background:#fff}
 
-    /* Aurora (kiinteä tausta) */
+    /* Aurora (kiinteä tausta) — ei gradienttia */
     .aurora-fixed{
       position:fixed; inset:0; width:100%; height:100%;
       z-index:0; pointer-events:none; display:block;
-      background: linear-gradient(#0a1e2a,#0b3824); /* fallback + pehmentää resizeä */
+      background: transparent;
       transform: translateZ(0); backface-visibility:hidden;
       will-change: transform, opacity;
     }
@@ -60,7 +61,7 @@
       background: radial-gradient(58% 42% at 50% 18%, rgba(255,255,255,.06), transparent 55%),
                   linear-gradient(to bottom, rgba(0,0,0,.16), rgba(0,0,0,.36) 72%); }
 
-    /* Sileä parallax – poista transition ja pidä GPU:lla */
+    /* Parallax smooth */
     #hero-text{ will-change:transform; transform:translateZ(0); transition:none !important; }
     @media (prefers-reduced-motion: reduce){ #hero-text{ transform:none !important; } }
 
@@ -93,8 +94,7 @@
     .nav-measure{ position:absolute !important; visibility:hidden !important; display:flex !important; white-space:nowrap !important; }
     .nav-hidden{ position:absolute !important; left:-9999px !important; visibility:hidden !important; }
 
-    /* Tuotekuvagalleria: 1 kuva oletuksena, 2 kuvaa kun tila riittää
-       → 1-kuvassa kuvan max-leveys = 50% gallerian leveydestä (kuten 2-kuvan palsta) */
+    /* Tuotekuvagalleria: 1 kuva oletuksena, 2 kuvaa kun tila riittää */
     .product-gallery{
       container-type:inline-size;
       --pg-gap:1rem;
@@ -106,11 +106,9 @@
       justify-items:center;
     }
     .pg-b{ display:none; }
-
-    /* Yksipalstassa max leveys = puolikas gallerian leveydestä */
     .pg-grid > .img-wrap{
       width:100%;
-      max-width: calc(50cqw - var(--pg-gap)/2);
+      max-width: calc(50cqw - var(--pg-gap)/2); /* yksipalsta = max puolikas leveys */
     }
     @container (min-width: 900px){
       .product-gallery{ --pg-gap:1.5rem; }
@@ -119,7 +117,7 @@
       .pg-grid > .img-wrap{ max-width:none; }
     }
 
-    /* MYYTY-overlay tuotekuvan päälle */
+    /* MYYTY-overlay */
     .img-wrap{ position:relative; }
     .sold-badge{
       position:absolute; inset:0; display:grid; place-items:center;
@@ -131,12 +129,26 @@
       border-radius:9999px; background:#111827; color:#fff; font-size:.75rem; letter-spacing:.08em;
     }
 
-    /* Aurora-rako osioiden väliin (vain tietyissä kohdissa) */
+    /* Revontuliraot */
     .aurora-gap{
       height: var(--section-gap);
       pointer-events: none;
       background: transparent;
     }
+
+    /* Pyöristetyt palkit (bandeja eri taustoilla) */
+    .full-bleed{
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+    }
+    .band{
+      background:#fff;
+      border-radius: var(--band-radius);
+      overflow: hidden;
+    }
+    .band--mist{ background: var(--mist); }
+    .band--stone{ background: #f5f5f4; }
+    .band-inner{ max-width: 72rem; margin: 0 auto; padding: 3rem 1rem; } /* = max-w-6xl + py-12 px-4 */
   </style>
 </head>
 
@@ -144,7 +156,7 @@
   <!-- KIINTEÄ REVONTULI-TAUSTA -->
   <canvas id="auroraCanvas" class="aurora-fixed"></canvas>
 
-  <!-- ALAREUNAN SILUETTI (muoto säilyy) -->
+  <!-- ALAREUNAN SILUETTI -->
   <div class="bottom-sil" aria-hidden="true">
     <svg viewBox="0 0 1440 160" preserveAspectRatio="xMidYMax slice">
       <defs>
@@ -218,12 +230,10 @@
         <a id="brandBlock" href="#etusivu" class="flex items-center gap-3">
           <img alt="RUMAT.STUDIO logo" class="h-9 w-9 object-contain" src="assets/logo.svg">
           <span class="hidden sm:block text-sm uppercase tracking-widest font-semibold">RUMAT.STUDIO</span>
-          <!-- Valikko-nappi logon viereen (näkyy vain kun nav ei mahdu) -->
           <button id="openMenu" class="ml-2 px-3 py-2 rounded-full bg-white/10 ring-1 ring-white/30 hover:bg-white/20 hidden"
                   aria-controls="menuDrawer" aria-expanded="false">Valikko</button>
         </a>
 
-        <!-- Keskellä: varsinainen nav -->
         <nav id="mainNav" class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
           <a href="#etusivu"   class="hover:underline underline-offset-4 font-semibold">Etusivu</a>
           <a href="#tuotteet"  class="hover:underline underline-offset-4 font-semibold">Tuotteet</a>
@@ -247,7 +257,7 @@
     <!-- HERO -->
     <section id="etusivu" class="hero grid place-items-center text-stone-50 px-4">
       <div class="hero-overlay"></div>
-      <div id="hero-text" class="text-center transition-transform mt-24 md:mt-28">
+      <div id="hero-text" class="text-center mt-24 md:mt-28">
         <h1 class="serif font-semibold tracking-[0.08em] text-[clamp(22px,4.8vw,58px)]
                    drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
           Liian rumat ollakseen totta
@@ -258,70 +268,77 @@
       </div>
     </section>
 
-    <!-- Esittely -->
-    <section class="py-12 bg-white">
-      <div class="mx-auto max-w-3xl px-6 text-center">
-        <p id="intro-text" class="text-xl sm:text-2xl">
-          <strong>Luonnosta syntynyt. Reissuissa testattu.</strong>
-          Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – jotta sinulla on päälläsi jotain, joka istuu, hengittää ja kestää jokaisella askeleella.
-        </p>
+    <!-- Esittely (pyöristetty valkoinen bandi) -->
+    <section class="py-0">
+      <div class="band full-bleed">
+        <div class="band-inner text-center">
+          <p id="intro-text" class="text-xl sm:text-2xl">
+            <strong>Luonnosta syntynyt. Reissuissa testattu.</strong>
+            Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – jotta sinulla on päälläsi jotain, joka istuu, hengittää ja kestää jokaisella askeleella.
+          </p>
+        </div>
       </div>
     </section>
-    <!-- Rako esittelyn jälkeen -->
-    <div class="aurora-gap"></div>
+    <div class="aurora-gap full-bleed"></div>
 
-    <!-- TUOTTEET (läpinäkyvä tausta, raot korttien väliin JS:llä) -->
-    <section id="tuotteet" class="py-14">
-      <div class="mx-auto max-w-6xl px-4">
+    <!-- TUOTTEET -->
+    <section id="tuotteet" class="py-0">
+      <div class="mx-auto max-w-6xl px-4 pt-12 pb-6">
         <div class="flex items-center justify-between mb-6">
           <h2 class="serif text-3xl">Tuotteet</h2>
           <div class="text-xs text-stone-500">Hinnat sis. ALV • Palautus 14 vrk • Toimitus valitaan kassalla</div>
         </div>
-        <div id="productsRoot" class="space-y-14"></div>
       </div>
+      <div id="productsRoot" class=""></div>
     </section>
 
-    <!-- BLOGI -->
-    <section id="blogi" class="py-14" style="background:var(--mist)">
-      <div class="mx-auto max-w-4xl px-6">
-        <h2 class="serif text-3xl mb-6">Blogi</h2>
-        <div id="blogRoot" class="grid gap-6"></div>
+    <!-- BLOGI (sumu-tausta, pyöristetty) -->
+    <section id="blogi" class="py-0">
+      <div class="band band--mist full-bleed">
+        <div class="band-inner">
+          <h2 class="serif text-3xl mb-6">Blogi</h2>
+          <div id="blogRoot" class="grid gap-6"></div>
+        </div>
       </div>
     </section>
-    <div class="aurora-gap"></div>
+    <div class="aurora-gap full-bleed"></div>
 
-    <!-- SOME -->
-    <section id="some" class="py-14 bg-white">
-      <div class="mx-auto max-w-6xl px-4">
-        <h2 class="serif text-3xl mb-6">Some</h2>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="aspect-[9/16] rounded-xl ring-1 ring-stone-200 overflow-hidden bg-black">
-            <iframe id="igEmbed" class="w-full h-full" allowtransparency="true" frameborder="0" scrolling="no" loading="lazy"
-                    src="https://www.instagram.com/p/DMXVRgGC1Bv/embed" style="display:block"></iframe>
-          </div>
-          <div class="aspect-[9/16] rounded-xl ring-1 ring-stone-200 overflow-hidden bg-black">
-            <iframe id="ttEmbed"
-              src="https://www.tiktok.com/embed/v2/7525414518562753814"
-              style="width:100%;height:100%;border:0;display:block"
-              allow="encrypted-media;"
-              allowfullscreen
-              title="TikTok video"></iframe>
+    <!-- SOME (valkoinen, pyöristetty) -->
+    <section id="some" class="py-0">
+      <div class="band full-bleed">
+        <div class="band-inner">
+          <h2 class="serif text-3xl mb-6">Some</h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="aspect-[9/16] rounded-xl ring-1 ring-stone-200 overflow-hidden bg-black">
+              <iframe id="igEmbed" class="w-full h-full" allowtransparency="true" frameborder="0" scrolling="no" loading="lazy"
+                      src="https://www.instagram.com/p/DMXVRgGC1Bv/embed" style="display:block"></iframe>
+            </div>
+            <div class="aspect-[9/16] rounded-xl ring-1 ring-stone-200 overflow-hidden bg-black">
+              <iframe id="ttEmbed"
+                src="https://www.tiktok.com/embed/v2/7525414518562753814"
+                style="width:100%;height:100%;border:0;display:block"
+                allow="encrypted-media;"
+                allowfullscreen
+                title="TikTok video"></iframe>
+            </div>
           </div>
         </div>
       </div>
     </section>
-    <div class="aurora-gap"></div>
+    <div class="aurora-gap full-bleed"></div>
 
-    <!-- TARINA -->
-    <section id="tarina" class="py-14 bg-stone-50">
-      <div class="mx-auto max-w-3xl px-6">
-        <h2 class="serif text-3xl mb-4">Tarina</h2>
-        <p id="story">
-          Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Valmistamme pieniä eriä Suomessa ja EU:ssa, jotta vaate kestää vuosia ja tekijät näkyvät.
-        </p>
+    <!-- TARINA (stone-50, pyöristetty) -->
+    <section id="tarina" class="py-0">
+      <div class="band band--stone full-bleed">
+        <div class="band-inner">
+          <h2 class="serif text-3xl mb-4">Tarina</h2>
+          <p id="story">
+            Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Valmistamme pieniä eriä Suomessa ja EU:ssa, jotta vaate kestää vuosia ja tekijät näkyvät.
+          </p>
+        </div>
       </div>
     </section>
-    <div class="aurora-gap"></div>
+    <div class="aurora-gap full-bleed"></div>
 
     <!-- FOOTER -->
     <footer id="yhteys" class="pt-14 text-[color:var(--ivory)]" style="background:var(--footer)">
@@ -422,7 +439,7 @@
     return n;
   };
 
-  // Hero-tekstin liike – rAF-throttled, pikseleissä (ei vh → vähemmän toolbar-heilahtelua)
+  // Hero-tekstin liike – rAF-throttled, pikseleissä
   (function(){
     const hero   = document.getElementById('etusivu');
     const textEl = document.getElementById('hero-text');
@@ -472,7 +489,7 @@
       email:"hello@rumat.fi",
       instagram:"https://instagram.com/rumat.studio",
       tiktok:"https://www.tiktok.com/@rumat.studio",
-      location:"Kauppakatu 20, 89600 Suomussalmi"   // ⬅️ osoite + kotipaikka
+      location:"Kauppakatu 20, 89600 Suomussalmi"
     },
     embed:{ instagramPost:"https://www.instagram.com/p/DMXVRgGC1Bv/embed", tiktokVideo:"https://www.tiktok.com/@rumat.studio/video/7525414518562753814" },
     pitch:"Luonnosta syntynyt. Reissuissa testattu. Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – jotta sinulla on päälläsi jotain, joka istuu, hengittää ja kestää jokaisella askeleella.",
@@ -554,7 +571,7 @@
   let SOLD = JSON.parse(localStorage.getItem('sold') || '{}'); // { [productId]: true }
   function saveSold(){ localStorage.setItem('sold', JSON.stringify(SOLD)); }
   function isSold(id){
-    const fromContent = (CONTENT.products || []).find(x=>x.id===id)?.sold === true; // mahdollinen CMS-lippu
+    const fromContent = (CONTENT.products || []).find(x=>x.id===id)?.sold === true;
     return !!(SOLD[id] || fromContent);
   }
   function markSold(ids=[]){ ids.forEach(id=>SOLD[id]=true); saveSold(); }
@@ -564,6 +581,7 @@
     const root = document.getElementById('productsRoot');
     if(!root) return;
     root.innerHTML = "";
+
     list.forEach((p,idx)=>{
       const pairId = `pair-${idx}`;
       const leftId=`${pairId}-a`, rightId=`${pairId}-b`;
@@ -599,10 +617,15 @@
       );
 
       const wrap = el('div',{}, gallery, details);
-      root.appendChild(wrap);
 
-      // ⬇️ rako jokaisen tuotekortin jälkeen
-      root.appendChild(el('div',{class:'aurora-gap'}));
+      // Pyöristetty valkoinen bandi tuotteen ympärille
+      const band = el('div',{class:'band full-bleed'},
+        el('div',{class:'band-inner'}, wrap)
+      );
+      root.appendChild(band);
+
+      // kapea revontulirako palkkien väliin
+      root.appendChild(el('div',{class:'aurora-gap full-bleed'}));
 
       // galleriakuvat
       const imgs = Array.isArray(p.images)&&p.images.length ? p.images : [
@@ -635,7 +658,7 @@
     });
   }
 
-  // ----- Toimitusvaihtoehdot + ostoskori (yksittäiskappale) -----
+  // ----- Toimitusvaihtoehdot + ostoskori -----
   const $cart   = $('#cartDrawer');
   const $items  = $('#cartItems');
   const $open   = $('#openCart');
@@ -751,7 +774,7 @@
     function show(t,msg){ title.textContent=t; text.textContent=msg; modal.classList.add('open'); }
     if(location.hash==='#success'){
       const soldIds = Object.keys(CART||{});
-      markSold(soldIds);            // ⬅️ merkitään myydyksi
+      markSold(soldIds);
       CART={}; saveCart();
       show('Kiitos tilauksesta!','Vahvistus saapuu PayPal-sähköpostiisi.');
       renderProducts(CONTENT.products || []);
@@ -761,7 +784,7 @@
     modal?.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // ===== RESPONSIIVINEN "VALIKKO" – simuloi brand-leveys ilman nappia, ei jää päälle =====
+  // ===== RESPONSIIVINEN "VALIKKO" (ei jää päälle) =====
   (function(){
     const container = document.getElementById('hdrRow');
     const brand     = document.getElementById('brandBlock');
@@ -769,8 +792,8 @@
     const right     = document.getElementById('rightBlock');
     const menuBtn   = document.getElementById('openMenu');
 
-    const SLACK_SHOW = 40; // vaadittu lisätila ennen kuin näytetään nav uudelleen
-    const SLACK_HIDE = 10; // sallittu ylitys ennen kuin piilotetaan nav
+    const SLACK_SHOW = 40;
+    const SLACK_HIDE = 10;
     let navVisible = true;
 
     function setHeaderVar(){
@@ -852,7 +875,7 @@
     drawer.querySelectorAll('[data-menu-close]').forEach(a=>a.addEventListener('click', close));
   })();
 
-  // ===== WebGL Revontulet – alkuperäinen look, stabiili koonhallinta (ei välkkymistä) =====
+  // ===== WebGL Revontulet – alkuperäinen look, ei gradient-fallbackia =====
   (function(){
     const SETTINGS = {
       PAL_COL1:[0.02,0.70,0.95],
@@ -868,10 +891,10 @@
     function init(){
       const canvas = document.getElementById('auroraCanvas'); if(!canvas) return;
       const gl = canvas.getContext('webgl',{antialias:false,depth:false,stencil:false,preserveDrawingBuffer:false});
-      canvas.style.background = 'linear-gradient(#0a1e2a,#0b3824)';
-      if(!gl){ return; } // gradientti fallbackiksi
+      canvas.style.background = 'transparent';
+      if(!gl){ return; }
 
-      gl.clearColor(0.04,0.12,0.16,1);
+      gl.clearColor(0.0,0.0,0.0,0.0);
 
       const vert=`attribute vec2 a_pos; void main(){ gl_Position=vec4(a_pos,0.,1.); }`;
       const frag=`precision highp float; uniform vec2 u_res; uniform float u_time,u_brightness,u_y,u_height,u_speed,u_stripes,u_star; uniform vec3 u_c1,u_c2;
