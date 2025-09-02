@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- tausta-ympyrä -->
-  <circle cx="256" cy="256" r="256" fill="#A1A266"/>
-  <!-- monogrammi “R” (paksu) vaalealla -->
-  <path fill="#E6F2EF" d="M96 180h210l68 58V180h42v156c0 32-4 63-20 100H334c32-23 38-63 38-112v-20H268v20c0 49 6 89 38 112H176l52-48H64l232-204H96z"/>
-</svg>
