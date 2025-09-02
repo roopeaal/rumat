@@ -7,7 +7,8 @@
   <meta name="description" content="Luonnosta syntynyt. Reissuissa testattu. Neuleet ja asusteet poluille ja kaupunkiin – istuvat, hengittävät ja kestävät."/>
 
   <!-- Fontit + Tailwind -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;600;700&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -21,16 +22,15 @@
   <style>
     :root{
       --ink:#202020;
-      --dark-forest:#0B0F0E;     /* header tausta */
+      --dark-forest:#0B0F0E;   /* header tausta */
       --olive:#A1A266;
       --ivory:#F6F6F4;
-      --mist:#DEEEEE;            /* esittelypalkkien tausta */
-      --gallery:#F6F6F4;         /* kuvapalkkien tausta */
+      --mist:#DEEEEE;          /* esittelypalkkien tausta */
+      --gallery:#F6F6F4;       /* kuvapalkkien tausta */
       --footer:#0B0F0E;
       --silhouette:#08110d;
       --silhouette-mid:#0c1a15;
       --silhouette-line:#9fb1a9;
-      --window-warm:#FFD780;     /* (ei käytössä enää) */
     }
     body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#111827;background:#fff}
     .serif{font-family:"Libre Baskerville",serif}
@@ -38,7 +38,6 @@
     .btn{border-radius:9999px;padding:.6rem 1rem;border:1px solid rgb(214,211,209);transition:transform .06s, box-shadow .12s}
     .btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.12)}
     .btn-dark{background:#111827;color:#fff;border-color:#111827}
-    .chip{font-size:.78rem;padding:.25rem .55rem;border-radius:9999px;border:1px solid rgb(214,211,209);background:#fff}
 
     /* Aurora (kiinteä tausta) */
     .aurora-fixed{ position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; display:block; }
@@ -54,7 +53,7 @@
     /* Alareunan siluetti */
     .bottom-sil{ position:fixed; left:0; right:0; bottom:-1px; height:160px; z-index:1; pointer-events:none;
       mask-image: linear-gradient(to top, black 72%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to top, black 72%, transparent 100%);}
+      -webkit-mask-image: linear-gradient(to top, black 72%, transparent 100%); }
     .bottom-sil svg{ width:100%; height:100%; display:block; }
     .smoke{ animation:smoke 6s ease-in-out infinite; transform-origin:center; opacity:.6 }
     .smoke.s2{ animation-delay:1.4s }
@@ -73,27 +72,24 @@
   <!-- KIINTEÄ REVONTULI-TAUSTA -->
   <canvas id="auroraCanvas" class="aurora-fixed"></canvas>
 
-  <!-- ALAREUNAN SILUETTI (rungot piilossa, latvus yhtyy horisonttiin) -->
+  <!-- ALAREUNAN SILUETTI -->
   <div class="bottom-sil" aria-hidden="true">
     <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
       <defs>
-        <filter id="windowGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-
-        <!-- PUUT – rungot poistettu, alin "oksakerros" pidennetty jotta osuu horisonttiin -->
         <g id="treeTall" fill="var(--silhouette)">
           <path d="M0,0 l-18,22 h36 z" transform="translate(0,0)"/>
           <path d="M0,0 l-20,24 h40 z" transform="translate(0,10)"/>
           <path d="M0,0 l-22,26 h44 z" transform="translate(0,22)"/>
-          <path d="M0,0 l-26,32 h52 z" transform="translate(0,34)"/> <!-- pidennetty alin kerros -->
+          <path d="M0,0 l-26,32 h52 z" transform="translate(0,34)"/>
         </g>
         <g id="treeMed" fill="var(--silhouette)">
           <path d="M0,0 l-14,18 h28 z" transform="translate(0,2)"/>
           <path d="M0,0 l-16,20 h32 z" transform="translate(0,12)"/>
-          <path d="M0,0 l-20,26 h40 z" transform="translate(0,22)"/> <!-- pidennetty alin kerros -->
+          <path d="M0,0 l-20,26 h40 z" transform="translate(0,22)"/>
         </g>
         <g id="treeSmall" fill="var(--silhouette)">
           <path d="M0,0 l-11,14 h22 z" transform="translate(0,4)"/>
-          <path d="M0,0 l-15,20 h30 z" transform="translate(0,12)"/> <!-- pidennetty alin kerros -->
+          <path d="M0,0 l-15,20 h30 z" transform="translate(0,12)"/>
         </g>
       </defs>
 
@@ -102,7 +98,7 @@
       <path d="M0,122 C120,118 190,110 260,118 C340,126 420,106 500,116 C580,126 670,108 760,120 C850,132 980,110 1100,118 C1220,126 1330,112 1440,120 L1440,160 L0,160 Z" fill="var(--silhouette-mid)" opacity=".44"/>
       <path d="M0,130 C160,128 320,132 480,130 C640,128 800,131 960,129 C1120,128 1280,131 1440,129 L1440,160 L0,160 Z" fill="var(--silhouette)"/>
 
-      <!-- Kuuset (ei runkoja; tyhjä vyöhyke mökin edessä 1180–1275) -->
+      <!-- Kuuset -->
       <g>
         <use href="#treeTall"  transform="translate(55,76) scale(0.75)"/>
         <use href="#treeMed"   transform="translate(95,82) scale(0.75)"/>
@@ -123,19 +119,16 @@
         <use href="#treeMed"   transform="translate(1122,84) scale(0.75)"/>
         <use href="#treeSmall" transform="translate(1156,90) scale(0.75)"/>
 
-        <!-- tyhjä mökille -->
-
         <use href="#treeMed"   transform="translate(1300,84) scale(0.75)"/>
         <use href="#treeSmall" transform="translate(1340,90) scale(0.75)"/>
         <use href="#treeTall"  transform="translate(1380,76) scale(0.75)"/>
       </g>
 
-      <!-- Mökki (nostettu ja ilman ikkunaa/ääriviivoja) -->
+      <!-- Mökki -->
       <g>
         <rect x="1203" y="115" width="44" height="22" rx="1" fill="var(--silhouette)"/>
         <path d="M1198,116 L1225,100 L1252,116 Z" fill="var(--silhouette)"/>
         <rect x="1232" y="102" width="6" height="12" fill="var(--silhouette)"/>
-        <!-- ikkuna poistettu -->
       </g>
 
       <!-- Savu -->
@@ -151,10 +144,8 @@
     <div class="relative bg-[color:var(--dark-forest)] text-white">
       <div class="mx-auto max-w-6xl px-4 py-3 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
         <a href="#etusivu" class="flex items-center gap-3">
-          <!-- LOGO (SVG-tiedosto) -->
-          <div class="h-9 w-9 grid place-items-center rounded-xl ring-1 ring-white/40 bg-white/90 overflow-hidden">
-            <img alt="RUMAT.STUDIO logo" class="w-[80%] h-[80%] object-contain" src="assets/logo.svg">
-          </div>
+          <!-- Vain logo -->
+          <img alt="RUMAT.STUDIO logo" class="h-9 w-9 object-contain" src="assets/logo.svg">
           <span class="hidden sm:block text-sm uppercase tracking-widest font-semibold">RUMAT.STUDIO</span>
         </a>
         <nav class="justify-self-center hidden md:flex items-center gap-6 text-[13px] uppercase tracking-widest">
@@ -185,10 +176,8 @@
           Liian rumat ollakseen totta
         </h1>
         <div class="mt-8 flex justify-center">
-          <!-- ISO LOGO HERO-KEHYKSESSÄ -->
-          <div class="h-24 w-24 sm:h-28 sm:w-28 grid place-items-center rounded-full bg-white/92 ring-1 ring-white/70 shadow-soft overflow-hidden">
-            <img alt="RUMAT.STUDIO logo" class="w-[78%] h-[78%] object-contain" src="assets/logo.svg">
-          </div>
+          <!-- Vain logo -->
+          <img alt="RUMAT.STUDIO logo" class="h-24 w-24 sm:h-28 sm:w-28 object-contain" src="assets/logo.svg">
         </div>
       </div>
     </section>
@@ -318,13 +307,20 @@
 
   <!-- SCRIPTS -->
   <script>
-  const API_BASE = ""; // esim. "https://rumat-backend.<tunnus>.workers.dev"
+  const API_BASE = "";
   const fmtEUR = x => new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
   const $ = sel => document.querySelector(sel);
-  const el = (tag,attrs={},...kids)=>{ const n=document.createElement(tag); Object.entries(attrs).forEach(([k,v])=>{
-      if(k==='class') n.className=v; else if(k==='html') n.innerHTML=v; else if(k.startsWith('on')) n.addEventListener(k.slice(2),v);
+  const el = (tag,attrs={},...kids)=>{
+    const n=document.createElement(tag);
+    Object.entries(attrs).forEach(([k,v])=>{
+      if(k==='class') n.className=v;
+      else if(k==='html') n.innerHTML=v;
+      else if(k.startsWith('on')) n.addEventListener(k.slice(2),v);
       else n.setAttribute(k,v);
-    }); kids.forEach(k=>{ if(k==null) return; if(typeof k==='string') n.appendChild(document.createTextNode(k)); else n.appendChild(k);}); return n;};
+    });
+    kids.forEach(k=>{ if(k==null) return; if(typeof k==='string') n.appendChild(document.createTextNode(k)); else n.appendChild(k);});
+    return n;
+  };
 
   // Hero-tekstin liike (vain teksti nousee)
   (function(){
@@ -568,17 +564,24 @@
     modal.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // ===== WebGL Revontulet – kevyt elävä liike, ei scrollaa =====
+  // ===== WebGL Revontulet – epäsymmetrisempi =====
   (function(){
     const SETTINGS = {
-      PAL_COL1:[0.02,0.70,0.95], // sinertävä
-      PAL_COL2:[0.00,1.00,0.60], // vihreä
+      PAL_COL1:[0.02,0.70,0.95],
+      PAL_COL2:[0.00,1.00,0.60],
       BRIGHTNESS:1.00,
+
+      // epäsymmetria
       CURTAIN_Y:0.58,
       HEIGHT:0.55,
-      SPEED:0.18,           // pieni, jatkuva liike
-      STRIPE_STRENGTH:0.22, // hillitty raitailu
-      STAR_DENS:0.0001      // harvat tähdet → vähemmän "rakeisuutta"
+      SKEW:0.28,        // x-vino (↑ = enemmän vinoa)
+      CURVE_AMP:0.12,   // pääverhon kaari
+      WAVE_AMP:0.08,    // satunnainen aaltoilu
+      BAND2_STRENGTH:0.75, // toisen verhon voimakkuus
+
+      SPEED:0.18,
+      STRIPE_STRENGTH:0.22,
+      STAR_DENS:0.0001
     };
 
     function init(){
@@ -587,27 +590,63 @@
       if(!gl){ canvas.style.background='linear-gradient(#0a1e2a,#0b3824)'; return; }
 
       const vert=`attribute vec2 a_pos; void main(){ gl_Position=vec4(a_pos,0.,1.); }`;
-      const frag=`precision highp float; uniform vec2 u_res; uniform float u_time,u_brightness,u_y,u_height,u_speed,u_stripes,u_star; uniform vec3 u_c1,u_c2;
-      float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
-      float noise(vec2 p){vec2 i=floor(p),f=fract(p); float a=hash(i),b=hash(i+vec2(1,0)),c=hash(i+vec2(0,1)),d=hash(i+vec2(1,1));
-        vec2 u=f*f*(3.-2.*f); return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}
-      float fbm(vec2 p){float v=0.,a=0.5;for(int i=0;i<6;i++){v+=a*noise(p);p*=2.03;a*=0.47;}return v;}
+
+      const frag=`precision highp float;
+      uniform vec2 u_res;
+      uniform float u_time,u_brightness,u_y,u_height,u_speed,u_stripes,u_star;
+      uniform float u_skew,u_curve,u_wave,u_band2;
+      uniform vec3 u_c1,u_c2;
+
+      float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123); }
+      float noise(vec2 p){ vec2 i=floor(p),f=fract(p);
+        float a=hash(i), b=hash(i+vec2(1,0)), c=hash(i+vec2(0,1)), d=hash(i+vec2(1,1));
+        vec2 u=f*f*(3.-2.*f);
+        return mix(mix(a,b,u.x), mix(c,d,u.x), u.y);
+      }
+      float fbm(vec2 p){ float v=0.,a=.5; for(int i=0;i<6;i++){ v+=a*noise(p); p*=2.03; a*=.47; } return v; }
       float stars(vec2 uv){ vec2 p=floor(uv*900.); float rnd=hash(p); return step(1.-u_star,rnd); }
+
       void main(){
-        vec2 uv=gl_FragCoord.xy/u_res.xy, suv=vec2(uv.x*(u_res.x/u_res.y),uv.y);
-        vec3 col=vec3(.02,.06,.12);
-        float band=1.-smoothstep(0.,u_height,abs(uv.y-u_y));
-        float t=u_time*u_speed;
-        float flow=fbm(vec2(suv.x*1.6 - t, suv.y*1.2 + t*.35));
-        float stripes=smoothstep(.38,1., fbm(vec2(suv.x*10.+t*1.2,t*2.)))*u_stripes;
-        float inten=band*(.52+.72*flow)+stripes*band;
-        float skyfade=smoothstep(0.,.25,uv.y); inten*=skyfade;
-        vec3 pal=mix(u_c1,u_c2, clamp(uv.y + 0.22*flow,0.,1.));
-        col=mix(col,pal, clamp(inten*1.18,0.,1.));
-        float g=0.; g+=band*.20; g+=fbm(vec2(suv.x*1.8 - t*.4,suv.y*1.8))*.12; col += pal*g*1.03;
-        float st=stars(uv); col+=vec3(st)*.32;
-        col*=u_brightness;
-        gl_FragColor=vec4(col,1.);
+        vec2 uv = gl_FragCoord.xy/u_res.xy;
+        vec2 suv= vec2(uv.x*(u_res.x/u_res.y), uv.y);
+
+        // vino: ylempänä suurempi siirtymä
+        suv.x += (suv.y-0.5)*u_skew;
+
+        float t = u_time*u_speed;
+
+        // pääverho (ei abs() → ei peilisymmetriaa)
+        float y0 = u_y
+          + u_curve * sin(suv.x*1.3 + t*0.35)
+          + u_wave  * fbm(vec2(suv.x*2.0 - t*0.40, t*0.23));
+        float band0 = smoothstep(0., u_height, suv.y - y0);
+
+        // toinen verho eri tahdissa
+        float y1 = u_y - 0.08
+          + 0.06 * sin(suv.x*2.7 - t*0.22)
+          + 0.04 * fbm(vec2(suv.x*3.5 + t*0.50, t*0.17));
+        float band1 = smoothstep(0., u_height*0.85, suv.y - y1);
+
+        float band = max(band0, band1*u_band2);
+
+        // virtaus + pystysuorat raidat
+        float flow = fbm(vec2(suv.x*1.5 - t, suv.y*1.2 + t*0.25));
+        float stripes = smoothstep(.40,1., fbm(vec2(suv.x*12. + t*1.1, t*1.8))) * u_stripes;
+
+        float inten = band*(.50 + .75*flow) + stripes*band;
+
+        // vasen-oikea bias
+        float lr = smoothstep(0.05,0.95,suv.x);
+        inten *= mix(1.25, 0.85, lr);
+
+        vec3 base = vec3(.02,.06,.12);
+        vec3 pal  = mix(u_c1, u_c2, clamp(suv.y + 0.25*flow - 0.10*lr, 0., 1.));
+        vec3 col  = mix(base, pal, clamp(inten*1.2, 0., 1.));
+        col += pal * (band*.20 + fbm(vec2(suv.x*1.8 - t*.4, suv.y*1.8))*.12);
+        col += vec3(stars(uv)) * .28;
+
+        col *= u_brightness;
+        gl_FragColor = vec4(col,1.);
       }`;
 
       const sh=(t,s)=>{const o=gl.createShader(t); gl.shaderSource(o,s); gl.compileShader(o);
@@ -622,10 +661,20 @@
       const buf=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,buf); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
       const aPos=gl.getAttribLocation(prog,'a_pos'); gl.enableVertexAttribArray(aPos); gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
 
-      const uRes=gl.getUniformLocation(prog,'u_res'), uTime=gl.getUniformLocation(prog,'u_time'), uBr=gl.getUniformLocation(prog,'u_brightness'),
-            uY=gl.getUniformLocation(prog,'u_y'), uH=gl.getUniformLocation(prog,'u_height'), uSpd=gl.getUniformLocation(prog,'u_speed'),
-            uStr=gl.getUniformLocation(prog,'u_stripes'), uStar=gl.getUniformLocation(prog,'u_star'),
-            uC1=gl.getUniformLocation(prog,'u_c1'), uC2=gl.getUniformLocation(prog,'u_c2');
+      const uRes=gl.getUniformLocation(prog,'u_res'),
+            uTime=gl.getUniformLocation(prog,'u_time'),
+            uBr=gl.getUniformLocation(prog,'u_brightness'),
+            uY=gl.getUniformLocation(prog,'u_y'),
+            uH=gl.getUniformLocation(prog,'u_height'),
+            uSpd=gl.getUniformLocation(prog,'u_speed'),
+            uStr=gl.getUniformLocation(prog,'u_stripes'),
+            uStar=gl.getUniformLocation(prog,'u_star'),
+            uC1=gl.getUniformLocation(prog,'u_c1'),
+            uC2=gl.getUniformLocation(prog,'u_c2'),
+            uSk=gl.getUniformLocation(prog,'u_skew'),
+            uCurve=gl.getUniformLocation(prog,'u_curve'),
+            uWave=gl.getUniformLocation(prog,'u_wave'),
+            uBand2=gl.getUniformLocation(prog,'u_band2');
 
       function setUniforms(t){
         gl.uniform2f(uRes,canvas.width,canvas.height);
@@ -638,6 +687,10 @@
         gl.uniform1f(uStar,SETTINGS.STAR_DENS);
         gl.uniform3fv(uC1,SETTINGS.PAL_COL1);
         gl.uniform3fv(uC2,SETTINGS.PAL_COL2);
+        gl.uniform1f(uSk, SETTINGS.SKEW);
+        gl.uniform1f(uCurve, SETTINGS.CURVE_AMP);
+        gl.uniform1f(uWave, SETTINGS.WAVE_AMP);
+        gl.uniform1f(uBand2, SETTINGS.BAND2_STRENGTH);
       }
       function draw(t){ setUniforms(t*0.001); gl.drawArrays(gl.TRIANGLES,0,3); requestAnimationFrame(draw); }
 
