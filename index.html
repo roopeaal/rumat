@@ -90,13 +90,36 @@
     .nav-measure{ position:absolute !important; visibility:hidden !important; display:flex !important; white-space:nowrap !important; }
     .nav-hidden{ position:absolute !important; left:-9999px !important; visibility:hidden !important; }
 
-    /* Tuotekuvagalleria: 1 kuva oletuksena, 2 kuvaa kun tila riittää */
-    .product-gallery{ container-type:inline-size; }
-    .pg-grid{ display:grid; grid-template-columns:1fr; gap:1rem; }
-    .pg-b{ display:none; }  /* toinen kuva piilossa, jos tila ei riitä */
+    /* Tuotekuvagalleria: 1 kuva oletuksena, 2 kuvaa kun tila riittää
+       → 1-kuvassa kuvan max-leveys = 50% gallerian leveydestä (kuten 2-kuvan palsta) */
+    .product-gallery{
+      container-type:inline-size;
+      --pg-gap:1rem;
+    }
+    .pg-grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:var(--pg-gap);
+      justify-items:center;           /* keskittää sisällön */
+    }
+    .pg-b{ display:none; }            /* piilota toinen kuva kapealla */
+
+    /* Yksipalstassa rajoita kuvan max-leveys puoleen gallerian leveydestä
+       (miinus puoli välistä, jotta vastaa 2-palstan todellista palstaleveyttä) */
+    .pg-grid > .img-wrap{
+      width:100%;
+      max-width: calc(50cqw - var(--pg-gap)/2);
+    }
+
+    /* Kun gallerian leveys ≥ 900px, näytä 2 kuvaa vierekkäin ja poista rajoitus */
     @container (min-width: 900px){
-      .pg-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.5rem; }
+      .product-gallery{ --pg-gap:1.5rem; }
+      .pg-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:var(--pg-gap);
+      }
       .pg-b{ display:block; }
+      .pg-grid > .img-wrap{ max-width:none; } /* 2-palstassa ei rajoitusta */
     }
 
     /* MYYTY-overlay tuotekuvan päälle */
@@ -693,7 +716,7 @@
     modal?.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // ===== RESPONSIIVINEN "VALIKKO" – näytä kun nav ei mahdu (hystereesi + debounce) =====
+  // ===== RESPONSIIVINEN "VALIKKO" – parannettu: simuloi brändin leveys ilman nappia (ei jää Valikko päälle) =====
   (function(){
     const container = document.getElementById('hdrRow');
     const brand     = document.getElementById('brandBlock');
@@ -701,8 +724,8 @@
     const right     = document.getElementById('rightBlock');
     const menuBtn   = document.getElementById('openMenu');
 
-    const SLACK_SHOW = 40; // px tilaa vaaditaan ennen kuin näytetään nav uudelleen
-    const SLACK_HIDE = 10; // px ylitys sallitaan ennen kuin piilotetaan nav
+    const SLACK_SHOW = 40; // vaadittu lisätila ennen kuin näytetään nav uudelleen
+    const SLACK_HIDE = 10; // sallittu ylitys ennen kuin piilotetaan nav
     let navVisible = true;
 
     function setHeaderVar(){
@@ -717,6 +740,24 @@
       return w;
     }
 
+    // Mittaa brand-leveys; simulateNavVisible=true => mittaa kuin Valikko-nappi olisi piilossa
+    function brandWidth(simulateNavVisible){
+      const wasHidden = menuBtn.classList.contains('hidden');
+      if (simulateNavVisible && !wasHidden) menuBtn.classList.add('hidden');
+      const bw = Math.ceil(brand.getBoundingClientRect().width);
+      if (simulateNavVisible && !wasHidden) menuBtn.classList.remove('hidden');
+      return bw;
+    }
+
+    function widths(simulateNavVisible=false){
+      const cw = container.clientWidth;
+      const bw = brandWidth(simulateNavVisible);
+      const rw = Math.ceil(right.getBoundingClientRect().width);
+      const navW = measureNavWidth();
+      const avail = cw - bw - rw - 24; // pieni marginaalipuskuri
+      return { navW, avail };
+    }
+
     function applyState(showNav){
       navVisible = !!showNav;
       if (navVisible){
@@ -724,27 +765,21 @@
         menuBtn.classList.add('hidden');
         menuBtn.setAttribute('aria-expanded','false');
       }else{
-        nav.classList.add('nav-hidden'); // ei vie tilaa eikä vilku
+        nav.classList.add('nav-hidden');
         menuBtn.classList.remove('hidden');
       }
-    }
-
-    function fitsNow(){
-      const cw = container.clientWidth;
-      const bw = Math.ceil(brand.getBoundingClientRect().width);
-      const rw = Math.ceil(right.getBoundingClientRect().width);
-      const navW = measureNavWidth();
-      const avail = cw - bw - rw - 24; // pieni marginaalipuskuri
-      return { navW, avail };
+      setHeaderVar();
     }
 
     function compute(){
       setHeaderVar();
-      const {navW, avail} = fitsNow();
+      const cur = widths(false); // nykytila
+      const sim = widths(true);  // oletus, että Valikko piilotetaan
+
       if (navVisible){
-        if (navW > (avail - SLACK_HIDE)) applyState(false);
+        if (cur.navW > (cur.avail - SLACK_HIDE)) applyState(false);
       }else{
-        if (navW <= (avail - SLACK_SHOW)) applyState(true);
+        if (sim.navW <= (sim.avail - SLACK_SHOW)) applyState(true);
       }
     }
 
