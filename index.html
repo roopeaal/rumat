@@ -30,7 +30,8 @@
       --silhouette:#08110d;
       --silhouette-mid:#0c1a15;
       --silhouette-line:#9fb1a9;
-      --header-h:56px;           /* päivitetään JS:llä */
+      --header-h:56px;              /* päivitetään JS:llä */
+      --section-gap: clamp(8px, 1.2vw, 14px);
     }
 
     html{ scroll-padding-top: var(--header-h); }  /* ankkurit eivät jää headerin alle */
@@ -53,12 +54,15 @@
     }
     .site-content{ position:relative; z-index:2; background:transparent; }
 
-    /* Hero: käytä small viewport unit -fallbackia */
+    /* Hero */
     .hero{ position:relative; height:100vh; height:100svh; isolation:isolate; overflow:hidden; }
     .hero-overlay{ position:absolute; inset:0; z-index:1; pointer-events:none;
       background: radial-gradient(58% 42% at 50% 18%, rgba(255,255,255,.06), transparent 55%),
                   linear-gradient(to bottom, rgba(0,0,0,.16), rgba(0,0,0,.36) 72%); }
-    #hero-text{ position:relative; z-index:2; }
+
+    /* Sileä parallax – poista transition ja pidä GPU:lla */
+    #hero-text{ will-change:transform; transform:translateZ(0); transition:none !important; }
+    @media (prefers-reduced-motion: reduce){ #hero-text{ transform:none !important; } }
 
     /* Alareunan siluetti */
     .bottom-sil{ position:fixed; left:0; right:0; bottom:-1px; height:160px; z-index:1; pointer-events:none;
@@ -66,12 +70,12 @@
       -webkit-mask-image: linear-gradient(to top, black 72%, transparent 100%);}
     .bottom-sil svg{ width:100%; height:100%; display:block; }
 
-    /* Savun animaatio – korjaa transform-origin SVG:ssä */
+    /* Savun animaatio */
     .smoke{
       animation:smoke 6s ease-in-out infinite;
       opacity:.6;
       transform-origin:50% 50%;
-      transform-box:fill-box; /* tärkeä */
+      transform-box:fill-box;
       will-change:transform,opacity;
     }
     .smoke.s2{ animation-delay:1.4s }
@@ -80,7 +84,6 @@
     /* Drawer & Modal */
     .drawer{position:fixed;inset:0;z-index:60;display:none}
     .drawer.open{display:block}
-    /* Paneelien suunnat: menu vasemmalta, cart oikealta */
     #menuDrawer .panel{position:absolute;top:0;left:0;right:auto;width:min(420px,90vw);height:100%;background:#fff;box-shadow:10px 0 30px rgba(0,0,0,.2)}
     #cartDrawer .panel{position:absolute;top:0;right:0;left:auto;width:min(420px,90vw);height:100%;background:#fff;box-shadow:-10px 0 30px rgba(0,0,0,.2)}
     .modal{position:fixed;inset:0;z-index:70;display:none}
@@ -100,26 +103,20 @@
       display:grid;
       grid-template-columns:1fr;
       gap:var(--pg-gap);
-      justify-items:center;           /* keskittää sisällön */
+      justify-items:center;
     }
-    .pg-b{ display:none; }            /* piilota toinen kuva kapealla */
+    .pg-b{ display:none; }
 
-    /* Yksipalstassa rajoita kuvan max-leveys puoleen gallerian leveydestä
-       (miinus puoli välistä, jotta vastaa 2-palstan todellista palstaleveyttä) */
+    /* Yksipalstassa max leveys = puolikas gallerian leveydestä */
     .pg-grid > .img-wrap{
       width:100%;
       max-width: calc(50cqw - var(--pg-gap)/2);
     }
-
-    /* Kun gallerian leveys ≥ 900px, näytä 2 kuvaa vierekkäin ja poista rajoitus */
     @container (min-width: 900px){
       .product-gallery{ --pg-gap:1.5rem; }
-      .pg-grid{
-        grid-template-columns:repeat(2,minmax(0,1fr));
-        gap:var(--pg-gap);
-      }
+      .pg-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--pg-gap); }
       .pg-b{ display:block; }
-      .pg-grid > .img-wrap{ max-width:none; } /* 2-palstassa ei rajoitusta */
+      .pg-grid > .img-wrap{ max-width:none; }
     }
 
     /* MYYTY-overlay tuotekuvan päälle */
@@ -133,6 +130,13 @@
       display:inline-block; margin-top:.35rem; padding:.25rem .55rem;
       border-radius:9999px; background:#111827; color:#fff; font-size:.75rem; letter-spacing:.08em;
     }
+
+    /* Aurora-rako osioiden väliin (vain tietyissä kohdissa) */
+    .aurora-gap{
+      height: var(--section-gap);
+      pointer-events: none;
+      background: transparent;
+    }
   </style>
 </head>
 
@@ -140,7 +144,7 @@
   <!-- KIINTEÄ REVONTULI-TAUSTA -->
   <canvas id="auroraCanvas" class="aurora-fixed"></canvas>
 
-  <!-- ALAREUNAN SILUETTI (muoto säilyy; ei venytyksiä) -->
+  <!-- ALAREUNAN SILUETTI (muoto säilyy) -->
   <div class="bottom-sil" aria-hidden="true">
     <svg viewBox="0 0 1440 160" preserveAspectRatio="xMidYMax slice">
       <defs>
@@ -263,9 +267,11 @@
         </p>
       </div>
     </section>
+    <!-- Rako esittelyn jälkeen -->
+    <div class="aurora-gap"></div>
 
-    <!-- TUOTTEET -->
-    <section id="tuotteet" class="py-14 bg-white">
+    <!-- TUOTTEET (läpinäkyvä tausta, raot korttien väliin JS:llä) -->
+    <section id="tuotteet" class="py-14">
       <div class="mx-auto max-w-6xl px-4">
         <div class="flex items-center justify-between mb-6">
           <h2 class="serif text-3xl">Tuotteet</h2>
@@ -282,6 +288,7 @@
         <div id="blogRoot" class="grid gap-6"></div>
       </div>
     </section>
+    <div class="aurora-gap"></div>
 
     <!-- SOME -->
     <section id="some" class="py-14 bg-white">
@@ -303,6 +310,7 @@
         </div>
       </div>
     </section>
+    <div class="aurora-gap"></div>
 
     <!-- TARINA -->
     <section id="tarina" class="py-14 bg-stone-50">
@@ -313,13 +321,14 @@
         </p>
       </div>
     </section>
+    <div class="aurora-gap"></div>
 
     <!-- FOOTER -->
     <footer id="yhteys" class="pt-14 text-[color:var(--ivory)]" style="background:var(--footer)">
       <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
         <div>
           <div class="uppercase tracking-wide">RUMAT.STUDIO</div>
-          <div id="tagline" class="text-sm mt-1 text-white/70">Helsinki — Contemporary textiles, built to last.</div>
+          <div id="tagline" class="text-sm mt-1 text-white/70">Suomussalmi — Contemporary textiles, built to last.</div>
         </div>
         <div>
           <h5 class="text-sm text-white/70">Yhteys</h5>
@@ -327,7 +336,7 @@
             <li><a id="mailLink" href="mailto:hello@rumat.fi" class="hover:underline">hello@rumat.fi</a></li>
             <li><a id="igLink" href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer" class="hover:underline">Instagram</a></li>
             <li><a id="ttLink" href="https://www.tiktok.com/@rumat.studio" target="_blank" rel="noreferrer" class="hover:underline">TikTok</a></li>
-            <li id="location">Rovaniemi — Helsinki</li>
+            <li id="location">Kauppakatu 20, 89600 Suomussalmi</li>
           </ul>
         </div>
         <div>
@@ -413,12 +422,46 @@
     return n;
   };
 
-  // Hero-tekstin liike
+  // Hero-tekstin liike – rAF-throttled, pikseleissä (ei vh → vähemmän toolbar-heilahtelua)
   (function(){
-    const hero=document.getElementById('etusivu'); const textEl=document.getElementById('hero-text'); const yearEl=document.getElementById('year');
-    if(yearEl) yearEl.textContent = new Date().getFullYear();
-    function onScroll(){ const r=hero.getBoundingClientRect(); const h=Math.max(1,r.height); const p=Math.min(1,Math.max(0,-r.top/h)); const ty=-18*Math.min(1,p/0.9); textEl.style.transform=`translateY(${ty}vh)`; }
-    addEventListener('scroll', onScroll, {passive:true}); addEventListener('resize', onScroll, {passive:true}); onScroll();
+    const hero   = document.getElementById('etusivu');
+    const textEl = document.getElementById('hero-text');
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    let heroTop = 0, heroHeight = 1, amplitudePx = 0;
+    let ticking = false, lastScrollY = 0, reduceMotion = false;
+
+    function recalc(){
+      const rect = hero.getBoundingClientRect();
+      heroTop = rect.top + (window.scrollY || window.pageYOffset || 0);
+      heroHeight = Math.max(1, hero.offsetHeight);
+      amplitudePx = heroHeight * 0.18; // ~18vh
+    }
+    const clamp = (v,min,max)=>Math.min(max,Math.max(min,v));
+    const easeOutQuad = t => 1 - (1 - t) * (1 - t);
+
+    function update(){
+      ticking = false;
+      if (reduceMotion){ textEl.style.transform = 'translate3d(0,0,0)'; return; }
+      const y = lastScrollY;
+      const p = clamp((y - heroTop) / heroHeight, 0, 1);
+      const eased = easeOutQuad(clamp(p / 0.9, 0, 1));
+      const ty = -amplitudePx * eased;
+      textEl.style.transform = `translate3d(0, ${ty}px, 0)`;
+    }
+    function onScroll(){ lastScrollY = window.scrollY || window.pageYOffset || 0; if (!ticking){ ticking = true; requestAnimationFrame(update); } }
+    function onResize(){ recalc(); onScroll(); }
+
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    reduceMotion = mq.matches;
+    mq.addEventListener?.('change', e => { reduceMotion = e.matches; onScroll(); });
+
+    window.addEventListener('scroll', onScroll, {passive:true});
+    window.addEventListener('resize', ()=>requestAnimationFrame(onResize), {passive:true});
+    if (window.visualViewport){ window.visualViewport.addEventListener('resize', ()=>requestAnimationFrame(onResize), {passive:true}); }
+    if ('fonts' in document){ document.fonts.ready.then(()=>{ recalc(); onScroll(); }); }
+    recalc(); onScroll();
   })();
 
   // ----- CMS / sisältö -----
@@ -429,7 +472,7 @@
       email:"hello@rumat.fi",
       instagram:"https://instagram.com/rumat.studio",
       tiktok:"https://www.tiktok.com/@rumat.studio",
-      location:"Rovaniemi — Helsinki"
+      location:"Kauppakatu 20, 89600 Suomussalmi"   // ⬅️ osoite + kotipaikka
     },
     embed:{ instagramPost:"https://www.instagram.com/p/DMXVRgGC1Bv/embed", tiktokVideo:"https://www.tiktok.com/@rumat.studio/video/7525414518562753814" },
     pitch:"Luonnosta syntynyt. Reissuissa testattu. Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – jotta sinulla on päälläsi jotain, joka istuu, hengittää ja kestää jokaisella askeleella.",
@@ -557,6 +600,9 @@
 
       const wrap = el('div',{}, gallery, details);
       root.appendChild(wrap);
+
+      // ⬇️ rako jokaisen tuotekortin jälkeen
+      root.appendChild(el('div',{class:'aurora-gap'}));
 
       // galleriakuvat
       const imgs = Array.isArray(p.images)&&p.images.length ? p.images : [
@@ -708,7 +754,6 @@
       markSold(soldIds);            // ⬅️ merkitään myydyksi
       CART={}; saveCart();
       show('Kiitos tilauksesta!','Vahvistus saapuu PayPal-sähköpostiisi.');
-      // Päivitä UI
       renderProducts(CONTENT.products || []);
       renderCart();
     }
@@ -716,7 +761,7 @@
     modal?.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // ===== RESPONSIIVINEN "VALIKKO" – parannettu: simuloi brändin leveys ilman nappia (ei jää Valikko päälle) =====
+  // ===== RESPONSIIVINEN "VALIKKO" – simuloi brand-leveys ilman nappia, ei jää päälle =====
   (function(){
     const container = document.getElementById('hdrRow');
     const brand     = document.getElementById('brandBlock');
@@ -740,7 +785,6 @@
       return w;
     }
 
-    // Mittaa brand-leveys; simulateNavVisible=true => mittaa kuin Valikko-nappi olisi piilossa
     function brandWidth(simulateNavVisible){
       const wasHidden = menuBtn.classList.contains('hidden');
       if (simulateNavVisible && !wasHidden) menuBtn.classList.add('hidden');
@@ -754,7 +798,7 @@
       const bw = brandWidth(simulateNavVisible);
       const rw = Math.ceil(right.getBoundingClientRect().width);
       const navW = measureNavWidth();
-      const avail = cw - bw - rw - 24; // pieni marginaalipuskuri
+      const avail = cw - bw - rw - 24;
       return { navW, avail };
     }
 
@@ -773,9 +817,8 @@
 
     function compute(){
       setHeaderVar();
-      const cur = widths(false); // nykytila
-      const sim = widths(true);  // oletus, että Valikko piilotetaan
-
+      const cur = widths(false);
+      const sim = widths(true);
       if (navVisible){
         if (cur.navW > (cur.avail - SLACK_HIDE)) applyState(false);
       }else{
@@ -788,7 +831,6 @@
     window.addEventListener('resize', schedule, {passive:true});
     window.addEventListener('orientationchange', ()=>setTimeout(compute,150), {passive:true});
     if ('fonts' in document) document.fonts.ready.then(compute);
-
     compute();
   })();
 
