@@ -31,8 +31,8 @@
       --silhouette-mid:#0c1a15;
       --silhouette-line:#9fb1a9;
       --header-h:56px;
-      --section-gap: clamp(8px, 1.2vw, 14px);
-      --band-radius: 16px; /* himpun pyöristetty */
+      --section-gap: clamp(6px, 1vw, 12px);  /* ⬅️ hitusen pienempi rako */
+      --band-radius: 16px; /* hieman pyöristetty */
     }
 
     html{ scroll-padding-top: var(--header-h); }
@@ -283,13 +283,9 @@
 
     <!-- TUOTTEET -->
     <section id="tuotteet" class="py-0">
-      <div class="mx-auto max-w-6xl px-4 pt-12 pb-6">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="serif text-3xl">Tuotteet</h2>
-          <div class="text-xs text-stone-500">Hinnat sis. ALV • Palautus 14 vrk • Toimitus valitaan kassalla</div>
-        </div>
-      </div>
-      <div id="productsRoot" class=""></div>
+      <!-- rako ennen ensimmäistä tuote-bandin alkua -->
+      <div class="aurora-gap full-bleed"></div>
+      <div id="productsRoot"></div>
     </section>
 
     <!-- BLOGI (sumu-tausta, pyöristetty) -->
@@ -619,9 +615,18 @@
       const wrap = el('div',{}, gallery, details);
 
       // Pyöristetty valkoinen bandi tuotteen ympärille
-      const band = el('div',{class:'band full-bleed'},
-        el('div',{class:'band-inner'}, wrap)
-      );
+      const inner = el('div',{class:'band-inner'});
+      // ⬇️ Ensimmäiseen tuotteeseen liitetään otsikkorivi + infoteksti
+      if (idx === 0){
+        const headerRow = el('div',{class:'flex items-center justify-between mb-6'},
+          el('h2',{class:'serif text-3xl'}, 'Tuotteet'),
+          el('div',{class:'text-xs text-stone-500'}, 'Hinnat sis. ALV • Palautus 14 vrk • Toimitus valitaan kassalla')
+        );
+        inner.appendChild(headerRow);
+      }
+      inner.appendChild(wrap);
+
+      const band = el('div',{class:'band full-bleed'}, inner);
       root.appendChild(band);
 
       // kapea revontulirako palkkien väliin
