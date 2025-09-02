@@ -91,6 +91,32 @@
     .nav-measure{ position:absolute !important; visibility:hidden !important; display:flex !important; white-space:nowrap !important; }
     .nav-hidden{ position:absolute !important; left:-9999px !important; visibility:hidden !important; }
 
+    /* HEADER LAYOUT SAFETY */
+    #hdrRow{ grid-template-columns: 1fr auto 1fr; }
+    #brandBlock{ min-width:0; }
+    #brandText{
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:45vw; /* bränditeksti ei saa viedä liikaa tilaa */
+    }
+    /* Ääritilassa typistetään bränditeksti pois (logo jää), jotta napit mahtuvat */
+    #hdrRow.compact #brandText{ display:none; }
+
+    /* Oikean reunan napit eivät koskaan mene päällekkäin */
+    #rightBlock{
+      display:flex;
+      align-items:center;
+      gap:.5rem;
+      flex-wrap:nowrap;
+      white-space:nowrap;  /* ei rivinvaihtoja */
+    }
+    #rightBlock button{
+      display:inline-flex;
+      align-items:center;
+      white-space:nowrap;  /* teksti ei katkea */
+    }
+
     /* Tuotekuvagalleria */
     .product-gallery{
       container-type:inline-size;
@@ -133,7 +159,7 @@
       background: transparent;
     }
 
-    /* Pyöristetyt palkit (bandeja eri taustoilla) */
+    /* Pyöristetyt palkit */
     .full-bleed{
       margin-left: calc(50% - 50vw);
       margin-right: calc(50% - 50vw);
@@ -224,13 +250,13 @@
   <header class="fixed top-0 left-0 right-0 z-50">
     <div class="relative bg-[color:var(--dark-forest)] text-white">
       <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-3 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
-        <!-- Brändi: logo + teksti (näkyy myös puhelimessa) -->
+        <!-- Brändi -->
         <a id="brandBlock" href="#etusivu" class="flex items-center gap-3">
           <img alt="RUMAT.STUDIO logo" class="h-9 w-9 object-contain" src="assets/logo.svg">
           <span id="brandText" class="text-sm tracking-widest font-semibold">rumat.studio</span>
         </a>
 
-        <!-- Navigaatio (näytetään vain kun mahtuu) -->
+        <!-- Navigaatio (näkyy vain kun mahtuu) -->
         <nav id="mainNav" class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
           <a href="#etusivu"   class="hover:underline underline-offset-4 font-semibold">Etusivu</a>
           <a href="#tuotteet"  class="hover:underline underline-offset-4 font-semibold">Tuotteet</a>
@@ -240,8 +266,8 @@
           <a href="#yhteys"    class="hover:underline underline-offset-4 font-semibold">Yhteystiedot</a>
         </nav>
 
-        <!-- Oikea: Valikko + Ostoskori (mobiilissa aina näkyvissä; desktopilla Valikko piiloon kun nav näkyy) -->
-        <div id="rightBlock" class="justify-self-end flex items-center gap-2">
+        <!-- Oikea: Valikko + Ostoskori (ei koskaan päällekkäin) -->
+        <div id="rightBlock" class="justify-self-end">
           <button id="openMenu" class="px-3 py-2 rounded-full bg-white/10 ring-1 ring-white/30 hover:bg-white/20"
                   aria-controls="menuDrawer" aria-expanded="false">Valikko</button>
           <button id="openCart" class="px-3 py-2 rounded-full bg-white/10 ring-1 ring-white/30 hover:bg-white/20">
@@ -267,7 +293,7 @@
       </div>
     </section>
 
-    <!-- Esittely (pyöristetty valkoinen bandi) -->
+    <!-- Esittely -->
     <section class="py-0">
       <div class="band full-bleed">
         <div class="band-inner text-center">
@@ -282,12 +308,11 @@
 
     <!-- TUOTTEET -->
     <section id="tuotteet" class="py-0">
-      <!-- rako ennen ensimmäistä tuote-bandin alkua -->
       <div class="aurora-gap full-bleed"></div>
       <div id="productsRoot"></div>
     </section>
 
-    <!-- BLOGI (sumu-tausta, pyöristetty) -->
+    <!-- BLOGI -->
     <section id="blogi" class="py-0">
       <div class="band band--mist full-bleed">
         <div class="band-inner">
@@ -298,7 +323,7 @@
     </section>
     <div class="aurora-gap full-bleed"></div>
 
-    <!-- SOME (valkoinen, pyöristetty) -->
+    <!-- SOME -->
     <section id="some" class="py-0">
       <div class="band full-bleed">
         <div class="band-inner">
@@ -322,7 +347,7 @@
     </section>
     <div class="aurora-gap full-bleed"></div>
 
-    <!-- TARINA (stone-50, pyöristetty) -->
+    <!-- TARINA -->
     <section id="tarina" class="py-0">
       <div class="band band--stone full-bleed">
         <div class="band-inner">
@@ -787,7 +812,7 @@
     modal?.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // ===== RESPONSIVE NAV TOIMINTA =====
+  // ===== RESPONSIVE NAV + EI PÄÄLLEKKÄIN NAPEILLE =====
   (function(){
     const container = document.getElementById('hdrRow');
     const brand     = document.getElementById('brandBlock');
@@ -812,8 +837,9 @@
     }
 
     function canShowNav(){
+      // simuloi tilannetta, jossa Valikko on piilossa (nav näkyy)
       const wasHidden = menuBtn.classList.contains('hidden');
-      menuBtn.classList.add('hidden'); // simuloi tilannetta jossa nav näkyy ja Valikko piilossa
+      menuBtn.classList.add('hidden');
       const cw = container.clientWidth;
       const bw = Math.ceil(brand.getBoundingClientRect().width);
       const rw = Math.ceil(right.getBoundingClientRect().width);
@@ -836,6 +862,17 @@
       setHeaderVar();
     }
 
+    function ensureRightNeverOverlaps(){
+      // Näytä bränditeksti, mittaa -> jos ei mahdu, ota compact-tila (piilottaa bränditekstin)
+      container.classList.remove('compact');
+      const cw = container.clientWidth;
+      const bw = Math.ceil(brand.getBoundingClientRect().width);
+      const rw = Math.ceil(right.getBoundingClientRect().width);
+      if (bw + rw + 16 > cw){
+        container.classList.add('compact');
+      }
+    }
+
     function compute(){
       setHeaderVar();
       if (navVisible){
@@ -843,6 +880,7 @@
       }else{
         if (canShowNav() )  applyState(true);
       }
+      ensureRightNeverOverlaps();
     }
 
     let t=null;
