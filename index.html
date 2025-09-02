@@ -39,23 +39,30 @@
     .btn-dark{background:#111827;color:#fff;border-color:#111827}
     .chip{font-size:.78rem;padding:.25rem .55rem;border-radius:9999px;border:1px solid rgb(214,211,209);background:#fff}
 
-    .aurora-fixed{ position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; display:block; }
+    /* Aurora (kiinteä tausta) */
+    .aurora-fixed{
+      position:fixed; inset:0; width:100%; height:100%;
+      z-index:0; pointer-events:none; display:block;
+      background: linear-gradient(#0a1e2a,#0b3824); /* fallback + pehmentää resizeä */
+      transform: translateZ(0); backface-visibility:hidden;
+      will-change: transform, opacity;
+    }
     .site-content{ position:relative; z-index:2; background:transparent; }
 
-    .hero{ position:relative; height:100vh; isolation:isolate; overflow:hidden; }
+    /* Hero: käytä small viewport unit -fallbackia */
+    .hero{ position:relative; height:100vh; height:100svh; isolation:isolate; overflow:hidden; }
     .hero-overlay{ position:absolute; inset:0; z-index:1; pointer-events:none;
       background: radial-gradient(58% 42% at 50% 18%, rgba(255,255,255,.06), transparent 55%),
                   linear-gradient(to bottom, rgba(0,0,0,.16), rgba(0,0,0,.36) 72%); }
     #hero-text{ position:relative; z-index:2; }
 
+    /* Alareunan siluetti */
     .bottom-sil{ position:fixed; left:0; right:0; bottom:-1px; height:160px; z-index:1; pointer-events:none;
       mask-image: linear-gradient(to top, black 72%, transparent 100%);
       -webkit-mask-image: linear-gradient(to top, black 72%, transparent 100%);}
     .bottom-sil svg{ width:100%; height:100%; display:block; }
-    .smoke{ animation:smoke 6s ease-in-out infinite; transform-origin:center; opacity:.6 }
-    .smoke.s2{ animation-delay:1.4s }
-    @keyframes smoke{ 0%{transform:translateY(0) scale(1);opacity:.6} 100%{transform:translateY(-28px) scale(1.4);opacity:0} }
 
+    /* Drawer & Modal */
     .drawer{position:fixed;inset:0;z-index:60;display:none}
     .drawer.open{display:block}
     .drawer .panel{position:absolute;top:0;right:0;width:min(420px,90vw);height:100%;background:#fff;box-shadow:-10px 0 30px rgba(0,0,0,.2)}
@@ -65,10 +72,12 @@
 </head>
 
 <body class="text-stone-900">
+  <!-- KIINTEÄ REVONTULI-TAUSTA -->
   <canvas id="auroraCanvas" class="aurora-fixed"></canvas>
 
+  <!-- ALAREUNAN SILUETTI (muoto säilyy; ei venytyksiä) -->
   <div class="bottom-sil" aria-hidden="true">
-    <svg viewBox="0 0 1440 160" preserveAspectRatio="none">
+    <svg viewBox="0 0 1440 160" preserveAspectRatio="xMidYMax slice">
       <defs>
         <g id="treeTall" fill="var(--silhouette)">
           <path d="M0,0 l-18,22 h36 z" transform="translate(0,0)"/>
@@ -87,10 +96,12 @@
         </g>
       </defs>
 
+      <!-- Vuoriharjanteet -->
       <path d="M0,120 C180,105 240,108 340,114 C460,121 520,110 640,116 C760,122 880,108 1000,114 C1160,122 1280,110 1440,118 L1440,160 L0,160 Z" fill="var(--silhouette-mid)" opacity=".28"/>
       <path d="M0,122 C120,118 190,110 260,118 C340,126 420,106 500,116 C580,126 670,108 760,120 C850,132 980,110 1100,118 C1220,126 1330,112 1440,120 L1440,160 L0,160 Z" fill="var(--silhouette-mid)" opacity=".44"/>
       <path d="M0,130 C160,128 320,132 480,130 C640,128 800,131 960,129 C1120,128 1280,131 1440,129 L1440,160 L0,160 Z" fill="var(--silhouette)"/>
 
+      <!-- Kuuset -->
       <g>
         <use href="#treeTall"  transform="translate(55,76) scale(0.75)"/>
         <use href="#treeMed"   transform="translate(95,82) scale(0.75)"/>
@@ -116,12 +127,14 @@
         <use href="#treeTall"  transform="translate(1380,76) scale(0.75)"/>
       </g>
 
+      <!-- Mökki -->
       <g>
         <rect x="1203" y="115" width="44" height="22" rx="1" fill="var(--silhouette)"/>
         <path d="M1198,116 L1225,100 L1252,116 Z" fill="var(--silhouette)"/>
         <rect x="1232" y="102" width="6" height="12" fill="var(--silhouette)"/>
       </g>
 
+      <!-- Savu -->
       <g fill="#b7c7c1">
         <circle class="smoke"  cx="1235" cy="98" r="2.8"/>
         <circle class="smoke s2" cx="1239" cy="93" r="2.2"/>
@@ -129,6 +142,7 @@
     </svg>
   </div>
 
+  <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50">
     <div class="relative bg-[color:var(--dark-forest)] text-white">
       <div class="mx-auto max-w-6xl px-4 py-3 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
@@ -153,11 +167,14 @@
     </div>
   </header>
 
+  <!-- SISÄLTÖ -->
   <main class="site-content">
+    <!-- HERO -->
     <section id="etusivu" class="hero grid place-items-center text-stone-50 px-4">
       <div class="hero-overlay"></div>
       <div id="hero-text" class="text-center transition-transform mt-24 md:mt-28">
-        <h1 class="serif font-semibold tracking-[0.08em] text-[clamp(22px,4.8vw,58px)] drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
+        <h1 class="serif font-semibold tracking-[0.08em] text-[clamp(22px,4.8vw,58px)]
+                   drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
           Liian rumat ollakseen totta
         </h1>
         <div class="mt-8 flex justify-center">
@@ -166,6 +183,7 @@
       </div>
     </section>
 
+    <!-- Esittely -->
     <section class="py-12 bg-white">
       <div class="mx-auto max-w-3xl px-6 text-center">
         <p id="intro-text" class="text-xl sm:text-2xl">
@@ -175,6 +193,7 @@
       </div>
     </section>
 
+    <!-- TUOTTEET (renderöidään JS:llä) -->
     <section id="tuotteet" class="py-14 bg-white">
       <div class="mx-auto max-w-6xl px-4">
         <div class="flex items-center justify-between mb-6">
@@ -185,6 +204,7 @@
       </div>
     </section>
 
+    <!-- BLOGI -->
     <section id="blogi" class="py-14" style="background:var(--mist)">
       <div class="mx-auto max-w-4xl px-6">
         <h2 class="serif text-3xl mb-6">Blogi</h2>
@@ -192,6 +212,7 @@
       </div>
     </section>
 
+    <!-- SOME -->
     <section id="some" class="py-14 bg-white">
       <div class="mx-auto max-w-6xl px-4">
         <h2 class="serif text-3xl mb-6">Some</h2>
@@ -212,6 +233,7 @@
       </div>
     </section>
 
+    <!-- TARINA -->
     <section id="tarina" class="py-14 bg-stone-50">
       <div class="mx-auto max-w-3xl px-6">
         <h2 class="serif text-3xl mb-4">Tarina</h2>
@@ -221,6 +243,7 @@
       </div>
     </section>
 
+    <!-- FOOTER -->
     <footer id="yhteys" class="pt-14 text-[color:var(--ivory)]" style="background:var(--footer)">
       <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
         <div>
@@ -249,6 +272,7 @@
     </footer>
   </main>
 
+  <!-- OSTOSKORI -->
   <div id="cartDrawer" class="drawer">
     <div class="absolute inset-0 bg-black/40" id="closeCart"></div>
     <div class="panel p-5 flex flex-col">
@@ -273,6 +297,7 @@
     </div>
   </div>
 
+  <!-- SUCCESS/CANCEL MODAL -->
   <div id="resultModal" class="modal">
     <div class="bg-white rounded-2xl p-6 shadow-soft w-[min(92vw,480px)] text-center">
       <h3 id="resultTitle" class="serif text-2xl mb-2">Kiitos tilauksesta!</h3>
@@ -281,6 +306,7 @@
     </div>
   </div>
 
+  <!-- SCRIPTS -->
   <script>
   const API_BASE = "";
   const fmtEUR = x => new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
@@ -297,15 +323,15 @@
     return n;
   };
 
+  // Hero-tekstin liike
   (function(){
-    const hero=document.getElementById('etusivu');
-    const textEl=document.getElementById('hero-text');
-    const yearEl=document.getElementById('year');
+    const hero=document.getElementById('etusivu'); const textEl=document.getElementById('hero-text'); const yearEl=document.getElementById('year');
     yearEl.textContent = new Date().getFullYear();
     function onScroll(){ const r=hero.getBoundingClientRect(); const h=Math.max(1,r.height); const p=Math.min(1,Math.max(0,-r.top/h)); const ty=-18*Math.min(1,p/0.9); textEl.style.transform=`translateY(${ty}vh)`; }
     addEventListener('scroll', onScroll, {passive:true}); addEventListener('resize', onScroll, {passive:true}); onScroll();
   })();
 
+  // ----- CMS / sisältö -----
   const defaultContent = {
     hero:{ headline:"Liian rumat ollakseen totta" },
     paypalBusiness:"",
@@ -392,7 +418,6 @@
               el('img',{id:rightId,class:'w-full h-full object-cover',alt:`${p.name} kuva 2`,loading:'lazy',decoding:'async'})
             )
           ),
-          /* ⬇️ TÄRKEÄ: napit JS-elementteinä, ei raaka-HTML ⬇️ */
           el('button',{id:prevId,class:'absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft',ariaLabel:'Edelliset kuvat'},'◀'),
           el('button',{id:nextId,class:'absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft',ariaLabel:'Seuraavat kuvat'},'▶')
         )
@@ -435,6 +460,7 @@
     });
   }
 
+  // Ostoskori
   const $cart   = $('#cartDrawer');
   const $items  = $('#cartItems');
   const $open   = $('#openCart');
@@ -465,7 +491,7 @@
       );
       $shipOpts.appendChild(radio);
     });
-    $shipOpts.querySelectorAll('input[name="ship"]').forEach(r=> r.addEventListener('change', renderCart));
+    $shipOpts.querySelectorAll('input[name="ship"]').forEach(r=>r.addEventListener('change', renderCart));
 
     const ul = document.getElementById('shipInfo'); ul.innerHTML='';
     methods.forEach(m=>ul.appendChild(el('li',{}, `${m.name} — ${typeof m.price==='number'?fmtEUR(m.price):m.price}`)));
@@ -539,18 +565,14 @@
     modal.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // ===== WebGL Revontulet – epäsymmetrisempi ja alempana =====
+  // ===== WebGL Revontulet – alkuperäinen look, stabiili koonhallinta (ei välkkymistä) =====
   (function(){
     const SETTINGS = {
       PAL_COL1:[0.02,0.70,0.95],
       PAL_COL2:[0.00,1.00,0.60],
       BRIGHTNESS:1.00,
-      CURTAIN_Y:0.52,
+      CURTAIN_Y:0.58,
       HEIGHT:0.55,
-      SKEW:0.28,
-      CURVE_AMP:0.12,
-      WAVE_AMP:0.08,
-      BAND2_STRENGTH:0.75,
       SPEED:0.18,
       STRIPE_STRENGTH:0.22,
       STAR_DENS:0.0001
@@ -559,82 +581,52 @@
     function init(){
       const canvas = document.getElementById('auroraCanvas'); if(!canvas) return;
       const gl = canvas.getContext('webgl',{antialias:false,depth:false,stencil:false,preserveDrawingBuffer:false});
-      if(!gl){ canvas.style.background='linear-gradient(#0a1e2a,#0b3824)'; return; }
+      canvas.style.background = 'linear-gradient(#0a1e2a,#0b3824)';
+      if(!gl){ return; } // gradientti fallbackiksi
+
+      gl.clearColor(0.04,0.12,0.16,1);
 
       const vert=`attribute vec2 a_pos; void main(){ gl_Position=vec4(a_pos,0.,1.); }`;
-
-      const frag=`precision highp float;
-      uniform vec2 u_res;
-      uniform float u_time,u_brightness,u_y,u_height,u_speed,u_stripes,u_star;
-      uniform float u_skew,u_curve,u_wave,u_band2;
-      uniform vec3 u_c1,u_c2;
-
+      const frag=`precision highp float; uniform vec2 u_res; uniform float u_time,u_brightness,u_y,u_height,u_speed,u_stripes,u_star; uniform vec3 u_c1,u_c2;
       float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
-      float noise(vec2 p){ vec2 i=floor(p),f=fract(p);
-        float a=hash(i), b=hash(i+vec2(1,0)), c=hash(i+vec2(0,1)), d=hash(i+vec2(1,1));
-        vec2 u=f*f*(3.-2.*f);
-        return mix(mix(a,b,u.x), mix(c,d,u.x), u.y);
-      }
-      float fbm(vec2 p){ float v=0.,a=.5; for(int i=0;i<6;i++){ v+=a*noise(p); p*=2.03; a*=.47; } return v; }
+      float noise(vec2 p){vec2 i=floor(p),f=fract(p); float a=hash(i),b=hash(i+vec2(1,0)),c=hash(i+vec2(0,1)),d=hash(i+vec2(1,1));
+        vec2 u=f*f*(3.-2.*f); return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}
+      float fbm(vec2 p){float v=0.,a=0.5;for(int i=0;i<6;i++){v+=a*noise(p);p*=2.03;a*=0.47;}return v;}
       float stars(vec2 uv){ vec2 p=floor(uv*900.); float rnd=hash(p); return step(1.-u_star,rnd); }
-
       void main(){
-        vec2 uv = gl_FragCoord.xy/u_res.xy;
-        vec2 suv= vec2(uv.x*(u_res.x/u_res.y), uv.y);
-
-        suv.x += (suv.y-0.5)*u_skew;
-
-        float t = u_time*u_speed;
-
-        float n0 = fbm(vec2(suv.x*2.0 - t*0.40, t*0.23)) - 0.5;
-        float n1 = fbm(vec2(suv.x*3.5 + t*0.50, t*0.17)) - 0.5;
-
-        float y0 = u_y + u_curve * sin(suv.x*1.3 + t*0.35) + u_wave * n0;
-        float y1 = u_y - 0.08 + 0.06 * sin(suv.x*2.7 - t*0.22) + 0.04 * n1;
-
-        float band0 = 1. - smoothstep(0., u_height,      abs(suv.y - y0));
-        float band1 = 1. - smoothstep(0., u_height*0.85, abs(suv.y - y1));
-        float band  = max(band0, band1*u_band2);
-
-        float flow = fbm(vec2(suv.x*1.5 - t, suv.y*1.2 + t*0.25));
-        float stripes = smoothstep(.40,1., fbm(vec2(suv.x*12. + t*1.1, t*1.8))) * u_stripes;
-
-        float inten = band*(.50 + .75*flow) + stripes*band;
-
-        float lr = smoothstep(0.05,0.95,suv.x);
-        inten *= mix(1.25, 0.85, lr);
-
-        vec3 base = vec3(.02,.06,.12);
-        vec3 pal  = mix(u_c1, u_c2, clamp(suv.y + 0.25*flow - 0.10*lr, 0., 1.));
-        vec3 col  = mix(base, pal, clamp(inten*1.2, 0., 1.));
-
-        col += pal * (band*.20 + fbm(vec2(suv.x*1.8 - t*.4, suv.y*1.8))*.12);
-        col += vec3(stars(uv)) * .28;
-
-        col *= u_brightness;
-        gl_FragColor = vec4(col,1.);
+        vec2 uv=gl_FragCoord.xy/u_res.xy, suv=vec2(uv.x*(u_res.x/u_res.y),uv.y);
+        vec3 col=vec3(.02,.06,.12);
+        float band=1.-smoothstep(0.,u_height,abs(uv.y-u_y));
+        float t=u_time*u_speed;
+        float flow=fbm(vec2(suv.x*1.6 - t, suv.y*1.2 + t*.35));
+        float stripes=smoothstep(.38,1., fbm(vec2(suv.x*10.+t*1.2,t*2.)))*u_stripes;
+        float inten=band*(.52+.72*flow)+stripes*band;
+        float skyfade=smoothstep(0.,.25,uv.y); inten*=skyfade;
+        vec3 pal=mix(u_c1,u_c2, clamp(uv.y + 0.22*flow,0.,1.));
+        col=mix(col,pal, clamp(inten*1.18,0.,1.));
+        float g=0.; g+=band*.20; g+=fbm(vec2(suv.x*1.8 - t*.4,suv.y*1.8))*.12; col += pal*g*1.03;
+        float st=stars(uv); col+=vec3(st)*.32;
+        col*=u_brightness;
+        gl_FragColor=vec4(col,1.);
       }`;
 
-      const sh=(t,s)=>{const o=gl.createShader(t); gl.shaderSource(o,s); gl.compileShader(o);
-        if(!gl.getShaderParameter(o,gl.COMPILER,)){};
-      };
-      const vsh=gl.createShader(gl.VERTEX_SHADER); gl.shaderSource(vsh,vert); gl.compileShader(vsh);
-      if(!gl.getShaderParameter(vsh,gl.COMPILE_STATUS)){ console.error(gl.getShaderInfoLog(vsh)); }
-      const fsh=gl.createShader(gl.FRAGMENT_SHADER); gl.shaderSource(fsh,frag); gl.compileShader(fsh);
-      if(!gl.getShaderParameter(fsh,gl.COMPILE_STATUS)){ console.error(gl.getShaderInfoLog(fsh)); }
-
+      // compile/link
+      const makeShader=(type,src)=>{ const s=gl.createShader(type); gl.shaderSource(s,src); gl.compileShader(s);
+        if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){ console.error(gl.getShaderInfoLog(s)); } return s; };
       const prog=gl.createProgram();
-      gl.attachShader(prog,vsh);
-      gl.attachShader(prog,fsh);
+      gl.attachShader(prog,makeShader(gl.VERTEX_SHADER,vert));
+      gl.attachShader(prog,makeShader(gl.FRAGMENT_SHADER,frag));
       gl.linkProgram(prog);
       if(!gl.getProgramParameter(prog,gl.LINK_STATUS)){ console.error(gl.getProgramInfoLog(prog)); return; }
       gl.useProgram(prog);
 
-      const buf=gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+      // geom
+      const buf=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,buf);
       gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
-      const aPos=gl.getAttribLocation(prog,'a_pos'); gl.enableVertexAttribArray(aPos); gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
+      const aPos=gl.getAttribLocation(prog,'a_pos'); gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
 
+      // uniforms
       const uRes=gl.getUniformLocation(prog,'u_res'),
             uTime=gl.getUniformLocation(prog,'u_time'),
             uBr=gl.getUniformLocation(prog,'u_brightness'),
@@ -644,11 +636,7 @@
             uStr=gl.getUniformLocation(prog,'u_stripes'),
             uStar=gl.getUniformLocation(prog,'u_star'),
             uC1=gl.getUniformLocation(prog,'u_c1'),
-            uC2=gl.getUniformLocation(prog,'u_c2'),
-            uSk=gl.getUniformLocation(prog,'u_skew'),
-            uCurve=gl.getUniformLocation(prog,'u_curve'),
-            uWave=gl.getUniformLocation(prog,'u_wave'),
-            uBand2=gl.getUniformLocation(prog,'u_band2');
+            uC2=gl.getUniformLocation(prog,'u_c2');
 
       function setUniforms(t){
         gl.uniform2f(uRes,canvas.width,canvas.height);
@@ -661,24 +649,49 @@
         gl.uniform1f(uStar,SETTINGS.STAR_DENS);
         gl.uniform3fv(uC1,SETTINGS.PAL_COL1);
         gl.uniform3fv(uC2,SETTINGS.PAL_COL2);
-        gl.uniform1f(uSk, SETTINGS.SKEW);
-        gl.uniform1f(uCurve, SETTINGS.CURVE_AMP);
-        gl.uniform1f(uWave, SETTINGS.WAVE_AMP);
-        gl.uniform1f(uBand2, SETTINGS.BAND2_STRENGTH);
       }
-      function draw(t){ setUniforms(t*0.001); gl.drawArrays(gl.TRIANGLES,0,3); requestAnimationFrame(draw); }
 
-      const ro=new ResizeObserver(()=>{ const DPR=Math.min(devicePixelRatio||1,2);
-        const rect=canvas.getBoundingClientRect(); const dw=Math.floor(rect.width*DPR), dh=Math.floor(rect.height*DPR);
-        if(canvas.width!==dw||canvas.height!==dh){ canvas.width=dw; canvas.height=dh; gl.viewport(0,0,dw,dh); }
-      });
-      ro.observe(canvas);
+      // Stabiili koonhallinta: ei skaalata scrollin mikromuutoksissa
+      let lastW=0,lastH=0, rtid=null;
+      function resizeNow(){
+        const dpr = Math.min(window.devicePixelRatio||1, 2);
+        const rect = canvas.getBoundingClientRect();
+        const dw = Math.max(1, Math.floor(rect.width  * dpr));
+        const dh = Math.max(1, Math.floor(rect.height * dpr));
+        if (dw===lastW && dh===lastH) return;
+        lastW=dw; lastH=dh;
+        canvas.width=dw; canvas.height=dh;
+        gl.viewport(0,0,dw,dh);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+      }
+      function scheduleResize(){
+        if (rtid) return;
+        rtid = setTimeout(()=>{ rtid=null; resizeNow(); }, 120);
+      }
+      window.addEventListener('resize', scheduleResize, {passive:true});
+      window.addEventListener('orientationchange', ()=>setTimeout(resizeNow, 250), {passive:true});
+      if (window.visualViewport){
+        let vvPrevW = Math.round(window.visualViewport.width||0);
+        window.visualViewport.addEventListener('resize', ()=>{
+          const w = Math.round(window.visualViewport.width||0);
+          if (Math.abs(w - vvPrevW) >= 2) scheduleResize();
+          vvPrevW = w;
+        }, {passive:true});
+      }
+      resizeNow();
 
+      function draw(t){
+        setUniforms(t*0.001);
+        gl.drawArrays(gl.TRIANGLES,0,3);
+        requestAnimationFrame(draw);
+      }
       requestAnimationFrame(draw);
     }
+
     if(document.readyState==='loading') addEventListener('DOMContentLoaded',init,{once:true}); else init();
   })();
 
+  // Start
   loadContent();
   </script>
 </body>
