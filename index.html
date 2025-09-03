@@ -31,13 +31,11 @@
       --silhouette-mid:#0c1a15;
       --silhouette-line:#9fb1a9;
       --header-h:56px;
-      /* ↓ pienennetty rako ja yhtenäinen kaikkialla */
       --section-gap: clamp(4px, 0.7vw, 8px);
       --band-radius: 16px;
     }
 
     html{ scroll-padding-top: var(--header-h); }
-
     body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#111827;background:#fff}
     .serif{font-family:"Libre Baskerville",serif}
     .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
@@ -88,34 +86,45 @@
     .modal{position:fixed;inset:0;z-index:70;display:none}
     .modal.open{display:grid;place-items:center}
 
-    /* Nav mittaus + “Valikko” togglaus */
+    /* Nav mittaus + togglaus */
     .nav-measure{ position:absolute !important; visibility:hidden !important; display:flex !important; white-space:nowrap !important; }
-    .nav-hidden{ position:absolute !important; left:-9999px !important; visibility:hidden !important; }
+    .nav-hidden{ display:none !important; }
 
-    /* HEADER SAFETY */
-    #hdrRow{ grid-template-columns: 1fr auto; /* brand | nav */ }
-    #brandBlock{ min-width:0; }
+    /* HEADER GRID: vasen brand, keskellä nav, oikealla ikonit/tekstit */
+    #hdrRow{ grid-template-columns: auto 1fr auto; }
+    #brandBlock{ min-width:0; justify-self:start; }
     #brandText{
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:45vw;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      max-width:min(42vw, 460px);
     }
-    #hdrRow.compact #brandText{ display:none; }
 
-    /* Oikean reunan ikonit (äärioikealle) */
-    #rightBlock{
-      position:absolute; right:12px; top:50%; transform:translateY(-50%);
-      display:flex; align-items:center; gap:.5rem; white-space:nowrap;
+    #mainNav{
+      justify-self:center;
+      display:flex; gap:1.5rem; white-space:nowrap;
+      font-size:13px; text-transform:uppercase; letter-spacing:.2em;
     }
+
+    #rightBlock{ justify-self:end; display:flex; align-items:center; gap:.5rem; white-space:nowrap; }
+
     .icon-btn{
       position:relative; width:38px; height:38px; display:grid; place-items:center;
       border-radius:9999px; background:rgba(255,255,255,0.10);
       border:1px solid rgba(255,255,255,0.30); color:#fff; transition:background .15s ease;
     }
     .icon-btn:hover{ background:rgba(255,255,255,0.20); }
+
     .badge{
       position:absolute; top:-4px; right:-4px; min-width:18px; height:18px; padding:0 4px;
       display:grid; place-items:center; border-radius:9999px; background:#fff; color:#111827;
       font-size:11px; line-height:1; font-weight:700; border:1px solid rgba(0,0,0,.15);
     }
+
+    .cart-text-btn{
+      border:1px solid rgba(255,255,255,.3);
+      padding:.45rem .8rem; border-radius:9999px; color:#fff;
+      background:rgba(255,255,255,.10);
+    }
+    .cart-text-btn:hover{ background:rgba(255,255,255,.20); }
 
     /* Tuotekuvagalleria */
     .product-gallery{ container-type:inline-size; --pg-gap:1rem; }
@@ -227,35 +236,15 @@
   <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50">
     <div class="relative bg-[color:var(--dark-forest)] text-white">
-      <!-- oikean reunan ikonit -->
-      <div id="rightBlock">
-        <!-- Valikko: piilossa oletuksena, JS näyttää tarvittaessa -->
-        <button id="openMenu" class="icon-btn hidden" aria-controls="menuDrawer" aria-expanded="false" aria-label="Valikko">
-          <span aria-hidden="true" style="font-size:20px;line-height:1">☰</span>
-          <span class="sr-only">Valikko</span>
-        </button>
-        <!-- Ostoskori -->
-        <button id="openCart" class="icon-btn" aria-label="Ostoskori">
-          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="9" cy="20" r="1.8"></circle>
-            <circle cx="17" cy="20" r="1.8"></circle>
-            <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 8H7.1"></path>
-          </svg>
-          <span class="badge" id="cartCount">0</span>
-          <span class="sr-only">Ostoskori</span>
-        </button>
-      </div>
-
       <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-3 grid items-center gap-3">
-        <!-- Brändi -->
+        <!-- VASEN: logo + teksti -->
         <a id="brandBlock" href="#etusivu" class="flex items-center gap-3">
           <img alt="RUMAT.STUDIO logo" class="h-9 w-9 object-contain" src="assets/logo.svg">
           <span id="brandText" class="uppercase text-sm tracking-widest font-semibold">RUMAT.STUDIO</span>
         </a>
 
-        <!-- Navigaatio (näkyy kun mahtuu) -->
-        <nav id="mainNav" class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
+        <!-- KESKI: nav (näkyy vain kun mahtuu) -->
+        <nav id="mainNav" class="">
           <a href="#etusivu"   class="hover:underline underline-offset-4 font-semibold">Etusivu</a>
           <a href="#tuotteet"  class="hover:underline underline-offset-4 font-semibold">Tuotteet</a>
           <a href="#tarina"    class="hover:underline underline-offset-4 font-semibold">Tarina</a>
@@ -263,6 +252,32 @@
           <a href="#some"      class="hover:underline underline-offset-4 font-semibold">Some</a>
           <a href="#yhteys"    class="hover:underline underline-offset-4 font-semibold">Yhteystiedot</a>
         </nav>
+
+        <!-- OIKEA: ☰ + ostoskori (tekstinä TAI ikonina) -->
+        <div id="rightBlock" class="flex items-center gap-2">
+          <!-- Valikkoikonin nappi (näkyy vain kun nav ei mahdu) -->
+          <button id="openMenu" class="icon-btn hidden" aria-controls="menuDrawer" aria-expanded="false" aria-label="Valikko">
+            <span aria-hidden="true" style="font-size:20px;line-height:1">☰</span>
+            <span class="sr-only">Valikko</span>
+          </button>
+
+          <!-- Ostoskori TEKSTINÄ (näkyy kun nav mahtuu) -->
+          <button id="openCartText" class="cart-text-btn">
+            Ostoskori <span id="cartCountText" class="opacity-80"></span>
+          </button>
+
+          <!-- Ostoskori IKONINA (näkyy kun nav ei mahdu) -->
+          <button id="openCartIcon" class="icon-btn hidden" aria-label="Ostoskori">
+            <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="20" r="1.8"></circle>
+              <circle cx="17" cy="20" r="1.8"></circle>
+              <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 8H7.1"></path>
+            </svg>
+            <span class="badge" id="cartCount">0</span>
+            <span class="sr-only">Ostoskori</span>
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -297,7 +312,6 @@
 
     <!-- TUOTTEET -->
     <section id="tuotteet" class="py-0">
-      <!-- poistettu ylimääräinen rako täältä -->
       <div id="productsRoot"></div>
     </section>
 
@@ -628,7 +642,7 @@
 
       const wrap = el('div',{}, gallery, details);
 
-      // Pyöristetty valkoinen bandi tuotteen ympärille
+      // Pyöristetty valkoinen bandi + otsikkorivi ekalle tuotteelle
       const inner = el('div',{class:'band-inner'});
       if (idx === 0){
         const headerRow = el('div',{class:'flex items-center justify-between mb-6'},
@@ -642,7 +656,7 @@
       const band = el('div',{class:'band full-bleed'}, inner);
       root.appendChild(band);
 
-      // yhdenmukainen rako palkkien väliin
+      // rako palkkien väliin
       root.appendChild(el('div',{class:'aurora-gap full-bleed'}));
 
       // galleriakuvat
@@ -679,21 +693,32 @@
   // ----- Toimitus + ostoskori -----
   const $cart   = $('#cartDrawer');
   const $items  = $('#cartItems');
-  const $open   = $('#openCart');
   const $close  = $('#closeCart');
   const $closeX = $('#closeCartX');
   const $sub    = $('#subTotal');
   const $ship   = $('#shipTotal');
   const $grand  = $('#grandTotal');
-  const $count  = $('#cartCount');
+
+  const $openCartText = $('#openCartText');
+  const $openCartIcon = $('#openCartIcon');
+  const $countIcon    = $('#cartCount');
+  const $countText    = $('#cartCountText');
+
   const $shipOpts = $('#shipOptions');
 
   let CART = JSON.parse(localStorage.getItem('cart')||'{}');
   function saveCart(){ localStorage.setItem('cart', JSON.stringify(CART)); updateBadge(); }
-  function updateBadge(){ if($count) $count.textContent = Object.values(CART).reduce((a,b)=>a+b,0); }
+  function updateBadge(){
+    const n = Object.values(CART).reduce((a,b)=>a+b,0);
+    if($countIcon) $countIcon.textContent = String(n);
+    if($countText) $countText.textContent = n ? `(${n})` : '';
+  }
   function openCart(){ $cart.classList.add('open'); renderCart(); }
   function closeCart(){ $cart.classList.remove('open'); }
-  if($open) $open.onclick=openCart; if($close) $close.onclick=closeCart; if($closeX) $closeX.onclick=closeCart;
+  $openCartText?.addEventListener('click', openCart);
+  $openCartIcon?.addEventListener('click', openCart);
+  $close?.addEventListener('click', closeCart);
+  $closeX?.addEventListener('click', closeCart);
 
   function catalogFromContent(){ const cat={}; (CONTENT.products||[]).forEach(p=>{ cat[p.id]={id:p.id,name:p.name,price:Number(p.price||0)}; }); return cat; }
 
@@ -801,12 +826,15 @@
     modal?.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // ===== RESPONSIVE NAV (näytä ☰ vasta kun ei mahdu) =====
+  // ===== RESPONSIVE NAV (näytä ☰ + cart-IKONI vasta kun nav ei mahdu) =====
   (function(){
     const container = document.getElementById('hdrRow');
     const brand     = document.getElementById('brandBlock');
     const nav       = document.getElementById('mainNav');
+    const right     = document.getElementById('rightBlock');
     const menuBtn   = document.getElementById('openMenu');
+    const cartIcon  = document.getElementById('openCartIcon');
+    const cartText  = document.getElementById('openCartText');
 
     let navVisible = true;
 
@@ -816,41 +844,54 @@
     }
 
     function measureNavWidth(){
+      const wasHidden = nav.classList.contains('nav-hidden');
+      if (wasHidden) nav.classList.remove('nav-hidden');
       nav.classList.add('nav-measure');
       const w = Math.ceil(nav.scrollWidth);
       nav.classList.remove('nav-measure');
+      if (wasHidden) nav.classList.add('nav-hidden');
       return w;
     }
 
     function canShowNav(){
-      const wasHidden = menuBtn.classList.contains('hidden');
-      menuBtn.classList.add('hidden'); // kun nav näkyy, menu-ikoni piilossa
-      const cw = container.clientWidth;
-      const bw = Math.ceil(brand.getBoundingClientRect().width);
+      // Simuloi tilaa siinä tilassa, jossa nav olisi näkyvissä:
+      const prevMenuHidden = menuBtn.classList.contains('hidden');
+      const prevCartIconHidden = cartIcon.classList.contains('hidden');
+      const prevCartTextHidden = cartText.classList.contains('hidden');
+
+      menuBtn.classList.add('hidden');     // nav-tilassa ei menu-ikonia
+      cartIcon.classList.add('hidden');    // nav-tilassa ikonikorin sijaan tekstikori
+      cartText.classList.remove('hidden');
+
+      const cw   = container.clientWidth;
+      const bw   = Math.ceil(brand.getBoundingClientRect().width);
+      const rbw  = Math.ceil(right.getBoundingClientRect().width);
       const navW = measureNavWidth();
-      const fits = navW <= (cw - bw - 24);
-      if(!wasHidden) menuBtn.classList.remove('hidden');
+      const fits = navW <= Math.max(0, cw - bw - rbw - 24);
+
+      // Palauta aiempi tila
+      if (!prevMenuHidden) menuBtn.classList.remove('hidden');
+      if (!prevCartIconHidden) cartIcon.classList.remove('hidden'); else cartIcon.classList.add('hidden');
+      if ( prevCartTextHidden) cartText.classList.add('hidden'); else cartText.classList.remove('hidden');
+
       return fits;
     }
 
     function applyState(showNav){
       navVisible = !!showNav;
       if (navVisible){
-        nav.classList.remove('hidden','nav-hidden');
+        nav.classList.remove('nav-hidden');
         menuBtn.classList.add('hidden');
+        cartIcon.classList.add('hidden');
+        cartText.classList.remove('hidden');
         menuBtn.setAttribute('aria-expanded','false');
       }else{
         nav.classList.add('nav-hidden');
         menuBtn.classList.remove('hidden');
+        cartIcon.classList.remove('hidden');
+        cartText.classList.add('hidden');
       }
       setHeaderVar();
-    }
-
-    function ensureBrandFits(){
-      container.classList.remove('compact');
-      const cw = container.clientWidth;
-      const bw = Math.ceil(brand.getBoundingClientRect().width);
-      if (bw + 16 > cw){ container.classList.add('compact'); } // piilottaa bränditekstin, logo jää
     }
 
     function compute(){
@@ -860,7 +901,6 @@
       }else{
         if (canShowNav() )  applyState(true);
       }
-      ensureBrandFits();
     }
 
     let t=null;
