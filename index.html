@@ -31,7 +31,8 @@
       --silhouette-mid:#0c1a15;
       --silhouette-line:#9fb1a9;
       --header-h:56px;
-      --section-gap: clamp(6px, 1vw, 12px);
+      /* ↓ pienennetty rako ja yhtenäinen kaikkialla */
+      --section-gap: clamp(4px, 0.7vw, 8px);
       --band-radius: 16px;
     }
 
@@ -92,46 +93,34 @@
     .nav-hidden{ position:absolute !important; left:-9999px !important; visibility:hidden !important; }
 
     /* HEADER SAFETY */
-    #hdrRow{ grid-template-columns: 1fr auto; /* brand | nav (nav keskellä max-leveyden sisällä) */ }
+    #hdrRow{ grid-template-columns: 1fr auto; /* brand | nav */ }
     #brandBlock{ min-width:0; }
     #brandText{
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      max-width:45vw;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:45vw;
     }
     #hdrRow.compact #brandText{ display:none; }
 
-    /* Oikean reunan ikonipainikkeet (täysin oikeaan reunaan, containerin ulkopuolelle) */
+    /* Oikean reunan ikonit (äärioikealle) */
     #rightBlock{
       position:absolute; right:12px; top:50%; transform:translateY(-50%);
       display:flex; align-items:center; gap:.5rem; white-space:nowrap;
     }
     .icon-btn{
-      position:relative;
-      width:38px; height:38px;
-      display:grid; place-items:center;
-      border-radius:9999px;
-      background:rgba(255,255,255,0.10);
-      border:1px solid rgba(255,255,255,0.30);
-      color:#fff;
-      transition:background .15s ease;
+      position:relative; width:38px; height:38px; display:grid; place-items:center;
+      border-radius:9999px; background:rgba(255,255,255,0.10);
+      border:1px solid rgba(255,255,255,0.30); color:#fff; transition:background .15s ease;
     }
     .icon-btn:hover{ background:rgba(255,255,255,0.20); }
     .badge{
-      position:absolute; top:-4px; right:-4px;
-      min-width:18px; height:18px; padding:0 4px;
-      display:grid; place-items:center;
-      border-radius:9999px; background:#fff; color:#111827;
-      font-size:11px; line-height:1; font-weight:700;
-      border:1px solid rgba(0,0,0,.15);
+      position:absolute; top:-4px; right:-4px; min-width:18px; height:18px; padding:0 4px;
+      display:grid; place-items:center; border-radius:9999px; background:#fff; color:#111827;
+      font-size:11px; line-height:1; font-weight:700; border:1px solid rgba(0,0,0,.15);
     }
 
     /* Tuotekuvagalleria */
     .product-gallery{ container-type:inline-size; --pg-gap:1rem; }
     .pg-grid{ display:grid; grid-template-columns:1fr; gap:var(--pg-gap); justify-items:center; }
     .pg-b{ display:none; }
-    /* — Mobiilissa 1 kuva: täysi leveys (korjaus: ei enää 50cqw) */
     .pg-grid > .img-wrap{ width:100%; max-width:100%; }
     @container (min-width: 900px){
       .product-gallery{ --pg-gap:1.5rem; }
@@ -238,14 +227,14 @@
   <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50">
     <div class="relative bg-[color:var(--dark-forest)] text-white">
-      <!-- oikean reunan ikonit täysin reunaan -->
+      <!-- oikean reunan ikonit -->
       <div id="rightBlock">
-        <!-- Valikko: ☰ -->
-        <button id="openMenu" class="icon-btn" aria-controls="menuDrawer" aria-expanded="false" aria-label="Valikko">
+        <!-- Valikko: piilossa oletuksena, JS näyttää tarvittaessa -->
+        <button id="openMenu" class="icon-btn hidden" aria-controls="menuDrawer" aria-expanded="false" aria-label="Valikko">
           <span aria-hidden="true" style="font-size:20px;line-height:1">☰</span>
           <span class="sr-only">Valikko</span>
         </button>
-        <!-- Ostoskori: kärry + lätkä -->
+        <!-- Ostoskori -->
         <button id="openCart" class="icon-btn" aria-label="Ostoskori">
           <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -265,7 +254,7 @@
           <span id="brandText" class="uppercase text-sm tracking-widest font-semibold">RUMAT.STUDIO</span>
         </a>
 
-        <!-- Navigaatio (näkyy vain kun mahtuu) -->
+        <!-- Navigaatio (näkyy kun mahtuu) -->
         <nav id="mainNav" class="justify-self-center flex items-center gap-6 text-[13px] uppercase tracking-widest">
           <a href="#etusivu"   class="hover:underline underline-offset-4 font-semibold">Etusivu</a>
           <a href="#tuotteet"  class="hover:underline underline-offset-4 font-semibold">Tuotteet</a>
@@ -308,7 +297,7 @@
 
     <!-- TUOTTEET -->
     <section id="tuotteet" class="py-0">
-      <div class="aurora-gap full-bleed"></div>
+      <!-- poistettu ylimääräinen rako täältä -->
       <div id="productsRoot"></div>
     </section>
 
@@ -653,7 +642,7 @@
       const band = el('div',{class:'band full-bleed'}, inner);
       root.appendChild(band);
 
-      // rako palkkien väliin
+      // yhdenmukainen rako palkkien väliin
       root.appendChild(el('div',{class:'aurora-gap full-bleed'}));
 
       // galleriakuvat
@@ -812,7 +801,7 @@
     modal?.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
   })();
 
-  // ===== RESPONSIVE NAV (menunäkyvyys) =====
+  // ===== RESPONSIVE NAV (näytä ☰ vasta kun ei mahdu) =====
   (function(){
     const container = document.getElementById('hdrRow');
     const brand     = document.getElementById('brandBlock');
@@ -839,7 +828,7 @@
       const cw = container.clientWidth;
       const bw = Math.ceil(brand.getBoundingClientRect().width);
       const navW = measureNavWidth();
-      const fits = navW <= (cw - bw - 24); // oikean reunan ikoneja ei tarvitse huomioida (ne ovat containerin ulkopuolella)
+      const fits = navW <= (cw - bw - 24);
       if(!wasHidden) menuBtn.classList.remove('hidden');
       return fits;
     }
