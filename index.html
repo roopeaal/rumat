@@ -1,14 +1,23 @@
 <!doctype html>
-<html lang="fi">
+<html lang="fi" class="h-full">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>RUMAT.STUDIO</title>
   <meta name="description" content="Luonnosta syntynyt. Reissuissa testattu. Neuleet ja asusteet poluille ja kaupunkiin – istuvat, hengittävät ja kestävät."/>
+  <meta name="theme-color" content="#0B0F0E">
+  <meta name="color-scheme" content="dark light">
+  <link rel="canonical" href="https://rumat.studio/">
 
-  <!-- Fontit + Tailwind -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;600;700&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Favicons (replace with real icons) -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Fonts + Tailwind -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- OG -->
@@ -39,23 +48,16 @@
     body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#111827;background:#fff}
     .serif{font-family:"Libre Baskerville",serif}
     .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
-    .btn{border-radius:9999px;padding:.6rem 1rem;border:1px solid rgb(214,211,209);transition:transform .06s, box-shadow .12s}
+    .btn{border-radius:9999px;padding:.65rem 1rem;border:1px solid rgb(214,211,209);transition:transform .06s, box-shadow .12s}
     .btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.12)}
     .btn-dark{background:#111827;color:#fff;border-color:#111827}
     .chip{font-size:.78rem;padding:.25rem .55rem;border-radius:9999px;border:1px solid rgb(214,211,209);background:#fff}
 
     /* Aurora (kiinteä tausta) — ei overlayta */
-    .aurora-fixed{
-      position:fixed; inset:0; width:100%; height:100%;
-      z-index:0; pointer-events:none; display:block;
-      background: transparent;
-      transform: translateZ(0); backface-visibility:hidden;
-      will-change: transform, opacity;
-    }
+    .aurora-fixed{position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; display:block; background:transparent; transform: translateZ(0); backface-visibility:hidden; will-change: transform, opacity;}
     .site-content{ position:relative; z-index:2; background:transparent; }
 
-    /* Hero */
-    .hero{ position:relative; height:100vh; height:100svh; isolation:isolate; overflow:hidden; }
+    .hero{ position:relative; min-height:100vh; min-height:100svh; isolation:isolate; overflow:hidden; }
 
     /* Parallax smooth */
     #hero-text{ will-change:transform; transform:translateZ(0); transition:none !important; }
@@ -68,13 +70,7 @@
     .bottom-sil svg{ width:100%; height:100%; display:block; }
 
     /* Savun animaatio */
-    .smoke{
-      animation:smoke 6s ease-in-out infinite;
-      opacity:.6;
-      transform-origin:50% 50%;
-      transform-box:fill-box;
-      will-change:transform,opacity;
-    }
+    .smoke{ animation:smoke 6s ease-in-out infinite; opacity:.6; transform-origin:50% 50%; transform-box:fill-box; will-change:transform,opacity; }
     .smoke.s2{ animation-delay:1.4s }
     @keyframes smoke{ 0%{transform:translateY(0) scale(1);opacity:.6} 100%{transform:translateY(-28px) scale(1.4);opacity:0} }
 
@@ -90,40 +86,21 @@
     .nav-measure{ position:absolute !important; visibility:hidden !important; display:flex !important; white-space:nowrap !important; }
     .nav-hidden{ display:none !important; }
 
-    /* HEADER GRID: vasen brand, keskellä nav, oikealla ikonit/tekstit */
+    /* HEADER GRID */
     #hdrRow{ grid-template-columns: auto 1fr auto; }
     #brandBlock{ min-width:0; justify-self:start; }
-    #brandText{
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-      max-width:min(42vw, 460px);
-    }
+    #brandText{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:min(42vw, 460px); }
 
-    #mainNav{
-      justify-self:center;
-      display:flex; gap:1.5rem; white-space:nowrap;
-      font-size:13px; text-transform:uppercase; letter-spacing:.2em;
-    }
+    #mainNav{ justify-self:center; display:flex; gap:1.5rem; white-space:nowrap; font-size:13px; text-transform:uppercase; letter-spacing:.2em; }
 
     #rightBlock{ justify-self:end; display:flex; align-items:center; gap:.5rem; white-space:nowrap; }
 
-    .icon-btn{
-      position:relative; width:38px; height:38px; display:grid; place-items:center;
-      border-radius:9999px; background:rgba(255,255,255,0.10);
-      border:1px solid rgba(255,255,255,0.30); color:#fff; transition:background .15s ease;
-    }
+    .icon-btn{ position:relative; width:38px; height:38px; display:grid; place-items:center; border-radius:9999px; background:rgba(255,255,255,0.10); border:1px solid rgba(255,255,255,0.30); color:#fff; transition:background .15s ease; }
     .icon-btn:hover{ background:rgba(255,255,255,0.20); }
 
-    .badge{
-      position:absolute; top:-4px; right:-4px; min-width:18px; height:18px; padding:0 4px;
-      display:grid; place-items:center; border-radius:9999px; background:#fff; color:#111827;
-      font-size:11px; line-height:1; font-weight:700; border:1px solid rgba(0,0,0,.15);
-    }
+    .badge{ position:absolute; top:-4px; right:-4px; min-width:18px; height:18px; padding:0 4px; display:grid; place-items:center; border-radius:9999px; background:#fff; color:#111827; font-size:11px; line-height:1; font-weight:700; border:1px solid rgba(0,0,0,.15); }
 
-    .cart-text-btn{
-      border:1px solid rgba(255,255,255,.3);
-      padding:.45rem .8rem; border-radius:9999px; color:#fff;
-      background:rgba(255,255,255,.10);
-    }
+    .cart-text-btn{ border:1px solid rgba(255,255,255,.3); padding:.45rem .8rem; border-radius:9999px; color:#fff; background:rgba(255,255,255,.10); }
     .cart-text-btn:hover{ background:rgba(255,255,255,.20); }
 
     /* Tuotekuvagalleria */
@@ -131,24 +108,12 @@
     .pg-grid{ display:grid; grid-template-columns:1fr; gap:var(--pg-gap); justify-items:center; }
     .pg-b{ display:none; }
     .pg-grid > .img-wrap{ width:100%; max-width:100%; }
-    @container (min-width: 900px){
-      .product-gallery{ --pg-gap:1.5rem; }
-      .pg-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--pg-gap); }
-      .pg-b{ display:block; }
-      .pg-grid > .img-wrap{ max-width:none; }
-    }
+    @container (min-width: 900px){ .product-gallery{ --pg-gap:1.5rem; } .pg-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--pg-gap); } .pg-b{ display:block; } .pg-grid > .img-wrap{ max-width:none; } }
 
     /* MYYTY */
     .img-wrap{ position:relative; }
-    .sold-badge{
-      position:absolute; inset:0; display:grid; place-items:center;
-      background:rgba(8,17,13,.72); color:#fff; font-weight:800; font-size:1.05rem;
-      letter-spacing:.12em; text-transform:uppercase;
-    }
-    .sold-chip{
-      display:inline-block; margin-top:.35rem; padding:.25rem .55rem;
-      border-radius:9999px; background:#111827; color:#fff; font-size:.75rem; letter-spacing:.08em;
-    }
+    .sold-badge{ position:absolute; inset:0; display:grid; place-items:center; background:rgba(8,17,13,.72); color:#fff; font-weight:800; font-size:1.05rem; letter-spacing:.12em; text-transform:uppercase; }
+    .sold-chip{ display:inline-block; margin-top:.35rem; padding:.25rem .55rem; border-radius:9999px; background:#111827; color:#fff; font-size:.75rem; letter-spacing:.08em; }
 
     /* Revontuliraot */
     .aurora-gap{ height: var(--section-gap); pointer-events: none; background: transparent; }
@@ -159,12 +124,22 @@
     .band--mist{ background: var(--mist); }
     .band--stone{ background: #f5f5f4; }
     .band-inner{ max-width: 72rem; margin: 0 auto; padding: 3rem 1rem; }
+
+    /* Reveal anim */
+    .reveal{ opacity:0; transform: translateY(12px); transition: opacity .5s ease, transform .5s ease; }
+    .reveal.show{ opacity:1; transform: none; }
+
+    /* Skip link */
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+    .skip-link:focus{left:1rem;top:1rem;width:auto;height:auto;background:#fff;color:#111827;padding:.5rem .75rem;border-radius:.5rem;z-index:100}
   </style>
 </head>
 
-<body class="text-stone-900">
+<body class="text-stone-900 min-h-full">
+  <a href="#main" class="skip-link">Siirry sisältöön</a>
+
   <!-- KIINTEÄ REVONTULI-TAUSTA -->
-  <canvas id="auroraCanvas" class="aurora-fixed"></canvas>
+  <canvas id="auroraCanvas" class="aurora-fixed" aria-hidden="true"></canvas>
 
   <!-- ALAREUNAN SILUETTI -->
   <div class="bottom-sil" aria-hidden="true">
@@ -187,7 +162,6 @@
         </g>
       </defs>
 
-      <!-- Vuoriharjanteet -->
       <path d="M0,120 C180,105 240,108 340,114 C460,121 520,110 640,116 C760,122 880,108 1000,114 C1160,122 1280,110 1440,118 L1440,160 L0,160 Z" fill="var(--silhouette-mid)" opacity=".28"/>
       <path d="M0,122 C120,118 190,110 260,118 C340,126 420,106 500,116 C580,126 670,108 760,120 C850,132 980,110 1100,118 C1220,126 1330,112 1440,120 L1440,160 L0,160 Z" fill="var(--silhouette-mid)" opacity=".44"/>
       <path d="M0,130 C160,128 320,132 480,130 C640,128 800,131 960,129 C1120,128 1280,131 1440,129 L1440,160 L0,160 Z" fill="var(--silhouette)"/>
@@ -234,17 +208,17 @@
   </div>
 
   <!-- HEADER -->
-  <header class="fixed top-0 left-0 right-0 z-50">
+  <header class="fixed top-0 left-0 right-0 z-50" role="banner">
     <div class="relative bg-[color:var(--dark-forest)] text-white">
       <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-3 grid items-center gap-3">
         <!-- VASEN: logo + teksti -->
-        <a id="brandBlock" href="#etusivu" class="flex items-center gap-3">
-          <img alt="RUMAT.STUDIO logo" class="h-9 w-9 object-contain" src="assets/logo.svg">
+        <a id="brandBlock" href="#etusivu" class="flex items-center gap-3" aria-label="Etusivu">
+          <img alt="RUMAT.STUDIO logo" class="h-9 w-9 object-contain" src="assets/logo.svg" width="36" height="36" fetchpriority="high">
           <span id="brandText" class="uppercase text-sm tracking-widest font-semibold">RUMAT.STUDIO</span>
         </a>
 
         <!-- KESKI: nav (näkyy vain kun mahtuu) -->
-        <nav id="mainNav" class="">
+        <nav id="mainNav" aria-label="Päävalikko">
           <a href="#etusivu"   class="hover:underline underline-offset-4 font-semibold">Etusivu</a>
           <a href="#tuotteet"  class="hover:underline underline-offset-4 font-semibold">Tuotteet</a>
           <a href="#tarina"    class="hover:underline underline-offset-4 font-semibold">Tarina</a>
@@ -255,26 +229,22 @@
 
         <!-- OIKEA: ☰ + ostoskori (tekstinä TAI ikonina) -->
         <div id="rightBlock" class="flex items-center gap-2">
-          <!-- Valikkoikonin nappi (näkyy vain kun nav ei mahdu) -->
           <button id="openMenu" class="icon-btn hidden" aria-controls="menuDrawer" aria-expanded="false" aria-label="Valikko">
             <span aria-hidden="true" style="font-size:20px;line-height:1">☰</span>
             <span class="sr-only">Valikko</span>
           </button>
 
-          <!-- Ostoskori TEKSTINÄ (näkyy kun nav mahtuu) -->
-          <button id="openCartText" class="cart-text-btn">
-            Ostoskori <span id="cartCountText" class="opacity-80"></span>
-          </button>
+          <!-- Ostoskori TEKSTINÄ -->
+          <button id="openCartText" class="cart-text-btn" aria-haspopup="dialog" aria-controls="cartDrawer">Ostoskori <span id="cartCountText" class="opacity-80"></span></button>
 
-          <!-- Ostoskori IKONINA (näkyy kun nav ei mahdu) -->
-          <button id="openCartIcon" class="icon-btn hidden" aria-label="Ostoskori">
-            <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Ostoskori IKONINA -->
+          <button id="openCartIcon" class="icon-btn hidden" aria-label="Ostoskori" aria-haspopup="dialog" aria-controls="cartDrawer">
+            <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="9" cy="20" r="1.8"></circle>
               <circle cx="17" cy="20" r="1.8"></circle>
               <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 8H7.1"></path>
             </svg>
-            <span class="badge" id="cartCount">0</span>
+            <span class="badge" id="cartCount" aria-live="polite">0</span>
             <span class="sr-only">Ostoskori</span>
           </button>
         </div>
@@ -283,23 +253,26 @@
   </header>
 
   <!-- SISÄLTÖ -->
-  <main class="site-content">
+  <main id="main" class="site-content" role="main">
     <!-- HERO -->
     <section id="etusivu" class="hero grid place-items-center text-stone-50 px-4">
       <div id="hero-text" class="text-center mt-24 md:mt-28">
-        <h1 class="serif font-semibold tracking-[0.08em] text-[clamp(22px,4.8vw,58px)]
-                   drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
+        <h1 class="serif font-semibold tracking-[0.08em] text-[clamp(22px,4.8vw,58px)] drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
           Liian rumat ollakseen totta
         </h1>
+        <p class="mt-3 text-sm opacity-90">Luonnosta syntynyt • Reissuissa testattu</p>
         <div class="mt-8 flex justify-center">
-          <img alt="RUMAT.STUDIO logo" class="h-24 w-24 sm:h-28 sm:w-28 object-contain" src="assets/logo.svg">
+          <img alt="RUMAT.STUDIO logo" class="h-24 w-24 sm:h-28 sm:w-28 object-contain" src="assets/logo.svg" width="112" height="112" loading="eager" decoding="async">
+        </div>
+        <div class="mt-8">
+          <a href="#tuotteet" class="btn btn-dark">Katso tuotteet</a>
         </div>
       </div>
     </section>
 
     <!-- Esittely -->
     <section class="py-0">
-      <div class="band full-bleed">
+      <div class="band full-bleed reveal">
         <div class="band-inner text-center">
           <p id="intro-text" class="text-xl sm:text-2xl">
             <strong>Luonnosta syntynyt. Reissuissa testattu.</strong>
@@ -308,51 +281,45 @@
         </div>
       </div>
     </section>
-    <div class="aurora-gap full-bleed"></div>
+    <div class="aurora-gap full-bleed" aria-hidden="true"></div>
 
     <!-- TUOTTEET -->
     <section id="tuotteet" class="py-0">
-      <div id="productsRoot"></div>
+      <div id="productsRoot" class="reveal"></div>
     </section>
 
     <!-- BLOGI -->
     <section id="blogi" class="py-0">
-      <div class="band band--mist full-bleed">
+      <div class="band band--mist full-bleed reveal">
         <div class="band-inner">
           <h2 class="serif text-3xl mb-6">Blogi</h2>
           <div id="blogRoot" class="grid gap-6"></div>
         </div>
       </div>
     </section>
-    <div class="aurora-gap full-bleed"></div>
+    <div class="aurora-gap full-bleed" aria-hidden="true"></div>
 
     <!-- SOME -->
     <section id="some" class="py-0">
-      <div class="band full-bleed">
+      <div class="band full-bleed reveal">
         <div class="band-inner">
           <h2 class="serif text-3xl mb-6">Some</h2>
           <div class="grid md:grid-cols-2 gap-6">
             <div class="aspect-[9/16] rounded-xl ring-1 ring-stone-200 overflow-hidden bg-black">
-              <iframe id="igEmbed" class="w-full h-full" allowtransparency="true" frameborder="0" scrolling="no" loading="lazy"
-                      src="https://www.instagram.com/p/DMXVRgGC1Bv/embed" style="display:block"></iframe>
+              <iframe id="igEmbed" class="w-full h-full" allowtransparency="true" frameborder="0" scrolling="no" loading="lazy" title="Instagram upotus" src="https://www.instagram.com/p/DMXVRgGC1Bv/embed" style="display:block"></iframe>
             </div>
             <div class="aspect-[9/16] rounded-xl ring-1 ring-stone-200 overflow-hidden bg-black">
-              <iframe id="ttEmbed"
-                src="https://www.tiktok.com/embed/v2/7525414518562753814"
-                style="width:100%;height:100%;border:0;display:block"
-                allow="encrypted-media;"
-                allowfullscreen
-                title="TikTok video"></iframe>
+              <iframe id="ttEmbed" title="TikTok video" src="https://www.tiktok.com/embed/v2/7525414518562753814" style="width:100%;height:100%;border:0;display:block" allow="encrypted-media;" allowfullscreen loading="lazy"></iframe>
             </div>
           </div>
         </div>
       </div>
     </section>
-    <div class="aurora-gap full-bleed"></div>
+    <div class="aurora-gap full-bleed" aria-hidden="true"></div>
 
     <!-- TARINA -->
     <section id="tarina" class="py-0">
-      <div class="band band--stone full-bleed">
+      <div class="band band--stone full-bleed reveal">
         <div class="band-inner">
           <h2 class="serif text-3xl mb-4">Tarina</h2>
           <p id="story">
@@ -361,10 +328,10 @@
         </div>
       </div>
     </section>
-    <div class="aurora-gap full-bleed"></div>
+    <div class="aurora-gap full-bleed" aria-hidden="true"></div>
 
     <!-- FOOTER -->
-    <footer id="yhteys" class="pt-14 text-[color:var(--ivory)]" style="background:var(--footer)">
+    <footer id="yhteys" class="pt-14 text-[color:var(--ivory)]" style="background:var(--footer)" role="contentinfo">
       <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
         <div>
           <div class="uppercase tracking-wide">RUMAT.STUDIO</div>
@@ -393,20 +360,20 @@
   </main>
 
   <!-- OSTOSKORI -->
-  <div id="cartDrawer" class="drawer" aria-hidden="true">
-    <div class="absolute inset-0 bg-black/40" id="closeCart" aria-label="Sulje ostoskori"></div>
-    <div class="panel p-5 flex flex-col">
+  <div id="cartDrawer" class="drawer" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Ostoskori">
+    <div class="absolute inset-0 bg-black/40" id="closeCart" aria-label="Sulje ostoskori" tabindex="-1"></div>
+    <div class="panel p-5 flex flex-col" tabindex="-1">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-xl font-semibold">Ostoskori</h3>
-        <button id="closeCartX" class="text-stone-500 hover:text-stone-800">✕</button>
+        <button id="closeCartX" class="text-stone-500 hover:text-stone-800" aria-label="Sulje">✕</button>
       </div>
-      <div id="cartItems" class="flex-1 overflow-auto divide-y"></div>
+      <div id="cartItems" class="flex-1 overflow-auto divide-y" aria-live="polite"></div>
       <div class="mt-4 space-y-3">
         <div>
           <div class="text-sm font-medium mb-1">Toimitus</div>
           <div id="shipOptions" class="space-y-1"></div>
         </div>
-        <div class="text-sm grid grid-cols-2 gap-y-1">
+        <div class="text-sm grid grid-cols-2 gap-y-1" aria-label="Yhteenveto">
           <div class="text-stone-600">Välisumma</div><div class="text-right" id="subTotal">€0,00</div>
           <div class="text-stone-600">Toimitus</div><div class="text-right" id="shipTotal">€0,00</div>
           <div class="font-semibold">Yhteensä</div><div class="text-right font-semibold" id="grandTotal">€0,00</div>
@@ -418,14 +385,14 @@
   </div>
 
   <!-- VALIKKO (vasemmalta) -->
-  <div id="menuDrawer" class="drawer" aria-hidden="true">
-    <div class="absolute inset-0 bg-black/40" id="closeMenu" aria-label="Sulje valikko"></div>
-    <div class="panel p-6 flex flex-col gap-4">
+  <div id="menuDrawer" class="drawer" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Valikko">
+    <div class="absolute inset-0 bg-black/40" id="closeMenu" aria-label="Sulje valikko" tabindex="-1"></div>
+    <div class="panel p-6 flex flex-col gap-4" tabindex="-1">
       <div class="flex items-center justify-between">
         <h3 class="text-xl font-semibold">Valikko</h3>
-        <button id="closeMenuX" class="text-stone-500 hover:text-stone-800">✕</button>
+        <button id="closeMenuX" class="text-stone-500 hover:text-stone-800" aria-label="Sulje">✕</button>
       </div>
-      <nav class="flex flex-col gap-3 text-lg">
+      <nav class="flex flex-col gap-3 text-lg" aria-label="Sivun sisäinen valikko">
         <a href="#etusivu"   class="py-2 border-b" data-menu-close>Etusivu</a>
         <a href="#tuotteet"  class="py-2 border-b" data-menu-close>Tuotteet</a>
         <a href="#tarina"    class="py-2 border-b" data-menu-close>Tarina</a>
@@ -437,7 +404,7 @@
   </div>
 
   <!-- SUCCESS/CANCEL MODAL -->
-  <div id="resultModal" class="modal">
+  <div id="resultModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="resultTitle" aria-describedby="resultText">
     <div class="bg-white rounded-2xl p-6 shadow-soft w-[min(92vw,480px)] text-center">
       <h3 id="resultTitle" class="serif text-2xl mb-2">Kiitos tilauksesta!</h3>
       <p id="resultText" class="text-stone-600">Vahvistus saapuu sähköpostiisi.</p>
@@ -445,57 +412,54 @@
     </div>
   </div>
 
+  <!-- Settings / toggles -->
+  <div class="fixed bottom-4 right-4 z-40">
+    <label class="flex items-center gap-2 bg-white/80 backdrop-blur ring-1 ring-stone-200 rounded-full px-3 py-2 text-sm">
+      <input type="checkbox" id="fxToggle" class="accent-stone-800">
+      <span>Vähennä tehosteita</span>
+    </label>
+  </div>
+
   <!-- SCRIPTS -->
-  <script>
-  const API_BASE = "";
+  <script defer>
+  const API_BASE = ""; // Lisää backendin juuri tarvittaessa
   const fmtEUR = x => new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
   const $ = sel => document.querySelector(sel);
-  const el = (tag,attrs={},...kids)=>{
-    const n=document.createElement(tag);
-    Object.entries(attrs).forEach(([k,v])=>{
-      if(k==='class') n.className=v;
-      else if(k==='html') n.innerHTML=v;
-      else if(k.startsWith('on')) n.addEventListener(k.slice(2),v);
-      else n.setAttribute(k,v);
-    });
-    kids.forEach(k=>{ if(k==null) return; if(typeof k==='string') n.appendChild(document.createTextNode(k)); else n.appendChild(k);});
-    return n;
-  };
+  const $$ = sel => Array.from(document.querySelectorAll(sel));
+  const el = (tag,attrs={},...kids)=>{ const n=document.createElement(tag); Object.entries(attrs).forEach(([k,v])=>{ if(k==='class') n.className=v; else if(k==='html') n.innerHTML=v; else if(k.startsWith('on')) n.addEventListener(k.slice(2),v); else n.setAttribute(k,v); }); kids.forEach(k=>{ if(k==null) return; if(typeof k==='string') n.appendChild(document.createTextNode(k)); else n.appendChild(k);}); return n; };
 
-  // Hero-parallax
+  // ---- Utilities ----
+  const clamp = (v,min,max)=>Math.min(max,Math.max(min,v));
+
+  // Intersection reveal
+  (function(){
+    const obs = new IntersectionObserver((ents)=>{
+      ents.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); obs.unobserve(e.target); } });
+    },{rootMargin:'-5% 0px -5% 0px', threshold:0.05});
+    $$('.reveal').forEach(n=>obs.observe(n));
+  })();
+
+  // Hero-parallax (honor reduced motion + toggle)
   (function(){
     const hero   = document.getElementById('etusivu');
     const textEl = document.getElementById('hero-text');
     const yearEl = document.getElementById('year');
-    if (yearEl) yearEl.textContent = new Date().getFullYear();
+    yearEl && (yearEl.textContent = new Date().getFullYear());
 
     let heroTop = 0, heroHeight = 1, amplitudePx = 0;
-    let ticking = false, lastScrollY = 0, reduceMotion = false;
+    let ticking = false, lastScrollY = 0;
+    let reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function recalc(){
-      const rect = hero.getBoundingClientRect();
-      heroTop = rect.top + (window.scrollY || window.pageYOffset || 0);
-      heroHeight = Math.max(1, hero.offsetHeight);
-      amplitudePx = heroHeight * 0.18;
-    }
-    const clamp = (v,min,max)=>Math.min(max,Math.max(min,v));
+    function recalc(){ const rect = hero.getBoundingClientRect(); heroTop = rect.top + (window.scrollY || window.pageYOffset || 0); heroHeight = Math.max(1, hero.offsetHeight); amplitudePx = heroHeight * 0.18; }
     const easeOutQuad = t => 1 - (1 - t) * (1 - t);
 
-    function update(){
-      ticking = false;
-      if (reduceMotion){ textEl.style.transform = 'translate3d(0,0,0)'; return; }
-      const y = lastScrollY;
-      const p = clamp((y - heroTop) / heroHeight, 0, 1);
-      const eased = easeOutQuad(clamp(p / 0.9, 0, 1));
-      const ty = -amplitudePx * eased;
-      textEl.style.transform = `translate3d(0, ${ty}px, 0)`;
-    }
+    function update(){ ticking = false; if (reduceMotion || $('#fxToggle')?.checked){ textEl.style.transform = 'translate3d(0,0,0)'; return; } const y = lastScrollY; const p = clamp((y - heroTop) / heroHeight, 0, 1); const eased = easeOutQuad(clamp(p / 0.9, 0, 1)); const ty = -amplitudePx * eased; textEl.style.transform = `translate3d(0, ${ty}px, 0)`; }
     function onScroll(){ lastScrollY = window.scrollY || window.pageYOffset || 0; if (!ticking){ ticking = true; requestAnimationFrame(update); } }
     function onResize(){ recalc(); onScroll(); }
 
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    reduceMotion = mq.matches;
     mq.addEventListener?.('change', e => { reduceMotion = e.matches; onScroll(); });
+    $('#fxToggle')?.addEventListener('change', onScroll);
 
     window.addEventListener('scroll', onScroll, {passive:true});
     window.addEventListener('resize', ()=>requestAnimationFrame(onResize), {passive:true});
@@ -508,12 +472,7 @@
   const defaultContent = {
     hero:{ headline:"Liian rumat ollakseen totta" },
     paypalBusiness:"",
-    contact:{
-      email:"hello@rumat.fi",
-      instagram:"https://instagram.com/rumat.studio",
-      tiktok:"https://www.tiktok.com/@rumat.studio",
-      location:"Kauppakatu 20, 89600 Suomussalmi"
-    },
+    contact:{ email:"hello@rumat.fi", instagram:"https://instagram.com/rumat.studio", tiktok:"https://www.tiktok.com/@rumat.studio", location:"Kauppakatu 20, 89600 Suomussalmi" },
     embed:{ instagramPost:"https://www.instagram.com/p/DMXVRgGC1Bv/embed", tiktokVideo:"https://www.tiktok.com/@rumat.studio/video/7525414518562753814" },
     pitch:"Luonnosta syntynyt. Reissuissa testattu. Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – jotta sinulla on päälläsi jotain, joka istuu, hengittää ja kestää jokaisella askeleella.",
     story:"Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Jokainen vaate neulotaan käsin Suomussalmella yhden tekijän toimesta — jotta se kestää vuosia ja tekijä näkyy.",
@@ -547,16 +506,13 @@
     applyContent(CONTENT);
   }
 
-  function priceNum(s){ if(typeof s==='number') return s; const m=String(s||"").replace(/\s/g,"").match(/([0-9]+(?:[.,][0-9]{1,2})?)/); return m?parseFloat(m[1].replace(',','.')):0; }
-  function parseTikTokId(url){ const m=String(url||"").match(/video\/(\d+)/); return m?m[1]:null; }
+  const priceNum = s => (typeof s==='number')? s : (String(s||"").replace(/\s/g,"").match(/([0-9]+(?:[.,][0-9]{1,2})?)/)?.[1]||'0').replace(',', '.');
+  const parseTikTokId = url => String(url||"").match(/video\/(\d+)/)?.[1] || null;
 
   function applyContent(d){
-    const h1 = document.querySelector('#hero-text h1');
-    if(d?.hero?.headline && h1) h1.textContent = d.hero.headline;
-    const intro = document.getElementById('intro-text');
-    if(d?.pitch && intro) intro.textContent = d.pitch;
-    const story = document.getElementById('story');
-    if(d?.story && story) story.textContent = d.story;
+    const h1 = document.querySelector('#hero-text h1'); if(d?.hero?.headline && h1) h1.textContent = d.hero.headline;
+    const intro = document.getElementById('intro-text'); if(d?.pitch && intro) intro.textContent = d.pitch;
+    const story = document.getElementById('story'); if(d?.story && story) story.textContent = d.story;
 
     if(d?.contact?.email){ const ml=$('#mailLink'); if(ml){ ml.href=`mailto:${d.contact.email}`; ml.textContent=d.contact.email; } }
     if(d?.contact?.instagram){ const ig=$('#igLink'); if(ig) ig.href=d.contact.instagram; }
@@ -575,12 +531,20 @@
     renderBlog(d.blog || defaultContent.blog);
 
     const warn = $('#paypalWarn'); if(warn) warn.textContent = d.paypalBusiness ? "" : "Aseta PayPal-sähköposti backendissä (ADMIN) ennen julkaisuversiota.";
+
+    // JSON-LD Organization (basic). Replace values as needed.
+    const org = {
+      '@context':'https://schema.org', '@type':'Organization',
+      name:'RUMAT.STUDIO', url: location.origin,
+      sameAs:[d?.contact?.instagram, d?.contact?.tiktok].filter(Boolean),
+      address: { '@type':'PostalAddress', streetAddress: d?.contact?.location || 'Suomussalmi' }
+    };
+    const ld = document.getElementById('ld-org') || document.body.appendChild(Object.assign(document.createElement('script'),{type:'application/ld+json', id:'ld-org'}));
+    ld.textContent = JSON.stringify(org);
   }
 
   function renderBlog(posts){
-    const root = document.getElementById('blogRoot');
-    if(!root) return;
-    root.innerHTML='';
+    const root = document.getElementById('blogRoot'); if(!root) return; root.innerHTML='';
     posts.forEach(p=>{
       root.appendChild(
         el('article',{class:'bg-white rounded-xl ring-1 ring-stone-200 p-6 md:p-8'},
@@ -592,19 +556,14 @@
   }
 
   // ===== Yksittäiskappale-logiikka (MYYTY) =====
-  let SOLD = JSON.parse(localStorage.getItem('sold') || '{}'); // { [productId]: true }
-  function saveSold(){ localStorage.setItem('sold', JSON.stringify(SOLD)); }
-  function isSold(id){
-    const fromContent = (CONTENT.products || []).find(x=>x.id===id)?.sold === true;
-    return !!(SOLD[id] || fromContent);
-  }
-  function markSold(ids=[]){ ids.forEach(id=>SOLD[id]=true); saveSold(); }
+  let SOLD = JSON.parse(localStorage.getItem('sold') || '{}');
+  const saveSold = ()=>localStorage.setItem('sold', JSON.stringify(SOLD));
+  const isSold = id => !!(SOLD[id] || (CONTENT.products||[]).find(x=>x.id===id)?.sold);
+  const markSold = (ids=[])=>{ ids.forEach(id=>SOLD[id]=true); saveSold(); };
 
   // ===== Tuotteet =====
   function renderProducts(list){
-    const root = document.getElementById('productsRoot');
-    if(!root) return;
-    root.innerHTML = "";
+    const root = document.getElementById('productsRoot'); if(!root) return; root.innerHTML = "";
 
     list.forEach((p,idx)=>{
       const pairId = `pair-${idx}`;
@@ -612,18 +571,15 @@
       const prevId=`${pairId}-prev`, nextId=`${pairId}-next`;
       const sold = isSold(p.id);
 
-      const gallery = el('div',{
-          class:'product-gallery rounded-xl',
-          style:`background:${getComputedStyle(document.documentElement).getPropertyValue('--gallery')||'#F6F6F4'}`
-        },
+      const gallery = el('div',{ class:'product-gallery rounded-xl', style:`background:${getComputedStyle(document.documentElement).getPropertyValue('--gallery')||'#F6F6F4'}` },
         el('div',{class:'relative'},
           el('div',{class:'pg-grid'},
             el('div',{class:'img-wrap aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200'},
-              el('img',{id:leftId,class:'w-full h-full object-cover',alt:`${p.name} kuva 1`,loading:'lazy',decoding:'async'}),
+              el('img',{id:leftId,class:'w-full h-full object-cover',alt:`${p.name} kuva 1`,loading:'lazy',decoding:'async',width:1400,height:1750}),
               sold ? el('div',{class:'sold-badge'}, 'MYYTY') : null
             ),
             el('div',{class:'pg-b img-wrap aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200'},
-              el('img',{id:rightId,class:'w-full h-full object-cover',alt:`${p.name} kuva 2`,loading:'lazy',decoding:'async'}),
+              el('img',{id:rightId,class:'w-full h-full object-cover',alt:`${p.name} kuva 2`,loading:'lazy',decoding:'async',width:1400,height:1750}),
               sold ? el('div',{class:'sold-badge'}, 'MYYTY') : null
             )
           ),
@@ -636,13 +592,11 @@
         el('h3',{class:'serif text-2xl'}, p.name||'Tuote'),
         el('p',{class:'mt-1 text-stone-700 max-w-2xl mx-auto'}, p.blurb||''),
         el('div',{class:'mt-2 font-semibold text-lg'}, fmtEUR(Number(p.price||0))),
-        sold ? el('div',{class:'sold-chip', 'aria-label':'Myyty'}, 'MYYTY') :
-               el('div',{class:'mt-3'}, el('button',{'data-buy':p.id,class:'btn btn-dark'},'Osta'))
+        sold ? el('div',{class:'sold-chip', 'aria-label':'Myyty'}, 'MYYTY') : el('div',{class:'mt-3'}, el('button',{'data-buy':p.id,class:'btn btn-dark'},'Osta'))
       );
 
       const wrap = el('div',{}, gallery, details);
 
-      // Pyöristetty valkoinen bandi + otsikkorivi ekalle tuotteelle
       const inner = el('div',{class:'band-inner'});
       if (idx === 0){
         const headerRow = el('div',{class:'flex items-center justify-between mb-6'},
@@ -652,41 +606,27 @@
         inner.appendChild(headerRow);
       }
       inner.appendChild(wrap);
-
       const band = el('div',{class:'band full-bleed'}, inner);
       root.appendChild(band);
-
-      // rako palkkien väliin
       root.appendChild(el('div',{class:'aurora-gap full-bleed'}));
 
-      // galleriakuvat
       const imgs = Array.isArray(p.images)&&p.images.length ? p.images : [
         "https://placehold.co/1400x1750?text=Kuva+1",
         "https://placehold.co/1400x1750?text=Kuva+2",
         "https://placehold.co/1400x1750?text=Kuva+3"
       ];
       let i=0;
-      const setPair=(k)=>{
-        const a=$(`#${leftId}`), b=$(`#${rightId}`);
-        const n=imgs.length;
-        if(a) a.src=imgs[(k%n+n)%n];
-        if(b) b.src=imgs[((k+1)%n+n)%n];
-      };
+      const setPair=k=>{ const a=$(`#${leftId}`), b=$(`#${rightId}`); const n=imgs.length; if(a) a.src=imgs[(k%n+n)%n]; if(b) b.src=imgs[((k+1)%n+n)%n]; };
       setPair(i);
       if(!sold){
         const nextBtn=$(`#${nextId}`), prevBtn=$(`#${prevId}`);
-        if(nextBtn) nextBtn.addEventListener('click',()=>{i=(i+1)%imgs.length; setPair(i);});
-        if(prevBtn) prevBtn.addEventListener('click',()=>{i=(i-1+imgs.length)%imgs.length; setPair(i);});
+        nextBtn && nextBtn.addEventListener('click',()=>{i=(i+1)%imgs.length; setPair(i);});
+        prevBtn && prevBtn.addEventListener('click',()=>{i=(i-1+imgs.length)%imgs.length; setPair(i);});
       }
     });
 
-    // “Osta” napit lisäävät korin; ei määriä, aina 1 kpl
     root.addEventListener('click', e=>{
-      const btn = e.target.closest('[data-buy]');
-      if(!btn) return;
-      const id = btn.getAttribute('data-buy');
-      if(isSold(id)) return alert('Tuote on jo myyty.');
-      addToCart(id);
+      const btn = e.target.closest('[data-buy]'); if(!btn) return; const id = btn.getAttribute('data-buy'); if(isSold(id)) return alert('Tuote on jo myyty.'); addToCart(id);
     });
   }
 
@@ -707,24 +647,19 @@
   const $shipOpts = $('#shipOptions');
 
   let CART = JSON.parse(localStorage.getItem('cart')||'{}');
-  function saveCart(){ localStorage.setItem('cart', JSON.stringify(CART)); updateBadge(); }
-  function updateBadge(){
-    const n = Object.values(CART).reduce((a,b)=>a+b,0);
-    if($countIcon) $countIcon.textContent = String(n);
-    if($countText) $countText.textContent = n ? `(${n})` : '';
-  }
-  function openCart(){ $cart.classList.add('open'); renderCart(); }
-  function closeCart(){ $cart.classList.remove('open'); }
+  const saveCart = ()=>{ localStorage.setItem('cart', JSON.stringify(CART)); updateBadge(); };
+  function updateBadge(){ const n = Object.values(CART).reduce((a,b)=>a+b,0); if($countIcon) $countIcon.textContent = String(n); if($countText) $countText.textContent = n ? `(${n})` : ''; }
+  function openCart(){ $cart.classList.add('open'); document.body.style.overflow='hidden'; trapFocus($cart); renderCart(); }
+  function closeCart(){ $cart.classList.remove('open'); document.body.style.overflow=''; releaseFocus(); }
   $openCartText?.addEventListener('click', openCart);
   $openCartIcon?.addEventListener('click', openCart);
   $close?.addEventListener('click', closeCart);
   $closeX?.addEventListener('click', closeCart);
 
-  function catalogFromContent(){ const cat={}; (CONTENT.products||[]).forEach(p=>{ cat[p.id]={id:p.id,name:p.name,price:Number(p.price||0)}; }); return cat; }
+  const catalogFromContent=()=>{ const cat={}; (CONTENT.products||[]).forEach(p=>{ cat[p.id]={id:p.id,name:p.name,price:Number(p.price||0)}; }); return cat; };
 
   function renderShipping(methods, defId){
-    if(!$shipOpts) return;
-    $shipOpts.innerHTML='';
+    if(!$shipOpts) return; $shipOpts.innerHTML='';
     methods.forEach((m,idx)=>{
       const id = `ship-${m.id}`;
       const radio = el('label',{class:'flex items-center gap-2 text-sm'},
@@ -735,8 +670,7 @@
     });
     $shipOpts.querySelectorAll('input[name="ship"]').forEach(r=>r.addEventListener('change', renderCart));
 
-    const ul = document.getElementById('shipInfo'); if(!ul) return;
-    ul.innerHTML='';
+    const ul = document.getElementById('shipInfo'); if(!ul) return; ul.innerHTML='';
     methods.forEach(m=>ul.appendChild(el('li',{}, `${m.name} — ${typeof m.price==='number'?fmtEUR(m.price):m.price}`)));
   }
 
@@ -748,21 +682,11 @@
     let sub=0;
     ids.forEach(id=>{
       const p = cat[id]; if(!p) return;
-      if(isSold(id)){
-        const row = el('div',{class:'py-3 text-sm text-red-600'}, `Tuote "${p.name}" on jo myyty. Poista se korista.`);
-        $items.appendChild(row);
-        return;
-      }
+      if(isSold(id)){ $items.appendChild(el('div',{class:'py-3 text-sm text-red-600'}, `Tuote "${p.name}" on jo myyty. Poista se korista.`)); return; }
       sub += p.price;
       const row = el('div',{class:'py-3 flex items-center justify-between gap-3'},
-        el('div',{},
-          el('div',{class:'font-medium'}, p.name),
-          el('div',{class:'text-sm text-stone-600'}, fmtEUR(p.price))
-        ),
-        el('div',{class:'flex items-center gap-3'},
-          el('div',{class:'font-medium'}, fmtEUR(p.price)),
-          el('button',{'data-remove':id, class:'px-2 ring-1 ring-stone-300 rounded'}, 'Poista')
-        )
+        el('div',{}, el('div',{class:'font-medium'}, p.name), el('div',{class:'text-sm text-stone-600'}, fmtEUR(p.price)) ),
+        el('div',{class:'flex items-center gap-3'}, el('div',{class:'font-medium'}, fmtEUR(p.price)), el('button',{'data-remove':id, class:'px-2 ring-1 ring-stone-300 rounded', ariaLabel:'Poista tuote'}, 'Poista') )
       );
       $items.appendChild(row);
     });
@@ -775,12 +699,7 @@
     $items.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{ const id=b.dataset.remove; delete CART[id]; saveCart(); renderCart(); });
   }
 
-  function addToCart(id){
-    if(isSold(id)) return alert('Tuote on jo myyty.');
-    CART[id] = 1;
-    saveCart();
-    openCart();
-  }
+  function addToCart(id){ if(isSold(id)) return alert('Tuote on jo myyty.'); CART[id] = 1; saveCart(); openCart(); }
   updateBadge();
 
   // PayPal: merkitse myydyksi #success jälkeen (demo)
@@ -799,13 +718,7 @@
       el('input',{type:'hidden',name:'cancel_return',value: location.origin+'/#cancel'})
     );
     let i=1;
-    ids.forEach(id=>{
-      const p=cat[id]; if(!p) return;
-      form.appendChild(el('input',{type:'hidden',name:`item_name_${i}`,value:p.name}));
-      form.appendChild(el('input',{type:'hidden',name:`amount_${i}`,   value:Number(p.price||0).toFixed(2)}));
-      form.appendChild(el('input',{type:'hidden',name:`quantity_${i}`, value:1}));
-      i++;
-    });
+    ids.forEach(id=>{ const p=cat[id]; if(!p) return; form.appendChild(el('input',{type:'hidden',name:`item_name_${i}`,value:p.name})); form.appendChild(el('input',{type:'hidden',name:`amount_${i}`,   value:Number(p.price||0).toFixed(2)})); form.appendChild(el('input',{type:'hidden',name:`quantity_${i}`, value:1})); i++; });
     const shipVal = parseFloat((document.querySelector('input[name="ship"]:checked')||{value:"0"}).value || '0');
     form.appendChild(el('input',{type:'hidden',name:'handling_cart',value:shipVal.toFixed(2)}));
     document.body.appendChild(form); form.submit(); form.remove();
@@ -813,20 +726,15 @@
 
   (function(){
     const modal = $('#resultModal'); const title=$('#resultTitle'); const text=$('#resultText');
-    function show(t,msg){ title.textContent=t; text.textContent=msg; modal.classList.add('open'); }
-    if(location.hash==='#success'){
-      const soldIds = Object.keys(CART||{});
-      markSold(soldIds);
-      CART={}; saveCart();
-      show('Kiitos tilauksesta!','Vahvistus saapuu PayPal-sähköpostiisi.');
-      renderProducts(CONTENT.products || []);
-      renderCart();
-    }
+    function show(t,msg){ title.textContent=t; text.textContent=msg; modal.classList.add('open'); trapFocus(modal); }
+    function hide(){ modal.classList.remove('open'); releaseFocus(); }
+    if(location.hash==='#success'){ const soldIds = Object.keys(CART||{}); markSold(soldIds); CART={}; saveCart(); show('Kiitos tilauksesta!','Vahvistus saapuu PayPal-sähköpostiisi.'); renderProducts(CONTENT.products || []); renderCart(); }
     if(location.hash==='#cancel'){ show('Maksu peruttu','Voit yrittää uudelleen tai muokata koria.'); }
-    modal?.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
+    modal?.addEventListener('click', e=>{ if(e.target===modal) hide(); });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') hide(); });
   })();
 
-  // ===== RESPONSIVE NAV (näytä ☰ + cart-IKONI vasta kun nav ei mahdu) =====
+  // ===== RESPONSIVE NAV =====
   (function(){
     const container = document.getElementById('hdrRow');
     const brand     = document.getElementById('brandBlock');
@@ -838,29 +746,17 @@
 
     let navVisible = true;
 
-    function setHeaderVar(){
-      const h = document.querySelector('header')?.getBoundingClientRect().height || 56;
-      document.documentElement.style.setProperty('--header-h', Math.round(h)+'px');
-    }
+    function setHeaderVar(){ const h = document.querySelector('header')?.getBoundingClientRect().height || 56; document.documentElement.style.setProperty('--header-h', Math.round(h)+'px'); }
 
-    function measureNavWidth(){
-      const wasHidden = nav.classList.contains('nav-hidden');
-      if (wasHidden) nav.classList.remove('nav-hidden');
-      nav.classList.add('nav-measure');
-      const w = Math.ceil(nav.scrollWidth);
-      nav.classList.remove('nav-measure');
-      if (wasHidden) nav.classList.add('nav-hidden');
-      return w;
-    }
+    function measureNavWidth(){ const wasHidden = nav.classList.contains('nav-hidden'); if (wasHidden) nav.classList.remove('nav-hidden'); nav.classList.add('nav-measure'); const w = Math.ceil(nav.scrollWidth); nav.classList.remove('nav-measure'); if (wasHidden) nav.classList.add('nav-hidden'); return w; }
 
     function canShowNav(){
-      // Simuloi tilaa siinä tilassa, jossa nav olisi näkyvissä:
       const prevMenuHidden = menuBtn.classList.contains('hidden');
       const prevCartIconHidden = cartIcon.classList.contains('hidden');
       const prevCartTextHidden = cartText.classList.contains('hidden');
 
-      menuBtn.classList.add('hidden');     // nav-tilassa ei menu-ikonia
-      cartIcon.classList.add('hidden');    // nav-tilassa ikonikorin sijaan tekstikori
+      menuBtn.classList.add('hidden');
+      cartIcon.classList.add('hidden');
       cartText.classList.remove('hidden');
 
       const cw   = container.clientWidth;
@@ -869,7 +765,6 @@
       const navW = measureNavWidth();
       const fits = navW <= Math.max(0, cw - bw - rbw - 24);
 
-      // Palauta aiempi tila
       if (!prevMenuHidden) menuBtn.classList.remove('hidden');
       if (!prevCartIconHidden) cartIcon.classList.remove('hidden'); else cartIcon.classList.add('hidden');
       if ( prevCartTextHidden) cartText.classList.add('hidden'); else cartText.classList.remove('hidden');
@@ -894,32 +789,36 @@
       setHeaderVar();
     }
 
-    function compute(){
-      setHeaderVar();
-      if (navVisible){
-        if (!canShowNav() ) applyState(false);
-      }else{
-        if (canShowNav() )  applyState(true);
-      }
-    }
+    function compute(){ setHeaderVar(); if (navVisible){ if (!canShowNav() ) applyState(false); }else{ if (canShowNav() )  applyState(true); } }
 
-    let t=null;
-    const schedule=()=>{ if(t) return; t=setTimeout(()=>{ t=null; compute(); }, 120); };
+    let t=null; const schedule=()=>{ if(t) return; t=setTimeout(()=>{ t=null; compute(); }, 120); };
     window.addEventListener('resize', schedule, {passive:true});
     window.addEventListener('orientationchange', ()=>setTimeout(compute,150), {passive:true});
     if ('fonts' in document) document.fonts.ready.then(compute);
     compute();
   })();
 
+  // ===== Accessible focus trapping for drawers/modals =====
+  let lastFocus = null; let trapRoot = null;
+  function trapFocus(root){
+    trapRoot = root; lastFocus = document.activeElement;
+    const focusables = root.querySelectorAll('a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])');
+    const first = focusables[0]; const last = focusables[focusables.length-1];
+    function loop(e){ if(e.key !== 'Tab') return; if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); } else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); } }
+    root.__trapHandler = loop; document.addEventListener('keydown', loop);
+    first && first.focus();
+  }
+  function releaseFocus(){ if(trapRoot?.__trapHandler){ document.removeEventListener('keydown', trapRoot.__trapHandler); } trapRoot = null; lastFocus && lastFocus.focus(); }
+
   // ===== VALIKKO-DRAWER =====
-  (function(){
+  ;(function(){
     const drawer = document.getElementById('menuDrawer');
     const openBtn = document.getElementById('openMenu');
     const closeA = document.getElementById('closeMenu');
     const closeX = document.getElementById('closeMenuX');
 
-    function open(){ drawer.classList.add('open'); openBtn.setAttribute('aria-expanded','true'); }
-    function close(){ drawer.classList.remove('open'); openBtn.setAttribute('aria-expanded','false'); }
+    function open(){ drawer.classList.add('open'); openBtn.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; trapFocus(drawer); }
+    function close(){ drawer.classList.remove('open'); openBtn.setAttribute('aria-expanded','false'); document.body.style.overflow=''; releaseFocus(); }
     openBtn.addEventListener('click', open);
     closeA.addEventListener('click', close);
     closeX.addEventListener('click', close);
@@ -929,17 +828,8 @@
   })();
 
   // ===== WebGL Revontulet =====
-  (function(){
-    const SETTINGS = {
-      PAL_COL1:[0.02,0.70,0.95],
-      PAL_COL2:[0.00,1.00,0.60],
-      BRIGHTNESS:1.00,
-      CURTAIN_Y:0.58,
-      HEIGHT:0.55,
-      SPEED:0.18,
-      STRIPE_STRENGTH:0.22,
-      STAR_DENS:0.0001
-    };
+  ;(function(){
+    const SETTINGS = { PAL_COL1:[0.02,0.70,0.95], PAL_COL2:[0.00,1.00,0.60], BRIGHTNESS:1.00, CURTAIN_Y:0.58, HEIGHT:0.55, SPEED:0.18, STRIPE_STRENGTH:0.22, STAR_DENS:0.0001 };
 
     function init(){
       const canvas = document.getElementById('auroraCanvas'); if(!canvas) return;
@@ -951,100 +841,26 @@
 
       const vert=`attribute vec2 a_pos; void main(){ gl_Position=vec4(a_pos,0.,1.); }`;
       const frag=`precision highp float; uniform vec2 u_res; uniform float u_time,u_brightness,u_y,u_height,u_speed,u_stripes,u_star; uniform vec3 u_c1,u_c2;
-      float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
-      float noise(vec2 p){vec2 i=floor(p),f=fract(p); float a=hash(i),b=hash(i+vec2(1,0)),c=hash(i+vec2(0,1)),d=hash(i+vec2(1,1));
-        vec2 u=f*f*(3.-2.*f); return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}
-      float fbm(vec2 p){float v=0.,a=0.5;for(int i=0;i<6;i++){v+=a*noise(p);p*=2.03;a*=0.47;}return v;}
-      float stars(vec2 uv){ vec2 p=floor(uv*900.); float rnd=hash(p); return step(1.-u_star,rnd); }
-      void main(){
-        vec2 uv=gl_FragCoord.xy/u_res.xy, suv=vec2(uv.x*(u_res.x/u_res.y),uv.y);
-        vec3 col=vec3(.02,.06,.12);
-        float band=1.-smoothstep(0.,u_height,abs(uv.y-u_y));
-        float t=u_time*u_speed;
-        float flow=fbm(vec2(suv.x*1.6 - t, suv.y*1.2 + t*.35));
-        float stripes=smoothstep(.38,1., fbm(vec2(suv.x*10.+t*1.2,t*2.)))*u_stripes;
-        float inten=band*(.52+.72*flow)+stripes*band;
-        float skyfade=smoothstep(0.,.25,uv.y); inten*=skyfade;
-        vec3 pal=mix(u_c1,u_c2, clamp(uv.y + 0.22*flow,0.,1.));
-        col=mix(col,pal, clamp(inten*1.18,0.,1.));
-        float g=0.; g+=band*.20; g+=fbm(vec2(suv.x*1.8 - t*.4,suv.y*1.8))*.12; col += pal*g*1.03;
-        float st=stars(uv); col+=vec3(st)*.32;
-        col*=u_brightness;
-        gl_FragColor=vec4(col,1.);
-      }`;
+      float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);} float noise(vec2 p){vec2 i=floor(p),f=fract(p); float a=hash(i),b=hash(i+vec2(1,0)),c=hash(i+vec2(0,1)),d=hash(i+vec2(1,1)); vec2 u=f*f*(3.-2.*f); return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);} float fbm(vec2 p){float v=0.,a=0.5;for(int i=0;i<6;i++){v+=a*noise(p);p*=2.03;a*=0.47;}return v;} float stars(vec2 uv){ vec2 p=floor(uv*900.); float rnd=hash(p); return step(1.-u_star,rnd); } void main(){ vec2 uv=gl_FragCoord.xy/u_res.xy, suv=vec2(uv.x*(u_res.x/u_res.y),uv.y); vec3 col=vec3(.02,.06,.12); float band=1.-smoothstep(0.,u_height,abs(uv.y-u_y)); float t=u_time*u_speed; float flow=fbm(vec2(suv.x*1.6 - t, suv.y*1.2 + t*.35)); float stripes=smoothstep(.38,1., fbm(vec2(suv.x*10.+t*1.2,t*2.)))*u_stripes; float inten=band*(.52+.72*flow)+stripes*band; float skyfade=smoothstep(0.,.25,uv.y); inten*=skyfade; vec3 pal=mix(u_c1,u_c2, clamp(uv.y + 0.22*flow,0.,1.)); col=mix(col,pal, clamp(inten*1.18,0.,1.)); float g=0.; g+=band*.20; g+=fbm(vec2(suv.x*1.8 - t*.4,suv.y*1.8))*.12; col += pal*g*1.03; float st=stars(uv); col+=vec3(st)*.32; col*=u_brightness; gl_FragColor=vec4(col,1.); }`;
 
-      const makeShader=(type,src)=>{ const s=gl.createShader(type); gl.shaderSource(s,src); gl.compileShader(s);
-        if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){ console.error(gl.getShaderInfoLog(s)); } return s; };
-      const prog=gl.createProgram();
-      gl.attachShader(prog,makeShader(gl.VERTEX_SHADER,vert));
-      gl.attachShader(prog,makeShader(gl.FRAGMENT_SHADER,frag));
-      gl.linkProgram(prog);
-      if(!gl.getProgramParameter(prog,gl.LINK_STATUS)){ console.error(gl.getProgramInfoLog(prog)); return; }
-      gl.useProgram(prog);
+      const makeShader=(type,src)=>{ const s=gl.createShader(type); gl.shaderSource(s,src); gl.compileShader(s); if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){ console.error(gl.getShaderInfoLog(s)); } return s; };
+      const prog=gl.createProgram(); gl.attachShader(prog,makeShader(gl.VERTEX_SHADER,vert)); gl.attachShader(prog,makeShader(gl.FRAGMENT_SHADER,frag)); gl.linkProgram(prog); if(!gl.getProgramParameter(prog,gl.LINK_STATUS)){ console.error(gl.getProgramInfoLog(prog)); return; } gl.useProgram(prog);
 
-      const buf=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,buf);
-      gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
-      const aPos=gl.getAttribLocation(prog,'a_pos'); gl.enableVertexAttribArray(aPos);
-      gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
+      const buf=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,buf); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW); const aPos=gl.getAttribLocation(prog,'a_pos'); gl.enableVertexAttribArray(aPos); gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
 
-      const uRes=gl.getUniformLocation(prog,'u_res'),
-            uTime=gl.getUniformLocation(prog,'u_time'),
-            uBr=gl.getUniformLocation(prog,'u_brightness'),
-            uY=gl.getUniformLocation(prog,'u_y'),
-            uH=gl.getUniformLocation(prog,'u_height'),
-            uSpd=gl.getUniformLocation(prog,'u_speed'),
-            uStr=gl.getUniformLocation(prog,'u_stripes'),
-            uStar=gl.getUniformLocation(prog,'u_star'),
-            uC1=gl.getUniformLocation(prog,'u_c1'),
-            uC2=gl.getUniformLocation(prog,'u_c2');
+      const uRes=gl.getUniformLocation(prog,'u_res'), uTime=gl.getUniformLocation(prog,'u_time'), uBr=gl.getUniformLocation(prog,'u_brightness'), uY=gl.getUniformLocation(prog,'u_y'), uH=gl.getUniformLocation(prog,'u_height'), uSpd=gl.getUniformLocation(prog,'u_speed'), uStr=gl.getUniformLocation(prog,'u_stripes'), uStar=gl.getUniformLocation(prog,'u_star'), uC1=gl.getUniformLocation(prog,'u_c1'), uC2=gl.getUniformLocation(prog,'u_c2');
 
-      function setUniforms(t){
-        gl.uniform2f(uRes,canvas.width,canvas.height);
-        gl.uniform1f(uTime,t);
-        gl.uniform1f(uBr,SETTINGS.BRIGHTNESS);
-        gl.uniform1f(uY,SETTINGS.CURTAIN_Y);
-        gl.uniform1f(uH,SETTINGS.HEIGHT);
-        gl.uniform1f(uSpd,SETTINGS.SPEED);
-        gl.uniform1f(uStr,SETTINGS.STRIPE_STRENGTH);
-        gl.uniform1f(uStar,SETTINGS.STAR_DENS);
-        gl.uniform3fv(uC1,SETTINGS.PAL_COL1);
-        gl.uniform3fv(uC2,SETTINGS.PAL_COL2);
-      }
+      function setUniforms(t){ gl.uniform2f(uRes,canvas.width,canvas.height); gl.uniform1f(uTime,t); gl.uniform1f(uBr,SETTINGS.BRIGHTNESS * ($('#fxToggle')?.checked ? 0.6 : 1)); gl.uniform1f(uY,SETTINGS.CURTAIN_Y); gl.uniform1f(uH,SETTINGS.HEIGHT); gl.uniform1f(uSpd, SETTINGS.SPEED * ($('#fxToggle')?.checked ? 0.1 : 1)); gl.uniform1f(uStr,SETTINGS.STRIPE_STRENGTH); gl.uniform1f(uStar,SETTINGS.STAR_DENS); gl.uniform3fv(uC1,SETTINGS.PAL_COL1); gl.uniform3fv(uC2,SETTINGS.PAL_COL2); }
 
-      // Stabiili koonhallinta
       let lastW=0,lastH=0, rtid=null;
-      function resizeNow(){
-        const dpr = Math.min(window.devicePixelRatio||1, 2);
-        const rect = canvas.getBoundingClientRect();
-        const dw = Math.max(1, Math.floor(rect.width  * dpr));
-        const dh = Math.max(1, Math.floor(rect.height * dpr));
-        if (dw===lastW && dh===lastH) return;
-        lastW=dw; lastH=dh;
-        canvas.width=dw; canvas.height=dh;
-        gl.viewport(0,0,dw,dh);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-      }
-      function scheduleResize(){
-        if (rtid) return;
-        rtid = setTimeout(()=>{ rtid=null; resizeNow(); }, 120);
-      }
+      function resizeNow(){ const dpr = Math.min(window.devicePixelRatio||1, 2); const rect = canvas.getBoundingClientRect(); const dw = Math.max(1, Math.floor(rect.width  * dpr)); const dh = Math.max(1, Math.floor(rect.height * dpr)); if (dw===lastW && dh===lastH) return; lastW=dw; lastH=dh; canvas.width=dw; canvas.height=dh; gl.viewport(0,0,dw,dh); gl.clear(gl.COLOR_BUFFER_BIT); }
+      function scheduleResize(){ if (rtid) return; rtid = setTimeout(()=>{ rtid=null; resizeNow(); }, 120); }
       window.addEventListener('resize', scheduleResize, {passive:true});
       window.addEventListener('orientationchange', ()=>setTimeout(resizeNow, 250), {passive:true});
-      if (window.visualViewport){
-        let vvPrevW = Math.round(window.visualViewport.width||0);
-        window.visualViewport.addEventListener('resize', ()=>{
-          const w = Math.round(window.visualViewport.width||0);
-          if (Math.abs(w - vvPrevW) >= 2) scheduleResize();
-          vvPrevW = w;
-        }, {passive:true});
-      }
+      if (window.visualViewport){ let vvPrevW = Math.round(window.visualViewport.width||0); window.visualViewport.addEventListener('resize', ()=>{ const w = Math.round(window.visualViewport.width||0); if (Math.abs(w - vvPrevW) >= 2) scheduleResize(); vvPrevW = w; }, {passive:true}); }
       resizeNow();
 
-      function draw(t){
-        setUniforms(t*0.001);
-        gl.drawArrays(gl.TRIANGLES,0,3);
-        requestAnimationFrame(draw);
-      }
+      function draw(t){ if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || $('#fxToggle')?.checked){ gl.clear(gl.COLOR_BUFFER_BIT); return requestAnimationFrame(draw); } setUniforms(t*0.001); gl.drawArrays(gl.TRIANGLES,0,3); requestAnimationFrame(draw); }
       requestAnimationFrame(draw);
     }
 
