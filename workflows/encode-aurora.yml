@@ -1,0 +1,54 @@
+name: Encode aurora video
+
+on:
+  push:
+    paths:
+      - 'assets/aurora.mov'
+  workflow_dispatch:
+
+jobs:
+  encode:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Ensure assets dir
+        run: mkdir -p assets
+
+      - name: Transcode MOV -> MP4/WebM + poster
+        run: |
+          set -e
+          IN=assets/aurora.mov
+          MP4=assets/aurora.mp4
+          WEBM=assets/aurora.webm
+          POSTER=assets/aurora-poster.jpg
+
+          # 1080p, pyri <100 MB
+          ffmpeg -y -i "$IN" -vf "scale=1920:-2" -c:v libx264 -crf 22 -preset slow -pix_fmt yuv420p -movflags +faststart -an "$MP4"
+          ffmpeg -y -i "$IN" -vf "scale=1920:-2" -c:v libvpx-vp9 -crf 36 -b:v 0 -row-mt 1 -pix_fmt yuv420p -an "$WEBM"
+          ffmpeg -y -ss 1 -i "$IN" -frames:v 1 -q:v 4 "$POSTER"
+
+          # Jos joku >95 MB → 720p uusiksi
+          max=95000000
+          redo=false
+          [ -f "$MP4" ] && [ $(stat -c%s "$MP4") -gt $max ] && redo=true
+          [ -f "$WEBM" ] && [ $(stat -c%s "$WEBM") -gt $max ] && redo=true
+          if $redo; then
+            echo "Re-encoding at 1280 width (720p) to fit under 100MB…"
+            ffmpeg -y -i "$IN" -vf "scale=1280:-2" -c:v libx264 -crf 22 -preset slow -pix_fmt yuv420p -movflags +faststart -an "$MP4"
+            ffmpeg -y -i "$IN" -vf "scale=1280:-2" -c:v libvpx-vp9 -crf 36 -b:v 0 -row-mt 1 -pix_fmt yuv420p -an "$WEBM"
+          fi
+
+      - name: Commit outputs
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Build: aurora.mp4/webm + poster from aurora.mov"
+          file_pattern: |
+            assets/aurora.mp4
+            assets/aurora.webm
+            assets/aurora-poster.jpg
