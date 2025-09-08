@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write   # tarvitaan automaattikommittiin
+  contents: write
 
 jobs:
   encode:
@@ -15,15 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          lfs: true           # hae LFS-matsku oikeasti, ei vain pointeria
+          lfs: true
 
       - name: Install ffmpeg
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg
-
-      - name: Ensure assets dir
-        run: mkdir -p assets
 
       - name: Transcode MOV -> MP4/WebM + poster
         run: |
@@ -42,7 +39,7 @@ jobs:
           [ -f "$MP4" ] && [ $(stat -c%s "$MP4") -gt $max ] && redo=true
           [ -f "$WEBM" ] && [ $(stat -c%s "$WEBM") -gt $max ] && redo=true
           if $redo; then
-            echo "Re-encoding 1280px to fit under 100MB…"
+            echo "Re-encoding at 1280px (720p)…"
             ffmpeg -y -i "$IN" -vf "scale=1280:-2" -c:v libx264 -crf 22 -preset slow -pix_fmt yuv420p -movflags +faststart -an "$MP4"
             ffmpeg -y -i "$IN" -vf "scale=1280:-2" -c:v libvpx-vp9 -crf 36 -b:v 0 -row-mt 1 -pix_fmt yuv420p -an "$WEBM"
           fi
