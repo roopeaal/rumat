@@ -44,7 +44,7 @@
     .btn-dark{background:#111827;color:#fff;border-color:#111827}
     .chip{font-size:.78rem;padding:.25rem .55rem;border-radius:9999px;border:1px solid rgb(214,211,209);background:#fff}
 
-    /* Aurora (kiinteä tausta) — ei overlayta */
+    /* Tausta: video + fallback-canvas */
     .aurora-fixed{
       position:fixed; inset:0; width:100%; height:100%;
       z-index:0; pointer-events:none; display:block;
@@ -52,6 +52,9 @@
       transform: translateZ(0); backface-visibility:hidden;
       will-change: transform, opacity;
     }
+    /* Täysruutuinen taustavideo */
+    #bgVideo{ object-fit: cover; }
+
     .site-content{ position:relative; z-index:2; background:transparent; }
 
     /* Hero */
@@ -163,8 +166,19 @@
 </head>
 
 <body class="text-stone-900">
-  <!-- KIINTEÄ REVONTULI-TAUSTA -->
+  <!-- KIINTEÄ REVONTULI-TAUSTA (fallback) -->
   <canvas id="auroraCanvas" class="aurora-fixed"></canvas>
+
+  <!-- TAUSTAVIDEO (ensisijainen) -->
+  <video id="bgVideo" class="aurora-fixed"
+         autoplay muted loop playsinline preload="auto"
+         poster="assets/aurora-poster.jpg">
+    <!-- Suositus: lisää myös webm/mp4 kun ehdit -->
+    <source src="assets/aurora.webm" type="video/webm">
+    <source src="assets/aurora.mp4"  type="video/mp4">
+    <!-- Tämän saat suoraan tällä hetkellä käytettävästä .movista -->
+    <source src="assets/aurora.mov"  type="video/quicktime">
+  </video>
 
   <!-- ALAREUNAN SILUETTI -->
   <div class="bottom-sil" aria-hidden="true">
@@ -928,7 +942,55 @@
     drawer.querySelectorAll('[data-menu-close]').forEach(a=>a.addEventListener('click', close));
   })();
 
-  // ===== WebGL Revontulet =====
+  // ===== Video päälle, WebGL fallback =====
+  // aseta projektiin: assets/aurora.mov (ja mielellään aurora.mp4 / aurora.webm)
+  window.__stopAurora = false;
+  (function(){
+    const vid = document.getElementById('bgVideo');
+    const canvas = document.getElementById('auroraCanvas');
+    if(!vid) return;
+
+    function useVideo(){
+      window.__stopAurora = true;             // pysäytä WebGL-silmukka
+      if (canvas) canvas.style.display = 'none';
+      vid.style.display = '';                 // näkyviin varmuudeksi
+    }
+    function useCanvas(){
+      window.__stopAurora = false;
+      vid.style.display = 'none';
+      if (canvas) canvas.style.display = '';
+    }
+
+    let armed = false;
+    vid.addEventListener('canplay', ()=>{
+      if (armed) return;
+      armed = true;
+      useVideo();
+      vid.play().catch(()=>{});
+    }, { once: true });
+
+    vid.addEventListener('error', ()=> useCanvas(), { once:true });
+
+    // Aikakatkaisu 3s → fallback canvas
+    setTimeout(()=>{ if(!armed) useCanvas(); }, 3000);
+
+    // Kunnioita PRM-asetusta
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    function applyPRM(){
+      if (mq.matches){
+        vid.pause();
+        vid.setAttribute('aria-hidden','true');
+        useCanvas();
+      }else{
+        vid.removeAttribute('aria-hidden');
+        vid.play().catch(()=>{});
+      }
+    }
+    mq.addEventListener?.('change', applyPRM);
+    applyPRM();
+  })();
+
+  // ===== WebGL Revontulet (piirrä vain jos video ei käytössä) =====
   (function(){
     const SETTINGS = {
       PAL_COL1:[0.02,0.70,0.95],
@@ -942,6 +1004,7 @@
     };
 
     function init(){
+      if (window.__stopAurora) return; // jos video jo käytössä, ei edes initöidä
       const canvas = document.getElementById('auroraCanvas'); if(!canvas) return;
       const gl = canvas.getContext('webgl',{antialias:false,depth:false,stencil:false,preserveDrawingBuffer:false});
       canvas.style.background = 'transparent';
@@ -1041,6 +1104,7 @@
       resizeNow();
 
       function draw(t){
+        if (window.__stopAurora) return; // video käytössä → älä piirrä
         setUniforms(t*0.001);
         gl.drawArrays(gl.TRIANGLES,0,3);
         requestAnimationFrame(draw);
