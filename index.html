@@ -20,27 +20,30 @@
 
   <style>
     :root{
-      --ink:#202020;
-      --dark-forest:#0B0F0E;
-      --olive:#A1A266;
-      --ivory:#F6F6F4;   /* sivuston vaalea sävy */
-      --mist:#DEEEEE;
-      --gallery:#F6F6F4;
-      --footer:#0B0F0E;
+      --ink:#202020;         /* musta (tekstit) */
+      --olive:#A1A266;       /* FOOTER-tausta */
+      --deep-blue:#345563;   /* otsikot */
+      --blue:#789FAB;        /* varalla */
+      --light-blue:#DEEEEE;  /* footer-logo */
+      --ivory:#F6F6F4;       /* taustat & yläpalkki */
+
       --header-h:56px;
       --section-gap: clamp(4px, 0.7vw, 8px);
       --band-radius: 16px;
     }
 
     html{ scroll-padding-top: var(--header-h); }
-    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#111827;background:#fff}
+    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:var(--ink);background:var(--ivory)}
+
+    /* Otsikoiden väri tummansininen */
+    h1,h2,h3{ color: var(--deep-blue); }
 
     .serif{font-family:"Libre Baskerville",serif}
     .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
-    .btn{border-radius:9999px;padding:.6rem 1rem;border:1px solid rgb(214,211,209);transition:transform .06s, box-shadow .12s}
+    .btn{border-radius:9999px;padding:.6rem 1rem;border:1px solid rgba(0,0,0,.15);transition:transform .06s, box-shadow .12s}
     .btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.12)}
-    .btn-dark{background:#111827;color:#fff;border-color:#111827}
-    .chip{font-size:.78rem;padding:.25rem .55rem;border-radius:9999px;border:1px solid rgb(214,211,209);background:#fff}
+    .btn-dark{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .chip{font-size:.78rem;padding:.25rem .55rem;border-radius:9999px;border:1px solid rgba(0,0,0,.15);background:#fff}
 
     /* Taustavideo */
     .bg-fixed{
@@ -73,14 +76,16 @@
     #brandText{
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
       max-width:min(42vw, 460px);
+      color:var(--ink);
     }
 
     #mainNav{
       justify-self:center;
       display:flex; gap:1.5rem; white-space:nowrap;
       font-size:13px; text-transform:uppercase; letter-spacing:.2em;
-      color:#111827;
+      color:var(--ink);
     }
+    #mainNav a{ color:var(--ink); }
 
     #rightBlock{ justify-self:end; display:flex; align-items:center; gap:.5rem; white-space:nowrap; }
 
@@ -88,25 +93,25 @@
     .icon-btn{
       position:relative; width:38px; height:38px; display:grid; place-items:center;
       border-radius:9999px; background:rgba(0,0,0,0.06);
-      border:1px solid rgba(0,0,0,0.16); color:#111827; transition:background .15s ease;
+      border:1px solid rgba(0,0,0,0.16); color:var(--ink); transition:background .15s ease;
     }
     .icon-btn:hover{ background:rgba(0,0,0,0.10); }
 
     .badge{
       position:absolute; top:-4px; right:-4px; min-width:18px; height:18px; padding:0 4px;
-      display:grid; place-items:center; border-radius:9999px; background:#111827; color:#fff;
+      display:grid; place-items:center; border-radius:9999px; background:var(--ink); color:#fff;
       font-size:11px; line-height:1; font-weight:700; border:1px solid rgba(0,0,0,.15);
     }
 
     .cart-text-btn{
       border:1px solid rgba(0,0,0,.16);
-      padding:.45rem .8rem; border-radius:9999px; color:#111827;
+      padding:.45rem .8rem; border-radius:9999px; color:var(--ink);
       background:rgba(0,0,0,.04);
     }
     .cart-text-btn:hover{ background:rgba(0,0,0,.08); }
 
     /* Tuotekuvagalleria */
-    .product-gallery{ container-type:inline-size; --pg-gap:1rem; }
+    .product-gallery{ container-type:inline-size; --pg-gap:1rem; background:var(--ivory); }
     .pg-grid{ display:grid; grid-template-columns:1fr; gap:var(--pg-gap); justify-items:center; }
     .pg-b{ display:none; }
     .pg-grid > .img-wrap{ width:100%; max-width:100%; }
@@ -121,12 +126,12 @@
     .img-wrap{ position:relative; }
     .sold-badge{
       position:absolute; inset:0; display:grid; place-items:center;
-      background:rgba(8,17,13,.72); color:#fff; font-weight:800; font-size:1.05rem;
+      background:rgba(32,32,32,.72); color:#fff; font-weight:800; font-size:1.05rem;
       letter-spacing:.12em; text-transform:uppercase;
     }
     .sold-chip{
       display:inline-block; margin-top:.35rem; padding:.25rem .55rem;
-      border-radius:9999px; background:#111827; color:#fff; font-size:.75rem; letter-spacing:.08em;
+      border-radius:9999px; background:var(--ink); color:#fff; font-size:.75rem; letter-spacing:.08em;
     }
 
     /* Rako-osiot */
@@ -135,13 +140,21 @@
     /* Pyöristetyt palkit */
     .full-bleed{ margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
     .band{ background: var(--ivory); border-radius: var(--band-radius); overflow: hidden; }
-    .band--mist{ background: var(--mist); }
-    .band--stone{ background: #f5f5f4; }
+    .band--mist{ background: var(--light-blue); }   /* vaalea sininen lohko */
+    .band--stone{ background: var(--ivory); }
     .band-inner{ max-width: 72rem; margin: 0 auto; padding: 3rem 1rem; }
+
+    /* Footer-logo maskina (väritettävä) */
+    .logo-mask{
+      width:36px; height:36px;
+      background: var(--light-blue);
+      -webkit-mask: url('assets/logo.svg') no-repeat center / contain;
+      mask: url('assets/logo.svg') no-repeat center / contain;
+    }
   </style>
 </head>
 
-<body class="text-stone-900">
+<body>
   <!-- TAUSTAVIDEO -->
   <video id="bgVideo" class="bg-fixed"
          autoplay muted loop playsinline preload="auto"
@@ -152,7 +165,7 @@
 
   <!-- HEADER (vaalea) -->
   <header class="fixed top-0 left-0 right-0 z-50">
-    <div class="relative" style="background:var(--ivory); color:#111827; border-bottom:1px solid rgba(0,0,0,.08);">
+    <div class="relative" style="background:var(--ivory); color:var(--ink); border-bottom:1px solid rgba(0,0,0,.08);">
       <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-3 grid items-center gap-3">
         <!-- VASEN: logo + brändi -->
         <a id="brandBlock" href="#etusivu" class="flex items-center gap-3">
@@ -202,11 +215,11 @@
 
   <!-- SISÄLTÖ -->
   <main class="site-content">
-    <!-- HERO -->
-    <section id="etusivu" class="hero grid place-items-center text-stone-50 px-4">
+    <!-- HERO (otsikko tummansininen, varjolla luettavuus videon päällä) -->
+    <section id="etusivu" class="hero grid place-items-center px-4">
       <div id="hero-text" class="text-center mt-24 md:mt-28">
-        <h1 class="serif font-semibold tracking-[0.08em] text-[clamp(22px,4.8vw,58px)]
-                   drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
+        <h1 class="serif font-semibold tracking-[0.08em] text-[clamp(22px,4.8vw,58px)]"
+            style="text-shadow:0 2px 16px rgba(0,0,0,0.40)">
           Liian rumat ollakseen totta
         </h1>
         <div class="mt-8 flex justify-center">
@@ -228,7 +241,7 @@
     </section>
     <div class="aurora-gap full-bleed"></div>
 
-    <!-- TUOTTEET -->
+    <!-- TUOTTEET (tuotu takaisin näkyviin) -->
     <section id="tuotteet" class="py-0">
       <div class="aurora-gap full-bleed"></div>
       <div id="productsRoot"></div>
@@ -251,11 +264,11 @@
         <div class="band-inner">
           <h2 class="serif text-3xl mb-6">Some</h2>
           <div class="grid md:grid-cols-2 gap-6">
-            <div class="aspect-[9/16] rounded-xl ring-1 ring-stone-200 overflow-hidden bg-black">
+            <div class="aspect-[9/16] rounded-xl ring-1 ring-[rgba(0,0,0,.15)] overflow-hidden bg-black">
               <iframe id="igEmbed" class="w-full h-full" allowtransparency="true" frameborder="0" scrolling="no" loading="lazy"
                       src="https://www.instagram.com/p/DMXVRgGC1Bv/embed" style="display:block"></iframe>
             </div>
-            <div class="aspect-[9/16] rounded-xl ring-1 ring-stone-200 overflow-hidden bg-black">
+            <div class="aspect-[9/16] rounded-xl ring-1 ring-[rgba(0,0,0,.15)] overflow-hidden bg-black">
               <iframe id="ttEmbed"
                 src="https://www.tiktok.com/embed/v2/7525414518562753814"
                 style="width:100%;height:100%;border:0;display:block"
@@ -271,7 +284,7 @@
 
     <!-- TARINA -->
     <section id="tarina" class="py-0">
-      <div class="band band--stone full-bleed">
+      <div class="band full-bleed">
         <div class="band-inner">
           <h2 class="serif text-3xl mb-4">Tarina</h2>
           <p id="story">
@@ -282,32 +295,35 @@
     </section>
     <div class="aurora-gap full-bleed"></div>
 
-    <!-- FOOTER -->
-    <footer id="yhteys" class="pt-14 text-[color:var(--ivory)]" style="background:var(--footer)">
+    <!-- FOOTER (vihreä tausta, logo vaaleansinisellä) -->
+    <footer id="yhteys" class="pt-14 text-[color:var(--ivory)]" style="background:var(--olive)">
       <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
-        <div>
-          <div class="uppercase tracking-wide">RUMAT STUDIO</div>
-          <div id="tagline" class="text-sm mt-1 text-white/70">Suomussalmi — Contemporary textiles, built to last.</div>
+        <div class="flex items-start gap-3">
+          <div class="logo-mask" aria-hidden="true"></div>
+          <div>
+            <div class="uppercase tracking-wide">RUMAT STUDIO</div>
+            <div id="tagline" class="text-sm mt-1 text-white/80">Suomussalmi — Contemporary textiles, built to last.</div>
+          </div>
         </div>
         <div>
-          <h5 class="text-sm text-white/70">Yhteys</h5>
+          <h5 class="text-sm text-white/80">Yhteys</h5>
           <ul class="mt-2 space-y-2 text-sm">
-            <li><a id="mailLink" href="mailto:hello@rumat.fi" class="hover:underline">hello@rumat.fi</a></li>
-            <li><a id="igLink" href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer" class="hover:underline">Instagram</a></li>
-            <li><a id="ttLink" href="https://www.tiktok.com/@rumat.studio" target="_blank" rel="noreferrer" class="hover:underline">TikTok</a></li>
-            <li id="location">Kauppakatu 20, 89600 Suomussalmi</li>
+            <li><a id="mailLink" href="mailto:hello@rumat.fi" class="hover:underline text-white">hello@rumat.fi</a></li>
+            <li><a id="igLink" href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer" class="hover:underline text-white">Instagram</a></li>
+            <li><a id="ttLink" href="https://www.tiktok.com/@rumat.studio" target="_blank" rel="noreferrer" class="hover:underline text-white">TikTok</a></li>
+            <li id="location" class="text-white">Kauppakatu 20, 89600 Suomussalmi</li>
           </ul>
         </div>
         <div>
-          <h5 class="text-sm text-white/70">Toimitus</h5>
+          <h5 class="text-sm text-white/80">Toimitus</h5>
           <ul class="mt-2 space-y-2 text-sm" id="shipInfo">
-            <li>Toimitus valitaan kassalla</li>
-            <li>Nouto (sovitusti) — 0 €</li>
-            <li>Posti — 6,90 €</li>
+            <li class="text-white">Toimitus valitaan kassalla</li>
+            <li class="text-white">Nouto (sovitusti) — 0 €</li>
+            <li class="text-white">Posti — 6,90 €</li>
           </ul>
         </div>
       </div>
-      <div class="py-8 text-center text-xs text-white/65">© <span id="year"></span> RUMAT STUDIO</div>
+      <div class="py-8 text-center text-xs text-white/80">© <span id="year"></span> RUMAT STUDIO</div>
     </footer>
   </main>
 
@@ -486,11 +502,9 @@
     if(d?.embed?.tiktokVideo){ const id=parseTikTokId(d.embed?.tiktokVideo); const tt=$('#ttEmbed'); if(id&&tt){ tt.src=`https://www.tiktok.com/embed/v2/${id}`; } }
 
     renderProducts(d.products || defaultContent.products);
-
     const methods = d?.payment?.shipping?.methods || defaultContent.payment.shipping.methods;
     const defId   = d?.payment?.shipping?.defaultMethodId || methods[0]?.id;
     renderShipping(methods, defId);
-
     renderBlog(d.blog || defaultContent.blog);
 
     const warn = $('#paypalWarn'); if(warn) warn.textContent = d.paypalBusiness ? "" : "Aseta PayPal-sähköposti backendissä (ADMIN) ennen julkaisuversiota.";
@@ -502,9 +516,9 @@
     root.innerHTML='';
     posts.forEach(p=>{
       root.appendChild(
-        el('article',{class:'bg-white rounded-xl ring-1 ring-stone-200 p-6 md:p-8'},
+        el('article',{class:'bg-white rounded-xl ring-1 ring-[rgba(0,0,0,.15)] p-6 md:p-8'},
           el('h3',{class:'text-2xl font-semibold mb-2'}, p.title||'Postaus'),
-          el('p',{class:'text-stone-700'}, p.body||'')
+          el('p',{class:'text-[color:var(--ink)]/80'}, p.body||'')
         )
       );
     });
@@ -531,30 +545,27 @@
       const prevId=`${pairId}-prev`, nextId=`${pairId}-next`;
       const sold = isSold(p.id);
 
-      const gallery = el('div',{
-          class:'product-gallery rounded-xl',
-          style:`background:${getComputedStyle(document.documentElement).getPropertyValue('--gallery')||'#F6F6F4'}`
-        },
+      const gallery = el('div',{ class:'product-gallery rounded-xl' },
         el('div',{class:'relative'},
           el('div',{class:'pg-grid'},
-            el('div',{class:'img-wrap aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200'},
+            el('div',{class:'img-wrap aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-[rgba(0,0,0,.15)] bg-white'},
               el('img',{id:leftId,class:'w-full h-full object-cover',alt:`${p.name} kuva 1`,loading:'lazy',decoding:'async'}),
               sold ? el('div',{class:'sold-badge'}, 'MYYTY') : null
             ),
-            el('div',{class:'pg-b img-wrap aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-stone-200'},
+            el('div',{class:'pg-b img-wrap aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-[rgba(0,0,0,.15)] bg-white'},
               el('img',{id:rightId,class:'w-full h-full object-cover',alt:`${p.name} kuva 2`,loading:'lazy',decoding:'async'}),
               sold ? el('div',{class:'sold-badge'}, 'MYYTY') : null
             )
           ),
-          el('button',{id:prevId,disabled:sold,class:'absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft' + (sold?' opacity-50 cursor-not-allowed':''),ariaLabel:'Edelliset kuvat'},'◀'),
-          el('button',{id:nextId,disabled:sold,class:'absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/90 backdrop-blur border border-stone-300 shadow-soft' + (sold?' opacity-50 cursor-not-allowed':''),ariaLabel:'Seuraavat kuvat'},'▶')
+          el('button',{id:prevId,disabled:sold,class:'absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[rgba(246,246,244,.95)] border border-[rgba(0,0,0,.15)] shadow-soft' + (sold?' opacity-50 cursor-not-allowed':''),ariaLabel:'Edelliset kuvat'},'◀'),
+          el('button',{id:nextId,disabled:sold,class:'absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[rgba(246,246,244,.95)] border border-[rgba(0,0,0,.15)] shadow-soft' + (sold?' opacity-50 cursor-not-allowed':''),ariaLabel:'Seuraavat kuvat'},'▶')
         )
       );
 
       const details = el('div',{class:'mt-6 text-center'},
         el('h3',{class:'serif text-2xl'}, p.name||'Tuote'),
-        el('p',{class:'mt-1 text-stone-700 max-w-2xl mx-auto'}, p.blurb||''),
-        el('div',{class:'mt-2 font-semibold text-lg'}, fmtEUR(Number(p.price||0))),
+        el('p',{class:'mt-1 text-[color:var(--ink)]/80 max-w-2xl mx-auto'}, p.blurb||''),
+        el('div',{class:'mt-2 font-semibold text-lg', style:'color:var(--ink)'}, fmtEUR(Number(p.price||0))),
         sold ? el('div',{class:'sold-chip', 'aria-label':'Myyty'}, 'MYYTY') :
                el('div',{class:'mt-3'}, el('button',{'data-buy':p.id,class:'btn btn-dark'},'Osta'))
       );
@@ -565,7 +576,7 @@
       if (idx === 0){
         const headerRow = el('div',{class:'flex items-center justify-between mb-6'},
           el('h2',{class:'serif text-3xl'}, 'Tuotteet'),
-          el('div',{class:'text-xs text-stone-500'}, 'Hinnat sis. ALV • Palautus 14 vrk • Toimitus valitaan kassalla')
+          el('div',{class:'text-xs', style:'color:rgba(32,32,32,.7)'}, 'Hinnat sis. ALV • Palautus 14 vrk • Toimitus valitaan kassalla')
         );
         inner.appendChild(headerRow);
       }
@@ -590,12 +601,12 @@
       };
       setPair(i);
       if(!sold){
-        const nextBtn=$(`#${nextId}`), prevBtn=$(`#${prevId}`);
-        if(nextBtn) nextBtn.addEventListener('click',()=>{i=(i+1)%imgs.length; setPair(i);});
-        if(prevBtn) prevBtn.addEventListener('click',()=>{i=(i-1+imgs.length)%imgs.length; setPair(i);});
+        $(`#${nextId}`)?.addEventListener('click',()=>{i=(i+1)%imgs.length; setPair(i);});
+        $(`#${prevId}`)?.addEventListener('click',()=>{i=(i-1+imgs.length)%imgs.length; setPair(i);});
       }
     });
 
+    // Osta-napit
     root.addEventListener('click', e=>{
       const btn = e.target.closest('[data-buy]');
       if(!btn) return;
@@ -658,7 +669,7 @@
     const cat = catalogFromContent();
     $items.innerHTML='';
     const ids=Object.keys(CART);
-    if(ids.length===0){ $items.innerHTML='<div class="text-sm text-stone-500 p-3">Ostoskori on tyhjä.</div>'; }
+    if(ids.length===0){ $items.innerHTML='<div class="text-sm text-[color:var(--ink)]/70 p-3">Ostoskori on tyhjä.</div>'; }
     let sub=0;
     ids.forEach(id=>{
       const p = cat[id]; if(!p) return;
@@ -671,20 +682,22 @@
       const row = el('div',{class:'py-3 flex items-center justify-between gap-3'},
         el('div',{},
           el('div',{class:'font-medium'}, p.name),
-          el('div',{class:'text-sm text-stone-600'}, fmtEUR(p.price))
+          el('div',{class:'text-sm text-[color:var(--ink)]/70'}, fmtEUR(p.price))
         ),
         el('div',{class:'flex items-center gap-3'},
           el('div',{class:'font-medium'}, fmtEUR(p.price)),
-          el('button',{'data-remove':id, class:'px-2 ring-1 ring-stone-300 rounded'}, 'Poista')
+          el('button',{'data-remove':id, class:'px-2 ring-1 ring-[rgba(0,0,0,.15)] rounded'}, 'Poista')
         )
       );
       $items.appendChild(row);
     });
-    $('#subTotal').textContent = fmtEUR(sub);
+    $sub.textContent = fmtEUR(sub);
 
     const shipVal = parseFloat((document.querySelector('input[name="ship"]:checked')||{value:"0"}).value || '0');
-    $('#shipTotal').textContent = fmtEUR(shipVal);
-    $('#grandTotal')?.textContent = fmtEUR(sub + shipVal);
+    $ship.textContent = fmtEUR(shipVal);
+    $grand.textContent = fmtEUR(sub + shipVal);
+
+    $items.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{ const id=b.dataset.remove; delete CART[id]; saveCart(); renderCart(); });
   }
 
   function addToCart(id){
@@ -766,6 +779,7 @@
     }
 
     function canShowNav(){
+      // pakota hetkeksi: menu pois, cart tekstinä näkyviin
       const prevMenuHidden = menuBtn.classList.contains('hidden');
       const prevCartIconHidden = cartIcon.classList.contains('hidden');
       const prevCartTextHidden = cartText.classList.contains('hidden');
@@ -780,6 +794,7 @@
       const navW = measureNavWidth();
       const fits = navW <= Math.max(0, cw - bw - rbw - 24);
 
+      // palauta edelliset tilat
       if (!prevMenuHidden) menuBtn.classList.remove('hidden');
       if (!prevCartIconHidden) cartIcon.classList.remove('hidden'); else cartIcon.classList.add('hidden');
       if ( prevCartTextHidden) cartText.classList.add('hidden'); else cartText.classList.remove('hidden');
