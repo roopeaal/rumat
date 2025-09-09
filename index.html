@@ -27,9 +27,6 @@
       --mist:#DEEEEE;
       --gallery:#F6F6F4;
       --footer:#0B0F0E;
-      --silhouette:#08110d;
-      --silhouette-mid:#0c1a15;
-      --silhouette-line:#9fb1a9;
       --header-h:56px;
       --section-gap: clamp(4px, 0.7vw, 8px);
       --band-radius: 16px;
@@ -52,7 +49,6 @@
       transform: translateZ(0); backface-visibility:hidden;
       will-change: transform, opacity;
     }
-    /* Täysruutuinen taustavideo */
     #bgVideo{ object-fit: cover; }
 
     .site-content{ position:relative; z-index:2; background:transparent; }
@@ -63,23 +59,6 @@
     /* Parallax smooth */
     #hero-text{ will-change:transform; transform:translateZ(0); transition:none !important; }
     @media (prefers-reduced-motion: reduce){ #hero-text{ transform:none !important; } }
-
-    /* Alareunan siluetti */
-    .bottom-sil{ position:fixed; left:0; right:0; bottom:-1px; height:160px; z-index:1; pointer-events:none;
-      mask-image: linear-gradient(to top, black 72%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to top, black 72%, transparent 100%);}
-    .bottom-sil svg{ width:100%; height:100%; display:block; }
-
-    /* Savun animaatio */
-    .smoke{
-      animation:smoke 6s ease-in-out infinite;
-      opacity:.6;
-      transform-origin:50% 50%;
-      transform-box:fill-box;
-      will-change:transform,opacity;
-    }
-    .smoke.s2{ animation-delay:1.4s }
-    @keyframes smoke{ 0%{transform:translateY(0) scale(1);opacity:.6} 100%{transform:translateY(-28px) scale(1.4);opacity:0} }
 
     /* Drawer & Modal */
     .drawer{position:fixed;inset:0;z-index:60;display:none}
@@ -166,86 +145,17 @@
 </head>
 
 <body class="text-stone-900">
-  <!-- KIINTEÄ REVONTULI-TAUSTA (fallback) -->
+  <!-- FALLBACK-CANVAS (jos video ei toistu) -->
   <canvas id="auroraCanvas" class="aurora-fixed"></canvas>
 
   <!-- TAUSTAVIDEO (ensisijainen) -->
   <video id="bgVideo" class="aurora-fixed"
          autoplay muted loop playsinline preload="auto"
          poster="assets/aurora-poster.jpg">
-    <!-- Suositus: lisää myös webm/mp4 kun ehdit -->
     <source src="assets/aurora.webm" type="video/webm">
     <source src="assets/aurora.mp4"  type="video/mp4">
-    <!-- Tämän saat suoraan tällä hetkellä käytettävästä .movista -->
     <source src="assets/aurora.mov"  type="video/quicktime">
   </video>
-
-  <!-- ALAREUNAN SILUETTI -->
-  <div class="bottom-sil" aria-hidden="true">
-    <svg viewBox="0 0 1440 160" preserveAspectRatio="xMidYMax slice">
-      <defs>
-        <g id="treeTall" fill="var(--silhouette)">
-          <path d="M0,0 l-18,22 h36 z" transform="translate(0,0)"/>
-          <path d="M0,0 l-20,24 h40 z" transform="translate(0,10)"/>
-          <path d="M0,0 l-22,26 h44 z" transform="translate(0,22)"/>
-          <path d="M0,0 l-26,32 h52 z" transform="translate(0,34)"/>
-        </g>
-        <g id="treeMed" fill="var(--silhouette)">
-          <path d="M0,0 l-14,18 h28 z" transform="translate(0,2)"/>
-          <path d="M0,0 l-16,20 h32 z" transform="translate(0,12)"/>
-          <path d="M0,0 l-20,26 h40 z" transform="translate(0,22)"/>
-        </g>
-        <g id="treeSmall" fill="var(--silhouette)">
-          <path d="M0,0 l-11,14 h22 z" transform="translate(0,4)"/>
-          <path d="M0,0 l-15,20 h30 z" transform="translate(0,12)"/>
-        </g>
-      </defs>
-
-      <!-- Vuoriharjanteet -->
-      <path d="M0,120 C180,105 240,108 340,114 C460,121 520,110 640,116 C760,122 880,108 1000,114 C1160,122 1280,110 1440,118 L1440,160 L0,160 Z" fill="var(--silhouette-mid)" opacity=".28"/>
-      <path d="M0,122 C120,118 190,110 260,118 C340,126 420,106 500,116 C580,126 670,108 760,120 C850,132 980,110 1100,118 C1220,126 1330,112 1440,120 L1440,160 L0,160 Z" fill="var(--silhouette-mid)" opacity=".44"/>
-      <path d="M0,130 C160,128 320,132 480,130 C640,128 800,131 960,129 C1120,128 1280,131 1440,129 L1440,160 L0,160 Z" fill="var(--silhouette)"/>
-
-      <!-- Kuuset -->
-      <g>
-        <use href="#treeTall"  transform="translate(55,76) scale(0.75)"/>
-        <use href="#treeMed"   transform="translate(95,82) scale(0.75)"/>
-        <use href="#treeSmall" transform="translate(128,88) scale(0.75)"/>
-        <use href="#treeTall"  transform="translate(168,74) scale(0.75)"/>
-        <use href="#treeMed"   transform="translate(210,82) scale(0.75)"/>
-
-        <use href="#treeTall"  transform="translate(520,74) scale(0.75)"/>
-        <use href="#treeMed"   transform="translate(558,82) scale(0.75)"/>
-        <use href="#treeSmall" transform="translate(592,88) scale(0.75)"/>
-        <use href="#treeTall"  transform="translate(632,72) scale(0.75)"/>
-        <use href="#treeMed"   transform="translate(674,82) scale(0.75)"/>
-        <use href="#treeSmall" transform="translate(706,90) scale(0.75)"/>
-        <use href="#treeTall"  transform="translate(748,74) scale(0.75)"/>
-        <use href="#treeMed"   transform="translate(786,82) scale(0.75)"/>
-
-        <use href="#treeTall"  transform="translate(1086,76) scale(0.75)"/>
-        <use href="#treeMed"   transform="translate(1122,84) scale(0.75)"/>
-        <use href="#treeSmall" transform="translate(1156,90) scale(0.75)"/>
-
-        <use href="#treeMed"   transform="translate(1300,84) scale(0.75)"/>
-        <use href="#treeSmall" transform="translate(1340,90) scale(0.75)"/>
-        <use href="#treeTall"  transform="translate(1380,76) scale(0.75)"/>
-      </g>
-
-      <!-- Mökki -->
-      <g>
-        <rect x="1203" y="115" width="44" height="22" rx="1" fill="var(--silhouette)"/>
-        <path d="M1198,116 L1225,100 L1252,116 Z" fill="var(--silhouette)"/>
-        <rect x="1232" y="102" width="6" height="12" fill="var(--silhouette)"/>
-      </g>
-
-      <!-- Savu -->
-      <g fill="#b7c7c1">
-        <circle class="smoke"  cx="1235" cy="98" r="2.8"/>
-        <circle class="smoke s2" cx="1239" cy="93" r="2.2"/>
-      </g>
-    </svg>
-  </div>
 
   <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50">
@@ -326,6 +236,7 @@
 
     <!-- TUOTTEET -->
     <section id="tuotteet" class="py-0">
+      <div class="aurora-gap full-bleed"></div>
       <div id="productsRoot"></div>
     </section>
 
@@ -943,7 +854,6 @@
   })();
 
   // ===== Video päälle, WebGL fallback =====
-  // aseta projektiin: assets/aurora.mov (ja mielellään aurora.mp4 / aurora.webm)
   window.__stopAurora = false;
   (function(){
     const vid = document.getElementById('bgVideo');
@@ -971,10 +881,8 @@
 
     vid.addEventListener('error', ()=> useCanvas(), { once:true });
 
-    // Aikakatkaisu 3s → fallback canvas
     setTimeout(()=>{ if(!armed) useCanvas(); }, 3000);
 
-    // Kunnioita PRM-asetusta
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     function applyPRM(){
       if (mq.matches){
@@ -1004,7 +912,7 @@
     };
 
     function init(){
-      if (window.__stopAurora) return; // jos video jo käytössä, ei edes initöidä
+      if (window.__stopAurora) return; // jos video jo käytössä, ei initöidä
       const canvas = document.getElementById('auroraCanvas'); if(!canvas) return;
       const gl = canvas.getContext('webgl',{antialias:false,depth:false,stencil:false,preserveDrawingBuffer:false});
       canvas.style.background = 'transparent';
