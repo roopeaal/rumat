@@ -34,6 +34,7 @@
 
     html{ scroll-padding-top: var(--header-h); }
     body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#111827;background:#fff}
+
     .serif{font-family:"Libre Baskerville",serif}
     .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
     .btn{border-radius:9999px;padding:.6rem 1rem;border:1px solid rgb(214,211,209);transition:transform .06s, box-shadow .12s}
@@ -41,22 +42,17 @@
     .btn-dark{background:#111827;color:#fff;border-color:#111827}
     .chip{font-size:.78rem;padding:.25rem .55rem;border-radius:9999px;border:1px solid rgb(214,211,209);background:#fff}
 
-    /* Tausta: video + fallback-canvas */
-    .aurora-fixed{
+    /* Taustavideo (vain video + poster-kuva latauksen ajaksi) */
+    .bg-fixed{
       position:fixed; inset:0; width:100%; height:100%;
-      z-index:0; pointer-events:none; display:block;
-      background: transparent;
-      transform: translateZ(0); backface-visibility:hidden;
-      will-change: transform, opacity;
+      object-fit:cover; z-index:0; pointer-events:none; display:block;
+      background: #000; /* jos poster puuttuu hetkellisesti */
     }
-    #bgVideo{ object-fit: cover; }
 
     .site-content{ position:relative; z-index:2; background:transparent; }
 
     /* Hero */
     .hero{ position:relative; height:100vh; height:100svh; isolation:isolate; overflow:hidden; }
-
-    /* Parallax smooth */
     #hero-text{ will-change:transform; transform:translateZ(0); transition:none !important; }
     @media (prefers-reduced-motion: reduce){ #hero-text{ transform:none !important; } }
 
@@ -132,7 +128,7 @@
       border-radius:9999px; background:#111827; color:#fff; font-size:.75rem; letter-spacing:.08em;
     }
 
-    /* Revontuliraot */
+    /* Läpinäkyvät rako-osiot (video/poster näkyy taustalla) */
     .aurora-gap{ height: var(--section-gap); pointer-events: none; background: transparent; }
 
     /* Pyöristetyt palkit */
@@ -145,16 +141,14 @@
 </head>
 
 <body class="text-stone-900">
-  <!-- FALLBACK-CANVAS (jos video ei toistu) -->
-  <canvas id="auroraCanvas" class="aurora-fixed"></canvas>
-
-  <!-- TAUSTAVIDEO (ensisijainen) -->
-  <video id="bgVideo" class="aurora-fixed"
+  <!-- TAUSTAVIDEO (poster-kuva näkyy kunnes video toistuu) -->
+  <video id="bgVideo" class="bg-fixed"
          autoplay muted loop playsinline preload="auto"
          poster="assets/aurora-poster.jpg">
     <source src="assets/aurora.webm" type="video/webm">
     <source src="assets/aurora.mp4"  type="video/mp4">
-    <source src="assets/aurora.mov"  type="video/quicktime">
+    <!-- MOV valinnainen varalähde Safarille
+    <source src="assets/aurora.mov"  type="video/quicktime"> -->
   </video>
 
   <!-- HEADER -->
@@ -167,8 +161,8 @@
           <span id="brandText" class="uppercase text-sm tracking-widest font-semibold">RUMAT.STUDIO</span>
         </a>
 
-        <!-- KESKI: nav (näkyy vain kun mahtuu) -->
-        <nav id="mainNav" class="">
+        <!-- KESKI: nav (näkyy kun mahtuu) -->
+        <nav id="mainNav">
           <a href="#etusivu"   class="hover:underline underline-offset-4 font-semibold">Etusivu</a>
           <a href="#tuotteet"  class="hover:underline underline-offset-4 font-semibold">Tuotteet</a>
           <a href="#tarina"    class="hover:underline underline-offset-4 font-semibold">Tarina</a>
@@ -179,7 +173,6 @@
 
         <!-- OIKEA: ☰ + ostoskori (tekstinä TAI ikonina) -->
         <div id="rightBlock" class="flex items-center gap-2">
-          <!-- Valikkoikonin nappi (näkyy vain kun nav ei mahdu) -->
           <button id="openMenu" class="icon-btn hidden" aria-controls="menuDrawer" aria-expanded="false" aria-label="Valikko">
             <span aria-hidden="true" style="font-size:20px;line-height:1">☰</span>
             <span class="sr-only">Valikko</span>
@@ -387,7 +380,7 @@
     return n;
   };
 
-  // Hero-parallax
+  // Hero-parallax (pehmeä, ilman nykimistä)
   (function(){
     const hero   = document.getElementById('etusivu');
     const textEl = document.getElementById('hero-text');
@@ -489,7 +482,7 @@
     if(d?.contact?.location){ const loc=$('#location'); if(loc) loc.textContent = d.contact.location; }
 
     if(d?.embed?.instagramPost){ const ig=$('#igEmbed'); if(ig) ig.src = d.embed.instagramPost; }
-    if(d?.embed?.tiktokVideo){ const id=parseTikTokId(d.embed.tiktokVideo); const tt=$('#ttEmbed'); if(id&&tt){ tt.src=`https://www.tiktok.com/embed/v2/${id}`; } }
+    if(d?.embed?.tiktokVideo){ const id=parseTikTokId(d.embed?.tiktokVideo); const tt=$('#ttEmbed'); if(id&&tt){ tt.src=`https://www.tiktok.com/embed/v2/${id}`; } }
 
     renderProducts(d.products || defaultContent.products);
 
@@ -622,14 +615,13 @@
   const $closeX = $('#closeCartX');
   const $sub    = $('#subTotal');
   const $ship   = $('#shipTotal');
-  const $grand  = $('#grandTotal');
+  const $grand  = $('#GrandTotal'); // typo-safe; korjataan alla
+  const $shipOpts = $('#shipOptions');
 
   const $openCartText = $('#openCartText');
   const $openCartIcon = $('#openCartIcon');
   const $countIcon    = $('#cartCount');
   const $countText    = $('#cartCountText');
-
-  const $shipOpts = $('#shipOptions');
 
   let CART = JSON.parse(localStorage.getItem('cart')||'{}');
   function saveCart(){ localStorage.setItem('cart', JSON.stringify(CART)); updateBadge(); }
@@ -691,13 +683,11 @@
       );
       $items.appendChild(row);
     });
-    $sub.textContent = fmtEUR(sub);
+    $('#subTotal').textContent = fmtEUR(sub);
 
     const shipVal = parseFloat((document.querySelector('input[name="ship"]:checked')||{value:"0"}).value || '0');
-    $ship.textContent = fmtEUR(shipVal);
-    $grand.textContent = fmtEUR(sub + shipVal);
-
-    $items.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{ const id=b.dataset.remove; delete CART[id]; saveCart(); renderCart(); });
+    $('#shipTotal').textContent = fmtEUR(shipVal);
+    $('#grandTotal')?.textContent = fmtEUR(sub + shipVal);
   }
 
   function addToCart(id){
@@ -742,7 +732,7 @@
     if(location.hash==='#success'){
       const soldIds = Object.keys(CART||{});
       markSold(soldIds);
-      CART={}; saveCart();
+      CART={}; localStorage.setItem('cart','{}'); updateBadge();
       show('Kiitos tilauksesta!','Vahvistus saapuu PayPal-sähköpostiisi.');
       renderProducts(CONTENT.products || []);
       renderCart();
@@ -779,13 +769,13 @@
     }
 
     function canShowNav(){
-      // Simuloi tilaa siinä tilassa, jossa nav olisi näkyvissä:
+      // Simuloi nav-tilaa: ☰ piiloon, ostoskori teksti -tilaan
       const prevMenuHidden = menuBtn.classList.contains('hidden');
       const prevCartIconHidden = cartIcon.classList.contains('hidden');
       const prevCartTextHidden = cartText.classList.contains('hidden');
 
-      menuBtn.classList.add('hidden');     // nav-tilassa ei menu-ikonia
-      cartIcon.classList.add('hidden');    // nav-tilassa ikonikorin sijaan tekstikori
+      menuBtn.classList.add('hidden');
+      cartIcon.classList.add('hidden');
       cartText.classList.remove('hidden');
 
       const cw   = container.clientWidth;
@@ -794,7 +784,7 @@
       const navW = measureNavWidth();
       const fits = navW <= Math.max(0, cw - bw - rbw - 24);
 
-      // Palauta aiempi tila
+      // Palauta edellinen tila
       if (!prevMenuHidden) menuBtn.classList.remove('hidden');
       if (!prevCartIconHidden) cartIcon.classList.remove('hidden'); else cartIcon.classList.add('hidden');
       if ( prevCartTextHidden) cartText.classList.add('hidden'); else cartText.classList.remove('hidden');
@@ -851,176 +841,6 @@
     drawer.addEventListener('click', e=>{ if(e.target===drawer) close(); });
     document.addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
     drawer.querySelectorAll('[data-menu-close]').forEach(a=>a.addEventListener('click', close));
-  })();
-
-  // ===== Video päälle, WebGL fallback =====
-  window.__stopAurora = false;
-  (function(){
-    const vid = document.getElementById('bgVideo');
-    const canvas = document.getElementById('auroraCanvas');
-    if(!vid) return;
-
-    function useVideo(){
-      window.__stopAurora = true;             // pysäytä WebGL-silmukka
-      if (canvas) canvas.style.display = 'none';
-      vid.style.display = '';                 // näkyviin varmuudeksi
-    }
-    function useCanvas(){
-      window.__stopAurora = false;
-      vid.style.display = 'none';
-      if (canvas) canvas.style.display = '';
-    }
-
-    let armed = false;
-    vid.addEventListener('canplay', ()=>{
-      if (armed) return;
-      armed = true;
-      useVideo();
-      vid.play().catch(()=>{});
-    }, { once: true });
-
-    vid.addEventListener('error', ()=> useCanvas(), { once:true });
-
-    setTimeout(()=>{ if(!armed) useCanvas(); }, 3000);
-
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    function applyPRM(){
-      if (mq.matches){
-        vid.pause();
-        vid.setAttribute('aria-hidden','true');
-        useCanvas();
-      }else{
-        vid.removeAttribute('aria-hidden');
-        vid.play().catch(()=>{});
-      }
-    }
-    mq.addEventListener?.('change', applyPRM);
-    applyPRM();
-  })();
-
-  // ===== WebGL Revontulet (piirrä vain jos video ei käytössä) =====
-  (function(){
-    const SETTINGS = {
-      PAL_COL1:[0.02,0.70,0.95],
-      PAL_COL2:[0.00,1.00,0.60],
-      BRIGHTNESS:1.00,
-      CURTAIN_Y:0.58,
-      HEIGHT:0.55,
-      SPEED:0.18,
-      STRIPE_STRENGTH:0.22,
-      STAR_DENS:0.0001
-    };
-
-    function init(){
-      if (window.__stopAurora) return; // jos video jo käytössä, ei initöidä
-      const canvas = document.getElementById('auroraCanvas'); if(!canvas) return;
-      const gl = canvas.getContext('webgl',{antialias:false,depth:false,stencil:false,preserveDrawingBuffer:false});
-      canvas.style.background = 'transparent';
-      if(!gl){ return; }
-
-      gl.clearColor(0.0,0.0,0.0,0.0);
-
-      const vert=`attribute vec2 a_pos; void main(){ gl_Position=vec4(a_pos,0.,1.); }`;
-      const frag=`precision highp float; uniform vec2 u_res; uniform float u_time,u_brightness,u_y,u_height,u_speed,u_stripes,u_star; uniform vec3 u_c1,u_c2;
-      float hash(vec2 p){ return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
-      float noise(vec2 p){vec2 i=floor(p),f=fract(p); float a=hash(i),b=hash(i+vec2(1,0)),c=hash(i+vec2(0,1)),d=hash(i+vec2(1,1));
-        vec2 u=f*f*(3.-2.*f); return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}
-      float fbm(vec2 p){float v=0.,a=0.5;for(int i=0;i<6;i++){v+=a*noise(p);p*=2.03;a*=0.47;}return v;}
-      float stars(vec2 uv){ vec2 p=floor(uv*900.); float rnd=hash(p); return step(1.-u_star,rnd); }
-      void main(){
-        vec2 uv=gl_FragCoord.xy/u_res.xy, suv=vec2(uv.x*(u_res.x/u_res.y),uv.y);
-        vec3 col=vec3(.02,.06,.12);
-        float band=1.-smoothstep(0.,u_height,abs(uv.y-u_y));
-        float t=u_time*u_speed;
-        float flow=fbm(vec2(suv.x*1.6 - t, suv.y*1.2 + t*.35));
-        float stripes=smoothstep(.38,1., fbm(vec2(suv.x*10.+t*1.2,t*2.)))*u_stripes;
-        float inten=band*(.52+.72*flow)+stripes*band;
-        float skyfade=smoothstep(0.,.25,uv.y); inten*=skyfade;
-        vec3 pal=mix(u_c1,u_c2, clamp(uv.y + 0.22*flow,0.,1.));
-        col=mix(col,pal, clamp(inten*1.18,0.,1.));
-        float g=0.; g+=band*.20; g+=fbm(vec2(suv.x*1.8 - t*.4,suv.y*1.8))*.12; col += pal*g*1.03;
-        float st=stars(uv); col+=vec3(st)*.32;
-        col*=u_brightness;
-        gl_FragColor=vec4(col,1.);
-      }`;
-
-      const makeShader=(type,src)=>{ const s=gl.createShader(type); gl.shaderSource(s,src); gl.compileShader(s);
-        if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){ console.error(gl.getShaderInfoLog(s)); } return s; };
-      const prog=gl.createProgram();
-      gl.attachShader(prog,makeShader(gl.VERTEX_SHADER,vert));
-      gl.attachShader(prog,makeShader(gl.FRAGMENT_SHADER,frag));
-      gl.linkProgram(prog);
-      if(!gl.getProgramParameter(prog,gl.LINK_STATUS)){ console.error(gl.getProgramInfoLog(prog)); return; }
-      gl.useProgram(prog);
-
-      const buf=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,buf);
-      gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
-      const aPos=gl.getAttribLocation(prog,'a_pos'); gl.enableVertexAttribArray(aPos);
-      gl.vertexAttribPointer(aPos,2,gl.FLOAT,false,0,0);
-
-      const uRes=gl.getUniformLocation(prog,'u_res'),
-            uTime=gl.getUniformLocation(prog,'u_time'),
-            uBr=gl.getUniformLocation(prog,'u_brightness'),
-            uY=gl.getUniformLocation(prog,'u_y'),
-            uH=gl.getUniformLocation(prog,'u_height'),
-            uSpd=gl.getUniformLocation(prog,'u_speed'),
-            uStr=gl.getUniformLocation(prog,'u_stripes'),
-            uStar=gl.getUniformLocation(prog,'u_star'),
-            uC1=gl.getUniformLocation(prog,'u_c1'),
-            uC2=gl.getUniformLocation(prog,'u_c2');
-
-      function setUniforms(t){
-        gl.uniform2f(uRes,canvas.width,canvas.height);
-        gl.uniform1f(uTime,t);
-        gl.uniform1f(uBr,SETTINGS.BRIGHTNESS);
-        gl.uniform1f(uY,SETTINGS.CURTAIN_Y);
-        gl.uniform1f(uH,SETTINGS.HEIGHT);
-        gl.uniform1f(uSpd,SETTINGS.SPEED);
-        gl.uniform1f(uStr,SETTINGS.STRIPE_STRENGTH);
-        gl.uniform1f(uStar,SETTINGS.STAR_DENS);
-        gl.uniform3fv(uC1,SETTINGS.PAL_COL1);
-        gl.uniform3fv(uC2,SETTINGS.PAL_COL2);
-      }
-
-      // Stabiili koonhallinta
-      let lastW=0,lastH=0, rtid=null;
-      function resizeNow(){
-        const dpr = Math.min(window.devicePixelRatio||1, 2);
-        const rect = canvas.getBoundingClientRect();
-        const dw = Math.max(1, Math.floor(rect.width  * dpr));
-        const dh = Math.max(1, Math.floor(rect.height * dpr));
-        if (dw===lastW && dh===lastH) return;
-        lastW=dw; lastH=dh;
-        canvas.width=dw; canvas.height=dh;
-        gl.viewport(0,0,dw,dh);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-      }
-      function scheduleResize(){
-        if (rtid) return;
-        rtid = setTimeout(()=>{ rtid=null; resizeNow(); }, 120);
-      }
-      window.addEventListener('resize', scheduleResize, {passive:true});
-      window.addEventListener('orientationchange', ()=>setTimeout(resizeNow, 250), {passive:true});
-      if (window.visualViewport){
-        let vvPrevW = Math.round(window.visualViewport.width||0);
-        window.visualViewport.addEventListener('resize', ()=>{
-          const w = Math.round(window.visualViewport.width||0);
-          if (Math.abs(w - vvPrevW) >= 2) scheduleResize();
-          vvPrevW = w;
-        }, {passive:true});
-      }
-      resizeNow();
-
-      function draw(t){
-        if (window.__stopAurora) return; // video käytössä → älä piirrä
-        setUniforms(t*0.001);
-        gl.drawArrays(gl.TRIANGLES,0,3);
-        requestAnimationFrame(draw);
-      }
-      requestAnimationFrame(draw);
-    }
-
-    if(document.readyState==='loading') addEventListener('DOMContentLoaded',init,{once:true}); else init();
   })();
 
   // Start
