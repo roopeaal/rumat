@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;600;700&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
     :root{
       --ivory:#F6F6F4;
@@ -17,72 +18,104 @@
       --header-h:72px;
       --radius:18px;
     }
-    html{scroll-behavior:smooth; scroll-padding-top: var(--header-h);}
+    html{ scroll-behavior:smooth; scroll-padding-top: var(--header-h); }
     body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:var(--ivory);color:var(--ink)}
     .serif{font-family:"Libre Baskerville",serif}
     .btn{border-radius:9999px;padding:.6rem 1rem;border:1px solid rgb(214,211,209);transition:transform .06s, box-shadow .12s}
     .btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.12)}
-    .img-round{border-radius:var(--radius);overflow:hidden}
+    .shadow-soft{box-shadow:0 8px 24px rgba(0,0,0,.12)}
+    .kicker{letter-spacing:.18em;text-transform:uppercase;font-size:12px}
 
-    /* Header layout (logo vasen, linkit keskellä, hamburger kun ei mahdu) */
+    /* Header (logo vasen, linkit keskellä; oikealla ostoskori-TEKSTI kun nav mahtuu,
+       muuten hamburger + kärry-IKONI) */
     #hdrRow{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:12px;}
     #brand{display:flex;align-items:center;gap:.6rem;white-space:nowrap}
     #brand span{letter-spacing:.18em;font-weight:800}
     #mainNav{display:flex;gap:1.6rem;justify-content:center;white-space:nowrap;text-transform:uppercase;letter-spacing:.18em;font-size:13px}
     #right{display:flex;gap:.5rem;align-items:center}
+    .icon-btn{width:38px;height:38px;border-radius:9999px;display:grid;place-items:center;background:#00000010;border:1px solid #00000020}
+    .badge{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;border-radius:9999px;background:#fff;color:#111827;border:1px solid #00000030;
+      font-weight:800; font-size:11px; display:grid; place-items:center; padding:0 4px; line-height:1}
     .nav-hidden{display:none !important;}
     .nav-measure{position:absolute!important;visibility:hidden!important;display:flex!important;white-space:nowrap!important;}
 
-    .icon-btn{width:38px;height:38px;border-radius:9999px;display:grid;place-items:center;background:#00000010;border:1px solid #00000020}
-
-    /* Hero video (vain etusivulla, koko ruutu) */
+    /* HERO video */
     .hero{position:relative;height:100vh;height:100svh;overflow:hidden;isolation:isolate}
     .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
     .hero .overlay{position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.18) 40%, rgba(0,0,0,.35))}
     .shadow-strong{ text-shadow:0 5px 30px rgba(0,0,0,.45); }
 
-    /* Kortit mockupin tapaan */
-    .card{ border-radius:var(--radius); overflow:hidden; }
-    .card img{ width:100%; height:12rem; object-fit:cover; }
-    @media (min-width:640px){ .card img{ height:13.5rem; } }
+    /* KAAVAT – korttiruudukko, jossa ostotoiminto + karuselli nuolineen */
+    .grid-cards{display:grid;gap:1rem}
+    @media (min-width:640px){ .grid-cards{grid-template-columns:repeat(3,minmax(0,1fr));} }
+    .card{ position:relative; border-radius:var(--radius); overflow:hidden; background:#fff; }
+    .card .imgwrap{ position:relative; aspect-ratio:4/5; overflow:hidden; }
+    .card img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .card .label{ position:absolute; left:0; right:auto; bottom:0; margin:10px; padding:.35rem .6rem; border-radius:9999px;
+                  background:rgba(0,0,0,.65); color:#fff; font-weight:800; letter-spacing:.08em; text-transform:uppercase; font-size:.8rem;}
+    .card .nav{ position:absolute; inset:0; display:flex; align-items:center; justify-content:space-between; padding:.5rem; pointer-events:none; }
+    .card .nav button{ pointer-events:auto; width:36px;height:36px;border-radius:9999px;display:grid;place-items:center;background:rgba(255,255,255,.92);
+                       border:1px solid #ddd;}
+    .card .cta{ display:flex; align-items:center; justify-content:space-between; gap:.5rem; padding:.6rem .8rem; }
+    .card .price{ font-weight:700; }
+    .sold-badge{ position:absolute; inset:0; display:grid; place-items:center; background:rgba(0,0,0,.55); color:#fff;
+                 font-weight:900; letter-spacing:.15em; text-transform:uppercase; }
 
-    /* Footer */
+    /* Drawer / modal */
+    .drawer{position:fixed;inset:0;z-index:60;display:none}
+    .drawer.open{display:block}
+    #menuDrawer .panel{position:absolute;top:0;left:0;width:min(420px,90vw);height:100%;background:#fff;box-shadow:10px 0 30px rgba(0,0,0,.25)}
+    #cartDrawer .panel{position:absolute;top:0;right:0;width:min(420px,90vw);height:100%;background:#fff;box-shadow:-10px 0 30px rgba(0,0,0,.25)}
+    .modal{position:fixed;inset:0;z-index:70;display:none}
+    .modal.open{display:grid;place-items:center}
+
+    /* Footer + logo maski */
     footer{background:var(--olive);color:#fff}
     .logo-mark{display:inline-block;width:64px;height:44px;background:var(--logo);
       mask:url(assets/logo.svg) no-repeat 50% 50%/contain;-webkit-mask:url(assets/logo.svg) no-repeat 50% 50%/contain}
-
-    /* Pienet hienoudet */
-    .kicker{letter-spacing:.18em;text-transform:uppercase;font-size:12px}
   </style>
 </head>
-<body>
 
-  <!-- Ylin ohut infopalkki -->
+<body>
+  <!-- Info strip -->
   <div class="w-full border-b border-black/10">
     <div class="mx-auto max-w-6xl px-4 py-2 flex items-center justify-between kicker">
       <div>LIIAN <strong>RUMAT</strong> OLLAKSEEN TOTTA</div>
-      <div class="opacity-0 select-none">—</div> <!-- (vain paikkaaja, ei ENGLISH-linkkiä tässä vaiheessa) -->
+      <div class="opacity-0 select-none">—</div>
     </div>
   </div>
 
-  <!-- Header -->
+  <!-- HEADER -->
   <header class="sticky top-0 z-50 bg-[var(--ivory)]/95 backdrop-blur border-b border-black/10">
     <div class="mx-auto max-w-6xl px-4 py-3" id="hdrRow">
-      <!-- Vasemmalla: logo + teksti -->
+      <!-- vasen: brändi -->
       <a id="brand" href="#etusivu" class="shrink-0">
         <img src="assets/logo.svg" alt="RUMAT STUDIO" class="h-7 w-7 object-contain">
         <span>RUMAT&nbsp;STUDIO</span>
       </a>
-      <!-- Keskellä: nav -->
+      <!-- keskellä nav (näkyy kun mahtuu) -->
       <nav id="mainNav" class="">
         <a href="#kaavat" class="hover:underline underline-offset-4">Kaavat</a>
         <a href="#mika" class="hover:underline underline-offset-4">Mikä on RUMAT?</a>
         <a href="#yhteys" class="hover:underline underline-offset-4">Ota yhteyttä</a>
       </nav>
-      <!-- Oikealla: hamburger (näkyy vain jos linkit eivät mahdu) -->
-      <div id="right">
-        <button id="openMenu" class="icon-btn nav-hidden" aria-label="Valikko">
+      <!-- oikea: ostoskori TEKSTI kun nav näkyy -->
+      <div id="rightText" class="flex items-center gap-2">
+        <button id="openCartText" class="px-3 py-2 rounded-full bg-black/5 border border-black/10">Ostoskori (<span id="cartCountText">0</span>)</button>
+      </div>
+      <!-- oikea: ikonit kun nav EI mahdu -->
+      <div id="rightIcons" class="flex items-center gap-2 nav-hidden">
+        <button id="openMenu" class="icon-btn" aria-label="Valikko">
           <span aria-hidden="true" style="font-size:20px;line-height:1">☰</span>
+        </button>
+        <button id="openCart" class="icon-btn relative" aria-label="Ostoskori">
+          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="20" r="1.8"></circle>
+            <circle cx="17" cy="20" r="1.8"></circle>
+            <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 8H7.1"></path>
+          </svg>
+          <span class="badge" id="cartCount">0</span>
         </button>
       </div>
     </div>
@@ -107,29 +140,11 @@
   <section id="kaavat" class="py-10">
     <div class="mx-auto max-w-6xl px-4">
       <h2 class="text-3xl serif mb-4">Kaavat</h2>
-
-      <div class="bg-white p-4 sm:p-6 rounded-[18px]">
-        <div class="grid sm:grid-cols-3 gap-4">
-          <!-- Card 1 -->
-          <a class="card ring-1 ring-black/10 relative" href="#">
-            <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1400&q=80" alt="Laukku">
-            <div class="absolute left-0 right-0 bottom-0 p-3 text-white font-extrabold tracking-wide uppercase">Laukku</div>
-          </a>
-          <!-- Card 2 -->
-          <a class="card ring-1 ring-black/10 relative" href="#">
-            <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1400&q=80" alt="Usva paita">
-            <div class="absolute left-0 right-0 bottom-0 p-3 text-white font-extrabold tracking-wide uppercase">Usva paita</div>
-          </a>
-          <!-- Card 3 -->
-          <a class="card ring-1 ring-black/10 relative" href="#">
-            <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1400&q=80" alt="Neule panta">
-            <div class="absolute left-0 right-0 bottom-0 p-3 text-white font-extrabold tracking-wide uppercase">Neule panta</div>
-          </a>
-        </div>
-
-        <div class="text-center mt-6">
-          <a href="#" class="btn bg-white">Lisää kaavoja</a>
-        </div>
+      <div id="productsRoot" class="bg-white p-4 sm:p-6 rounded-[18px]">
+        <!-- renderöidään JS:llä kortteina -->
+      </div>
+      <div class="text-center mt-6">
+        <a href="#" class="btn bg-white">Lisää kaavoja</a>
       </div>
     </div>
   </section>
@@ -138,17 +153,15 @@
   <section id="mika" class="py-10">
     <div class="mx-auto max-w-6xl px-4">
       <div class="grid md:grid-cols-[280px_1fr_280px] gap-5 items-start">
-        <div class="img-round h-64">
+        <div class="rounded-[18px] overflow-hidden h-64">
           <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=70" alt="">
         </div>
-
         <div class="prose max-w-none">
           <h2 class="serif text-3xl mb-2">Mikä on RUMAT?</h2>
-          <p><strong>RUMAT STUDIO</strong> syntyi haaveesta ja halusta kyseenalaistaa kertakäyttöisyys. Teemme neule- ja asustekaavoja, jotka rohkaisevat tekemään itse – rauhallisia muotoja, harkittuja yksityiskohtia ja arjessa toimivia ratkaisuja.</p>
+          <p><strong>RUMAT STUDIO</strong> syntyi haaveesta ja halusta kyseenalaistaa kertakäyttöisyys. Teemme neule- ja asustekaavoja, jotka rohkaisevat tekemään itse – rauhallisia muotoja ja arjessa toimivia ratkaisuja.</p>
           <p>Ytimessä on vaatteen tarkoitus: istua, hengittää ja kestää. Siksi suosimme luonnonläheisiä sävyjä ja yksinkertaisia leikkauksia, jotka tuntuvat hyviltä poluilla ja kaupungissa.</p>
         </div>
-
-        <div class="img-round h-64">
+        <div class="rounded-[18px] overflow-hidden h-64">
           <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1200&q=70" alt="">
         </div>
       </div>
@@ -159,13 +172,13 @@
   <section id="suunnittelija" class="py-10">
     <div class="mx-auto max-w-6xl px-4">
       <div class="grid lg:grid-cols-2 gap-6 items-start">
-        <div class="img-round h-[420px]">
+        <div class="rounded-[18px] overflow-hidden h-[420px]">
           <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=70" alt="">
         </div>
         <div>
           <h2 class="serif text-3xl mb-2">Suunnittelija</h2>
-          <p>Olen käsinneuloja, joka ei rajoita luovuuttaan yhteen muotoon. Tykkään muotoilla, korjata ja tehdä – hitaasti ja harkiten. Kaavoissa etsin rauhallisia linjoja, joissa on tilaa hengittää.</p>
-          <p>Kaikki mallit syntyvät pienissä erissä — kokeillen, käyttäen ja parantaen — jotta ne toimivat oikeassa elämässä.</p>
+          <p>Olen käsinneuloja, jonka inspiraatio tulee reissuista ja metsistä. Kaavat syntyvät pienissä erissä – kokeillen, käyttäen ja parantaen – jotta istuvuus, hengittävyys ja kestävyys toteutuvat arjessa.</p>
+          <p>Työ on käsityötä: hitaasti, harkiten, merkityksellisesti.</p>
         </div>
       </div>
     </div>
@@ -192,70 +205,364 @@
     <div class="text-center text-white/85 pb-6 text-xs tracking-wide">DO NOT COPY — ALL RIGHTS RESERVED 2025</div>
   </footer>
 
-  <!-- Drawer (hamburger-valikko) -->
-  <div id="menuDrawer" class="fixed inset-0 z-[60] hidden">
-    <div id="drawerBack" class="absolute inset-0 bg-black/40"></div>
-    <div class="absolute top-0 left-0 w-[min(420px,90vw)] h-full bg-white shadow-xl p-6">
-      <div class="flex items-center justify-between mb-3">
+  <!-- OSTOSKORI -->
+  <div id="cartDrawer" class="drawer" aria-hidden="true">
+    <div class="absolute inset-0 bg-black/40" id="closeCart" aria-label="Sulje ostoskori"></div>
+    <div class="panel p-5 flex flex-col">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-semibold">Ostoskori</h3>
+        <button id="closeCartX" class="text-stone-500 hover:text-stone-800">✕</button>
+      </div>
+      <div id="cartItems" class="flex-1 overflow-auto divide-y"></div>
+      <div class="mt-4 space-y-3">
+        <div>
+          <div class="text-sm font-medium mb-1">Toimitus</div>
+          <div id="shipOptions" class="space-y-1"></div>
+        </div>
+        <div class="text-sm grid grid-cols-2 gap-y-1">
+          <div class="text-stone-600">Välisumma</div><div class="text-right" id="subTotal">€0,00</div>
+          <div class="text-stone-600">Toimitus</div><div class="text-right" id="shipTotal">€0,00</div>
+          <div class="font-semibold">Yhteensä</div><div class="text-right font-semibold" id="grandTotal">€0,00</div>
+        </div>
+        <button id="checkout" class="btn bg-black text-white w-full">Maksa PayPalilla</button>
+        <div id="paypalWarn" class="text-xs text-stone-500"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VALIKKO (vasemmalta) -->
+  <div id="menuDrawer" class="drawer" aria-hidden="true">
+    <div class="absolute inset-0 bg-black/40" id="closeMenu" aria-label="Sulje valikko"></div>
+    <div class="panel p-6 flex flex-col gap-4">
+      <div class="flex items-center justify-between">
         <h3 class="text-xl font-semibold">Valikko</h3>
-        <button id="drawerClose" class="text-stone-600 hover:text-stone-900">✕</button>
+        <button id="closeMenuX" class="text-stone-500 hover:text-stone-800">✕</button>
       </div>
       <nav class="flex flex-col gap-3 text-lg">
-        <a href="#kaavat"  class="py-2 border-b" data-close>Kaavat</a>
-        <a href="#mika"    class="py-2 border-b" data-close>Mikä on RUMAT?</a>
-        <a href="#yhteys"  class="py-2"          data-close>Ota yhteyttä</a>
+        <a href="#kaavat"  class="py-2 border-b" data-menu-close>Kaavat</a>
+        <a href="#mika"    class="py-2 border-b" data-menu-close>Mikä on RUMAT?</a>
+        <a href="#yhteys"  class="py-2"          data-menu-close>Ota yhteyttä</a>
       </nav>
     </div>
   </div>
 
+  <!-- SUCCESS/CANCEL MODAL -->
+  <div id="resultModal" class="modal">
+    <div class="bg-white rounded-2xl p-6 shadow-soft w-[min(92vw,480px)] text-center">
+      <h3 id="resultTitle" class="serif text-2xl mb-2">Kiitos tilauksesta!</h3>
+      <p id="resultText" class="text-stone-600">Vahvistus saapuu sähköpostiisi.</p>
+      <a href="#" class="btn bg-black text-white mt-4 inline-block">Takaisin etusivulle</a>
+    </div>
+  </div>
+
   <script>
-    // Hamburger näkyviin vain kun linkit eivät mahdu keskelle
-    (function(){
-      const row    = document.getElementById('hdrRow');
-      const brand  = document.getElementById('brand');
-      const nav    = document.getElementById('mainNav');
-      const right  = document.getElementById('right');
-      const menu   = document.getElementById('openMenu');
+  const API_BASE = ""; // jos käytössä Workers/ADMIN
+  const fmtEUR = x => new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
+  const $ = sel => document.querySelector(sel);
+  const el = (tag,attrs={},...kids)=>{
+    const n=document.createElement(tag);
+    Object.entries(attrs).forEach(([k,v])=>{
+      if(k==='class') n.className=v;
+      else if(k==='html') n.innerHTML=v;
+      else if(k.startsWith('on')) n.addEventListener(k.slice(2),v);
+      else n.setAttribute(k,v);
+    });
+    kids.forEach(k=>{ if(k==null) return; if(typeof k==='string') n.appendChild(document.createTextNode(k)); else n.appendChild(k);});
+    return n;
+  };
 
-      function measureNav(){
-        nav.classList.add('nav-measure');
-        const w = Math.ceil(nav.scrollWidth);
-        nav.classList.remove('nav-measure');
-        return w;
+  // ----- CMS / sisältö (sama perusrakenne kuin aiemmin) -----
+  const defaultContent = {
+    paypalBusiness:"",
+    contact:{
+      email:"aaltosen96@outlook.com",
+      instagram:"https://instagram.com/rumat.studio",
+      tiktok:"https://www.tiktok.com/@rumat.studio",
+      location:"Kauppakatu 20, 89600 Suomussalmi"
+    },
+    products:[
+      { id:"laukku", name:"Laukku", price:149.00, blurb:"Täysin kierrätysmateriaaleista valmistettu sling-laukku.", images:[
+        "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1511389026070-a14ae610a1be?auto=format&fit=crop&w=1600&q=80"
+      ]},
+      { id:"pipo", name:"RUMAT Pipo", price:59.00, blurb:"Käsinneulottu mohair-sekoite.", images:[
+        // näytetään esimerkkiksi placeholder "tulossa" jos kuva puuttuu:
+        "https://placehold.co/1200x1500?text=TULOSSA"
+      ]},
+      { id:"panta", name:"Neule panta", price:39.00, blurb:"Lämmin, kevyt panta.", images:[
+        "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1600&q=80"
+      ]}
+    ],
+    payment:{ shipping:{ methods:[
+      { id:"PICKUP", name:"Nouto (sovitusti)", price:"€0,00" },
+      { id:"POSTI",  name:"Posti",             price:"€6,90" }
+    ], defaultMethodId:"PICKUP" } }
+  };
+
+  let CONTENT = structuredClone(defaultContent);
+
+  async function loadContent(){
+    if(!API_BASE){ applyContent(CONTENT); return; }
+    try{
+      const r = await fetch(`${API_BASE}/api/content`, {credentials:'include'});
+      if(r.ok){ const d = await r.json(); CONTENT = Object.assign({}, CONTENT, d); }
+    }catch(e){ console.warn("Sisällön haku epäonnistui", e); }
+    applyContent(CONTENT);
+  }
+
+  function priceNum(s){ if(typeof s==='number') return s; const m=String(s||"").replace(/\s/g,"").match(/([0-9]+(?:[.,][0-9]{1,2})?)/); return m?parseFloat(m[1].replace(',','.')):0; }
+
+  function applyContent(d){
+    renderProducts(d.products || defaultContent.products);
+    const methods = d?.payment?.shipping?.methods || defaultContent.payment.shipping.methods;
+    const defId   = d?.payment?.shipping?.defaultMethodId || methods[0]?.id;
+    renderShipping(methods, defId);
+    const warn=$('#paypalWarn'); if(warn) warn.textContent = d.paypalBusiness ? "" : "Aseta PayPal-sähköposti backendissä (ADMIN) ennen julkaisuversiota.";
+  }
+
+  // ==== SOLD state ====
+  let SOLD = JSON.parse(localStorage.getItem('sold') || '{}'); // { [productId]: true }
+  function saveSold(){ localStorage.setItem('sold', JSON.stringify(SOLD)); }
+  function isSold(id){ const fromContent=(CONTENT.products||[]).find(x=>x.id===id)?.sold===true; return !!(SOLD[id]||fromContent); }
+  function markSold(ids=[]){ ids.forEach(id=>SOLD[id]=true); saveSold(); }
+
+  // ==== Products as CARDS (with carousel, buy, sold) ====
+  function renderProducts(list){
+    const root = document.getElementById('productsRoot');
+    root.innerHTML='';
+    const grid = el('div',{class:'grid-cards'});
+    root.appendChild(grid);
+
+    list.forEach((p,idx)=>{
+      const cardId = `p-${idx}`;
+      const imgId  = `${cardId}-img`;
+      const prevId = `${cardId}-prev`;
+      const nextId = `${cardId}-next`;
+      const sold   = isSold(p.id);
+
+      const imgs = Array.isArray(p.images)&&p.images.length ? p.images : [
+        "https://placehold.co/1200x1500?text=Kuva+puuttuu"
+      ];
+      let i=0;
+
+      const card = el('div',{class:'card ring-1 ring-black/10'},
+        el('div',{class:'imgwrap'},
+          el('img',{id:imgId,alt:p.name,loading:'lazy',decoding:'async'}),
+          sold ? el('div',{class:'sold-badge'},"MYYTY") : null,
+          el('div',{class:'nav'},
+            el('button',{id:prevId, 'aria-label':'Edellinen kuva'},'◀'),
+            el('button',{id:nextId, 'aria-label':'Seuraava kuva'},'▶')
+          ),
+          el('div',{class:'label'}, p.name.toUpperCase())
+        ),
+        el('div',{class:'cta'},
+          el('div',{class:'price'}, fmtEUR(Number(p.price||0))),
+          sold ? el('span',{class:'px-3 py-1 rounded-full bg-black text-white text-xs font-semibold tracking-wider'},'MYYTY') :
+                 el('button',{'data-buy':p.id, class:'btn bg-white'},"Osta")
+        )
+      );
+      grid.appendChild(card);
+
+      function setImg(k){ const n=imgs.length; const elImg=$(`#${imgId}`); if(elImg) elImg.src=imgs[(k%n+n)%n]; }
+      setImg(i);
+      $(`#${nextId}`).addEventListener('click',()=>{ if(!sold){ i=(i+1)%imgs.length; setImg(i); }});
+      $(`#${prevId}`).addEventListener('click',()=>{ if(!sold){ i=(i-1+imgs.length)%imgs.length; setImg(i); }});
+    });
+
+    // buy
+    grid.addEventListener('click', e=>{
+      const btn = e.target.closest('[data-buy]');
+      if(!btn) return;
+      const id = btn.getAttribute('data-buy');
+      if(isSold(id)) return alert('Tuote on jo myyty.');
+      addToCart(id);
+    });
+  }
+
+  // ==== Cart + shipping ====
+  const $cart   = $('#cartDrawer');
+  const $items  = $('#cartItems');
+  const $openI  = $('#openCart');
+  const $openT  = $('#openCartText');
+  const $close  = $('#closeCart');
+  const $closeX = $('#closeCartX');
+  const $sub    = $('#subTotal');
+  const $ship   = $('#shipTotal');
+  const $grand  = $('#grandTotal');
+  const $countI = $('#cartCount');
+  const $countT = $('#cartCountText');
+  const $shipOpts = $('#shipOptions');
+
+  let CART = JSON.parse(localStorage.getItem('cart')||'{}'); // {id:1}
+  function saveCart(){ localStorage.setItem('cart', JSON.stringify(CART)); updateBadge(); }
+  function updateBadge(){
+    const c = Object.values(CART).reduce((a,b)=>a+b,0);
+    if($countI) $countI.textContent = c;
+    if($countT) $countT.textContent = c;
+  }
+  function openCart(){ $cart.classList.add('open'); renderCart(); }
+  function closeCart(){ $cart.classList.remove('open'); }
+  $openI?.addEventListener('click', openCart);
+  $openT?.addEventListener('click', openCart);
+  $close?.addEventListener('click', closeCart);
+  $closeX?.addEventListener('click', closeCart);
+
+  function catalogFromContent(){ const cat={}; (CONTENT.products||[]).forEach(p=>{ cat[p.id]={id:p.id,name:p.name,price:Number(p.price||0)}; }); return cat; }
+
+  function renderShipping(methods, defId){
+    if(!$shipOpts) return;
+    $shipOpts.innerHTML='';
+    methods.forEach((m,idx)=>{
+      const id = `ship-${m.id}`;
+      const radio = el('label',{class:'flex items-center gap-2 text-sm'},
+        el('input',{type:'radio',name:'ship',value:String(priceNum(m.price)),id, ...(m.id===defId || (!defId&&idx===0)?{checked:true}:{}) }),
+        `${m.name} (${typeof m.price==='number' ? fmtEUR(m.price) : m.price})`
+      );
+      $shipOpts.appendChild(radio);
+    });
+    $shipOpts.querySelectorAll('input[name="ship"]').forEach(r=>r.addEventListener('change', renderCart));
+  }
+
+  function renderCart(){
+    const cat = catalogFromContent();
+    $items.innerHTML='';
+    const ids=Object.keys(CART);
+    if(ids.length===0){ $items.innerHTML='<div class="text-sm text-stone-500 p-3">Ostoskori on tyhjä.</div>'; }
+    let sub=0;
+    ids.forEach(id=>{
+      const p = cat[id]; if(!p) return;
+      if(isSold(id)){
+        const row = el('div',{class:'py-3 text-sm text-red-600'}, `Tuote "${p.name}" on jo myyty. Poista se korista.`);
+        $items.appendChild(row);
+        return;
       }
-      function compute(){
-        // oletus: nav näkyy, menu piilossa
+      sub += p.price;
+      const row = el('div',{class:'py-3 flex items-center justify-between gap-3'},
+        el('div',{},
+          el('div',{class:'font-medium'}, p.name),
+          el('div',{class:'text-sm text-stone-600'}, fmtEUR(p.price))
+        ),
+        el('div',{class:'flex items-center gap-3'},
+          el('div',{class:'font-medium'}, fmtEUR(p.price)),
+          el('button',{'data-remove':id, class:'px-2 ring-1 ring-stone-300 rounded'}, 'Poista')
+        )
+      );
+      $items.appendChild(row);
+    });
+    $sub.textContent = fmtEUR(sub);
+    const shipVal = parseFloat((document.querySelector('input[name="ship"]:checked')||{value:"0"}).value || '0');
+    $ship.textContent = fmtEUR(shipVal);
+    $grand.textContent = fmtEUR(sub + shipVal);
+
+    $items.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{ const id=b.dataset.remove; delete CART[id]; saveCart(); renderCart(); });
+  }
+
+  function addToCart(id){
+    if(isSold(id)) return alert('Tuote on jo myyty.');
+    CART[id] = 1; saveCart(); openCart();
+  }
+  updateBadge();
+
+  // PayPal (kuten ennen) + merkitse myydyksi onnistumisen jälkeen
+  document.getElementById('checkout').addEventListener('click', ()=>{
+    const ids = Object.keys(CART).filter(id=>!isSold(id));
+    if(ids.length===0) return alert('Lisää tuotteita koriin.');
+
+    const cat = catalogFromContent();
+    const email = CONTENT.paypalBusiness || "kauppa@esimerkki.fi";
+    const form = el('form',{method:'POST', action:'https://www.paypal.com/cgi-bin/webscr', target:'_blank'},
+      el('input',{type:'hidden',name:'cmd',value:'_cart'}),
+      el('input',{type:'hidden',name:'upload',value:'1'}),
+      el('input',{type:'hidden',name:'business',value:email}),
+      el('input',{type:'hidden',name:'currency_code',value:'EUR'}),
+      el('input',{type:'hidden',name:'return',value: location.origin+'/#success'}),
+      el('input',{type:'hidden',name:'cancel_return',value: location.origin+'/#cancel'})
+    );
+    let i=1;
+    ids.forEach(id=>{
+      const p=cat[id]; if(!p) return;
+      form.appendChild(el('input',{type:'hidden',name:`item_name_${i}`,value:p.name}));
+      form.appendChild(el('input',{type:'hidden',name:`amount_${i}`,   value:Number(p.price||0).toFixed(2)}));
+      form.appendChild(el('input',{type:'hidden',name:`quantity_${i}`, value:1}));
+      i++;
+    });
+    const shipVal = parseFloat((document.querySelector('input[name="ship"]:checked')||{value:"0"}).value || '0');
+    form.appendChild(el('input',{type:'hidden',name:'handling_cart',value:shipVal.toFixed(2)}));
+    document.body.appendChild(form); form.submit(); form.remove();
+  });
+
+  // Success/cancel + mark sold
+  (function(){
+    const modal = $('#resultModal'); const title=$('#resultTitle'); const text=$('#resultText');
+    function show(t,msg){ title.textContent=t; text.textContent=msg; modal.classList.add('open'); }
+    if(location.hash==='#success'){
+      const soldIds = Object.keys(CART||{});
+      markSold(soldIds);
+      CART={}; saveCart();
+      show('Kiitos tilauksesta!','Vahvistus saapuu PayPal-sähköpostiisi.');
+      renderProducts(CONTENT.products || []);
+      renderCart();
+    }
+    if(location.hash==='#cancel'){ show('Maksu peruttu','Voit yrittää uudelleen tai muokata koria.'); }
+    modal?.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
+  })();
+
+  // ===== RESPONSIVE NAV (mittaa mahtuuko keskellä) =====
+  (function(){
+    const row    = document.getElementById('hdrRow');
+    const brand  = document.getElementById('brand');
+    const nav    = document.getElementById('mainNav');
+    const rightT = document.getElementById('rightText');   // Ostoskori (teksti)
+    const rightI = document.getElementById('rightIcons');  // Hamburger + ikonikärry
+    const menu   = document.getElementById('openMenu');
+
+    function measureNav(){
+      nav.classList.add('nav-measure');
+      const w = Math.ceil(nav.scrollWidth);
+      nav.classList.remove('nav-measure');
+      return w;
+    }
+    function apply(showNav){
+      if(showNav){
         nav.classList.remove('nav-hidden');
-        menu.classList.add('nav-hidden');
-
-        const rowW   = row.clientWidth;
-        const brandW = Math.ceil(brand.getBoundingClientRect().width);
-        const rightW = Math.ceil(right.getBoundingClientRect().width);
-        const navW   = measureNav();
-
-        const fits = navW <= Math.max(0, rowW - brandW - rightW - 24);
-        if(!fits){
-          nav.classList.add('nav-hidden');
-          menu.classList.remove('nav-hidden');
-        }
+        rightT.classList.remove('nav-hidden');
+        rightI.classList.add('nav-hidden');
+      }else{
+        nav.classList.add('nav-hidden');
+        rightT.classList.add('nav-hidden');
+        rightI.classList.remove('nav-hidden');
       }
-      let t=null;
-      const schedule=()=>{ if(t) return; t=setTimeout(()=>{t=null; compute();},120); };
-      window.addEventListener('resize', schedule, {passive:true});
-      if('fonts' in document) document.fonts.ready.then(compute);
-      compute();
+    }
+    function compute(){
+      // oletuksena näkyvä
+      apply(true);
+      const rowW   = row.clientWidth;
+      const brandW = Math.ceil(brand.getBoundingClientRect().width);
+      const rightW = Math.ceil(rightT.getBoundingClientRect().width); // teksti-versio
+      const navW   = measureNav();
+      const fits = navW <= Math.max(0, rowW - brandW - rightW - 24);
+      apply(fits);
+    }
+    let t=null; const schedule=()=>{ if(t) return; t=setTimeout(()=>{t=null; compute();},120); };
+    window.addEventListener('resize', schedule, {passive:true});
+    if('fonts' in document) document.fonts.ready.then(compute);
+    compute();
 
-      // Drawer open/close
-      const drawer = document.getElementById('menuDrawer');
-      const open   = ()=>drawer.classList.remove('hidden');
-      const close  = ()=>drawer.classList.add('hidden');
-      const back   = document.getElementById('drawerBack');
-      const x      = document.getElementById('drawerClose');
-      menu.addEventListener('click', open);
-      back.addEventListener('click', close);
-      x.addEventListener('click', close);
-      drawer.querySelectorAll('[data-close]').forEach(a=>a.addEventListener('click', close));
-    })();
+    // Drawer
+    const drawer = document.getElementById('menuDrawer');
+    const closeA = document.getElementById('closeMenu');
+    const closeX = document.getElementById('closeMenuX');
+    const open   = ()=>drawer.classList.add('open');
+    const close  = ()=>drawer.classList.remove('open');
+    menu.addEventListener('click', open);
+    closeA.addEventListener('click', close);
+    closeX.addEventListener('click', close);
+    drawer.querySelectorAll('[data-menu-close]').forEach(a=>a.addEventListener('click', close));
+  })();
+
+  // Start
+  loadContent();
   </script>
 </body>
 </html>
