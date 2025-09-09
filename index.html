@@ -22,11 +22,6 @@
       --header-h:64px;
       --section-gap: clamp(6px, 1vw, 12px);
       --band-radius: 16px;
-
-      /* Esittelyn mitat */
-      --intro-h: clamp(260px, 34vw, 360px);
-      --intro-side: clamp(220px, 30vw, 380px);
-      --intro-gap: 14px;
     }
     html{ scroll-padding-top: var(--header-h); }
     body{ font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial; color:var(--ink); background:var(--ivory); }
@@ -48,7 +43,7 @@
     #brandText .strong{ font-weight:800; }
     #brandText .light{ font-weight:600; }
     #mainNav{ justify-self:center; display:flex; gap:1.5rem; white-space:nowrap; font-size:13px; text-transform:uppercase; letter-spacing:.2em; color:var(--ink); }
-    #mainNav a{ color:var(--ink); }
+    #mainNav a{ color:var(--ink); text-decoration: none; }
     .nav-hidden{ display:none !important; }
     .nav-measure{ position:absolute !important; visibility:hidden !important; display:flex !important; white-space:nowrap !important; }
 
@@ -63,35 +58,46 @@
     .bg-video{
       position:fixed; inset:0; width:100%; height:100%;
       z-index:0; object-fit:cover; object-position:center;
-      background:transparent; pointer-events:none;
-      filter:none !important;
+      background:transparent; pointer-events:none; filter:none !important;
     }
-    .hero::before,.hero::after{ content:none !important; background:none !important; }
-
     .site-content{ position:relative; z-index:2; }
     .hero{ position:relative; height:100svh; display:grid; place-items:center; text-align:center; }
 
-    /* Esittely (kuvat reunoista) */
-    .intro-wrap.full-bleed{ border-radius: 20px; overflow: hidden; }
-    .intro-edge{ position:relative; height: var(--intro-h); display:flex; align-items:center; justify-content:center; background: var(--ivory); }
-    .intro-center{
-      position: relative; z-index: 1;
-      width:100%; max-width:none; box-sizing:border-box;
-      padding: 0 1rem;
-      padding-left:  calc(var(--intro-side) + var(--intro-gap));
-      padding-right: calc(var(--intro-side) + var(--intro-gap));
-      text-align: left;
+    /* --- ESITTELY (uusi, robusti grid) --- */
+    .intro-band{ background:#fff; border-radius:20px; overflow:hidden; }
+    .intro-inner{
+      display:grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(0, 2fr) minmax(180px, 1fr);
+      gap:14px;
+      align-items:stretch;
+      padding: 18px;
     }
-    .intro-center p{ margin:0 0 .7rem 0; }
-    .intro-logo{ width:56px; height:56px; display:block; margin:0 auto 1rem; object-fit:contain; }
-    .edge-img{ position:absolute; top:50%; transform: translateY(-50%); width: var(--intro-side); height: calc(var(--intro-h)); }
-    .edge-img img{ width:100%; height:100%; object-fit:cover; border-radius: 18px; border:1px solid rgba(0,0,0,.12); }
-    .edge-img--left{ left:0; } .edge-img--right{ right:0; }
+    .intro-img{
+      border-radius:18px; border:1px solid rgba(0,0,0,.12);
+      background-size: cover; background-position:center; background-repeat:no-repeat;
+      min-height: 280px; /* varmistaa että on kunnolla korkea */
+    }
+    /* Fallback: ensin assets, sitten Unsplash – jos assets puuttuu, toinen näkyy */
+    .intro-img.left{
+      background-image:
+        url('assets/intro-left.jpg'),
+        url('https://images.unsplash.com/photo-1470115636492-6d2b56f9146e?q=80&w=1600&auto=format&fit=crop');
+    }
+    .intro-img.right{
+      background-image:
+        url('assets/intro-right.jpg'),
+        url('https://images.unsplash.com/photo-1482192505345-5655af888cc4?q=80&w=1600&auto=format&fit=crop');
+    }
+    .intro-copy{ padding: 6px 8px; min-width:0; }
+    .intro-copy .logo{ width:56px; height:56px; display:block; margin:0 auto 12px; object-fit:contain; }
+    .intro-copy p{ margin:0 0 .8rem 0; line-height:1.55; }
+
     @media (max-width: 900px){
-      .intro-edge{ height:auto; display:block; }
-      .edge-img{ position:relative; top:auto; transform:none; width:100%; height: 220px; }
-      .intro-center{ padding: 1.25rem; padding-left:1.25rem; padding-right:1.25rem; }
-      .intro-logo{ margin-top:.5rem; }
+      .intro-inner{
+        grid-template-columns: 1fr;
+      }
+      .intro-img{ min-height: 220px; }
+      .intro-copy{ padding: 2px 2px; }
     }
 
     /* Kaaviot-galleria (neliöt) */
@@ -111,18 +117,10 @@
     .min-full:hover{ background:rgba(0,0,0,.08); }
 
     .expander{ grid-column:1 / -1; background:#fff; border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
-    .ex-row{
-      display:grid;
-      grid-template-columns: 1fr;                 /* mobiili: yksi palsta */
-      min-height:260px;
-    }
-    @media (min-width: 1024px){
-      .ex-row{
-        grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); /* desktop: 2 palstaa, sallii kutistumisen */
-      }
-    }
+    .ex-row{ display:grid; grid-template-columns: 1fr; min-height:260px; }
+    @media (min-width: 1024px){ .ex-row{ grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); } }
     .ex-view{ position:relative; background:#000; min-height:260px; min-width:0; }
-    .ex-info{ padding:1rem 1.1rem; overflow:auto; min-width:0; word-break: normal; overflow-wrap:anywhere; white-space: normal; }
+    .ex-info{ padding:1rem 1.1rem; overflow:auto; min-width:0; overflow-wrap:anywhere; }
     .ex-view img{ width:100%; height:100%; object-fit:contain; background:#000; }
     .ex-prev,.ex-next{ position:absolute; top:50%; transform:translateY(-50%); width:42px; height:42px; display:grid; place-items:center; border-radius:9999px; background:#fff; border:1px solid rgba(0,0,0,.15); font-weight:800; }
     .ex-prev{ left:10px; } .ex-next{ right:10px; }
@@ -201,22 +199,16 @@
       </div>
     </section>
 
-    <!-- Esittely -->
+    <!-- Esittely (uusi grid) -->
     <section class="py-0">
-      <div class="intro-wrap full-bleed">
-        <div class="intro-edge">
-          <div class="edge-img edge-img--left" aria-hidden="true">
-            <img src="assets/intro-left.jpg"
-                 onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1470115636492-6d2b56f9146e?q=80&w=1200&auto=format&fit=crop';" alt="">
-          </div>
-          <div class="intro-center">
-            <img class="intro-logo" src="assets/logo.svg" alt="RUMAT STUDIO">
+      <div class="intro-band full-bleed">
+        <div class="intro-inner">
+          <div class="intro-img left"  aria-hidden="true"></div>
+          <div class="intro-copy">
+            <img class="logo" src="assets/logo.svg" alt="RUMAT STUDIO">
             <div id="intro-text" class="text-[15px] sm:text-base"></div>
           </div>
-          <div class="edge-img edge-img--right" aria-hidden="true">
-            <img src="assets/intro-right.jpg"
-                 onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1482192505345-5655af888cc4?q=80&w=1200&auto=format&fit=crop';" alt="">
-          </div>
+          <div class="intro-img right" aria-hidden="true"></div>
         </div>
       </div>
     </section>
@@ -324,7 +316,7 @@
     return n;
   };
 
-  // Hero-parallax (sama kuin ennen, kevyt)
+  // Hero-parallax
   (function(){
     const hero=document.getElementById('etusivu'); const textEl=document.getElementById('hero-text');
     let heroTop=0, heroHeight=1, amp=0, ticking=false, lastY=0, reduce=false;
