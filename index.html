@@ -54,16 +54,15 @@
     .cart-text-btn:hover{ background:rgba(0,0,0,.08); }
     .badge{ position:absolute; top:-4px; right:-4px; min-width:18px; height:18px; padding:0 4px; display:grid; place-items:center; border-radius:9999px; background:var(--ink); color:#fff; font-size:11px; font-weight:700; border:1px solid rgba(0,0,0,.15); }
 
-    /* HERO video tausta (EI tummennusta) */
-    .bg-video{
-      position:fixed; inset:0; width:100%; height:100%;
-      z-index:0; object-fit:cover; object-position:center;
-      background:transparent; pointer-events:none; filter:none !important;
+    /* HERO – video vain herossa, ei mitään filtteriä */
+    .hero{ position:relative; height:100svh; display:grid; place-items:center; text-align:center; overflow:hidden; }
+    .hero-video{
+      position:absolute; inset:0; width:100%; height:100%;
+      object-fit:cover; object-position:center;
+      z-index:-1; pointer-events:none; filter:none !important; background:transparent;
     }
-    .site-content{ position:relative; z-index:2; }
-    .hero{ position:relative; height:100svh; display:grid; place-items:center; text-align:center; }
 
-    /* --- ESITTELY (uusi, robusti grid) --- */
+    /* --- ESITTELY (robusti grid) --- */
     .intro-band{ background:#fff; border-radius:20px; overflow:hidden; }
     .intro-inner{
       display:grid;
@@ -75,9 +74,8 @@
     .intro-img{
       border-radius:18px; border:1px solid rgba(0,0,0,.12);
       background-size: cover; background-position:center; background-repeat:no-repeat;
-      min-height: 280px; /* varmistaa että on kunnolla korkea */
+      min-height: 280px;
     }
-    /* Fallback: ensin assets, sitten Unsplash – jos assets puuttuu, toinen näkyy */
     .intro-img.left{
       background-image:
         url('assets/intro-left.jpg'),
@@ -93,9 +91,7 @@
     .intro-copy p{ margin:0 0 .8rem 0; line-height:1.55; }
 
     @media (max-width: 900px){
-      .intro-inner{
-        grid-template-columns: 1fr;
-      }
+      .intro-inner{ grid-template-columns: 1fr; }
       .intro-img{ min-height: 220px; }
       .intro-copy{ padding: 2px 2px; }
     }
@@ -149,12 +145,6 @@
 </head>
 
 <body>
-  <!-- HERO-VIDEO -->
-  <video class="bg-video" id="bgVideo" autoplay muted loop playsinline poster="assets/aurora-poster.jpg">
-    <source src="assets/aurora.webm" type="video/webm">
-    <source src="assets/aurora.mp4"  type="video/mp4">
-  </video>
-
   <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50">
     <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-4 grid items-center gap-3">
@@ -186,9 +176,13 @@
   </header>
 
   <!-- CONTENT -->
-  <main class="site-content pt-[84px]">
-    <!-- HERO -->
+  <main class="pt-[84px]">
+    <!-- HERO (video vain tässä) -->
     <section id="etusivu" class="hero px-4">
+      <video class="hero-video" autoplay muted loop playsinline poster="assets/aurora-poster.jpg">
+        <source src="assets/aurora.webm" type="video/webm">
+        <source src="assets/aurora.mp4"  type="video/mp4">
+      </video>
       <div id="hero-text" class="mt-10">
         <h1 class="text-[clamp(22px,4.8vw,58px)] tracking-[0.08em] drop-shadow-[0_2px_16px_rgba(0,0,0,0.40)]">
           Liian rumat ollakseen totta
@@ -199,7 +193,7 @@
       </div>
     </section>
 
-    <!-- Esittely (uusi grid) -->
+    <!-- Esittely -->
     <section class="py-0">
       <div class="intro-band full-bleed">
         <div class="intro-inner">
@@ -352,8 +346,8 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
   })();
 
-  // Kaavat (data)
-  const KAAVIOT = [
+  /* =============== KAAVIOT =============== */
+  window.KAAVIOT = [
     { id:'laukku',      name:'Laukku',       price:6.00, sizes:'One size', blurb:'Sling-laukku kaava (PDF).', images:['https://placehold.co/1400x900?text=Laukku+1','https://placehold.co/1400x900?text=Laukku+2']},
     { id:'usva-paita',  name:'Usva paita',   price:7.00, sizes:'XS–XL',    blurb:'Rento paita raglan-hihoilla.', images:['https://placehold.co/1400x900?text=Usva+1','https://placehold.co/1400x900?text=Usva+2']},
     { id:'neule-panta', name:'Neule panta',  price:5.00, sizes:'S–L',      blurb:'Helppo aloittelijalle.', images:['https://placehold.co/1400x900?text=Panta+1','https://placehold.co/1400x900?text=Panta+2']},
@@ -374,7 +368,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   function renderCart(){
     const root = $('#cartItems'); root.innerHTML=''; let sub=0;
     Object.entries(CART).forEach(([id,q])=>{
-      const p = KAAVIOT.find(x=>x.id===id); if(!p) return;
+      const p = window.KAAVIOT.find(x=>x.id===id); if(!p) return;
       sub += p.price*q;
       root.appendChild(el('div',{class:'py-3 flex items-center justify-between'},
         el('div',{}, el('div',{class:'font-semibold'}, p.name), el('div',{class:'text-sm opacity-70'}, fmtEUR(p.price))), el('button',{'data-remove':id, class:'px-2 border border-[rgba(0,0,0,.15)] rounded'}, 'Poista')
@@ -398,7 +392,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     );
     let i=1;
     ids.forEach(id=>{
-      const p = KAAVIOT.find(x=>x.id===id); if(!p) return;
+      const p = window.KAAVIOT.find(x=>x.id===id); if(!p) return;
       form.appendChild(el('input',{type:'hidden',name:`item_name_${i}`,value:p.name}));
       form.appendChild(el('input',{type:'hidden',name:`amount_${i}`,   value:Number(p.price||0).toFixed(2)}));
       form.appendChild(el('input',{type:'hidden',name:`quantity_${i}`, value:1}));
@@ -477,8 +471,9 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     let selectedId = null;
     let expander = null; let current=null; let imgIdx=0;
 
-    const KAAVIOT = window.KAAVIOT || [];
-    KAAVIOT.forEach((p)=>{
+    const DATA = window.KAAVIOT;
+
+    DATA.forEach((p)=>{
       const tile = document.createElement('article');
       tile.className = 'tile card';
       tile.setAttribute('data-id', p.id);
@@ -553,7 +548,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     function markSelected(tile, on){
       tile.classList.toggle('tile--selected', !!on);
       tile.innerHTML='';
-      const p = KAAVIOT.find(x=>x.id===tile.dataset.id);
+      const p = DATA.find(x=>x.id===tile.dataset.id);
       tile.appendChild(Object.assign(document.createElement('img'),{src:(p.images||[])[0]||'https://placehold.co/900?text=Kaava',alt:p.name}));
       tile.appendChild(Object.assign(document.createElement('div'),{className:'tile-caption',textContent:p.name}));
       if (on){
@@ -575,7 +570,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       clearSelection();
       selectedId = id;
       markSelected(tile, true);
-      const p = KAAVIOT.find(x=>x.id===id);
+      const p = DATA.find(x=>x.id===id);
       openFor(p, tile);
     }
     grid.addEventListener('click', (e)=>{
