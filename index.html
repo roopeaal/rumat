@@ -6,9 +6,9 @@
   <title>RUMAT STUDIO</title>
   <meta name="description" content="Luonnosta syntynyt. Reissuissa testattu. Neuleet ja asusteet poluille ja kaupunkiin – istuvat, hengittävät ja kestävät."/>
 
-  <!-- Fontit + Tailwind -->
+  <!-- Fontti: Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;600;700&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- OG -->
@@ -20,11 +20,12 @@
 
   <style>
     :root{
+      /* Paletti (pidetty ennallaan) */
       --ink:#202020;         /* musta (tekstit) */
       --olive:#A1A266;       /* FOOTER-tausta */
       --deep-blue:#345563;   /* otsikot */
-      --blue:#789FAB;        /* varalla */
-      --light-blue:#DEEEEE;  /* footer-logo / vaalea sininen */
+      --blue:#789FAB;        /* varalle */
+      --light-blue:#DEEEEE;  /* footer-logo ja vaalea sininen */
       --ivory:#F6F6F4;       /* taustat & yläpalkki */
 
       --header-h:56px;
@@ -33,14 +34,16 @@
     }
 
     html{ scroll-padding-top: var(--header-h); }
-    body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:var(--ink);background:var(--ivory)}
+    body{
+      font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial;
+      color:var(--ink);
+      background:var(--ivory)
+    }
 
-    /* Otsikoiden oletusväri tummansininen… */
+    /* Otsikoiden väri tummansininen, mutta hero-otsikko valkoinen */
     h1,h2,h3{ color: var(--deep-blue); }
-    /* …mutta hero-otsikko pidetään VALKOISENA videon päällä */
-    .hero h1{ color: var(--ivory) !important; }
+    #etusivu h1{ color:#fff !important; }
 
-    .serif{font-family:"Libre Baskerville",serif}
     .shadow-soft{box-shadow:0 6px 20px rgba(0,0,0,.12)}
     .btn{border-radius:9999px;padding:.6rem 1rem;border:1px solid rgba(0,0,0,.15);transition:transform .06s, box-shadow .12s}
     .btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.12)}
@@ -112,6 +115,30 @@
     }
     .cart-text-btn:hover{ background:rgba(0,0,0,.08); }
 
+    /* Tuotekuvagalleria */
+    .product-gallery{ container-type:inline-size; --pg-gap:1rem; background:var(--ivory); }
+    .pg-grid{ display:grid; grid-template-columns:1fr; gap:var(--pg-gap); justify-items:center; }
+    .pg-b{ display:none; }
+    .pg-grid > .img-wrap{ width:100%; max-width:100%; }
+    @container (min-width: 900px){
+      .product-gallery{ --pg-gap:1.5rem; }
+      .pg-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--pg-gap); }
+      .pg-b{ display:block; }
+      .pg-grid > .img-wrap{ max-width:none; }
+    }
+
+    /* MYYTY */
+    .img-wrap{ position:relative; }
+    .sold-badge{
+      position:absolute; inset:0; display:grid; place-items:center;
+      background:rgba(32,32,32,.72); color:#fff; font-weight:800; font-size:1.05rem;
+      letter-spacing:.12em; text-transform:uppercase;
+    }
+    .sold-chip{
+      display:inline-block; margin-top:.35rem; padding:.25rem .55rem;
+      border-radius:9999px; background:var(--ink); color:#fff; font-size:.75rem; letter-spacing:.08em;
+    }
+
     /* Rako-osiot */
     .aurora-gap{ height: var(--section-gap); pointer-events: none; background: transparent; }
 
@@ -141,7 +168,7 @@
     <source src="assets/aurora.mp4"  type="video/mp4">
   </video>
 
-  <!-- HEADER (vaalea) -->
+  <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50">
     <div class="relative" style="background:var(--ivory); color:var(--ink); border-bottom:1px solid rgba(0,0,0,.08);">
       <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-3 grid items-center gap-3">
@@ -153,7 +180,7 @@
           </span>
         </a>
 
-        <!-- KESKI: nav (näkyy kun mahtuu) -->
+        <!-- KESKI: nav -->
         <nav id="mainNav">
           <a href="#etusivu"   class="hover:underline underline-offset-4 font-semibold">Etusivu</a>
           <a href="kaavat.html" class="hover:underline underline-offset-4 font-semibold">Kaavat</a>
@@ -170,12 +197,12 @@
             <span class="sr-only">Valikko</span>
           </button>
 
-          <!-- Ostoskori TEKSTINÄ (nav mahtuu) -->
+          <!-- Ostoskori TEKSTINÄ (näkyy kun nav mahtuu) -->
           <button id="openCartText" class="cart-text-btn">
             Ostoskori <span id="cartCountText" class="opacity-80"></span>
           </button>
 
-          <!-- Ostoskori IKONINA (nav ei mahdu) -->
+          <!-- Ostoskori IKONINA (näkyy kun nav ei mahdu) -->
           <button id="openCartIcon" class="icon-btn hidden" aria-label="Ostoskori">
             <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -196,7 +223,7 @@
     <!-- HERO -->
     <section id="etusivu" class="hero grid place-items-center px-4">
       <div id="hero-text" class="text-center mt-24 md:mt-28">
-        <h1 class="serif font-semibold tracking-[0.08em] text-[clamp(22px,4.8vw,58px)]"
+        <h1 class="font-semibold tracking-[0.08em] text-[clamp(22px,4.8vw,58px)]"
             style="text-shadow:0 2px 16px rgba(0,0,0,0.40)">
           Liian rumat ollakseen totta
         </h1>
@@ -219,11 +246,17 @@
     </section>
     <div class="aurora-gap full-bleed"></div>
 
+    <!-- TUOTTEET (fyysiset tuotteet pysyvät etusivulla) -->
+    <section id="tuotteet" class="py-0">
+      <div class="aurora-gap full-bleed"></div>
+      <div id="productsRoot"></div>
+    </section>
+
     <!-- BLOGI -->
     <section id="blogi" class="py-0">
       <div class="band band--mist full-bleed">
         <div class="band-inner">
-          <h2 class="serif text-3xl mb-6">Blogi</h2>
+          <h2 class="text-3xl mb-6">Blogi</h2>
           <div id="blogRoot" class="grid gap-6"></div>
         </div>
       </div>
@@ -234,7 +267,7 @@
     <section id="some" class="py-0">
       <div class="band full-bleed">
         <div class="band-inner">
-          <h2 class="serif text-3xl mb-6">Some</h2>
+          <h2 class="text-3xl mb-6">Some</h2>
           <div class="grid md:grid-cols-2 gap-6">
             <div class="aspect-[9/16] rounded-xl ring-1 ring-[rgba(0,0,0,.15)] overflow-hidden bg-black">
               <iframe id="igEmbed" class="w-full h-full" allowtransparency="true" frameborder="0" scrolling="no" loading="lazy"
@@ -258,7 +291,7 @@
     <section id="tarina" class="py-0">
       <div class="band full-bleed">
         <div class="band-inner">
-          <h2 class="serif text-3xl mb-4">Tarina</h2>
+          <h2 class="text-3xl mb-4">Tarina</h2>
           <p id="story">
             Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Jokainen vaate neulotaan käsin Suomussalmella yhden tekijän toimesta — jotta se kestää vuosia ja tekijä näkyy.
           </p>
@@ -299,7 +332,7 @@
     </footer>
   </main>
 
-  <!-- OSTOSKORI -->
+  <!-- OSTOSKORI DRAWER -->
   <div id="cartDrawer" class="drawer" aria-hidden="true">
     <div class="absolute inset-0 bg-black/40" id="closeCart" aria-label="Sulje ostoskori"></div>
     <div class="panel p-5 flex flex-col">
@@ -324,7 +357,7 @@
     </div>
   </div>
 
-  <!-- VALIKKO (vasemmalta) -->
+  <!-- VALIKKO DRAWER -->
   <div id="menuDrawer" class="drawer" aria-hidden="true">
     <div class="absolute inset-0 bg-black/40" id="closeMenu" aria-label="Sulje valikko"></div>
     <div class="panel p-6 flex flex-col gap-4">
@@ -346,18 +379,19 @@
   <!-- SUCCESS/CANCEL MODAL -->
   <div id="resultModal" class="modal">
     <div class="bg-white rounded-2xl p-6 shadow-soft w-[min(92vw,480px)] text-center">
-      <h3 id="resultTitle" class="serif text-2xl mb-2">Kiitos tilauksesta!</h3>
+      <h3 id="resultTitle" class="text-2xl mb-2">Kiitos tilauksesta!</h3>
       <p id="resultText" class="text-stone-600">Vahvistus saapuu sähköpostiisi.</p>
       <a href="#" class="btn btn-dark mt-4 inline-block">Takaisin etusivulle</a>
     </div>
   </div>
 
-  <!-- SCRIPTS -->
+  <!-- SCRIPTS (sama logiikka kuin aiemmin, mutta fontit jo vaihdettu) -->
   <script>
   const API_BASE = "";
   const fmtEUR = x => new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
   const $ = sel => document.querySelector(sel);
-  const el = (tag,attrs={},...kids)=>{ const n=document.createElement(tag);
+  const el = (tag,attrs={},...kids)=>{
+    const n=document.createElement(tag);
     Object.entries(attrs).forEach(([k,v])=>{
       if(k==='class') n.className=v;
       else if(k==='html') n.innerHTML=v;
@@ -365,15 +399,15 @@
       else n.setAttribute(k,v);
     });
     kids.forEach(k=>{ if(k==null) return; if(typeof k==='string') n.appendChild(document.createTextNode(k)); else n.appendChild(k);});
-    return n; };
+    return n;
+  };
 
-  // Hero-parallax
+  // Hero-parallax (ennallaan)
   (function(){
     const hero   = document.getElementById('etusivu');
     const textEl = document.getElementById('hero-text');
     const yearEl = document.getElementById('year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
-    if (!hero || !textEl) return;
 
     let heroTop = 0, heroHeight = 1, amplitudePx = 0;
     let ticking = false, lastScrollY = 0, reduceMotion = false;
@@ -423,7 +457,18 @@
     embed:{ instagramPost:"https://www.instagram.com/p/DMXVRgGC1Bv/embed", tiktokVideo:"https://www.tiktok.com/@rumat.studio/video/7525414518562753814" },
     pitch:"Luonnosta syntynyt. Reissuissa testattu. Suunnittelemani neuleet ja asusteet kulkevat mukana poluilla ja kaupungissa – jotta sinulla on päälläsi jotain, joka istuu, hengittää ja kestää jokaisella askeleella.",
     story:"Pienet erät. Kestävä käyttö. Pohjoiset sävyt. Jokainen vaate neulotaan käsin Suomussalmella yhden tekijän toimesta — jotta se kestää vuosia ja tekijä näkyy.",
-    products:[], /* Etusivulla ei listata kaavoja */
+    products:[
+      { id:"laukku", name:"Laukku", price:149.00, blurb:"Täysin kierrätysmateriaaleista valmistettu sling-laukku. Kierrätetty purjekangas/tekstiili, hihna käytetystä turvavyöstä, metalliosat uudelleenkäytettyä varastoa. Ulkomitat: 28 × 16 × 7 cm. Valmistettu Suomessa.", images:[
+        "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1511389026070-a14ae610a1be?auto=format&fit=crop&w=1600&q=80"
+      ]},
+      { id:"pipo", name:"RUMAT Pipo", price:59.00, blurb:"Käsinneulottu mohair-sekoite. Korkeus n. 22 cm. Päänympärys 54–58 cm (joustava).", images:[
+        "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1600&q=80",
+        "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1600&q=80"
+      ]}
+    ],
     payment:{ shipping:{ methods:[
       { id:"PICKUP", name:"Nouto (sovitusti)", price:"€0,00" },
       { id:"POSTI",  name:"Posti",             price:"€6,90" }
@@ -433,4 +478,386 @@
 
   let CONTENT = structuredClone(defaultContent);
 
-  async function loadContent
+  async function loadContent(){
+    if(!API_BASE){ applyContent(CONTENT); return; }
+    try{
+      const r = await fetch(`${API_BASE}/api/content`, {credentials:'include'});
+      if(r.ok){ const d = await r.json(); CONTENT = Object.assign({}, CONTENT, d); }
+    }catch(e){ console.warn("Sisällön haku epäonnistui", e); }
+    applyContent(CONTENT);
+  }
+
+  function priceNum(s){ if(typeof s==='number') return s; const m=String(s||"").replace(/\s/g,"").match(/([0-9]+(?:[.,][0-9]{1,2})?)/); return m?parseFloat(m[1].replace(',','.')):0; }
+  function parseTikTokId(url){ const m=String(url||"").match(/video\/(\d+)/); return m?m[1]:null; }
+
+  function applyContent(d){
+    const h1 = document.querySelector('#hero-text h1');
+    if(d?.hero?.headline && h1) h1.textContent = d.hero.headline;
+    const intro = document.getElementById('intro-text');
+    if(d?.pitch && intro) intro.textContent = d.pitch;
+    const story = document.getElementById('story');
+    if(d?.story && story) story.textContent = d.story;
+
+    if(d?.contact?.email){ const ml=$('#mailLink'); if(ml){ ml.href=`mailto:${d.contact.email}`; ml.textContent=d.contact.email; } }
+    if(d?.contact?.instagram){ const ig=$('#igLink'); if(ig) ig.href=d.contact.instagram; }
+    if(d?.contact?.tiktok){ const tt=$('#ttLink'); if(tt) tt.href=d.contact.tiktok; }
+    if(d?.contact?.location){ const loc=$('#location'); if(loc) loc.textContent = d.contact.location; }
+
+    if(d?.embed?.instagramPost){ const ig=$('#igEmbed'); if(ig) ig.src = d.embed.instagramPost; }
+    if(d?.embed?.tiktokVideo){ const id=parseTikTokId(d.embed?.tiktokVideo); const tt=$('#ttEmbed'); if(id&&tt){ tt.src=`https://www.tiktok.com/embed/v2/${id}`; } }
+
+    renderProducts(d.products || defaultContent.products);
+    const methods = d?.payment?.shipping?.methods || defaultContent.payment.shipping.methods;
+    const defId   = d?.payment?.shipping?.defaultMethodId || methods[0]?.id;
+    renderShipping(methods, defId);
+    renderBlog(d.blog || defaultContent.blog);
+
+    const warn = $('#paypalWarn'); if(warn) warn.textContent = d.paypalBusiness ? "" : "Aseta PayPal-sähköposti backendissä (ADMIN) ennen julkaisuversiota.";
+  }
+
+  function renderBlog(posts){
+    const root = document.getElementById('blogRoot');
+    if(!root) return;
+    root.innerHTML='';
+    posts.forEach(p=>{
+      root.appendChild(
+        el('article',{class:'bg-white rounded-xl ring-1 ring-[rgba(0,0,0,.15)] p-6 md:p-8'},
+          el('h3',{class:'text-2xl font-semibold mb-2'}, p.title||'Postaus'),
+          el('p',{class:'text-[color:var(--ink)]/80'}, p.body||'')
+        )
+      );
+    });
+  }
+
+  // ===== Yksittäiskappale-logiikka (MYYTY) =====
+  let SOLD = JSON.parse(localStorage.getItem('sold') || '{}');
+  function saveSold(){ localStorage.setItem('sold', JSON.stringify(SOLD)); }
+  function isSold(id){
+    const fromContent = (CONTENT.products || []).find(x=>x.id===id)?.sold === true;
+    return !!(SOLD[id] || fromContent);
+  }
+  function markSold(ids=[]){ ids.forEach(id=>SOLD[id]=true); saveSold(); }
+
+  // ===== Tuotteet (fyysiset) =====
+  function renderProducts(list){
+    const root = document.getElementById('productsRoot');
+    if(!root) return;
+    root.innerHTML = "";
+
+    list.forEach((p,idx)=>{
+      const pairId = `pair-${idx}`;
+      const leftId=`${pairId}-a`, rightId=`${pairId}-b`;
+      const prevId=`${pairId}-prev`, nextId=`${pairId}-next`;
+      const sold = isSold(p.id);
+
+      const gallery = el('div',{ class:'product-gallery rounded-xl' },
+        el('div',{class:'relative'},
+          el('div',{class:'pg-grid'},
+            el('div',{class:'img-wrap aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-[rgba(0,0,0,.15)] bg-white'},
+              el('img',{id:leftId,class:'w-full h-full object-cover',alt:`${p.name} kuva 1`,loading:'lazy',decoding:'async'}),
+              sold ? el('div',{class:'sold-badge'}, 'MYYTY') : null
+            ),
+            el('div',{class:'pg-b img-wrap aspect-[4/5] overflow-hidden rounded-xl ring-1 ring-[rgba(0,0,0,.15)] bg-white'},
+              el('img',{id:rightId,class:'w-full h-full object-cover',alt:`${p.name} kuva 2`,loading:'lazy',decoding:'async'}),
+              sold ? el('div',{class:'sold-badge'}, 'MYYTY') : null
+            )
+          ),
+          el('button',{id:prevId,disabled:sold,class:'absolute left-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[rgba(246,246,244,.95)] border border-[rgba(0,0,0,.15)] shadow-soft' + (sold?' opacity-50 cursor-not-allowed':''),ariaLabel:'Edelliset kuvat'},'◀'),
+          el('button',{id:nextId,disabled:sold,class:'absolute right-2 top-1/2 -translate-y-1/2 p-3 rounded-full bg-[rgba(246,246,244,.95)] border border-[rgba(0,0,0,.15)] shadow-soft' + (sold?' opacity-50 cursor-not-allowed':''),ariaLabel:'Seuraavat kuvat'},'▶')
+        )
+      );
+
+      const details = el('div',{class:'mt-6 text-center'},
+        el('h3',{class:'text-2xl'}, p.name||'Tuote'),
+        el('p',{class:'mt-1 text-[color:var(--ink)]/80 max-w-2xl mx-auto'}, p.blurb||''),
+        el('div',{class:'mt-2 font-semibold text-lg', style:'color:var(--ink)'}, fmtEUR(Number(p.price||0))),
+        sold ? el('div',{class:'sold-chip', 'aria-label':'Myyty'}, 'MYYTY') :
+               el('div',{class:'mt-3'}, el('button',{'data-buy':p.id,class:'btn btn-dark'},'Osta'))
+      );
+
+      const wrap = el('div',{}, gallery, details);
+
+      const inner = el('div',{class:'band-inner'});
+      if (idx === 0){
+        const headerRow = el('div',{class:'flex items-center justify-between mb-6'},
+          el('h2',{class:'text-3xl'}, 'Tuotteet'),
+          el('div',{class:'text-xs', style:'color:rgba(32,32,32,.7)'}, 'Hinnat sis. ALV • Palautus 14 vrk • Toimitus valitaan kassalla')
+        );
+        inner.appendChild(headerRow);
+      }
+      inner.appendChild(wrap);
+
+      const band = el('div',{class:'band full-bleed'}, inner);
+      root.appendChild(band);
+      root.appendChild(el('div',{class:'aurora-gap full-bleed'}));
+
+      const imgs = Array.isArray(p.images)&&p.images.length ? p.images : [
+        "https://placehold.co/1400x1750?text=Kuva+1",
+        "https://placehold.co/1400x1750?text=Kuva+2",
+        "https://placehold.co/1400x1750?text=Kuva+3"
+      ];
+      let i=0;
+      const setPair=(k)=>{
+        const a=$(`#${leftId}`), b=$(`#${rightId}`);
+        const n=imgs.length;
+        if(a) a.src=imgs[(k%n+n)%n];
+        if(b) b.src=imgs[((k+1)%n+n)%n];
+      };
+      setPair(i);
+      if(!sold){
+        $(`#${nextId}`)?.addEventListener('click',()=>{i=(i+1)%imgs.length; setPair(i);});
+        $(`#${prevId}`)?.addEventListener('click',()=>{i=(i-1+imgs.length)%imgs.length; setPair(i);});
+      }
+    });
+
+    // Osta-napit
+    root.addEventListener('click', e=>{
+      const btn = e.target.closest('[data-buy]');
+      if(!btn) return;
+      const id = btn.getAttribute('data-buy');
+      if(isSold(id)) return alert('Tuote on jo myyty.');
+      addToCart(id);
+    });
+  }
+
+  // ----- Ostoskori -----
+  const $cart   = $('#cartDrawer');
+  const $items  = $('#cartItems');
+  const $close  = $('#closeCart');
+  const $closeX = $('#closeCartX');
+  const $sub    = $('#subTotal');
+  const $ship   = $('#shipTotal');
+  const $grand  = $('#grandTotal');
+  const $shipOpts = $('#shipOptions');
+
+  const $openCartText = $('#openCartText');
+  const $openCartIcon = $('#openCartIcon');
+  const $countIcon    = $('#cartCount');
+  const $countText    = $('#cartCountText');
+
+  let CART = JSON.parse(localStorage.getItem('cart')||'{}');
+  function saveCart(){ localStorage.setItem('cart', JSON.stringify(CART)); updateBadge(); }
+  function updateBadge(){
+    const n = Object.values(CART).reduce((a,b)=>a+b,0);
+    if($countIcon) $countIcon.textContent = String(n);
+    if($countText) $countText.textContent = n ? `(${n})` : '';
+  }
+  function openCart(){ $cart.classList.add('open'); renderCart(); }
+  function closeCart(){ $cart.classList.remove('open'); }
+  $openCartText?.addEventListener('click', openCart);
+  $openCartIcon?.addEventListener('click', openCart);
+  $close?.addEventListener('click', closeCart);
+  $closeX?.addEventListener('click', closeCart);
+
+  function catalogFromContent(){ const cat={}; (CONTENT.products||[]).forEach(p=>{ cat[p.id]={id:p.id,name:p.name,price:Number(p.price||0)}; }); return cat; }
+
+  function renderShipping(methods, defId){
+    if(!$shipOpts) return;
+    $shipOpts.innerHTML='';
+    methods.forEach((m,idx)=>{
+      const id = `ship-${m.id}`;
+      const radio = el('label',{class:'flex items-center gap-2 text-sm'},
+        el('input',{type:'radio',name:'ship',value:String(priceNum(m.price)),id, ...(m.id===defId || (!defId&&idx===0)?{checked:true}:{}) }),
+        `${m.name} (${typeof m.price==='number' ? fmtEUR(m.price) : m.price})`
+      );
+      $shipOpts.appendChild(radio);
+    });
+    $shipOpts.querySelectorAll('input[name="ship"]').forEach(r=>r.addEventListener('change', renderCart));
+
+    const ul = document.getElementById('shipInfo'); if(!ul) return;
+    ul.innerHTML='';
+    methods.forEach(m=>ul.appendChild(el('li',{}, `${m.name} — ${typeof m.price==='number'?fmtEUR(m.price):m.price}`)));
+  }
+
+  function renderCart(){
+    const cat = catalogFromContent();
+    $items.innerHTML='';
+    const ids=Object.keys(CART);
+    if(ids.length===0){ $items.innerHTML='<div class="text-sm text-[color:var(--ink)]/70 p-3">Ostoskori on tyhjä.</div>'; }
+    let sub=0;
+    ids.forEach(id=>{
+      const p = cat[id]; if(!p) return;
+      if(isSold(id)){
+        const row = el('div',{class:'py-3 text-sm text-red-600'}, `Tuote "${p.name}" on jo myyty. Poista se korista.`);
+        $items.appendChild(row);
+        return;
+      }
+      sub += p.price;
+      const row = el('div',{class:'py-3 flex items-center justify-between gap-3'},
+        el('div',{},
+          el('div',{class:'font-medium'}, p.name),
+          el('div',{class:'text-sm text-[color:var(--ink)]/70'}, fmtEUR(p.price))
+        ),
+        el('div',{class:'flex items-center gap-3'},
+          el('div',{class:'font-medium'}, fmtEUR(p.price)),
+          el('button',{'data-remove':id, class:'px-2 ring-1 ring-[rgba(0,0,0,.15)] rounded'}, 'Poista')
+        )
+      );
+      $items.appendChild(row);
+    });
+    $sub.textContent = fmtEUR(sub);
+
+    const shipVal = parseFloat((document.querySelector('input[name="ship"]:checked')||{value:"0"}).value || '0');
+    $ship.textContent = fmtEUR(shipVal);
+    $grand.textContent = fmtEUR(sub + shipVal);
+
+    $items.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{ const id=b.dataset.remove; delete CART[id]; saveCart(); renderCart(); });
+  }
+
+  function addToCart(id){
+    if(isSold(id)) return alert('Tuote on jo myyty.');
+    CART[id] = 1;
+    saveCart();
+    openCart();
+  }
+  updateBadge();
+
+  // PayPal demo
+  document.getElementById('checkout').addEventListener('click', ()=>{
+    const ids = Object.keys(CART).filter(id=>!isSold(id));
+    if(ids.length===0) return alert('Lisää tuotteita koriin.');
+    const cat = catalogFromContent();
+    const email = CONTENT.paypalBusiness || "kauppa@esimerkki.fi";
+    const form = el('form',{method:'POST', action:'https://www.paypal.com/cgi-bin/webscr', target:'_blank'},
+      el('input',{type:'hidden',name:'cmd',value:'_cart'}),
+      el('input',{type:'hidden',name:'upload',value:'1'}),
+      el('input',{type:'hidden',name:'business',value:email}),
+      el('input',{type:'hidden',name:'currency_code',value:'EUR'}),
+      el('input',{type:'hidden',name:'return',value: location.origin+'/#success'}),
+      el('input',{type:'hidden',name:'cancel_return',value: location.origin+'/#cancel'})
+    );
+    let i=1;
+    ids.forEach(id=>{
+      const p=cat[id]; if(!p) return;
+      form.appendChild(el('input',{type:'hidden',name:`item_name_${i}`,value:p.name}));
+      form.appendChild(el('input',{type:'hidden',name:`amount_${i}`,   value:Number(p.price||0).toFixed(2)}));
+      form.appendChild(el('input',{type:'hidden',name:`quantity_${i}`, value:1}));
+      i++;
+    });
+    const shipVal = parseFloat((document.querySelector('input[name="ship"]:checked')||{value:"0"}).value || '0');
+    form.appendChild(el('input',{type:'hidden',name:'handling_cart',value:shipVal.toFixed(2)}));
+    document.body.appendChild(form); form.submit(); form.remove();
+  });
+
+  (function(){
+    const modal = $('#resultModal'); const title=$('#resultTitle'); const text=$('#resultText');
+    function show(t,msg){ title.textContent=t; text.textContent=msg; modal.classList.add('open'); }
+    if(location.hash==='#success'){
+      const soldIds = Object.keys(CART||{});
+      soldIds.forEach(id=>{ /* merkitse myydyksi tarv. */ });
+      CART={}; localStorage.setItem('cart','{}'); updateBadge();
+      show('Kiitos tilauksesta!','Vahvistus saapuu PayPal-sähköpostiisi.');
+      renderProducts(CONTENT.products || []);
+      renderCart();
+    }
+    if(location.hash==='#cancel'){ show('Maksu peruttu','Voit yrittää uudelleen tai muokata koria.'); }
+    modal?.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('open'); });
+  })();
+
+  // ===== RESPONSIVE NAV (näytä ☰ + cart-IKONI vasta kun nav ei mahdu) =====
+  (function(){
+    const container = document.getElementById('hdrRow');
+    const brand     = document.getElementById('brandBlock');
+    const nav       = document.getElementById('mainNav');
+    const right     = document.getElementById('rightBlock');
+    const menuBtn   = document.getElementById('openMenu');
+    const cartIcon  = document.getElementById('openCartIcon');
+    const cartText  = document.getElementById('openCartText');
+
+    let navVisible = true;
+
+    function setHeaderVar(){
+      const h = document.querySelector('header')?.getBoundingClientRect().height || 56;
+      document.documentElement.style.setProperty('--header-h', Math.round(h)+'px');
+    }
+
+    function measureNavWidth(){
+      const wasHidden = nav.classList.contains('nav-hidden');
+      if (wasHidden) nav.classList.remove('nav-hidden');
+      nav.classList.add('nav-measure');
+      const w = Math.ceil(nav.scrollWidth);
+      nav.classList.remove('nav-measure');
+      if (wasHidden) nav.classList.add('nav-hidden');
+      return w;
+    }
+
+    function canShowNav(){
+      // pakota hetkeksi: menu pois, cart tekstinä näkyviin
+      const prevMenuHidden = menuBtn.classList.contains('hidden');
+      const prevCartIconHidden = cartIcon.classList.contains('hidden');
+      const prevCartTextHidden = cartText.classList.contains('hidden');
+
+      menuBtn.classList.add('hidden');
+      cartIcon.classList.add('hidden');
+      cartText.classList.remove('hidden');
+
+      const cw   = container.clientWidth;
+      const bw   = Math.ceil(brand.getBoundingClientRect().width);
+      const rbw  = Math.ceil(right.getBoundingClientRect().width);
+      const navW = measureNavWidth();
+      const fits = navW <= Math.max(0, cw - bw - rbw - 24);
+
+      // palauta edelliset tilat
+      if (!prevMenuHidden) menuBtn.classList.remove('hidden');
+      if (!prevCartIconHidden) cartIcon.classList.remove('hidden'); else cartIcon.classList.add('hidden');
+      if ( prevCartTextHidden) cartText.classList.add('hidden'); else cartText.classList.remove('hidden');
+
+      return fits;
+    }
+
+    function applyState(showNav){
+      navVisible = !!showNav;
+      if (navVisible){
+        nav.classList.remove('nav-hidden');
+        menuBtn.classList.add('hidden');
+        cartIcon.classList.add('hidden');
+        cartText.classList.remove('hidden');
+        menuBtn.setAttribute('aria-expanded','false');
+      }else{
+        nav.classList.add('nav-hidden');
+        menuBtn.classList.remove('hidden');
+        cartIcon.classList.remove('hidden');
+        cartText.classList.add('hidden');
+      }
+      setHeaderVar();
+    }
+
+    function compute(){
+      setHeaderVar();
+      if (navVisible){
+        if (!canShowNav() ) applyState(false);
+      }else{
+        if (canShowNav() )  applyState(true);
+      }
+    }
+
+    let t=null;
+    const schedule=()=>{ if(t) return; t=setTimeout(()=>{ t=null; compute(); }, 120); };
+    window.addEventListener('resize', schedule, {passive:true});
+    window.addEventListener('orientationchange', ()=>setTimeout(compute,150), {passive:true});
+    if ('fonts' in document) document.fonts.ready.then(compute);
+    compute();
+  })();
+
+  // ===== VALIKKO-DRAWER =====
+  (function(){
+    const drawer = document.getElementById('menuDrawer');
+    const openBtn = document.getElementById('openMenu');
+    const closeA = document.getElementById('closeMenu');
+    const closeX = document.getElementById('closeMenuX');
+
+    function open(){ drawer.classList.add('open'); openBtn.setAttribute('aria-expanded','true'); }
+    function close(){ drawer.classList.remove('open'); openBtn.setAttribute('aria-expanded','false'); }
+    openBtn.addEventListener('click', open);
+    closeA.addEventListener('click', close);
+    closeX.addEventListener('click', close);
+    drawer.addEventListener('click', e=>{ if(e.target===drawer) close(); });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
+    drawer.querySelectorAll('[data-menu-close]').forEach(a=>a.addEventListener('click', close));
+  })();
+
+  // Start
+  loadContent();
+  </script>
+</body>
+</html>
