@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Kaavat – RUMAT STUDIO</title>
+
+  <!-- Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root{
+      --ink:#202020;         /* musta (tekstit) */
+      --olive:#A1A266;       /* footer-tausta */
+      --deep-blue:#345563;   /* otsikot */
+      --blue:#789FAB;        /* varalle */
+      --light-blue:#DEEEEE;  /* footer-logo tausta */
+      --ivory:#F6F6F4;       /* taustat & yläpalkki */
+      --header-h:56px; --band-radius:16px;
+    }
+    html{ scroll-padding-top: var(--header-h); }
+    body{ font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial; color:var(--ink); background:var(--ivory); }
+    h1,h2,h3{ color:var(--deep-blue); }
+
+    /* Header */
+    #hdrRow{ grid-template-columns:auto 1fr auto; }
+    #brandText{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:min(42vw, 460px); color:var(--ink); }
+    #mainNav{ justify-self:center; display:flex; gap:1.5rem; white-space:nowrap; font-size:13px; text-transform:uppercase; letter-spacing:.2em; color:var(--ink); }
+    #mainNav a{ color:var(--ink); }
+
+    /* Responsive nav helpers */
+    .nav-hidden{ display:none !important; }
+    .nav-measure{ position:absolute !important; visibility:hidden !important; display:flex !important; white-space:nowrap !important; }
+
+    /* Buttons */
+    .btn{border-radius:9999px;padding:.6rem 1rem;border:1px solid rgba(0,0,0,.15)}
+    .btn-dark{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+    /* Right block */
+    .icon-btn{ position:relative; width:38px; height:38px; display:grid; place-items:center; border-radius:9999px; background:rgba(0,0,0,0.06); border:1px solid rgba(0,0,0,0.16); color:var(--ink); }
+    .icon-btn:hover{ background:rgba(0,0,0,0.10); }
+    .cart-text-btn{ border:1px solid rgba(0,0,0,.16); padding:.45rem .8rem; border-radius:9999px; color:var(--ink); background:rgba(0,0,0,.04); }
+    .cart-text-btn:hover{ background:rgba(0,0,0,.08); }
+    .badge{ position:absolute; top:-4px; right:-4px; min-width:18px; height:18px; padding:0 4px; display:grid; place-items:center; border-radius:9999px; background:var(--ink); color:#fff; font-size:11px; font-weight:700; border:1px solid rgba(0,0,0,.15); }
+
+    /* Drawers */
+    .drawer{position:fixed;inset:0;z-index:60;display:none}
+    .drawer.open{display:block}
+    #menuDrawer .panel{position:absolute;top:0;left:0;right:auto;width:min(420px,90vw);height:100%;background:#fff;box-shadow:10px 0 30px rgba(0,0,0,.2)}
+    #cartDrawer .panel{position:absolute;top:0;right:0;left:auto;width:min(420px,90vw);height:100%;background:#fff;box-shadow:-10px 0 30px rgba(0,0,0,.2)}
+
+    /* Cards */
+    .card{ background:#fff; border-radius:16px; border:1px solid rgba(0,0,0,.12); }
+
+    /* Footer logo mask */
+    .logo-mask{ width:36px; height:36px; background:var(--light-blue); -webkit-mask:url('assets/logo.svg') no-repeat center/contain; mask:url('assets/logo.svg') no-repeat center/contain; }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="fixed top-0 left-0 right-0 z-50" style="background:var(--ivory); border-bottom:1px solid rgba(0,0,0,.08);">
+    <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-3 grid items-center gap-3">
+      <!-- Brand (vasen) -->
+      <a id="brandBlock" href="index.html#etusivu" class="flex items-center gap-3">
+        <img alt="RUMAT STUDIO logo" class="h-9 w-9 object-contain" src="assets/logo.svg">
+        <span id="brandText" class="uppercase text-sm tracking-widest">
+          <span class="font-extrabold">RUMAT</span>&nbsp;<span class="font-normal">STUDIO</span>
+        </span>
+      </a>
+      <!-- Nav (keskellä) -->
+      <nav id="mainNav">
+        <a href="index.html#etusivu" class="hover:underline underline-offset-4 font-semibold">Etusivu</a>
+        <a href="kaavat.html" class="hover:underline underline-offset-4 font-semibold">Kaavat</a>
+        <a href="index.html#tarina" class="hover:underline underline-offset-4 font-semibold">Tarina</a>
+        <a href="index.html#blogi"  class="hover:underline underline-offset-4 font-semibold">Blogi</a>
+        <a href="index.html#some"   class="hover:underline underline-offset-4 font-semibold">Some</a>
+        <a href="index.html#yhteys" class="hover:underline underline-offset-4 font-semibold">Yhteystiedot</a>
+      </nav>
+      <!-- Oikea reuna -->
+      <div id="rightBlock" class="flex items-center gap-2">
+        <!-- ☰ näkyy vasta kun nav ei mahdu -->
+        <button id="openMenu" class="icon-btn hidden" aria-controls="menuDrawer" aria-expanded="false" aria-label="Valikko">
+          <span aria-hidden="true" style="font-size:20px;line-height:1">☰</span>
+          <span class="sr-only">Valikko</span>
+        </button>
+        <!-- Ostoskori tekstinä (nav mahtuu) -->
+        <button id="openCartText" class="cart-text-btn">Ostoskori <span id="cartCountText" class="opacity-80"></span></button>
+        <!-- Ostoskori ikonina (nav ei mahdu) -->
+        <button id="openCartIcon" class="icon-btn hidden" aria-label="Ostoskori">
+          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="20" r="1.8"></circle><circle cx="17" cy="20" r="1.8"></circle><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 8H7.1"></path>
+          </svg>
+          <span class="badge" id="cartCount">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="pt-[72px]">
+    <section class="mx-auto max-w-6xl px-4 py-10">
+      <h1 class="text-4xl font-extrabold mb-2">Kaavat</h1>
+      <p class="text-[color:var(--ink)]/80 mb-8">Digitaaliset neule- ja ompelukaavat. Oston jälkeen saat latauslinkin sähköpostiisi.</p>
+      <div id="patternsRoot" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+  </main>
+
+  <!-- OSTOSKORI DRAWER -->
+  <div id="cartDrawer" class="drawer" aria-hidden="true">
+    <div class="absolute inset-0 bg-black/40" id="closeCart" aria-label="Sulje ostoskori"></div>
+    <div class="panel p-5 flex flex-col">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-semibold">Ostoskori</h3>
+        <button id="closeCartX" class="text-stone-500 hover:text-stone-800">✕</button>
+      </div>
+      <div id="cartItems" class="flex-1 overflow-auto divide-y"></div>
+      <div class="mt-4 space-y-3">
+        <div class="text-sm grid grid-cols-2 gap-y-1">
+          <div class="text-stone-600">Välisumma</div><div class="text-right" id="subTotal">€0,00</div>
+        </div>
+        <button id="checkout" class="btn btn-dark w-full">Maksa PayPalilla</button>
+        <div id="paypalWarn" class="text-xs text-stone-500"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VALIKKO DRAWER -->
+  <div id="menuDrawer" class="drawer" aria-hidden="true">
+    <div class="absolute inset-0 bg-black/40" id="closeMenu" aria-label="Sulje valikko"></div>
+    <div class="panel p-6 flex flex-col gap-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xl font-semibold">Valikko</h3>
+        <button id="closeMenuX" class="text-stone-500 hover:text-stone-800">✕</button>
+      </div>
+      <nav class="flex flex-col gap-3 text-lg">
+        <a href="index.html#etusivu" class="py-2 border-b" data-menu-close>Etusivu</a>
+        <a href="kaavat.html" class="py-2 border-b" data-menu-close>Kaavat</a>
+        <a href="index.html#tarina" class="py-2 border-b" data-menu-close>Tarina</a>
+        <a href="index.html#blogi"  class="py-2 border-b" data-menu-close>Blogi</a>
+        <a href="index.html#some"   class="py-2 border-b" data-menu-close>Some</a>
+        <a href="index.html#yhteys" class="py-2"          data-menu-close>Yhteystiedot</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="mt-16" style="background:var(--olive); color:var(--ivory);">
+    <div class="mx-auto max-w-6xl px-4 py-10 grid sm:grid-cols-3 gap-8">
+      <div class="flex items-start gap-3">
+        <div class="logo-mask" aria-hidden="true"></div>
+        <div>
+          <div class="uppercase tracking-wide">RUMAT STUDIO</div>
+          <div class="text-sm mt-1 text-white/80">Suomussalmi — Contemporary textiles, built to last.</div>
+        </div>
+      </div>
+      <div>
+        <h5 class="text-sm text-white/80">Yhteys</h5>
+        <ul class="mt-2 space-y-2 text-sm">
+          <li><a href="mailto:hello@rumat.fi" class="hover:underline text-white">hello@rumat.fi</a></li>
+          <li><a href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer" class="hover:underline text-white">Instagram</a></li>
+          <li><span class="text-white">Kauppakatu 20, 89600 Suomussalmi</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="py-6 text-center text-xs text-white/80">© <span id="year"></span> RUMAT STUDIO</div>
+  </footer>
+
+  <script>
+  const fmtEUR = x => new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
+  const $ = s => document.querySelector(s);
+  const el = (tag,attrs={},...kids)=>{ const n=document.createElement(tag);
+    Object.entries(attrs).forEach(([k,v])=>{
+      if(k==='class') n.className=v; else if(k==='html') n.innerHTML=v;
+      else if(k.startsWith('on')) n.addEventListener(k.slice(2),v); else n.setAttribute(k,v);
+    });
+    kids.forEach(k=>{ if(k==null) return; if(typeof k==='string') n.appendChild(document.createTextNode(k)); else n.appendChild(k);});
+    return n;
+  };
+
+  // Dummy kaavat (vaihda omiin)
+  const PATTERNS = [
+    { id:'kaava-pipo', name:'Pipon kaava (PDF)', price:6.00, blurb:'Yksi koko, helppo muokata.', img:'https://placehold.co/1200x800?text=Kaava' },
+    { id:'kaava-lapaset', name:'Lapaset (PDF)', price:6.00, blurb:'Peruslapanen, S-XL.', img:'https://placehold.co/1200x800?text=Kaava' },
+    { id:'kaava-kauluri', name:'Kauluri (PDF)', price:5.00, blurb:'Nopea viikonloppuprojekti.', img:'https://placehold.co/1200x800?text=Kaava' }
+  ];
+
+  // Render list
+  (function(){
+    const root = $('#patternsRoot');
+    PATTERNS.forEach(p=>{
+      root.appendChild(
+        el('article',{class:'card p-5 flex flex-col'},
+          el('img',{src:p.img, alt:p.name, class:'w-full h-48 object-cover rounded-lg mb-4'}),
+          el('h3',{class:'text-xl font-semibold'}, p.name),
+          el('p',{class:'text-[color:#202020]/80 mt-1 mb-3'}, p.blurb),
+          el('div',{class:'mt-auto flex items-center justify-between'},
+            el('div',{class:'font-semibold'}, fmtEUR(p.price)),
+            el('button',{'data-buy':p.id,class:'btn btn-dark'}, 'Osta')
+          )
+        )
+      );
+    });
+    root.addEventListener('click', e=>{
+      const b = e.target.closest('[data-buy]'); if(!b) return;
+      addToCart(b.getAttribute('data-buy'));
+    });
+    const y=$('#year'); if(y) y.textContent=new Date().getFullYear();
+  })();
+
+  // Ostoskori
+  let CART = JSON.parse(localStorage.getItem('cart')||'{}');
+  function saveCart(){ localStorage.setItem('cart', JSON.stringify(CART)); updateBadge(); }
+  function updateBadge(){
+    const n = Object.values(CART).reduce((a,b)=>a+b,0);
+    const ic = $('#cartCount'); const tx = $('#cartCountText');
+    if(ic) ic.textContent = String(n);
+    if(tx) tx.textContent = n ? `(${n})` : '';
+  }
+  const $drawer=$('#cartDrawer');
+  function openCart(){ $drawer.classList.add('open'); renderCart(); }
+  function closeCart(){ $drawer.classList.remove('open'); }
+  $('#openCartText')?.addEventListener('click', openCart);
+  $('#openCartIcon')?.addEventListener('click', openCart);
+  $('#closeCart')?.addEventListener('click', closeCart);
+  $('#closeCartX')?.addEventListener('click', closeCart);
+
+  function catalog(){ const map={}; PATTERNS.forEach(p=>map[p.id]=p); return map; }
+  function renderCart(){
+    const root = $('#cartItems'); root.innerHTML='';
+    const cat = catalog();
+    let sub=0;
+    Object.keys(CART).forEach(id=>{
+      const p=cat[id]; if(!p) return;
+      sub += p.price;
+      root.appendChild(el('div',{class:'py-3 flex items-center justify-between'},
+        el('div',{},
+          el('div',{class:'font-medium'}, p.name),
+          el('div',{class:'text-sm text-[color:#202020]/70'}, fmtEUR(p.price))
+        ),
+        el('button',{'data-remove':id, class:'px-2 ring-1 ring-[rgba(0,0,0,.15)] rounded'}, 'Poista')
+      ));
+    });
+    $('#subTotal').textContent = fmtEUR(sub);
+    root.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{ const id=b.dataset.remove; delete CART[id]; saveCart(); renderCart(); });
+  }
+  function addToCart(id){ CART[id]=1; saveCart(); openCart(); }
+  updateBadge();
+
+  // Valikko drawer
+  (function(){
+    const drawer = document.getElementById('menuDrawer');
+    const openBtn = document.getElementById('openMenu');
+    const closeA = document.getElementById('closeMenu');
+    const closeX = document.getElementById('closeMenuX');
+
+    function open(){ drawer.classList.add('open'); openBtn.setAttribute('aria-expanded','true'); }
+    function close(){ drawer.classList.remove('open'); openBtn.setAttribute('aria-expanded','false'); }
+    openBtn.addEventListener('click', open);
+    closeA.addEventListener('click', close);
+    closeX.addEventListener('click', close);
+    drawer.addEventListener('click', e=>{ if(e.target===drawer) close(); });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
+    drawer.querySelectorAll('[data-menu-close]').forEach(a=>a.addEventListener('click', close));
+  })();
+
+  // Responsive nav: näytä ☰ + cart-IKONI jos nav ei mahdu
+  (function(){
+    const container = document.getElementById('hdrRow');
+    const brand     = document.getElementById('brandBlock');
+    const nav       = document.getElementById('mainNav');
+    const right     = document.getElementById('rightBlock');
+    const menuBtn   = document.getElementById('openMenu');
+    const cartIcon  = document.getElementById('openCartIcon');
+    const cartText  = document.getElementById('openCartText');
+
+    let navVisible = true;
+
+    function measureNavWidth(){
+      const wasHidden = nav.classList.contains('nav-hidden');
+      if (wasHidden) nav.classList.remove('nav-hidden');
+      nav.classList.add('nav-measure');
+      const w = Math.ceil(nav.scrollWidth);
+      nav.classList.remove('nav-measure');
+      if (wasHidden) nav.classList.add('nav-hidden');
+      return w;
+    }
+
+    function canShowNav(){
+      const prevMenuHidden = menuBtn.classList.contains('hidden');
+      const prevCartIconHidden = cartIcon.classList.contains('hidden');
+      const prevCartTextHidden = cartText.classList.contains('hidden');
+
+      menuBtn.classList.add('hidden');
+      cartIcon.classList.add('hidden');
+      cartText.classList.remove('hidden');
+
+      const cw   = container.clientWidth;
+      const bw   = Math.ceil(brand.getBoundingClientRect().width);
+      const rbw  = Math.ceil(right.getBoundingClientRect().width);
+      const navW = measureNavWidth();
+      const fits = navW <= Math.max(0, cw - bw - rbw - 24);
+
+      if (!prevMenuHidden) menuBtn.classList.remove('hidden');
+      if (!prevCartIconHidden) cartIcon.classList.remove('hidden'); else cartIcon.classList.add('hidden');
+      if ( prevCartTextHidden) cartText.classList.add('hidden'); else cartText.classList.remove('hidden');
+
+      return fits;
+    }
+
+    function applyState(showNav){
+      navVisible = !!showNav;
+      if (navVisible){
+        nav.classList.remove('nav-hidden');
+        menuBtn.classList.add('hidden');
+        cartIcon.classList.add('hidden');
+        cartText.classList.remove('hidden');
+      }else{
+        nav.classList.add('nav-hidden');
+        menuBtn.classList.remove('hidden');
+        cartIcon.classList.remove('hidden');
+        cartText.classList.add('hidden');
+      }
+    }
+
+    function compute(){ if (navVisible){ if (!canShowNav()) applyState(false); } else { if (canShowNav()) applyState(true); } }
+    let t=null; const schedule=()=>{ if(t) return; t=setTimeout(()=>{ t=null; compute(); }, 120); };
+    window.addEventListener('resize', schedule, {passive:true});
+    if ('fonts' in document) document.fonts.ready.then(compute);
+    compute();
+  })();
+  </script>
+</body>
+</html>
