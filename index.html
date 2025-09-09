@@ -23,7 +23,7 @@
       --section-gap: clamp(6px, 1vw, 12px);
       --band-radius: 16px;
 
-      /* Esittelyn mitat (kuvan kaltainen, matala) */
+      /* Esittelyn mitat */
       --intro-h: clamp(260px, 34vw, 360px);
       --intro-side: clamp(220px, 30vw, 380px);
       --intro-gap: 14px;
@@ -69,30 +69,15 @@
     .site-content{ position:relative; z-index:2; }
     .hero{ position:relative; height:100svh; display:grid; place-items:center; text-align:center; }
 
-    /* Esittely: matala palkki, kuvat reunoista, keskiteksti */
+    /* Esittely (kuvat reunoista) */
     .intro-wrap.full-bleed{ border-radius: 20px; overflow: hidden; }
-    .intro-edge{
-      position:relative;
-      height: var(--intro-h);
-      display:flex; align-items:center; justify-content:center;
-      background: var(--ivory);
-    }
-    .intro-center{
-      position: relative; z-index: 1; max-width: 48rem;
-      padding: 0 1rem;
-      padding-left:  calc(var(--intro-side) + var(--intro-gap));
-      padding-right: calc(var(--intro-side) + var(--intro-gap));
-      text-align: left;
-    }
+    .intro-edge{ position:relative; height: var(--intro-h); display:flex; align-items:center; justify-content:center; background: var(--ivory); }
+    .intro-center{ position: relative; z-index: 1; max-width: 48rem; padding: 0 1rem; padding-left:  calc(var(--intro-side) + var(--intro-gap)); padding-right: calc(var(--intro-side) + var(--intro-gap)); text-align: left; }
     .intro-center p{ margin:0 0 .7rem 0; }
     .intro-logo{ width:56px; height:56px; display:block; margin:0 auto 1rem; object-fit:contain; }
-    .edge-img{
-      position:absolute; top:50%; transform: translateY(-50%);
-      width: var(--intro-side); height: calc(var(--intro-h));
-    }
+    .edge-img{ position:absolute; top:50%; transform: translateY(-50%); width: var(--intro-side); height: calc(var(--intro-h)); }
     .edge-img img{ width:100%; height:100%; object-fit:cover; border-radius: 18px; border:1px solid rgba(0,0,0,.12); }
     .edge-img--left{ left:0; } .edge-img--right{ right:0; }
-
     @media (max-width: 900px){
       .intro-edge{ height:auto; display:block; }
       .edge-img{ position:relative; top:auto; transform:none; width:100%; height: 220px; }
@@ -104,7 +89,6 @@
     .card{ background:#fff; border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
     .pattern-grid{ display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:12px; }
     @media (min-width: 768px){ .pattern-grid{ grid-template-columns: repeat(4,minmax(0,1fr)); gap:14px; } }
-
     .tile{ position:relative; cursor:pointer; aspect-ratio:1/1; display:block; }
     .tile img{ width:100%; height:100%; object-fit:cover; display:block; }
     .tile-caption{
@@ -113,9 +97,9 @@
       background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.0));
       color:#fff; font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-size:.85rem;
     }
+    .tile--selected{ outline:2px solid var(--deep-blue); }
 
     /* “pienennä” koko laatan kokoinen */
-    .tile--selected{ aspect-ratio:1/1; }
     .min-full{
       position:absolute; inset:0; width:100%; height:100%;
       display:grid; place-items:center;
@@ -124,50 +108,24 @@
     }
     .min-full:hover{ background:rgba(0,0,0,.08); }
 
-    /* Koko sivun tuoteikkuna */
-    .modal-fs{ position:fixed; inset:0; z-index:80; display:none; background:rgba(0,0,0,.55); }
-    .modal-fs.open{ display:grid; place-items:center; }
-    .pm-card{
-      width:min(1200px,96vw); height:min(90vh,900px);
-      background:#fff; border-radius:16px; overflow:hidden;
-      display:grid; grid-template-rows:auto 1fr;
-      box-shadow:0 20px 60px rgba(0,0,0,.35);
+    /* Inline-laajennus (koko ruudukon leveys) */
+    .expander{
+      grid-column: 1 / -1;
+      background:#fff; border-radius:16px; border:1px solid rgba(0,0,0,.12);
+      overflow:hidden;
     }
-    .pm-top{ display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.75rem 1rem; border-bottom:1px solid rgba(0,0,0,.1); }
-    .pm-body{ display:grid; grid-template-columns:1fr; min-height:0; }
-    @media (min-width: 1024px){ .pm-body{ grid-template-columns:1.6fr 1fr; } }
-    .pm-view{ position:relative; background:#000; min-height:280px; }
-    .pm-view img{ width:100%; height:100%; object-fit:contain; background:#000; }
-    .pm-next,.pm-prev{
+    .ex-row{ display:grid; grid-template-columns:1fr; min-height:260px; }
+    @media (min-width: 1024px){ .ex-row{ grid-template-columns: 1.6fr 1fr; } }
+    .ex-view{ position:relative; background:#000; min-height:260px; }
+    .ex-view img{ width:100%; height:100%; object-fit:contain; background:#000; }
+    .ex-prev,.ex-next{
       position:absolute; top:50%; transform:translateY(-50%);
       width:42px; height:42px; display:grid; place-items:center;
       border-radius:9999px; background:#fff; border:1px solid rgba(0,0,0,.15); font-weight:800;
     }
-    .pm-prev{ left:10px; } .pm-next{ right:10px; }
-    .pm-info{ padding:1rem 1.1rem; overflow:auto; }
-
-    /* Suunnittelija (kuva vasen, teksti oikea) */
-    .designer-grid{ display:grid; grid-template-columns:1fr; gap:1.25rem; align-items:start; }
-    @media (min-width: 900px){ .designer-grid{ grid-template-columns: 320px 1fr; gap:2rem; } }
-    .designer-image img{ width:100%; height:auto; display:block; border-radius:12px; border:1px solid rgba(0,0,0,.12); }
-    .designer-title{ text-transform:uppercase; font-weight:900; letter-spacing:.06em; }
-
-    /* Footer (kuvan mukainen) */
-    .footer-bar{ background:var(--olive); color:var(--ivory); }
-    .footer-grid{
-      max-width:72rem; margin:0 auto; padding:2.25rem 1rem;
-      display:grid; grid-template-columns:1fr 1fr auto; gap:2rem; align-items:center;
-    }
-    .footer-col h6{
-      margin:0 0 .2rem 0; font-size:.85rem; font-weight:800;
-      letter-spacing:.14em; text-transform:uppercase; color:var(--ink);
-    }
-    .footer-link, .footer-handle{ display:block; font-size:.95rem; line-height:1.35; color:var(--light-blue); }
-    .footer-link:hover{ text-decoration:underline; }
-    .footer-ytunnus{ margin-top:.8rem; font-weight:800; color:var(--ink); font-size:.9rem; letter-spacing:.04em; }
-    .footer-logo{ justify-self:end; width:min(180px,24vw); height:min(110px,14vw); background:var(--light-blue);
-      -webkit-mask:url('assets/logo.svg') no-repeat center/contain; mask:url('assets/logo.svg') no-repeat center/contain; }
-    .footer-copy{ padding:.9rem 1rem; text-align:center; font-size:.78rem; color:rgba(255,255,255,.85); }
+    .ex-prev{ left:10px; } .ex-next{ right:10px; }
+    .ex-info{ padding:1rem 1.1rem; overflow:auto; }
+    .ex-top{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.6rem .9rem; border-bottom:1px solid rgba(0,0,0,.1); }
   </style>
 </head>
 
@@ -223,19 +181,17 @@
       </div>
     </section>
 
-    <!-- Esittely (matalampi, kuvat reunoista) -->
+    <!-- Esittely -->
     <section class="py-0">
       <div class="intro-wrap full-bleed">
         <div class="intro-edge">
           <div class="edge-img edge-img--left" aria-hidden="true">
             <img src="assets/intro-left.jpg" alt="">
           </div>
-
           <div class="intro-center">
             <img class="intro-logo" src="assets/logo.svg" alt="RUMAT STUDIO">
             <div id="intro-text" class="text-[15px] sm:text-base"></div>
           </div>
-
           <div class="edge-img edge-img--right" aria-hidden="true">
             <img src="assets/intro-right.jpg" alt="">
           </div>
@@ -244,7 +200,7 @@
     </section>
     <div class="aurora-gap full-bleed"></div>
 
-    <!-- KAAVIOT (neliöt) -->
+    <!-- KAAVIOT (neliöt + inline-laajennus) -->
     <section id="kaaviot" class="py-0">
       <div class="band full-bleed">
         <div class="band-inner">
@@ -293,19 +249,15 @@
         <div class="footer-col">
           <h6>Instagram</h6>
           <a class="footer-handle" href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer">rumat.studio</a>
-
           <div style="height:.9rem"></div>
-
           <h6>TikTok</h6>
           <a class="footer-handle" href="https://www.tiktok.com/@rumat.studio" target="_blank" rel="noreferrer">rumat.studio</a>
         </div>
-
         <div class="footer-col">
           <h6>Ota yhteyttä</h6>
           <a class="footer-link" href="mailto:hello@rumat.fi">hello@rumat.fi</a>
           <div class="footer-ytunnus">Y-3436822-5</div>
         </div>
-
         <div class="footer-logo" aria-hidden="true"></div>
       </div>
       <div class="footer-copy">© <span id="year"></span> RUMAT STUDIO</div>
@@ -348,30 +300,6 @@
     </div>
   </div>
 
-  <!-- KOKO SIVUN TUOTEIKKUNA -->
-  <div id="patternModal" class="modal-fs" aria-hidden="true">
-    <div class="pm-card" role="dialog" aria-modal="true" aria-labelledby="pmTitle">
-      <div class="pm-top">
-        <div id="pmTitle" class="text-lg font-bold"></div>
-        <button id="pmClose" class="px-3 py-1 rounded border border-[rgba(0,0,0,.15)]">✕</button>
-      </div>
-      <div class="pm-body">
-        <div class="pm-view">
-          <img id="pmImg" alt="">
-          <button id="pmPrev" class="pm-prev">◀</button>
-          <button id="pmNext" class="pm-next">▶</button>
-        </div>
-        <div class="pm-info">
-          <h3 id="pmName" class="text-2xl mb-2"></h3>
-          <p id="pmBlurb" class="opacity-80 mb-2"></p>
-          <div class="mb-2"><span class="font-semibold">Koot:</span> <span id="pmSizes"></span></div>
-          <div id="pmPrice" class="text-xl font-bold mb-4"></div>
-          <button id="pmBuy" class="btn bg-[color:var(--deep-blue)] text-white">Osta</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script>
   const fmtEUR = x => new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
   const $ = s => document.querySelector(s);
@@ -402,7 +330,6 @@
 
   // Esittelyteksti
   function parasToHTML(s){ return String(s||'').trim().split(/\n\s*\n/).map(p=>`<p>${p.trim()}</p>`).join('\n'); }
-
   const defaultContent = {
     hero:{ headline:"Liian rumat ollakseen totta" },
     pitch: `RUMAT STUDIO syntyi lapsuuden haaveesta ja vuosien aikana kypsyneestä intohimosta vaatesuunnitteluun. Vuonna 2023 visio alkoi muovautumaan nykyiseen muotoonsa: ajattomia ja kestäviä vaatteita, jotka syntyvät harkitusta rakkaudesta ja intohimosta luovaan tekemiseen.
@@ -421,7 +348,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
   })();
 
-  // KAAVIOT
+  // Kaavat (data)
   const KAAVIOT = [
     { id:'laukku',      name:'Laukku',       price:6.00, sizes:'One size', blurb:'Sling-laukku kaava (PDF).', images:['https://placehold.co/1400x900?text=Laukku+1','https://placehold.co/1400x900?text=Laukku+2']},
     { id:'usva-paita',  name:'Usva paita',   price:7.00, sizes:'XS–XL',    blurb:'Rento paita raglan-hihoilla.', images:['https://placehold.co/1400x900?text=Usva+1','https://placehold.co/1400x900?text=Usva+2']},
@@ -477,7 +404,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     document.body.appendChild(form); form.submit(); form.remove();
   });
 
-  // NAV: vaihtaa ☰ + ostoskorin ikoniksi kun nav ei mahdu
+  // NAV: vaihto ☰/tekstikori kun nav ei mahdu
   (function(){
     const container = document.getElementById('hdrRow');
     const brand     = document.getElementById('brandBlock');
@@ -486,7 +413,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     const menuBtn   = document.getElementById('openMenu');
     const cartIcon  = document.getElementById('openCartIcon');
     const cartText  = document.getElementById('openCartText');
-
     let navVisible = true;
 
     function measureNavWidth(){
@@ -542,25 +468,15 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     })();
   })();
 
-  // KAAVIOT UI
+  // KAAVIOT UI – inline-laajennus rivin alle
   (function(){
     const grid  = document.getElementById('patternsGrid');
-    const modal   = document.getElementById('patternModal');
-    const pmTitle = document.getElementById('pmTitle');
-    const pmClose = document.getElementById('pmClose');
-    const pmImg   = document.getElementById('pmImg');
-    const pmPrev  = document.getElementById('pmPrev');
-    const pmNext  = document.getElementById('pmNext');
-    const pmName  = document.getElementById('pmName');
-    const pmBlurb = document.getElementById('pmBlurb');
-    const pmSizes = document.getElementById('pmSizes');
-    const pmPrice = document.getElementById('pmPrice');
-    const pmBuy   = document.getElementById('pmBuy');
-
     let selectedId = null;
-    let current = null; let imgIdx = 0;
+    let expander = null;       // uudelleenkäytettävä laajennuselementti
+    let current  = null;       // valittu tuote
+    let imgIdx   = 0;
 
-    grid.innerHTML='';
+    // Rakenna laatat
     KAAVIOT.forEach((p)=>{
       const tile = document.createElement('article');
       tile.className = 'tile card';
@@ -575,64 +491,118 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       grid.appendChild(tile);
     });
 
-    function clearSelection(){
-      if(!selectedId) return;
-      const prev = grid.querySelector(`.tile[data-id="${selectedId}"]`);
-      if(prev){
-        const p = KAAVIOT.find(x=>x.id===selectedId);
-        prev.className='tile card';
-        prev.innerHTML='';
-        prev.appendChild(Object.assign(document.createElement('img'),{
-          src:(p.images||[])[0] || 'https://placehold.co/900?text=Kaava',
-          alt:p.name
-        }));
-        const cap = document.createElement('div'); cap.className='tile-caption'; cap.textContent=p.name; prev.appendChild(cap);
+    function columns(){
+      const cs = getComputedStyle(grid).gridTemplateColumns;
+      return Math.max(1, cs.split(' ').length);
+    }
+    function insertAfterRow(tileEl){
+      const tiles = Array.from(grid.querySelectorAll('.tile, .expander'));
+      const onlyTiles = tiles.filter(n=>n.classList.contains('tile'));
+      const idx = onlyTiles.indexOf(tileEl);
+      const cols = columns();
+      const rowEndIdx = Math.min(onlyTiles.length-1, Math.floor(idx/cols)*cols + (cols-1));
+      const after = onlyTiles[rowEndIdx];
+      if (expander.parentNode !== grid){
+        grid.insertBefore(expander, after.nextSibling);
+      }else{
+        grid.insertBefore(expander, after.nextSibling);
       }
-      selectedId=null;
     }
+    function buildExpander(){
+      expander = el('div',{class:'expander'});
+      const top = el('div',{class:'ex-top'},
+        el('div',{id:'exTitle',class:'font-semibold'}, ''),
+        el('button',{id:'exClose',class:'px-3 py-1 rounded border border-[rgba(0,0,0,.15)]'}, 'pienennä')
+      );
+      const row = el('div',{class:'ex-row'},
+        el('div',{class:'ex-view'},
+          el('img',{id:'exImg',alt:'Kaava'}),
+          el('button',{id:'exPrev',class:'ex-prev'},'◀'),
+          el('button',{id:'exNext',class:'ex-next'},'▶')
+        ),
+        el('div',{class:'ex-info'},
+          el('h3',{id:'exName',class:'text-2xl mb-2'}, ''),
+          el('p',{id:'exBlurb',class:'opacity-80 mb-2'}, ''),
+          el('div',{class:'mb-2'}, el('span',{class:'font-semibold'},'Koot: '), el('span',{id:'exSizes'},'')),
+          el('div',{id:'exPrice',class:'text-xl font-bold mb-4'}, ''),
+          el('button',{id:'exBuy',class:'btn bg-[color:var(--deep-blue)] text-white'},'Osta')
+        )
+      );
+      expander.appendChild(top); expander.appendChild(row);
+      // tapahtumat
+      expander.querySelector('#exPrev').addEventListener('click', ()=>nav(-1));
+      expander.querySelector('#exNext').addEventListener('click', ()=>nav(+1));
+      expander.querySelector('#exClose').addEventListener('click', ()=>clearSelection());
+    }
+    buildExpander();
 
-    function openModal(p){
+    function openFor(p, tileEl){
       current = p; imgIdx = 0;
-      pmTitle.textContent = p.name;
-      pmName.textContent  = p.name;
-      pmBlurb.textContent = p.blurb || '';
-      pmSizes.textContent = p.sizes || '';
-      pmPrice.textContent = fmtEUR(p.price||0);
-      pmImg.src = (p.images||[])[0] || 'https://placehold.co/900?text=Kaava';
-      pmBuy.onclick = ()=>window.addToCart ? window.addToCart(p.id) : null;
-      modal.classList.add('open');
+      expander.querySelector('#exTitle').textContent = p.name;
+      expander.querySelector('#exName').textContent  = p.name;
+      expander.querySelector('#exBlurb').textContent = p.blurb || '';
+      expander.querySelector('#exSizes').textContent = p.sizes || '';
+      expander.querySelector('#exPrice').textContent = fmtEUR(p.price||0);
+      expander.querySelector('#exImg').src = (p.images||[])[0] || 'https://placehold.co/900?text=Kaava';
+      expander.querySelector('#exBuy').onclick = () => window.addToCart ? window.addToCart(p.id) : null;
+
+      // Sijoita laajennus oikean rivin perään
+      insertAfterRow(tileEl);
     }
-    function closeModal(){ modal.classList.remove('open'); }
     function nav(dir){
       if(!current || !current.images || !current.images.length) return;
       const n = current.images.length;
       imgIdx = (imgIdx + dir + n) % n;
-      pmImg.src = current.images[imgIdx];
+      expander.querySelector('#exImg').src = current.images[imgIdx];
     }
-    pmPrev.addEventListener('click', ()=>nav(-1));
-    pmNext.addEventListener('click', ()=>nav(+1));
-    pmClose.addEventListener('click', ()=>{ clearSelection(); closeModal(); });
-    modal.addEventListener('click', (e)=>{ if(e.target===modal){ clearSelection(); closeModal(); } });
-    document.addEventListener('keydown', e=>{ if(e.key==='Escape' && modal.classList.contains('open')){ clearSelection(); closeModal(); } });
+
+    function markSelected(tile, on){
+      tile.classList.toggle('tile--selected', !!on);
+      tile.innerHTML='';
+      const imgSrc = (KAAVIOT.find(x=>x.id===tile.dataset.id)?.images||[])[0] || 'https://placehold.co/900?text=Kaava';
+      tile.appendChild(Object.assign(document.createElement('img'),{src:imgSrc,alt:tile.dataset.id}));
+      const cap = Object.assign(document.createElement('div'),{className:'tile-caption',textContent: KAAVIOT.find(x=>x.id===tile.dataset.id)?.name || ''});
+      tile.appendChild(cap);
+      if (on){
+        const btn = Object.assign(document.createElement('button'),{className:'min-full',type:'button',textContent:'pienennä'});
+        btn.addEventListener('click', (e)=>{ e.stopPropagation(); clearSelection(); });
+        tile.appendChild(btn);
+      }
+    }
+
+    function clearSelection(){
+      if(!selectedId) return;
+      const prev = grid.querySelector(`.tile[data-id="${selectedId}"]`);
+      if (prev) markSelected(prev, false);
+      if (expander.parentNode === grid) grid.removeChild(expander);
+      selectedId = null; current = null; imgIdx = 0;
+    }
 
     function selectTile(tile){
       const id = tile.getAttribute('data-id');
-      if (id===selectedId) return;
+      if (id===selectedId){ clearSelection(); return; }
       clearSelection();
       selectedId = id;
-      tile.className = 'tile tile--selected card';
-      tile.innerHTML = '';
-      const minBtn = document.createElement('button'); minBtn.className='min-full'; minBtn.type='button'; minBtn.textContent='pienennä';
-      minBtn.addEventListener('click', (e)=>{ e.stopPropagation(); clearSelection(); closeModal(); });
-      tile.appendChild(minBtn);
+      markSelected(tile, true);
       const p = KAAVIOT.find(x=>x.id===id);
-      openModal(p);
+      openFor(p, tile);
     }
 
     grid.addEventListener('click', (e)=>{
       const tile = e.target.closest('.tile'); if(!tile || !grid.contains(tile)) return;
       selectTile(tile);
     });
+
+    // Reposi laajennus kun sarakemäärä muuttuu
+    let roTimer=null;
+    addEventListener('resize', ()=>{
+      if(!selectedId || !expander.parentNode) return;
+      if(roTimer) clearTimeout(roTimer);
+      roTimer=setTimeout(()=>{
+        const tile = grid.querySelector(`.tile[data-id="${selectedId}"]`);
+        if(tile) insertAfterRow(tile);
+      },120);
+    }, {passive:true});
   })();
   </script>
 </body>
