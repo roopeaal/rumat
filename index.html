@@ -23,7 +23,7 @@
       --ink:#202020;
       --dark-forest:#0B0F0E;
       --olive:#A1A266;
-      --ivory:#F6F6F4;
+      --ivory:#F6F6F4;   /* sivuston vaalea sävy */
       --mist:#DEEEEE;
       --gallery:#F6F6F4;
       --footer:#0B0F0E;
@@ -42,13 +42,12 @@
     .btn-dark{background:#111827;color:#fff;border-color:#111827}
     .chip{font-size:.78rem;padding:.25rem .55rem;border-radius:9999px;border:1px solid rgb(214,211,209);background:#fff}
 
-    /* Taustavideo (vain video + poster-kuva latauksen ajaksi) */
+    /* Taustavideo */
     .bg-fixed{
       position:fixed; inset:0; width:100%; height:100%;
       object-fit:cover; z-index:0; pointer-events:none; display:block;
-      background: #000; /* jos poster puuttuu hetkellisesti */
+      background:#000;
     }
-
     .site-content{ position:relative; z-index:2; background:transparent; }
 
     /* Hero */
@@ -80,29 +79,31 @@
       justify-self:center;
       display:flex; gap:1.5rem; white-space:nowrap;
       font-size:13px; text-transform:uppercase; letter-spacing:.2em;
+      color:#111827;
     }
 
     #rightBlock{ justify-self:end; display:flex; align-items:center; gap:.5rem; white-space:nowrap; }
 
+    /* Ikonipainikkeet – vaalea header */
     .icon-btn{
       position:relative; width:38px; height:38px; display:grid; place-items:center;
-      border-radius:9999px; background:rgba(255,255,255,0.10);
-      border:1px solid rgba(255,255,255,0.30); color:#fff; transition:background .15s ease;
+      border-radius:9999px; background:rgba(0,0,0,0.06);
+      border:1px solid rgba(0,0,0,0.16); color:#111827; transition:background .15s ease;
     }
-    .icon-btn:hover{ background:rgba(255,255,255,0.20); }
+    .icon-btn:hover{ background:rgba(0,0,0,0.10); }
 
     .badge{
       position:absolute; top:-4px; right:-4px; min-width:18px; height:18px; padding:0 4px;
-      display:grid; place-items:center; border-radius:9999px; background:#fff; color:#111827;
+      display:grid; place-items:center; border-radius:9999px; background:#111827; color:#fff;
       font-size:11px; line-height:1; font-weight:700; border:1px solid rgba(0,0,0,.15);
     }
 
     .cart-text-btn{
-      border:1px solid rgba(255,255,255,.3);
-      padding:.45rem .8rem; border-radius:9999px; color:#fff;
-      background:rgba(255,255,255,.10);
+      border:1px solid rgba(0,0,0,.16);
+      padding:.45rem .8rem; border-radius:9999px; color:#111827;
+      background:rgba(0,0,0,.04);
     }
-    .cart-text-btn:hover{ background:rgba(255,255,255,.20); }
+    .cart-text-btn:hover{ background:rgba(0,0,0,.08); }
 
     /* Tuotekuvagalleria */
     .product-gallery{ container-type:inline-size; --pg-gap:1rem; }
@@ -128,12 +129,12 @@
       border-radius:9999px; background:#111827; color:#fff; font-size:.75rem; letter-spacing:.08em;
     }
 
-    /* Läpinäkyvät rako-osiot (video/poster näkyy taustalla) */
+    /* Rako-osiot */
     .aurora-gap{ height: var(--section-gap); pointer-events: none; background: transparent; }
 
     /* Pyöristetyt palkit */
     .full-bleed{ margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
-    .band{ background:#fff; border-radius: var(--band-radius); overflow: hidden; }
+    .band{ background: var(--ivory); border-radius: var(--band-radius); overflow: hidden; }
     .band--mist{ background: var(--mist); }
     .band--stone{ background: #f5f5f4; }
     .band-inner{ max-width: 72rem; margin: 0 auto; padding: 3rem 1rem; }
@@ -141,24 +142,24 @@
 </head>
 
 <body class="text-stone-900">
-  <!-- TAUSTAVIDEO (poster-kuva näkyy kunnes video toistuu) -->
+  <!-- TAUSTAVIDEO -->
   <video id="bgVideo" class="bg-fixed"
          autoplay muted loop playsinline preload="auto"
          poster="assets/aurora-poster.jpg">
     <source src="assets/aurora.webm" type="video/webm">
     <source src="assets/aurora.mp4"  type="video/mp4">
-    <!-- MOV valinnainen varalähde Safarille
-    <source src="assets/aurora.mov"  type="video/quicktime"> -->
   </video>
 
-  <!-- HEADER -->
+  <!-- HEADER (vaalea) -->
   <header class="fixed top-0 left-0 right-0 z-50">
-    <div class="relative bg-[color:var(--dark-forest)] text-white">
+    <div class="relative" style="background:var(--ivory); color:#111827; border-bottom:1px solid rgba(0,0,0,.08);">
       <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-3 grid items-center gap-3">
-        <!-- VASEN: logo + teksti -->
+        <!-- VASEN: logo + brändi -->
         <a id="brandBlock" href="#etusivu" class="flex items-center gap-3">
-          <img alt="RUMAT.STUDIO logo" class="h-9 w-9 object-contain" src="assets/logo.svg">
-          <span id="brandText" class="uppercase text-sm tracking-widest font-semibold">RUMAT.STUDIO</span>
+          <img alt="RUMAT STUDIO logo" class="h-9 w-9 object-contain" src="assets/logo.svg">
+          <span id="brandText" class="uppercase text-sm tracking-widest">
+            <span class="font-extrabold">RUMAT</span>&nbsp;<span class="font-normal">STUDIO</span>
+          </span>
         </a>
 
         <!-- KESKI: nav (näkyy kun mahtuu) -->
@@ -209,7 +210,7 @@
           Liian rumat ollakseen totta
         </h1>
         <div class="mt-8 flex justify-center">
-          <img alt="RUMAT.STUDIO logo" class="h-24 w-24 sm:h-28 sm:w-28 object-contain" src="assets/logo.svg">
+          <img alt="RUMAT STUDIO logo" class="h-24 w-24 sm:h-28 sm:w-28 object-contain" src="assets/logo.svg">
         </div>
       </div>
     </section>
@@ -285,7 +286,7 @@
     <footer id="yhteys" class="pt-14 text-[color:var(--ivory)]" style="background:var(--footer)">
       <div class="mx-auto max-w-6xl px-4 grid sm:grid-cols-3 gap-8">
         <div>
-          <div class="uppercase tracking-wide">RUMAT.STUDIO</div>
+          <div class="uppercase tracking-wide">RUMAT STUDIO</div>
           <div id="tagline" class="text-sm mt-1 text-white/70">Suomussalmi — Contemporary textiles, built to last.</div>
         </div>
         <div>
@@ -306,7 +307,7 @@
           </ul>
         </div>
       </div>
-      <div class="py-8 text-center text-xs text-white/65">© <span id="year"></span> RUMAT.STUDIO</div>
+      <div class="py-8 text-center text-xs text-white/65">© <span id="year"></span> RUMAT STUDIO</div>
     </footer>
   </main>
 
@@ -380,7 +381,7 @@
     return n;
   };
 
-  // Hero-parallax (pehmeä, ilman nykimistä)
+  // Hero-parallax
   (function(){
     const hero   = document.getElementById('etusivu');
     const textEl = document.getElementById('hero-text');
@@ -560,7 +561,6 @@
 
       const wrap = el('div',{}, gallery, details);
 
-      // Pyöristetty valkoinen bandi + otsikkorivi ekalle tuotteelle
       const inner = el('div',{class:'band-inner'});
       if (idx === 0){
         const headerRow = el('div',{class:'flex items-center justify-between mb-6'},
@@ -574,10 +574,8 @@
       const band = el('div',{class:'band full-bleed'}, inner);
       root.appendChild(band);
 
-      // rako palkkien väliin
       root.appendChild(el('div',{class:'aurora-gap full-bleed'}));
 
-      // galleriakuvat
       const imgs = Array.isArray(p.images)&&p.images.length ? p.images : [
         "https://placehold.co/1400x1750?text=Kuva+1",
         "https://placehold.co/1400x1750?text=Kuva+2",
@@ -598,7 +596,6 @@
       }
     });
 
-    // “Osta” napit lisäävät korin; ei määriä, aina 1 kpl
     root.addEventListener('click', e=>{
       const btn = e.target.closest('[data-buy]');
       if(!btn) return;
@@ -615,7 +612,7 @@
   const $closeX = $('#closeCartX');
   const $sub    = $('#subTotal');
   const $ship   = $('#shipTotal');
-  const $grand  = $('#GrandTotal'); // typo-safe; korjataan alla
+  const $grand  = $('#grandTotal');
   const $shipOpts = $('#shipOptions');
 
   const $openCartText = $('#openCartText');
@@ -769,7 +766,6 @@
     }
 
     function canShowNav(){
-      // Simuloi nav-tilaa: ☰ piiloon, ostoskori teksti -tilaan
       const prevMenuHidden = menuBtn.classList.contains('hidden');
       const prevCartIconHidden = cartIcon.classList.contains('hidden');
       const prevCartTextHidden = cartText.classList.contains('hidden');
@@ -784,7 +780,6 @@
       const navW = measureNavWidth();
       const fits = navW <= Math.max(0, cw - bw - rbw - 24);
 
-      // Palauta edellinen tila
       if (!prevMenuHidden) menuBtn.classList.remove('hidden');
       if (!prevCartIconHidden) cartIcon.classList.remove('hidden'); else cartIcon.classList.add('hidden');
       if ( prevCartTextHidden) cartText.classList.add('hidden'); else cartText.classList.remove('hidden');
