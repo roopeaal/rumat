@@ -19,7 +19,7 @@
       --light-blue:#DEEEEE;  /* footer-logo */
       --ivory:#F6F6F4;       /* taustat & yläpalkki */
 
-      --header-h:56px;
+      --header-h:64px;
       --section-gap: clamp(6px, 1vw, 12px);
       --band-radius: 16px;
 
@@ -96,7 +96,7 @@
 
     /* Kaaviot-galleria (neliöt) */
     .card{ background:#fff; border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
-    .pattern-grid{ display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:12px; }
+    .pattern-grid{ display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:12px; align-items:start; }
     @media (min-width: 768px){ .pattern-grid{ grid-template-columns: repeat(4,minmax(0,1fr)); gap:14px; } }
     .tile{ position:relative; cursor:pointer; aspect-ratio:1/1; display:block; }
     .tile img{ width:100%; height:100%; object-fit:cover; display:block; }
@@ -111,21 +111,25 @@
     .min-full:hover{ background:rgba(0,0,0,.08); }
 
     .expander{ grid-column:1 / -1; background:#fff; border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
-    .ex-row{ display:grid; grid-template-columns:1fr; min-height:260px; }
-    @media (min-width: 1024px){ .ex-row{ grid-template-columns: 1.6fr 1fr; } }
-    .ex-view{ position:relative; background:#000; min-height:260px; }
+    .ex-row{
+      display:grid;
+      grid-template-columns: 1fr;                 /* mobiili: yksi palsta */
+      min-height:260px;
+    }
+    @media (min-width: 1024px){
+      .ex-row{
+        grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); /* desktop: 2 palstaa, sallii kutistumisen */
+      }
+    }
+    .ex-view{ position:relative; background:#000; min-height:260px; min-width:0; }
+    .ex-info{ padding:1rem 1.1rem; overflow:auto; min-width:0; word-break: normal; overflow-wrap:anywhere; white-space: normal; }
     .ex-view img{ width:100%; height:100%; object-fit:contain; background:#000; }
     .ex-prev,.ex-next{ position:absolute; top:50%; transform:translateY(-50%); width:42px; height:42px; display:grid; place-items:center; border-radius:9999px; background:#fff; border:1px solid rgba(0,0,0,.15); font-weight:800; }
     .ex-prev{ left:10px; } .ex-next{ right:10px; }
-    .ex-info{ padding:1rem 1.1rem; overflow:auto; }
     .ex-top{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.6rem .9rem; border-bottom:1px solid rgba(0,0,0,.1); }
 
-    /* FOOTER – palautettu näkyviin */
-    .footer-bar{
-      position:relative; z-index:2;  /* aina videon päällä */
-      background: var(--olive);
-      color: var(--ink);
-    }
+    /* FOOTER */
+    .footer-bar{ position:relative; z-index:2; background: var(--olive); color: var(--ink); }
     .footer-grid{
       max-width: 72rem; margin: 0 auto; padding: 1.75rem 1rem;
       display:grid; grid-template-columns: 1fr 1fr auto; gap: 2rem; align-items:center;
@@ -155,7 +159,7 @@
 
   <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50">
-    <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-3 grid items-center gap-3">
+    <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-4 grid items-center gap-3">
       <a id="brandBlock" href="#etusivu" class="flex items-center gap-3">
         <img alt="RUMAT STUDIO logo" class="h-9 w-9 object-contain" src="assets/logo.svg">
         <span id="brandText" class="uppercase text-sm tracking-widest">
@@ -184,7 +188,7 @@
   </header>
 
   <!-- CONTENT -->
-  <main class="site-content pt-[72px]">
+  <main class="site-content pt-[84px]">
     <!-- HERO -->
     <section id="etusivu" class="hero px-4">
       <div id="hero-text" class="mt-10">
@@ -320,7 +324,7 @@
     return n;
   };
 
-  // Hero-parallax
+  // Hero-parallax (sama kuin ennen, kevyt)
   (function(){
     const hero=document.getElementById('etusivu'); const textEl=document.getElementById('hero-text');
     let heroTop=0, heroHeight=1, amp=0, ticking=false, lastY=0, reduce=false;
@@ -389,7 +393,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   }
   function addToCart(id){ CART[id]=(CART[id]||0)+1; saveCart(); openCart(); }
   window.addToCart = addToCart; updateBadge();
-
   document.getElementById('checkout').addEventListener('click', ()=>{
     const ids = Object.keys(CART); if(ids.length===0) return alert('Ostoskori on tyhjä.');
     const email = "kauppa@esimerkki.fi";
@@ -482,7 +485,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     let selectedId = null;
     let expander = null; let current=null; let imgIdx=0;
 
-    // Rakenna laatat
     const KAAVIOT = window.KAAVIOT || [];
     KAAVIOT.forEach((p)=>{
       const tile = document.createElement('article');
