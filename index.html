@@ -25,12 +25,14 @@
     html{ scroll-padding-top: var(--header-h); }
     body{ font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial; color:var(--ink); background:var(--ivory); }
 
-    /* Otsikot: CAPS + lihavoitu */
+    /* Otsikot: erittäin paksu (900), versaalit */
     h1, h2, h3, h4, h5, h6{
-      font-weight:800;
-      text-transform:uppercase;
-      color:var(--deep-blue);
-      margin:0 0 .6rem;
+      font-family: Montserrat, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight: 900 !important;
+      text-transform: uppercase;
+      color: var(--deep-blue);
+      letter-spacing: .02em;
+      margin: 0 0 .6rem;
     }
     .normalcase{ text-transform:none !important; }
 
@@ -45,7 +47,7 @@
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
       max-width:min(42vw,460px); color:var(--ink);
     }
-    #brandText .strong{ font-weight:800; }
+    #brandText .strong{ font-weight:900; }
     #brandText .light{ font-weight:600; }
 
     #mainNav{
@@ -88,9 +90,11 @@
     #menuDrawer .panel{ left:0; }
     #cartDrawer .panel{ right:0; }
 
-    /* HERO – vain video + logo, ei overlayta */
+    /* HERO – vain video + logo, ei overlayta, ei taustascrollia */
     .hero{
-      position:relative; height:100svh; display:grid; place-items:center;
+      position:relative;
+      height: calc(100svh - var(--header-h));
+      display:grid; place-items:center;
       overflow:hidden; text-align:center;
     }
     .hero::before,.hero::after{ content:none !important; }
@@ -169,15 +173,25 @@
     /* Footer */
     .footer-bar{ position:relative; z-index:2; background: var(--olive); color: var(--ink); }
     .footer-grid{
-      max-width: 72rem; margin: 0 auto; padding: 1.75rem 1rem;
-      display:grid; grid-template-columns: 1fr 1fr auto; gap: 2rem; align-items:center;
+      max-width: 72rem; margin: 0 auto;
+      padding: 1.75rem 1rem 0;
+      display:grid;
+      grid-template-columns: 1fr 1fr;   /* 2 saraketta per rivi */
+      gap: 1rem 2rem;
+      align-items:start;
     }
     .footer-col h6{
-      font-size:.8rem; font-weight:800; text-transform:uppercase; letter-spacing:.12em; margin-bottom:.25rem; color:var(--ink);
+      font-size:.8rem; font-weight:900; text-transform:uppercase;
+      letter-spacing:.12em; margin:0 0 .35rem; color:var(--ink);
     }
     .footer-handle, .footer-link{ color:var(--ink); opacity:.85; text-decoration:none; }
     .footer-handle:hover, .footer-link:hover{ text-decoration:underline; }
-    .footer-ytunnus{ margin-top:.65rem; font-weight:800; font-size:.85rem; }
+    .footer-ytunnus{ font-weight:900; font-size:.9rem; }
+    .footer-logo{
+      max-width:72rem; margin:0 auto;
+      padding: 1rem 1rem 1.25rem;
+      display:flex; justify-content:flex-end;
+    }
     .footer-copy{ text-align:center; font-size:.75rem; opacity:.86; padding: .5rem 1rem 1rem; }
   </style>
 </head>
@@ -196,10 +210,10 @@
 
       <!-- Keskellä: nav (näkyy kun mahtuu) -->
       <nav id="mainNav" class="justify-self-center">
-        <a href="#mikaonrumat"  class="hover:underline underline-offset-4 font-semibold">Mikä on RUMAT?</a>
-        <a href="#kaaviot"      class="hover:underline underline-offset-4 font-semibold">Kaavat</a>
-        <a href="#suunnittelija"class="hover:underline underline-offset-4 font-semibold">Suunnittelija</a>
-        <a href="#yhteys"       class="hover:underline underline-offset-4 font-semibold">Ota yhteyttä</a>
+        <a href="#mikaonrumat"  class="hover:underline underline-offset-4">Mikä on RUMAT?</a>
+        <a href="#kaaviot"      class="hover:underline underline-offset-4">Kaavat</a>
+        <a href="#suunnittelija"class="hover:underline underline-offset-4">Suunnittelija</a>
+        <a href="#yhteys"       class="hover:underline underline-offset-4">Ota yhteyttä</a>
       </nav>
 
       <!-- Oikealla: ikonit aivan oikeassa reunassa -->
@@ -226,7 +240,7 @@
   </header>
 
   <!-- CONTENT -->
-  <main class="pt-[84px]">
+  <main class="pt-[64px]">
     <!-- HERO (vain video + logo) -->
     <section id="etusivu" class="hero px-4">
       <video class="hero-video" autoplay muted loop playsinline webkit-playsinline preload="auto" poster="assets/aurora-poster.jpg">
@@ -286,23 +300,32 @@
     <!-- FOOTER -->
     <footer id="yhteys" class="footer-bar">
       <div class="footer-grid">
+        <!-- Rivi 1: Instagram | Ota yhteyttä -->
         <div class="footer-col">
           <h6>Instagram</h6>
           <a class="footer-handle" href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer">rumat.studio</a>
-          <div style="height:.9rem"></div>
+        </div>
+        <div class="footer-col">
+          <h6>Ota yhteyttä</h6>
+          <a class="footer-link" href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>
+        </div>
+
+        <!-- Rivi 2: TikTok | Y-tunnus -->
+        <div class="footer-col">
           <h6>TikTok</h6>
           <a class="footer-handle" href="https://www.tiktok.com/@rumat.studio" target="_blank" rel="noreferrer">rumat.studio</a>
         </div>
         <div class="footer-col">
-          <h6>Ota yhteyttä</h6>
-          <a class="footer-link" href="mailto:hello@rumat.fi">hello@rumat.fi</a>
+          <h6>Y-tunnus</h6>
           <div class="footer-ytunnus">Y-3436822-5</div>
         </div>
-        <!-- Normaali logo -->
-        <div class="flex sm:justify-end">
-          <img src="assets/logo.svg" alt="RUMAT STUDIO logo" class="h-14 w-auto object-contain" />
-        </div>
       </div>
+
+      <!-- Logo omaan riviin, oikealle -->
+      <div class="footer-logo">
+        <img src="assets/logo.svg" alt="RUMAT STUDIO logo" class="h-14 w-auto object-contain" />
+      </div>
+
       <div class="footer-copy">© <span id="year"></span> RUMAT STUDIO</div>
     </footer>
   </main>
@@ -514,7 +537,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     })();
   })();
 
-  // KAAVIOT UI – inline-laajennus rivin alle
+  // KAAVIOT UI – inline-laajennus rivin alle (4 saraketta leveäksi kun tilaa)
   (function(){
     const grid  = document.getElementById('patternsGrid');
     let selectedId = null;
