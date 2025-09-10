@@ -36,7 +36,10 @@
 
     /* Yläpalkki */
     header{ background:var(--ivory); border-bottom:1px solid rgba(0,0,0,.08); }
-    #hdrRow{ grid-template-columns:auto 1fr auto; } /* vasen | keskellä | oikea */
+    #hdrRow{
+      position:relative;
+      grid-template-columns:auto 1fr; /* vasen (logo) | keskellä (nav) */
+    }
 
     #brandText{
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
@@ -46,6 +49,7 @@
     #brandText .light{ font-weight:600; }
 
     #mainNav{
+      justify-self:center;
       display:flex; gap:1.5rem; white-space:nowrap;
       font-size:13px; text-transform:uppercase; letter-spacing:.2em;
     }
@@ -53,6 +57,11 @@
     .nav-hidden{ display:none !important; }
     .nav-measure{ position:absolute !important; visibility:hidden !important; display:flex !important; white-space:nowrap !important; }
 
+    /* Oikean reunan ikonit aivan oikeaan laitaan */
+    #rightBlock{
+      position:absolute; right:12px; top:50%; transform:translateY(-50%);
+      display:flex; align-items:center; gap:.5rem; white-space:nowrap;
+    }
     .icon-btn{
       position:relative; width:38px; height:38px; display:grid; place-items:center;
       border-radius:9999px; background:rgba(0,0,0,.06); border:1px solid rgba(0,0,0,.16); color:var(--ink);
@@ -68,6 +77,16 @@
       display:grid; place-items:center; border-radius:9999px; background:var(--ink); color:#fff;
       font-size:11px; font-weight:700; border:1px solid rgba(0,0,0,.15);
     }
+
+    /* Drawerit (valikko & ostoskori) */
+    .drawer{ position:fixed; inset:0; z-index:60; display:none; }
+    .drawer.open{ display:block; }
+    .drawer > .panel{
+      position:absolute; top:0; bottom:0; width:min(420px,90vw);
+      background: var(--ivory); box-shadow: 0 10px 30px rgba(0,0,0,.20);
+    }
+    #menuDrawer .panel{ left:0; }
+    #cartDrawer .panel{ right:0; }
 
     /* HERO – vain video + logo, ei overlayta */
     .hero{
@@ -85,7 +104,10 @@
     @media (min-width:640px){ .hero-logo{ height:7rem; width:7rem; } }
     video::-webkit-media-controls { display:none !important; }
 
-    /* Bandit ja kortit (vain sallituilla väreillä) */
+    /* Full-bleed helper */
+    .full-bleed{ margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
+
+    /* Bandit ja kortit */
     .band{ background:var(--ivory); border-radius:var(--band-radius); overflow:hidden; }
     .band-inner{ max-width:72rem; margin:0 auto; padding:3rem 1rem; }
 
@@ -163,7 +185,7 @@
 <body>
   <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50">
-    <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-4 grid items-center gap-3">
+    <div id="hdrRow" class="relative mx-auto max-w-6xl px-4 py-4 grid items-center gap-3">
       <!-- Logo vasemmalla = etusivu -->
       <a id="brandBlock" href="#etusivu" aria-label="Etusivu" class="flex items-center gap-3">
         <img alt="RUMAT STUDIO logo" class="h-9 w-9 object-contain" src="assets/logo.svg">
@@ -180,7 +202,7 @@
         <a href="#yhteys"       class="hover:underline underline-offset-4 font-semibold">Ota yhteyttä</a>
       </nav>
 
-      <!-- Oikealla: ostoskori + valikko -->
+      <!-- Oikealla: ikonit aivan oikeassa reunassa -->
       <div id="rightBlock" class="flex items-center gap-2">
         <button id="openMenu" class="icon-btn hidden" aria-controls="menuDrawer" aria-expanded="false" aria-label="Valikko">
           <span aria-hidden="true" style="font-size:20px;line-height:1">☰</span><span class="sr-only">Valikko</span>
@@ -223,7 +245,7 @@
             <div class="intro-img left"  aria-hidden="true"></div>
             <div class="intro-copy">
               <img class="logo" src="assets/logo.svg" alt="RUMAT STUDIO">
-              <div id="intro-text" class="text-[15px] sm:text-base"></div>
+              <div id="intro-text" class="text-[15px] sm:text-base normalcase"></div>
             </div>
             <div class="intro-img right" aria-hidden="true"></div>
           </div>
@@ -252,7 +274,7 @@
                    onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1517445312885-9d7f7d7b4c53?q=80&w=1200&auto=format&fit=crop';"
                    alt="Suunnittelija" class="rounded-xl border border-[rgba(0,0,0,.12)] object-cover w-full h-[300px] md:h-[420px]">
             </div>
-            <div class="space-y-4">
+            <div class="space-y-4 normalcase">
               <p>Aaltonen on itsevarma neuloja, joka ei rajoita luovuuttaan vain yhteen tekemisen tapaan. Neulomisen rinnalla myös asusteiden ompelu on tärkeä osa ilmaisua – ja ennen kaikkea intohimo. Lapsuuden kiinnostus vaatteiden suunnitteluun johti muodin ja tekstiilisuunnittelun opintoihin vuonna 2021.</p>
               <p>Pian Aaltonen valmistuu taiteen maisteriksi, mukanaan vankka osaaminen ja omat suosikkitekniikat, joita hän on hionut opintojen aikana. Neulomisen ja asusteiden lisäksi Aaltonen on syventynyt erityisesti vaatteiden kierrätykseen, korjaamiseen liittyviin asenteisiin sekä kriittiseen tarkasteluun siitä, miten kuluttamista ohjataan – ja millaisia seurauksia sillä on ympäristölle.</p>
             </div>
@@ -288,9 +310,9 @@
   <!-- OSTOSKORI DRAWER -->
   <div id="cartDrawer" class="drawer" aria-hidden="true">
     <div class="absolute inset-0 bg-black/40" id="closeCart" aria-label="Sulje ostoskori"></div>
-    <div class="panel p-5 flex flex-col" style="background:var(--ivory)">
+    <div class="panel p-5 flex flex-col">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-xl font-semibold">Ostoskori</h3>
+        <h3 class="text-xl">Ostoskori</h3>
         <button id="closeCartX" class="text-stone-500 hover:text-stone-800">✕</button>
       </div>
       <div id="cartItems" class="flex-1 overflow-auto divide-y"></div>
@@ -307,9 +329,9 @@
   <!-- VALIKKO DRAWER -->
   <div id="menuDrawer" class="drawer" aria-hidden="true">
     <div class="absolute inset-0 bg-black/40" id="closeMenu" aria-label="Sulje valikko"></div>
-    <div class="panel p-6 flex flex-col gap-4" style="background:var(--ivory)">
+    <div class="panel p-6 flex flex-col gap-4">
       <div class="flex items-center justify-between">
-        <h3 class="text-xl font-semibold">Valikko</h3>
+        <h3 class="text-xl">Valikko</h3>
         <button id="closeMenuX" class="text-stone-500 hover:text-stone-800">✕</button>
       </div>
       <nav class="flex flex-col gap-3 text-lg">
