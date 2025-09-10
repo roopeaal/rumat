@@ -6,134 +6,101 @@
   <title>RUMAT STUDIO</title>
   <meta name="description" content="Luonnosta syntynyt. Reissuissa testattu. Neuleet, asusteet ja kaavat – istuvat, hengittävät ja kestävät."/>
 
-  <!-- Fontit -->
+  <!-- Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --ink:#202020;                 /* tekstit */
-      --white:#F6F6F4;               /* taustat + header */
-      --olive:#A1A266;               /* footer-tausta */
-      --blue:#789FAB;                /* varalla */
-      --blue-dark:#345563;           /* otsikoiden väri */
-      --mist:#DEEEEE;                /* vaalea sininen, logo footerissa tms */
+      --ink:#202020;
+      --white:#F6F6F4;        /* taustat + header */
+      --olive:#A1A266;        /* footer */
+      --blue:#789FAB;         /* varalla */
+      --blue-dark:#345563;    /* otsikot */
+      --mist:#DEEEEE;         /* vaalea sininen */
       --maxw:72rem;
       --header-h:64px;
-      --radius:18px;
     }
 
-    /* Perustypografia */
-    html,body{ margin:0; padding:0; background:var(--white); color:var(--ink); }
-    body{ font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial,sans-serif; }
-    img,video{ max-width:100%; display:block; }
+    html,body{margin:0;background:var(--white);color:var(--ink)}
+    body{font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial,sans-serif}
+    img,video{display:block;max-width:100%}
 
-    /* YLEISET OTSIKOT */
-    .title{ color:var(--blue-dark); text-transform:uppercase; font-weight:900; letter-spacing:.08em; margin:0 0 .75rem; }
-    .title.center{ text-align:center; }
-    .lead{ font-weight:700; }
+    /* Otsikot */
+    .title{color:var(--blue-dark);text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin:0 0 .8rem}
+    .title.center{text-align:center}
+    .lead{font-weight:700}
 
     /* Header */
-    header{ position:fixed; inset-block-start:0; inset-inline:0; z-index:50; background:var(--white); border-bottom:1px solid rgba(0,0,0,.06); }
-    .nav-wrap{ max-width:var(--maxw); margin:0 auto; padding:10px 14px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:.5rem; min-height:var(--header-h); }
-    .brand{ display:flex; align-items:center; gap:.65rem; text-decoration:none; color:inherit; }
-    .brand img{ height:32px; width:32px; object-fit:contain; }
-    .brand-name{ font-weight:800; white-space:nowrap; }
-    .brand-name b{ font-weight:900; }
+    header{position:fixed;inset:0 0 auto 0;z-index:50;background:var(--white);border-bottom:1px solid rgba(0,0,0,.06)}
+    .nav-wrap{max-width:var(--maxw);margin:0 auto;min-height:var(--header-h);padding:10px 14px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.5rem}
+    .brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;color:inherit}
+    .brand img{width:32px;height:32px;object-fit:contain}
+    .brand-name{font-weight:800;white-space:nowrap}
+    .brand-name b{font-weight:900}
 
-    nav.main{ display:flex; justify-content:center; gap:28px; font-weight:800; letter-spacing:.10em; text-transform:uppercase; }
-    nav.main a{ color:var(--ink); text-decoration:none; }
-    nav.main a:hover{ text-decoration:underline; text-underline-offset:3px; }
+    nav.main{display:flex;justify-content:center;gap:28px;font-weight:800;letter-spacing:.10em;text-transform:uppercase}
+    nav.main a{color:inherit;text-decoration:none}
+    nav.main a:hover{text-decoration:underline;text-underline-offset:3px}
 
-    .right-icons{ justify-self:end; display:flex; gap:.5rem; }
-    .icon-btn{
-      width:40px; height:40px; display:grid; place-items:center; border-radius:9999px;
-      border:1px solid rgba(0,0,0,.12); background:#fff;
-    }
-    .badge{
-      position:absolute; transform:translate(10px,-10px);
-      min-width:18px; height:18px; padding:0 4px; border-radius:999px;
-      background:var(--ink); color:#fff; font-size:11px; font-weight:800; display:grid; place-items:center;
-    }
-
-    /* Valikkoikoni näytetään vain jos nav ei mahdu */
-    .menu-btn{ display:none; position:relative; }
-    .cart-btn{ position:relative; }
+    .right-icons{justify-self:end;display:flex;gap:.5rem}
+    .icon-btn{width:40px;height:40px;display:grid;place-items:center;border-radius:9999px;border:1px solid rgba(0,0,0,.12);background:#fff}
+    .badge{position:absolute;transform:translate(10px,-10px);min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:var(--ink);color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center}
+    .menu-btn{display:none;position:relative}
+    .cart-btn{position:relative}
 
     /* Drawerit */
-    .drawer{ position:fixed; inset:0; z-index:70; display:none; }
-    .drawer.open{ display:block; }
-    .drawer .backdrop{ position:absolute; inset:0; background:rgba(0,0,0,.35); }
-    .drawer .panel{ position:absolute; top:0; bottom:0; width:min(420px,92vw); background:#fff; box-shadow:0 10px 40px rgba(0,0,0,.25); }
-    #menuDrawer .panel{ left:0; }
-    #cartDrawer .panel{ right:0; }
+    .drawer{position:fixed;inset:0;z-index:70;display:none}
+    .drawer.open{display:block}
+    .drawer .backdrop{position:absolute;inset:0;background:rgba(0,0,0,.35)}
+    .drawer .panel{position:absolute;top:0;bottom:0;width:min(420px,92vw);background:#fff;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+    #menuDrawer .panel{left:0}
+    #cartDrawer .panel{right:0}
 
-    /* HERO video */
-    .hero{ position:relative; height:100vh; }
-    .hero video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-    .hero .center-logo{
-      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
-      width:120px; height:120px; display:block;
-      filter:drop-shadow(0 2px 8px rgba(0,0,0,.25));
-    }
+    main{padding-top:var(--header-h)}
 
-    main{ padding-top:var(--header-h); }
+    /* HERO */
+    .hero{position:relative;height:100vh}
+    .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .hero .center-logo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:120px;height:120px;filter:drop-shadow(0 2px 8px rgba(0,0,0,.25))}
 
-    /* Esittelypalkki (kuvat reunoissa) */
-    .intro-band{ max-width:var(--maxw); margin:28px auto; padding:28px 16px; display:grid; grid-template-columns:1fr 2fr 1fr; gap:16px; align-items:center; }
-    .intro-img{ border-radius:16px; overflow:hidden; aspect-ratio:3/4; background:#eee; object-fit:cover; }
-    .intro-text{ background:var(--white); border-radius:16px; padding:20px 22px; }
-    .intro-text p{ line-height:1.65; margin:.85rem 0; }
+    /* Esittelypalkki */
+    .intro-band{max-width:var(--maxw);margin:28px auto;padding:28px 16px;display:grid;grid-template-columns:1fr 2fr 1fr;gap:16px;align-items:center}
+    .intro-img{border-radius:16px;overflow:hidden;aspect-ratio:3/4;object-fit:cover;background:#eee}
+    .intro-text{background:var(--white);border-radius:16px;padding:20px 22px}
+    .intro-text p{line-height:1.65;margin:.85rem 0}
+    @media (max-width:900px){.intro-band{grid-template-columns:1fr}.intro-text{order:-1}}
 
-    @media (max-width: 900px){
-      .intro-band{ grid-template-columns:1fr; }
-      .intro-text{ order:-1; }
-    }
+    /* KAAVIOT */
+    .grid-wrap{max-width:var(--maxw);margin:34px auto;padding:0 14px}
+    .patterns{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+    @media (max-width:1000px){.patterns{grid-template-columns:repeat(3,1fr)}}
+    @media (max-width:700px){.patterns{grid-template-columns:repeat(2,1fr)}}
+    .tile{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:1/1;background:#eee;cursor:pointer}
+    .tile img{width:100%;height:100%;object-fit:cover}
+    .tile .label{position:absolute;left:0;right:0;bottom:0;padding:8px 10px;background:linear-gradient(transparent,rgba(0,0,0,.55));color:#fff;font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:.85rem}
+    .tile.active::after{content:"PIENENNÄ";position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.35);color:#fff;font-weight:900;letter-spacing:.12em}
 
-    /* Kaavat-gridi */
-    .grid-wrap{ max-width:var(--maxw); margin:34px auto; padding:0 14px; }
-    .patterns{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
-    .tile{ position:relative; background:#eee; border-radius:16px; overflow:hidden; aspect-ratio:1/1; cursor:pointer; }
-    .tile img{ width:100%; height:100%; object-fit:cover; }
-    .tile .label{
-      position:absolute; left:0; right:0; bottom:0;
-      padding:8px 10px; background:linear-gradient(transparent, rgba(0,0,0,.55));
-      color:#fff; font-weight:800; letter-spacing:.08em; text-transform:uppercase; font-size:.85rem;
-    }
-    .tile.active::after{
-      content:"PIENENNÄ"; position:absolute; inset:0; display:grid; place-items:center;
-      background:rgba(0,0,0,.35); color:#fff; font-weight:900; letter-spacing:.12em;
-    }
-    @media (max-width: 1000px){ .patterns{ grid-template-columns:repeat(3,1fr);} }
-    @media (max-width: 700px){ .patterns{ grid-template-columns:repeat(2,1fr);} }
-
-    /* Rivin alle avautuva paneeli */
-    .expander{ grid-column:1 / -1; display:none; }
-    .expander.open{ display:block; }
-    .expander .sheet{
-      background:#fff; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,.08);
-      padding:18px; display:grid; grid-template-columns:1.3fr 1fr; gap:18px;
-    }
-    .viewer{ position:relative; border:1px solid rgba(0,0,0,.08); border-radius:14px; overflow:hidden; min-height:360px; }
-    .viewer img{ position:absolute; inset:0; margin:auto; max-width:100%; max-height:100%; object-fit:contain; }
-    .arrow{
-      position:absolute; top:50%; transform:translateY(-50%);
-      width:42px; height:42px; border-radius:9999px; border:1px solid rgba(0,0,0,.15); background:#fff; display:grid; place-items:center;
-    }
-    .arrow.left{ left:10px; } .arrow.right{ right:10px; }
-
-    .info h3{ margin:.25rem 0 .5rem; color:var(--blue-dark); text-transform:uppercase; font-weight:900; letter-spacing:.08em; }
-    .price{ font-weight:900; margin:.6rem 0; }
-    .sizes{ display:flex; gap:.4rem; flex-wrap:wrap; }
-    .sizes span{ border:1px solid rgba(0,0,0,.15); padding:.25rem .5rem; border-radius:999px; font-weight:700; }
+    /* Rivin alle avautuva alue */
+    .expander{grid-column:1 / -1;display:none}
+    .expander.open{display:block}
+    .expander .sheet{background:#fff;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.08);padding:18px;display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
+    .viewer{position:relative;border:1px solid rgba(0,0,0,.08);border-radius:14px;overflow:hidden;min-height:360px}
+    .viewer img{position:absolute;inset:0;margin:auto;max-width:100%;max-height:100%;object-fit:contain}
+    .arrow{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:9999px;border:1px solid rgba(0,0,0,.15);background:#fff;display:grid;place-items:center}
+    .arrow.left{left:10px}.arrow.right{right:10px}
+    .info h3{margin:.25rem 0 .5rem;color:var(--blue-dark);text-transform:uppercase;font-weight:900;letter-spacing:.08em}
+    .price{font-weight:900;margin:.6rem 0}
+    .sizes{display:flex;gap:.4rem;flex-wrap:wrap}
+    .sizes span{border:1px solid rgba(0,0,0,.15);padding:.25rem .5rem;border-radius:999px;font-weight:700}
 
     /* Suunnittelija */
-    .designer{ max-width:var(--maxw); margin:40px auto; padding:0 14px; display:grid; grid-template-columns:320px 1fr; gap:18px; align-items:start; }
-    .designer img{ border-radius:16px; object-fit:cover; aspect-ratio:3/4; }
-    @media (max-width: 840px){ .designer{ grid-template-columns:1fr; } }
+    .designer{max-width:var(--maxw);margin:40px auto;padding:0 14px;display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start}
+    .designer img{border-radius:16px;object-fit:cover;aspect-ratio:3/4}
+    @media (max-width:840px){.designer{grid-template-columns:1fr}}
 
-    /* FOOTER (kuvan mukainen) */
+    /* -------- FOOTER (kuvan mukainen) -------- */
     .footer-bar{ background: var(--olive); color: var(--ink); margin-top:40px; }
     .footer-grid{
       max-width: var(--maxw); margin: 0 auto;
@@ -157,21 +124,18 @@
       .footer-grid{ grid-template-columns:1fr; gap:1rem; }
       .footer-logoBox{ justify-content:flex-start; }
     }
-    a{ color:inherit; }
+    a{color:inherit}
   </style>
 </head>
-
 <body>
   <!-- HEADER -->
   <header>
     <div class="nav-wrap" id="hdr">
-      <!-- Vasemmalla: logo toimii etusivu-linkkinä -->
       <a class="brand" href="#etusivu">
         <img src="assets/logo.svg" alt="RUMAT STUDIO">
         <span class="brand-name"><b>RUMAT</b> STUDIO</span>
       </a>
 
-      <!-- Keskellä: nav, joka piilotetaan jos ei mahdu -->
       <nav class="main" id="mainNav">
         <a href="#mika">Mikä on RUMAT?</a>
         <a href="#kaaviot">Kaavat</a>
@@ -179,10 +143,8 @@
         <a href="#yhteys">Yhteystiedot</a>
       </nav>
 
-      <!-- Oikealla: ikonit -->
       <div class="right-icons">
         <button class="icon-btn menu-btn" id="menuBtn" aria-label="Valikko" title="Valikko">
-          <!-- ☰ -->
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
         </button>
         <button class="icon-btn cart-btn" id="openCart" aria-label="Ostoskori" title="Ostoskori">
@@ -196,7 +158,7 @@
     </div>
   </header>
 
-  <!-- VALIKKO-DRAWER -->
+  <!-- MENU DRAWER -->
   <div class="drawer" id="menuDrawer" aria-hidden="true">
     <div class="backdrop" id="menuBackdrop"></div>
     <div class="panel" role="dialog" aria-label="Valikko">
@@ -210,7 +172,7 @@
     </div>
   </div>
 
-  <!-- OSTOSKORI-DRAWER (yksinkertainen demo) -->
+  <!-- CART DRAWER (demo) -->
   <div class="drawer" id="cartDrawer" aria-hidden="true">
     <div class="backdrop" id="cartBackdrop"></div>
     <div class="panel" role="dialog" aria-label="Ostoskori">
@@ -221,7 +183,7 @@
   </div>
 
   <main>
-    <!-- HERO (vain video + logo) -->
+    <!-- HERO -->
     <section id="etusivu" class="hero" aria-label="Etusivu">
       <video autoplay muted loop playsinline preload="auto" poster="assets/aurora-poster.jpg" id="heroVideo">
         <source src="assets/aurora.webm" type="video/webm">
@@ -248,7 +210,6 @@
     <section id="kaaviot" class="grid-wrap" aria-label="Kaavat">
       <h2 class="title">KAAVAT</h2>
       <div class="patterns" id="patternGrid"></div>
-      <!-- expanderit lisätään JS:llä oikeaan kohtaan -->
     </section>
 
     <!-- SUUNNITTELIJA -->
@@ -264,7 +225,7 @@
     </section>
   </main>
 
-  <!-- FOOTER (kuvan mukainen) -->
+  <!-- FOOTER (uusi, muu sivu ennallaan) -->
   <footer id="yhteys" class="footer-bar" aria-label="Yhteystiedot">
     <div class="footer-grid">
       <div class="footer-social">
@@ -299,7 +260,7 @@
     // Vuosi
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // --- NAV FIT LOGIIKKA: piilota/tuo takaisin valikko ikoni ---
+    // NAV: näytä teksti-nav kun mahtuu, muuten menu-ikoni
     (function(){
       const nav = document.getElementById('mainNav');
       const menuBtn = document.getElementById('menuBtn');
@@ -309,7 +270,6 @@
         const cw = hdr.clientWidth;
         const left = hdr.children[0].getBoundingClientRect().width;  // brand
         const right = hdr.children[2].getBoundingClientRect().width; // iconit
-        // pieni turvamarginaali
         return (left + right + nav.scrollWidth + 20) <= cw;
       }
       function apply(){
@@ -323,30 +283,32 @@
           menuBtn.style.display='grid';
         }
       }
-      window.addEventListener('resize',()=>{ requestAnimationFrame(apply); }, {passive:true});
+      window.addEventListener('resize',()=>requestAnimationFrame(apply),{passive:true});
       if ('fonts' in document) document.fonts.ready.then(apply); else apply();
     })();
 
-    // --- MENU DRAWER ---
+    // MENU drawer
     (function(){
       const drawer = document.getElementById('menuDrawer');
       const btn = document.getElementById('menuBtn');
       const backdrop = document.getElementById('menuBackdrop');
-      function open(){ drawer.classList.add('open'); }
-      function close(){ drawer.classList.remove('open'); }
-      btn.addEventListener('click', open);
+      const close = ()=>drawer.classList.remove('open');
+      btn.addEventListener('click', ()=>drawer.classList.add('open'));
       backdrop.addEventListener('click', close);
       drawer.querySelectorAll('[data-close-menu]').forEach(a=>a.addEventListener('click', close));
       document.addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
     })();
 
-    // --- CART (kevyt demo) ---
-    const cartBtn = document.getElementById('openCart');
-    const cartDrawer = document.getElementById('cartDrawer');
-    document.getElementById('cartBackdrop').addEventListener('click',()=>cartDrawer.classList.remove('open'));
-    cartBtn.addEventListener('click', ()=> cartDrawer.classList.add('open'));
+    // CART drawer (kevyt demo)
+    (function(){
+      const btn = document.getElementById('openCart');
+      const drawer = document.getElementById('cartDrawer');
+      const backdrop = document.getElementById('cartBackdrop');
+      btn.addEventListener('click', ()=>drawer.classList.add('open'));
+      backdrop.addEventListener('click', ()=>drawer.classList.remove('open'));
+    })();
 
-    // --- DATA: KAAVAT ---
+    // DATA: Kaavat
     const PATTERNS = [
       {id:'laukku', title:'Laukku', price:12, sizes:['One size'], images:[
         'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1600&auto=format&fit=crop',
@@ -372,7 +334,7 @@
         'https://images.unsplash.com/photo-1520975892443-4b1b1b1d0f56?q=80&w=1600&auto=format&fit=crop',
         'https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?q=80&w=1600&auto=format&fit=crop'
       ]},
-      {id:'toppap', title:'Neuletakki', price:15, sizes:['S','M','L'], images:[
+      {id:'neuletakki', title:'Neuletakki', price:15, sizes:['S','M','L'], images:[
         'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1600&auto=format&fit=crop',
         'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600&auto=format&fit=crop'
       ]},
@@ -382,20 +344,17 @@
       ]}
     ];
 
-    // --- RENDER KAAVAT + INLINE EXPANDER ---
+    // Kaavat – kortit + rivin alle expander
     (function(){
       const grid = document.getElementById('patternGrid');
 
-      // apu: lisää expander oikeaan kohtaan (rivin alle)
       function insertExpanderAfterRow(index, expanderEl){
-        // neljä per rivi -> etsi rivin viimeinen
         const perRow = getComputedStyle(grid).gridTemplateColumns.split(' ').length;
         const rowEndIndex = Math.min(((Math.floor(index / perRow)+1)*perRow)-1, PATTERNS.length-1);
         const afterEl = grid.children[rowEndIndex];
         afterEl.after(expanderEl);
       }
 
-      // luo yhden kortin
       function tileEl(p, idx){
         const t = document.createElement('div');
         t.className='tile';
@@ -405,7 +364,6 @@
         return t;
       }
 
-      // luo expander
       function makeExpander(p){
         const wrap = document.createElement('div');
         wrap.className='expander';
@@ -427,7 +385,6 @@
               </div>
             </div>
           </div>`;
-        // karuselli
         let i=0;
         const img = wrap.querySelector(`#view-${p.id}`);
         const prev = wrap.querySelector('.arrow.left');
@@ -435,16 +392,14 @@
         const set = (k)=>{ i=(k+p.images.length)%p.images.length; img.src=p.images[i]; };
         prev.addEventListener('click', e=>{ e.stopPropagation(); set(i-1); });
         next.addEventListener('click', e=>{ e.stopPropagation(); set(i+1); });
-        // ostoskori
         wrap.querySelector(`#add-${p.id}`).addEventListener('click', ()=>{
-          addToCart(p); 
+          addToCart(p);
           document.getElementById('cartDrawer').classList.add('open');
         });
         return wrap;
       }
 
       let open = {idx:-1, expander:null, tile:null};
-
       function closeOpen(){
         if(open.expander){
           open.expander.classList.remove('open');
@@ -453,31 +408,26 @@
           open = {idx:-1,expander:null,tile:null};
         }
       }
-
       function toggleExpand(idx, tile){
         if(open.idx===idx){ closeOpen(); return; }
         closeOpen();
         const p = PATTERNS[idx];
         const exp = makeExpander(p);
         insertExpanderAfterRow(idx, exp);
-        // close button
         exp.querySelector(`#close-${p.id}`).addEventListener('click', closeOpen);
         exp.classList.add('open');
         tile.classList.add('active');
         open = {idx, expander:exp, tile};
       }
 
-      // render tiles
       PATTERNS.forEach((p,i)=> grid.appendChild(tileEl(p,i)));
 
-      // Reflow: jos ikkunan koko muuttuu, siirrä expander oikeaan kohtaan
       window.addEventListener('resize', ()=>{
         if(open.idx<0) return;
-        const ex = open.expander;
-        insertExpanderAfterRow(open.idx, ex);
+        insertExpanderAfterRow(open.idx, open.expander);
       }, {passive:true});
 
-      // pieni kori-demo
+      // Hyvin kevyt kori-demo
       const cart = [];
       function addToCart(p){
         cart.push(p);
