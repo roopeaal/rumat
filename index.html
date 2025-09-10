@@ -23,7 +23,7 @@
       --band-radius: 16px;
     }
     html{ scroll-padding-top: var(--header-h); }
-    body{ font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial; color:var(--ink); background:var(--ivory); }
+    body{ font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial; color:var(--ink); background:var(--ivory); margin:0; }
 
     /* Otsikot: erittäin paksu (900), versaalit */
     h1, h2, h3, h4, h5, h6{
@@ -42,7 +42,6 @@
       position:relative;
       grid-template-columns:auto 1fr; /* vasen (logo) | keskellä (nav) */
     }
-
     #brandText{
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
       max-width:min(42vw,460px); color:var(--ink);
@@ -80,6 +79,10 @@
       font-size:11px; font-weight:700; border:1px solid rgba(0,0,0,.15);
     }
 
+    /* Yleinen nappi */
+    .btn{ border-radius:9999px; padding:.6rem 1rem; border:1px solid rgba(0,0,0,.16); background:rgba(0,0,0,.04); }
+    .btn:hover{ background:rgba(0,0,0,.08); }
+
     /* Drawerit (valikko & ostoskori) */
     .drawer{ position:fixed; inset:0; z-index:60; display:none; }
     .drawer.open{ display:block; }
@@ -101,8 +104,7 @@
     .hero-video{
       position:absolute; inset:0; width:100%; height:100%;
       object-fit:cover; object-position:center;
-      z-index:-1; pointer-events:none;
-      filter:none !important; opacity:1 !important; mix-blend-mode:normal !important; background:transparent !important;
+      z-index:-1; pointer-events:none; filter:none !important; opacity:1 !important; background:transparent !important;
     }
     .hero-logo{ height:6.5rem; width:6.5rem; object-fit:contain; }
     @media (min-width:640px){ .hero-logo{ height:7rem; width:7rem; } }
@@ -170,13 +172,16 @@
     .ex-prev{ left:10px; } .ex-next{ right:10px; }
     .ex-top{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.6rem .9rem; border-bottom:1px solid rgba(0,0,0,.1); }
 
-    /* Footer */
+    /* Footer (uusi responsiivinen malli) */
     .footer-bar{ position:relative; z-index:2; background: var(--olive); color: var(--ink); }
     .footer-grid{
       max-width: 72rem; margin: 0 auto;
-      padding: 1.75rem 1rem 0;
+      padding: 1.5rem 1rem;
       display:grid;
-      grid-template-columns: 1fr 1fr;   /* 2 saraketta per rivi */
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "left logo"
+        "bottom bottom";
       gap: 1rem 2rem;
       align-items:start;
     }
@@ -186,13 +191,29 @@
     }
     .footer-handle, .footer-link{ color:var(--ink); opacity:.85; text-decoration:none; }
     .footer-handle:hover, .footer-link:hover{ text-decoration:underline; }
-    .footer-ytunnus{ font-weight:900; font-size:.9rem; }
-    .footer-logo{
-      max-width:72rem; margin:0 auto;
-      padding: 1rem 1rem 1.25rem;
-      display:flex; justify-content:flex-end;
+
+    .footer-left{ grid-area:left; display:flex; flex-direction:column; gap:.9rem; }
+    .footer-logoBox{ grid-area:logo; display:flex; justify-content:flex-end; align-items:flex-start; }
+    .footer-logoBox img{ height:72px; width:auto; object-fit:contain; }
+
+    .footer-bottom{
+      grid-area:bottom;
+      display:flex; justify-content:space-between; align-items:center;
+      padding-top:.6rem; border-top:1px solid rgba(0,0,0,.15);
     }
-    .footer-copy{ text-align:center; font-size:.75rem; opacity:.86; padding: .5rem 1rem 1rem; }
+    .footer-ytunnus{ font-weight:900; font-size:.95rem; }
+
+    @media (max-width: 700px){
+      .footer-grid{
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "logo"
+          "left"
+          "bottom";
+        gap: 1rem;
+      }
+      .footer-logoBox{ justify-content:flex-start; }
+    }
   </style>
 </head>
 
@@ -300,30 +321,28 @@
     <!-- FOOTER -->
     <footer id="yhteys" class="footer-bar">
       <div class="footer-grid">
-        <!-- Rivi 1: Instagram | Ota yhteyttä -->
-        <div class="footer-col">
-          <h6>Instagram</h6>
-          <a class="footer-handle" href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer">rumat.studio</a>
-        </div>
-        <div class="footer-col">
-          <h6>Ota yhteyttä</h6>
-          <a class="footer-link" href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>
+        <!-- Vasen pystyjono: Instagram & Ota yhteyttä -->
+        <div class="footer-left">
+          <div class="footer-col">
+            <h6>Instagram</h6>
+            <a class="footer-handle" href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer">rumat.studio</a>
+          </div>
+          <div class="footer-col">
+            <h6>Ota yhteyttä</h6>
+            <a class="footer-link" href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>
+          </div>
         </div>
 
-        <!-- Rivi 2: TikTok | Y-tunnus -->
-        <div class="footer-col">
-          <h6>TikTok</h6>
-          <a class="footer-handle" href="https://www.tiktok.com/@rumat.studio" target="_blank" rel="noreferrer">rumat.studio</a>
+        <!-- Oikea: iso logo -->
+        <div class="footer-logoBox">
+          <img src="assets/logo.svg" alt="RUMAT STUDIO logo">
         </div>
-        <div class="footer-col">
-          <h6>Y-tunnus</h6>
+
+        <!-- Alarivi: TikTok vasemmalla | Y-tunnus oikealla (ilman otsikkoa) -->
+        <div class="footer-bottom">
+          <a class="footer-handle" href="https://www.tiktok.com/@rumat.studio" target="_blank" rel="noreferrer">rumat.studio</a>
           <div class="footer-ytunnus">Y-3436822-5</div>
         </div>
-      </div>
-
-      <!-- Logo omaan riviin, oikealle -->
-      <div class="footer-logo">
-        <img src="assets/logo.svg" alt="RUMAT STUDIO logo" class="h-14 w-auto object-contain" />
       </div>
 
       <div class="footer-copy">© <span id="year"></span> RUMAT STUDIO</div>
