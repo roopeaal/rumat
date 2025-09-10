@@ -4,254 +4,190 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>RUMAT STUDIO</title>
+  <meta name="description" content="Luonnosta syntynyt. Reissuissa testattu. Neuleet, asusteet ja kaavat – istuvat, hengittävät ja kestävät."/>
 
-  <!-- Montserrat -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Fontit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     :root{
-      --ink:#202020;         /* tekstit */
-      --olive:#A1A266;       /* footer-tausta */
-      --deep-blue:#345563;   /* otsikot */
-      --blue:#789FAB;        /* varalle */
-      --light-blue:#DEEEEE;  /* varalle */
-      --ivory:#F6F6F4;       /* taustat & yläpalkki */
-
+      --ink:#202020;                 /* tekstit */
+      --white:#F6F6F4;               /* taustat + header */
+      --olive:#A1A266;               /* footer-tausta */
+      --blue:#789FAB;                /* varalla */
+      --blue-dark:#345563;           /* otsikoiden väri */
+      --mist:#DEEEEE;                /* vaalea sininen, logo footerissa tms */
+      --maxw:72rem;
       --header-h:64px;
-      --band-radius: 16px;
+      --radius:18px;
     }
-    html{ scroll-padding-top: var(--header-h); }
-    body{ font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial; color:var(--ink); background:var(--ivory); margin:0; }
 
-    /* Otsikot: erittäin paksu (900), versaalit */
-    h1, h2, h3, h4, h5, h6{
-      font-family: Montserrat, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      font-weight: 900 !important;
-      text-transform: uppercase;
-      color: var(--deep-blue);
-      letter-spacing: .02em;
-      margin: 0 0 .6rem;
-    }
-    .normalcase{ text-transform:none !important; }
+    /* Perustypografia */
+    html,body{ margin:0; padding:0; background:var(--white); color:var(--ink); }
+    body{ font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial,sans-serif; }
+    img,video{ max-width:100%; display:block; }
 
-    /* Yläpalkki */
-    header{ background:var(--ivory); border-bottom:1px solid rgba(0,0,0,.08); }
-    #hdrRow{
-      position:relative;
-      grid-template-columns:auto 1fr; /* vasen (logo) | keskellä (nav) */
-    }
-    #brandText{
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-      max-width:min(42vw,460px); color:var(--ink);
-    }
-    #brandText .strong{ font-weight:900; }
-    #brandText .light{ font-weight:600; }
+    /* YLEISET OTSIKOT */
+    .title{ color:var(--blue-dark); text-transform:uppercase; font-weight:900; letter-spacing:.08em; margin:0 0 .75rem; }
+    .title.center{ text-align:center; }
+    .lead{ font-weight:700; }
 
-    #mainNav{
-      justify-self:center;
-      display:flex; gap:1.5rem; white-space:nowrap;
-      font-size:13px; text-transform:uppercase; letter-spacing:.2em;
-    }
-    #mainNav a{ color:var(--ink); text-decoration:none; }
-    .nav-hidden{ display:none !important; }
-    .nav-measure{ position:absolute !important; visibility:hidden !important; display:flex !important; white-space:nowrap !important; }
+    /* Header */
+    header{ position:fixed; inset-block-start:0; inset-inline:0; z-index:50; background:var(--white); border-bottom:1px solid rgba(0,0,0,.06); }
+    .nav-wrap{ max-width:var(--maxw); margin:0 auto; padding:10px 14px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:.5rem; min-height:var(--header-h); }
+    .brand{ display:flex; align-items:center; gap:.65rem; text-decoration:none; color:inherit; }
+    .brand img{ height:32px; width:32px; object-fit:contain; }
+    .brand-name{ font-weight:800; white-space:nowrap; }
+    .brand-name b{ font-weight:900; }
 
-    /* Oikean reunan ikonit aivan oikeaan laitaan */
-    #rightBlock{
-      position:absolute; right:12px; top:50%; transform:translateY(-50%);
-      display:flex; align-items:center; gap:.5rem; white-space:nowrap;
-    }
+    nav.main{ display:flex; justify-content:center; gap:28px; font-weight:800; letter-spacing:.10em; text-transform:uppercase; }
+    nav.main a{ color:var(--ink); text-decoration:none; }
+    nav.main a:hover{ text-decoration:underline; text-underline-offset:3px; }
+
+    .right-icons{ justify-self:end; display:flex; gap:.5rem; }
     .icon-btn{
-      position:relative; width:38px; height:38px; display:grid; place-items:center;
-      border-radius:9999px; background:rgba(0,0,0,.06); border:1px solid rgba(0,0,0,.16); color:var(--ink);
+      width:40px; height:40px; display:grid; place-items:center; border-radius:9999px;
+      border:1px solid rgba(0,0,0,.12); background:#fff;
     }
-    .icon-btn:hover{ background:rgba(0,0,0,.10); }
-    .cart-text-btn{
-      border:1px solid rgba(0,0,0,.16); padding:.45rem .8rem; border-radius:9999px;
-      color:var(--ink); background:rgba(0,0,0,.04);
-    }
-    .cart-text-btn:hover{ background:rgba(0,0,0,.08); }
     .badge{
-      position:absolute; top:-4px; right:-4px; min-width:18px; height:18px; padding:0 4px;
-      display:grid; place-items:center; border-radius:9999px; background:var(--ink); color:#fff;
-      font-size:11px; font-weight:700; border:1px solid rgba(0,0,0,.15);
+      position:absolute; transform:translate(10px,-10px);
+      min-width:18px; height:18px; padding:0 4px; border-radius:999px;
+      background:var(--ink); color:#fff; font-size:11px; font-weight:800; display:grid; place-items:center;
     }
 
-    /* Yleinen nappi */
-    .btn{ border-radius:9999px; padding:.6rem 1rem; border:1px solid rgba(0,0,0,.16); background:rgba(0,0,0,.04); }
-    .btn:hover{ background:rgba(0,0,0,.08); }
+    /* Valikkoikoni näytetään vain jos nav ei mahdu */
+    .menu-btn{ display:none; position:relative; }
+    .cart-btn{ position:relative; }
 
-    /* Drawerit (valikko & ostoskori) */
-    .drawer{ position:fixed; inset:0; z-index:60; display:none; }
+    /* Drawerit */
+    .drawer{ position:fixed; inset:0; z-index:70; display:none; }
     .drawer.open{ display:block; }
-    .drawer > .panel{
-      position:absolute; top:0; bottom:0; width:min(420px,90vw);
-      background: var(--ivory); box-shadow: 0 10px 30px rgba(0,0,0,.20);
-    }
+    .drawer .backdrop{ position:absolute; inset:0; background:rgba(0,0,0,.35); }
+    .drawer .panel{ position:absolute; top:0; bottom:0; width:min(420px,92vw); background:#fff; box-shadow:0 10px 40px rgba(0,0,0,.25); }
     #menuDrawer .panel{ left:0; }
     #cartDrawer .panel{ right:0; }
 
-    /* HERO – vain video + logo, ei overlayta, ei taustascrollia */
-    .hero{
-      position:relative;
-      height: calc(100svh - var(--header-h));
-      display:grid; place-items:center;
-      overflow:hidden; text-align:center;
+    /* HERO video */
+    .hero{ position:relative; height:100vh; }
+    .hero video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .hero .center-logo{
+      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+      width:120px; height:120px; display:block;
+      filter:drop-shadow(0 2px 8px rgba(0,0,0,.25));
     }
-    .hero::before,.hero::after{ content:none !important; }
-    .hero-video{
-      position:absolute; inset:0; width:100%; height:100%;
-      object-fit:cover; object-position:center;
-      z-index:-1; pointer-events:none; filter:none !important; opacity:1 !important; background:transparent !important;
-    }
-    .hero-logo{ height:6.5rem; width:6.5rem; object-fit:contain; }
-    @media (min-width:640px){ .hero-logo{ height:7rem; width:7rem; } }
-    video::-webkit-media-controls { display:none !important; }
 
-    /* Full-bleed helper */
-    .full-bleed{ margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
+    main{ padding-top:var(--header-h); }
 
-    /* Bandit ja kortit */
-    .band{ background:var(--ivory); border-radius:var(--band-radius); overflow:hidden; }
-    .band-inner{ max-width:72rem; margin:0 auto; padding:3rem 1rem; }
+    /* Esittelypalkki (kuvat reunoissa) */
+    .intro-band{ max-width:var(--maxw); margin:28px auto; padding:28px 16px; display:grid; grid-template-columns:1fr 2fr 1fr; gap:16px; align-items:center; }
+    .intro-img{ border-radius:16px; overflow:hidden; aspect-ratio:3/4; background:#eee; object-fit:cover; }
+    .intro-text{ background:var(--white); border-radius:16px; padding:20px 22px; }
+    .intro-text p{ line-height:1.65; margin:.85rem 0; }
 
-    /* Esittely: kuvat reunoissa, teksti keskellä */
-    .intro-inner{
-      display:grid;
-      grid-template-columns: minmax(180px, 1fr) minmax(0, 2fr) minmax(180px, 1fr);
-      gap:14px; align-items:stretch; padding: 18px;
-    }
-    .intro-img{
-      border-radius:18px; border:1px solid rgba(0,0,0,.12);
-      background-size: cover; background-position:center; background-repeat:no-repeat;
-      min-height: 280px;
-    }
-    .intro-img.left{
-      background-image:
-        url('assets/intro-left.jpg'),
-        url('https://images.unsplash.com/photo-1470115636492-6d2b56f9146e?q=80&w=1600&auto=format&fit=crop');
-    }
-    .intro-img.right{
-      background-image:
-        url('assets/intro-right.jpg'),
-        url('https://images.unsplash.com/photo-1482192505345-5655af888cc4?q=80&w=1600&auto=format&fit=crop');
-    }
-    .intro-copy{ padding: 6px 8px; min-width:0; }
-    .intro-copy .logo{ width:56px; height:56px; display:block; margin:0 auto 12px; object-fit:contain; }
-    .intro-copy p{ margin:0 0 .8rem 0; line-height:1.55; }
     @media (max-width: 900px){
-      .intro-inner{ grid-template-columns: 1fr; }
-      .intro-img{ min-height: 220px; }
-      .intro-copy{ padding: 2px 2px; }
+      .intro-band{ grid-template-columns:1fr; }
+      .intro-text{ order:-1; }
     }
 
-    /* Kaaviot: neliöt + rivin alle laajennus */
-    .card{ background:var(--ivory); border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
-    .pattern-grid{ display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:12px; align-items:start; }
-    @media (min-width: 768px){ .pattern-grid{ grid-template-columns: repeat(4,minmax(0,1fr)); gap:14px; } }
-    .tile{ position:relative; cursor:pointer; aspect-ratio:1/1; display:block; }
-    .tile img{ width:100%; height:100%; object-fit:cover; display:block; }
-    .tile-caption{
-      position:absolute; left:0; right:0; bottom:0; padding:.45rem .65rem;
-      background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.0));
-      color:#fff; font-weight:800; letter-spacing:.06em; text-transform:uppercase; font-size:.85rem;
+    /* Kaavat-gridi */
+    .grid-wrap{ max-width:var(--maxw); margin:34px auto; padding:0 14px; }
+    .patterns{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    .tile{ position:relative; background:#eee; border-radius:16px; overflow:hidden; aspect-ratio:1/1; cursor:pointer; }
+    .tile img{ width:100%; height:100%; object-fit:cover; }
+    .tile .label{
+      position:absolute; left:0; right:0; bottom:0;
+      padding:8px 10px; background:linear-gradient(transparent, rgba(0,0,0,.55));
+      color:#fff; font-weight:800; letter-spacing:.08em; text-transform:uppercase; font-size:.85rem;
     }
-    .tile--selected{ outline:2px solid var(--deep-blue); }
-    .min-full{ position:absolute; inset:0; display:grid; place-items:center; background:rgba(0,0,0,.04); color:var(--deep-blue); font-weight:800; text-decoration:underline; }
-    .min-full:hover{ background:rgba(0,0,0,.08); }
+    .tile.active::after{
+      content:"PIENENNÄ"; position:absolute; inset:0; display:grid; place-items:center;
+      background:rgba(0,0,0,.35); color:#fff; font-weight:900; letter-spacing:.12em;
+    }
+    @media (max-width: 1000px){ .patterns{ grid-template-columns:repeat(3,1fr);} }
+    @media (max-width: 700px){ .patterns{ grid-template-columns:repeat(2,1fr);} }
 
-    .expander{ grid-column:1 / -1; background:var(--ivory); border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
-    .ex-row{ display:grid; grid-template-columns: 1fr; min-height:260px; }
-    @media (min-width:1024px){ .ex-row{ grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); } }
-    .ex-view{ position:relative; background:#000; min-height:260px; min-width:0; }
-    .ex-info{ padding:1rem 1.1rem; overflow:auto; min-width:0; overflow-wrap:anywhere; }
-    .ex-view img{ width:100%; height:100%; object-fit:contain; background:#000; }
-    .ex-prev,.ex-next{ position:absolute; top:50%; transform:translateY(-50%); width:42px; height:42px; display:grid; place-items:center; border-radius:9999px; background:var(--ivory); border:1px solid rgba(0,0,0,.15); font-weight:800; }
-    .ex-prev{ left:10px; } .ex-next{ right:10px; }
-    .ex-top{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.6rem .9rem; border-bottom:1px solid rgba(0,0,0,.1); }
+    /* Rivin alle avautuva paneeli */
+    .expander{ grid-column:1 / -1; display:none; }
+    .expander.open{ display:block; }
+    .expander .sheet{
+      background:#fff; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,.08);
+      padding:18px; display:grid; grid-template-columns:1.3fr 1fr; gap:18px;
+    }
+    .viewer{ position:relative; border:1px solid rgba(0,0,0,.08); border-radius:14px; overflow:hidden; min-height:360px; }
+    .viewer img{ position:absolute; inset:0; margin:auto; max-width:100%; max-height:100%; object-fit:contain; }
+    .arrow{
+      position:absolute; top:50%; transform:translateY(-50%);
+      width:42px; height:42px; border-radius:9999px; border:1px solid rgba(0,0,0,.15); background:#fff; display:grid; place-items:center;
+    }
+    .arrow.left{ left:10px; } .arrow.right{ right:10px; }
 
-    /* Footer (uusi responsiivinen malli) */
-    .footer-bar{ position:relative; z-index:2; background: var(--olive); color: var(--ink); }
+    .info h3{ margin:.25rem 0 .5rem; color:var(--blue-dark); text-transform:uppercase; font-weight:900; letter-spacing:.08em; }
+    .price{ font-weight:900; margin:.6rem 0; }
+    .sizes{ display:flex; gap:.4rem; flex-wrap:wrap; }
+    .sizes span{ border:1px solid rgba(0,0,0,.15); padding:.25rem .5rem; border-radius:999px; font-weight:700; }
+
+    /* Suunnittelija */
+    .designer{ max-width:var(--maxw); margin:40px auto; padding:0 14px; display:grid; grid-template-columns:320px 1fr; gap:18px; align-items:start; }
+    .designer img{ border-radius:16px; object-fit:cover; aspect-ratio:3/4; }
+    @media (max-width: 840px){ .designer{ grid-template-columns:1fr; } }
+
+    /* FOOTER (kuvan mukainen) */
+    .footer-bar{ background: var(--olive); color: var(--ink); margin-top:40px; }
     .footer-grid{
-      max-width: 72rem; margin: 0 auto;
-      padding: 1.5rem 1rem;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-areas:
-        "left logo"
-        "bottom bottom";
-      gap: 1rem 2rem;
-      align-items:start;
+      max-width: var(--maxw); margin: 0 auto;
+      padding: 1.6rem 1rem;
+      display: grid; grid-template-columns: 1fr 1fr auto;
+      gap: 1.75rem 2.5rem; align-items: start;
     }
     .footer-col h6{
-      font-size:.8rem; font-weight:900; text-transform:uppercase;
-      letter-spacing:.12em; margin:0 0 .35rem; color:var(--ink);
+      margin:0 0 .35rem; font-size:.82rem; font-weight:900;
+      text-transform:uppercase; letter-spacing:.12em; color:var(--ink);
     }
-    .footer-handle, .footer-link{ color:var(--ink); opacity:.85; text-decoration:none; }
+    .footer-handle, .footer-link{ color:var(--ink); opacity:.9; text-decoration:none; }
     .footer-handle:hover, .footer-link:hover{ text-decoration:underline; }
-
-    .footer-left{ grid-area:left; display:flex; flex-direction:column; gap:.9rem; }
-    .footer-logoBox{ grid-area:logo; display:flex; justify-content:flex-end; align-items:flex-start; }
-    .footer-logoBox img{ height:72px; width:auto; object-fit:contain; }
-
-    .footer-bottom{
-      grid-area:bottom;
-      display:flex; justify-content:space-between; align-items:center;
-      padding-top:.6rem; border-top:1px solid rgba(0,0,0,.15);
-    }
-    .footer-ytunnus{ font-weight:900; font-size:.95rem; }
-
+    .footer-social{ display:flex; flex-direction:column; gap:1rem; }
+    .footer-contact{ display:flex; flex-direction:column; gap:.6rem; }
+    .footer-ytunnus{ font-weight:900; letter-spacing:.04em; }
+    .footer-logoBox{ display:flex; justify-content:flex-end; align-items:flex-start; }
+    .footer-logoBox img{ height:72px; width:auto; object-fit:contain; filter:drop-shadow(0 2px 6px rgba(0,0,0,.15)); }
+    .footer-copy{ max-width:var(--maxw); margin:.4rem auto 0; padding:0 1rem 1rem; text-align:center; font-size:.82rem; opacity:.85; color:var(--ink); }
     @media (max-width: 700px){
-      .footer-grid{
-        grid-template-columns: 1fr;
-        grid-template-areas:
-          "logo"
-          "left"
-          "bottom";
-        gap: 1rem;
-      }
+      .footer-grid{ grid-template-columns:1fr; gap:1rem; }
       .footer-logoBox{ justify-content:flex-start; }
     }
+    a{ color:inherit; }
   </style>
 </head>
 
 <body>
   <!-- HEADER -->
-  <header class="fixed top-0 left-0 right-0 z-50">
-    <div id="hdrRow" class="relative mx-auto max-w-6xl px-4 py-4 grid items-center gap-3">
-      <!-- Logo vasemmalla = etusivu -->
-      <a id="brandBlock" href="#etusivu" aria-label="Etusivu" class="flex items-center gap-3">
-        <img alt="RUMAT STUDIO logo" class="h-9 w-9 object-contain" src="assets/logo.svg">
-        <span id="brandText" class="uppercase text-sm tracking-widest">
-          <span class="strong">RUMAT</span>&nbsp;<span class="light">STUDIO</span>
-        </span>
+  <header>
+    <div class="nav-wrap" id="hdr">
+      <!-- Vasemmalla: logo toimii etusivu-linkkinä -->
+      <a class="brand" href="#etusivu">
+        <img src="assets/logo.svg" alt="RUMAT STUDIO">
+        <span class="brand-name"><b>RUMAT</b> STUDIO</span>
       </a>
 
-      <!-- Keskellä: nav (näkyy kun mahtuu) -->
-      <nav id="mainNav" class="justify-self-center">
-        <a href="#mikaonrumat"  class="hover:underline underline-offset-4">Mikä on RUMAT?</a>
-        <a href="#kaaviot"      class="hover:underline underline-offset-4">Kaavat</a>
-        <a href="#suunnittelija"class="hover:underline underline-offset-4">Suunnittelija</a>
-        <a href="#yhteys"       class="hover:underline underline-offset-4">Ota yhteyttä</a>
+      <!-- Keskellä: nav, joka piilotetaan jos ei mahdu -->
+      <nav class="main" id="mainNav">
+        <a href="#mika">Mikä on RUMAT?</a>
+        <a href="#kaaviot">Kaavat</a>
+        <a href="#suunnittelija">Suunnittelija</a>
+        <a href="#yhteys">Yhteystiedot</a>
       </nav>
 
-      <!-- Oikealla: ikonit aivan oikeassa reunassa -->
-      <div id="rightBlock" class="flex items-center gap-2">
-        <button id="openMenu" class="icon-btn hidden" aria-controls="menuDrawer" aria-expanded="false" aria-label="Valikko">
-          <span aria-hidden="true" style="font-size:20px;line-height:1">☰</span><span class="sr-only">Valikko</span>
+      <!-- Oikealla: ikonit -->
+      <div class="right-icons">
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="Valikko" title="Valikko">
+          <!-- ☰ -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
         </button>
-
-        <!-- Tekstinä kun nav mahtuu -->
-        <button id="openCartText" class="cart-text-btn">Ostoskori <span id="cartCountText" class="opacity-80"></span></button>
-
-        <!-- Ikonina kun nav EI mahdu -->
-        <button id="openCartIcon" class="icon-btn hidden" aria-label="Ostoskori">
-          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="9" cy="20" r="1.8"></circle>
-            <circle cx="17" cy="20" r="1.8"></circle>
+        <button class="icon-btn cart-btn" id="openCart" aria-label="Ostoskori" title="Ostoskori">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="20" r="1.8"></circle><circle cx="17" cy="20" r="1.8"></circle>
             <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 8H7.1"></path>
           </svg>
           <span class="badge" id="cartCount">0</span>
@@ -260,425 +196,298 @@
     </div>
   </header>
 
-  <!-- CONTENT -->
-  <main class="pt-[64px]">
-    <!-- HERO (vain video + logo) -->
-    <section id="etusivu" class="hero px-4">
-      <video class="hero-video" autoplay muted loop playsinline webkit-playsinline preload="auto" poster="assets/aurora-poster.jpg">
-        <source src="assets/aurora.webm" type="video/webm">
-        <source src="assets/aurora.mp4"  type="video/mp4">
-      </video>
-      <img src="assets/logo.svg" alt="RUMAT STUDIO logo" class="hero-logo">
-    </section>
-
-    <!-- MIKÄ ON RUMAT? (esittely) -->
-    <section id="mikaonrumat" class="py-0">
-      <div class="band full-bleed">
-        <div class="band-inner">
-          <h2 class="mb-4">Liian rumat ollakseen totta</h2>
-          <div class="intro-inner">
-            <div class="intro-img left"  aria-hidden="true"></div>
-            <div class="intro-copy">
-              <img class="logo" src="assets/logo.svg" alt="RUMAT STUDIO">
-              <div id="intro-text" class="text-[15px] sm:text-base normalcase"></div>
-            </div>
-            <div class="intro-img right" aria-hidden="true"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- KAAVIOT -->
-    <section id="kaaviot" class="py-0">
-      <div class="band full-bleed">
-        <div class="band-inner">
-          <h2 class="text-3xl mb-4">Kaavat</h2>
-          <div id="patternsGrid" class="pattern-grid"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SUUNNITTELIJA -->
-    <section id="suunnittelija" class="py-0">
-      <div class="band full-bleed">
-        <div class="band-inner">
-          <h2 class="text-3xl mb-4">Suunnittelija</h2>
-          <div class="grid md:grid-cols-[320px_1fr] gap-6 items-start">
-            <div>
-              <img src="assets/designer.jpg"
-                   onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1517445312885-9d7f7d7b4c53?q=80&w=1200&auto=format&fit=crop';"
-                   alt="Suunnittelija" class="rounded-xl border border-[rgba(0,0,0,.12)] object-cover w-full h-[300px] md:h-[420px]">
-            </div>
-            <div class="space-y-4 normalcase">
-              <p>Aaltonen on itsevarma neuloja, joka ei rajoita luovuuttaan vain yhteen tekemisen tapaan. Neulomisen rinnalla myös asusteiden ompelu on tärkeä osa ilmaisua – ja ennen kaikkea intohimo. Lapsuuden kiinnostus vaatteiden suunnitteluun johti muodin ja tekstiilisuunnittelun opintoihin vuonna 2021.</p>
-              <p>Pian Aaltonen valmistuu taiteen maisteriksi, mukanaan vankka osaaminen ja omat suosikkitekniikat, joita hän on hionut opintojen aikana. Neulomisen ja asusteiden lisäksi Aaltonen on syventynyt erityisesti vaatteiden kierrätykseen, korjaamiseen liittyviin asenteisiin sekä kriittiseen tarkasteluun siitä, miten kuluttamista ohjataan – ja millaisia seurauksia sillä on ympäristölle.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer id="yhteys" class="footer-bar">
-      <div class="footer-grid">
-        <!-- Vasen pystyjono: Instagram & Ota yhteyttä -->
-        <div class="footer-left">
-          <div class="footer-col">
-            <h6>Instagram</h6>
-            <a class="footer-handle" href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer">rumat.studio</a>
-          </div>
-          <div class="footer-col">
-            <h6>Ota yhteyttä</h6>
-            <a class="footer-link" href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>
-          </div>
-        </div>
-
-        <!-- Oikea: iso logo -->
-        <div class="footer-logoBox">
-          <img src="assets/logo.svg" alt="RUMAT STUDIO logo">
-        </div>
-
-        <!-- Alarivi: TikTok vasemmalla | Y-tunnus oikealla (ilman otsikkoa) -->
-        <div class="footer-bottom">
-          <a class="footer-handle" href="https://www.tiktok.com/@rumat.studio" target="_blank" rel="noreferrer">rumat.studio</a>
-          <div class="footer-ytunnus">Y-3436822-5</div>
-        </div>
-      </div>
-
-      <div class="footer-copy">© <span id="year"></span> RUMAT STUDIO</div>
-    </footer>
-  </main>
-
-  <!-- OSTOSKORI DRAWER -->
-  <div id="cartDrawer" class="drawer" aria-hidden="true">
-    <div class="absolute inset-0 bg-black/40" id="closeCart" aria-label="Sulje ostoskori"></div>
-    <div class="panel p-5 flex flex-col">
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="text-xl">Ostoskori</h3>
-        <button id="closeCartX" class="text-stone-500 hover:text-stone-800">✕</button>
-      </div>
-      <div id="cartItems" class="flex-1 overflow-auto divide-y"></div>
-      <div class="mt-4 space-y-3">
-        <div class="text-sm grid grid-cols-2 gap-y-1">
-          <div class="text-[color:#202020]/70">Välisumma</div><div class="text-right" id="subTotal">€0,00</div>
-        </div>
-        <button id="checkout" class="btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2">Maksa PayPalilla</button>
-        <div id="paypalWarn" class="text-xs text-[color:#202020]/70"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- VALIKKO DRAWER -->
-  <div id="menuDrawer" class="drawer" aria-hidden="true">
-    <div class="absolute inset-0 bg-black/40" id="closeMenu" aria-label="Sulje valikko"></div>
-    <div class="panel p-6 flex flex-col gap-4">
-      <div class="flex items-center justify-between">
-        <h3 class="text-xl">Valikko</h3>
-        <button id="closeMenuX" class="text-stone-500 hover:text-stone-800">✕</button>
-      </div>
-      <nav class="flex flex-col gap-3 text-lg">
-        <a href="#mikaonrumat"  class="py-2 border-b" data-menu-close>Mikä on RUMAT?</a>
-        <a href="#kaaviot"      class="py-2 border-b" data-menu-close>Kaavat</a>
-        <a href="#suunnittelija"class="py-2 border-b" data-menu-close>Suunnittelija</a>
-        <a href="#yhteys"       class="py-2"          data-menu-close>Ota yhteyttä</a>
+  <!-- VALIKKO-DRAWER -->
+  <div class="drawer" id="menuDrawer" aria-hidden="true">
+    <div class="backdrop" id="menuBackdrop"></div>
+    <div class="panel" role="dialog" aria-label="Valikko">
+      <div style="padding:16px 16px 8px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;">Valikko</div>
+      <nav style="display:flex;flex-direction:column;padding:8px 16px 16px;gap:10px">
+        <a href="#mika" data-close-menu>Mikä on RUMAT?</a>
+        <a href="#kaaviot" data-close-menu>Kaavat</a>
+        <a href="#suunnittelija" data-close-menu>Suunnittelija</a>
+        <a href="#yhteys" data-close-menu>Yhteystiedot</a>
       </nav>
     </div>
   </div>
 
+  <!-- OSTOSKORI-DRAWER (yksinkertainen demo) -->
+  <div class="drawer" id="cartDrawer" aria-hidden="true">
+    <div class="backdrop" id="cartBackdrop"></div>
+    <div class="panel" role="dialog" aria-label="Ostoskori">
+      <div style="padding:16px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid rgba(0,0,0,.08)">Ostoskori</div>
+      <div id="cartItems" style="padding:12px 16px;">Kori on tyhjä.</div>
+      <div style="padding:12px 16px 20px;font-weight:800;">Yhteensä: <span id="cartSum">€0,00</span></div>
+    </div>
+  </div>
+
+  <main>
+    <!-- HERO (vain video + logo) -->
+    <section id="etusivu" class="hero" aria-label="Etusivu">
+      <video autoplay muted loop playsinline preload="auto" poster="assets/aurora-poster.jpg" id="heroVideo">
+        <source src="assets/aurora.webm" type="video/webm">
+        <source src="assets/aurora.mp4"  type="video/mp4">
+      </video>
+      <img class="center-logo" src="assets/logo.svg" alt="RUMAT STUDIO">
+    </section>
+
+    <!-- MIKÄ ON RUMAT / Esittely -->
+    <section id="mika" class="grid-wrap" aria-label="Mikä on RUMAT">
+      <h2 class="title center">LIIAN RUMAT OLLAKSEEN TOTTA</h2>
+      <div class="intro-band">
+        <img class="intro-img" src="https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?q=80&w=1200&auto=format&fit=crop" alt="">
+        <div class="intro-text">
+          <p class="lead">RUMAT STUDIO syntyi lapsuuden haaveesta ja vuosien aikana kypsyneestä intohimosta vaatesuunnitteluun.</p>
+          <p>Vuonna 2023 visio alkoi muovautumaan nykyiseen muotoonsa: ajattomia ja kestäviä vaatteita, jotka syntyvät harkitusta rakkaudesta ja intohimosta luovaan tekemiseen.</p>
+          <p>Taustalla on halu luoda ajattomia, kestäviä ja harkiten suunniteltuja vaatteita vastalauseena kertakäyttöiselle pikamuodille. Jokainen vaate suunnitellaan kestämään sekä käytössä että ajassa.</p>
+        </div>
+        <img class="intro-img" src="https://images.unsplash.com/photo-1520975916177-6a5b9d3e7b83?q=80&w=1200&auto=format&fit=crop" alt="">
+      </div>
+    </section>
+
+    <!-- KAAVIOT -->
+    <section id="kaaviot" class="grid-wrap" aria-label="Kaavat">
+      <h2 class="title">KAAVAT</h2>
+      <div class="patterns" id="patternGrid"></div>
+      <!-- expanderit lisätään JS:llä oikeaan kohtaan -->
+    </section>
+
+    <!-- SUUNNITTELIJA -->
+    <section id="suunnittelija" aria-label="Suunnittelija">
+      <div class="designer">
+        <img src="https://images.unsplash.com/photo-1536250853070-61a1f4e89f03?q=80&w=1200&auto=format&fit=crop" alt="Suunnittelija">
+        <div>
+          <h2 class="title">SUUNNITTELIJA</h2>
+          <p>Aaltonen on itsevarma neuloja, joka ei rajoita luovuuttaan vain yhteen tekemisen tapaan. Neulomisen rinnalla myös asusteiden ompelu on tärkeä osa ilmaisua – ja ennen kaikkea intohimo. Lapsuuden kiinnostus vaatteiden suunnitteluun johti muodin ja tekstiilisuunnittelun opintoihin vuonna 2021.</p>
+          <p>Pian Aaltonen valmistuu taiteen maisteriksi, mukanaan vankka osaaminen ja omat suosikkitekniikat, joita hän on hionut opintojen aikana. Neulomisen ja asusteiden lisäksi Aaltonen on syventynyt erityisesti vaatteiden kierrätykseen, korjaamiseen liittyviin asenteisiin sekä kriittiseen tarkasteluun siitä, miten kuluttamista ohjataan – ja millaisia seurauksia sillä on ympäristölle.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER (kuvan mukainen) -->
+  <footer id="yhteys" class="footer-bar" aria-label="Yhteystiedot">
+    <div class="footer-grid">
+      <div class="footer-social">
+        <div class="footer-col">
+          <h6>Instagram</h6>
+          <a class="footer-handle" href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer">rumat.studio</a>
+        </div>
+        <div class="footer-col">
+          <h6>TikTok</h6>
+          <a class="footer-handle" href="https://www.tiktok.com/@rumat.studio" target="_blank" rel="noreferrer">rumat.studio</a>
+        </div>
+      </div>
+
+      <div class="footer-contact">
+        <div class="footer-col">
+          <h6>Ota yhteyttä</h6>
+          <a class="footer-link" href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-ytunnus">Y-3436822-5</div>
+        </div>
+      </div>
+
+      <div class="footer-logoBox">
+        <img src="assets/logo.svg" alt="RUMAT STUDIO logo">
+      </div>
+    </div>
+    <div class="footer-copy">© <span id="year"></span> RUMAT STUDIO</div>
+  </footer>
+
   <script>
-  const fmtEUR = x => new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
-  const $ = s => document.querySelector(s);
-  const el = (tag,attrs={},...kids)=>{ const n=document.createElement(tag);
-    Object.entries(attrs).forEach(([k,v])=>{
-      if(k==='class') n.className=v; else if(k==='html') n.innerHTML=v;
-      else if(k.startsWith('on')) n.addEventListener(k.slice(2),v); else n.setAttribute(k,v);
-    });
-    kids.forEach(k=>{ if(k==null) return; if(typeof k==='string') n.appendChild(document.createTextNode(k)); else n.appendChild(k);});
-    return n;
-  };
+    // Vuosi
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Vuosi footerissa
-  (function(){ const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear(); })();
+    // --- NAV FIT LOGIIKKA: piilota/tuo takaisin valikko ikoni ---
+    (function(){
+      const nav = document.getElementById('mainNav');
+      const menuBtn = document.getElementById('menuBtn');
+      const hdr = document.getElementById('hdr');
 
-  // Esittelyteksti
-  function parasToHTML(s){ return String(s||'').trim().split(/\n\s*\n/).map(p=>`<p>${p.trim()}</p>`).join('\n'); }
-  const defaultContent = {
-    pitch: `RUMAT STUDIO syntyi lapsuuden haaveesta ja vuosien aikana kypsyneestä intohimosta vaatesuunnitteluun. Vuonna 2023 visio alkoi muovautumaan nykyiseen muotoonsa: ajattomia ja kestäviä vaatteita, jotka syntyvät harkitusta rakkaudesta ja intohimosta luovaan tekemiseen.
-
-RUMAT STUDIO pohjautuu vahvaan arvopohjaan. Se ei ole pelkkä tuotemerkki, vaan se rohkaisee pohtimaan omaa kulutuskäyttäytymistä ja inspiroi tekemään itse tai ainakin arvostamaan vaatteiden alkuperää ja tekijöitä niiden takana.
-
-Taustalla on halu luoda ajattomia, kestäviä ja harkiten suunniteltuja vaatteita vastalauseena kertakäyttöiselle pikamuodille. Jokainen vaate suunnitellaan kestämään sekä käytössä että ajassa. Suunnittelussa otetaan huomioon materiaalien laatu, vaatteen käyttötarkoitus ja visuaalinen ilme, mutta myös tuotannon ekologinen ja eettinen kestävyys. Käsityönä valmistetut vaatteet vaativat aikaa ja siten nostavat vaatteen arvoa niin konkreettisesti kuin tunnearvossakin.
-
-Tulevaisuuden suunnitelmissa on oman studiollisen avaaminen pääkaupunkiseudulle. Tila toimisi kohtaamispaikkana, jossa voi sovittaa mallikappaleita, osallistua työpajoihin ja verkostoitua muiden kestävästä arvosta kiinnostuneiden muotoilijoiden, ompelijoiden ja suunnittelijoiden kanssa.
-
-Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkityksellisyydestä käyttömukavuuteen asti. Tavoitteena ei ole täydellisyys, vaan rohkeus ja kehitys. Nimi RUMAT STUDIO viittaa juuri tähän: lapsen sallittuun keskeneräisyyteen, mutta tähdätä silti johonkin merkitykselliseen.`,
-  };
-  (function(){
-    const intro = document.getElementById('intro-text');
-    if(intro) intro.innerHTML = parasToHTML(defaultContent.pitch);
-  })();
-
-  /* =============== KAAVIOT =============== */
-  window.KAAVIOT = [
-    { id:'laukku',      name:'Laukku',       price:6.00, sizes:'One size', blurb:'Sling-laukku kaava (PDF).', images:['https://placehold.co/1400x900?text=Laukku+1','https://placehold.co/1400x900?text=Laukku+2']},
-    { id:'usva-paita',  name:'Usva paita',   price:7.00, sizes:'XS–XL',    blurb:'Rento paita raglan-hihoilla.', images:['https://placehold.co/1400x900?text=Usva+1','https://placehold.co/1400x900?text=Usva+2']},
-    { id:'neule-panta', name:'Neule panta',  price:5.00, sizes:'S–L',      blurb:'Helppo aloittelijalle.', images:['https://placehold.co/1400x900?text=Panta+1','https://placehold.co/1400x900?text=Panta+2']},
-    { id:'kauluri',     name:'Kauluri',      price:5.00, sizes:'One size', blurb:'Nopea viikonloppuprojekti.', images:['https://placehold.co/1400x900?text=Kauluri+1','https://placehold.co/1400x900?text=Kauluri+2']},
-    { id:'pipo',        name:'Pipo',         price:6.00, sizes:'S–L',      blurb:'Peruspipo, selkeä ohje.', images:['https://placehold.co/1400x900?text=Pipo+1','https://placehold.co/1400x900?text=Pipo+2']},
-    { id:'lapaset',     name:'Lapaset',      price:6.00, sizes:'S–XL',     blurb:'Tiivis peruslapanen.', images:['https://placehold.co/1400x900?text=Lapaset+1','https://placehold.co/1400x900?text=Lapaset+2']},
-    { id:'sukat',       name:'Sukat',        price:6.00, sizes:'36–46',    blurb:'Vahvistettu kantapää.', images:['https://placehold.co/1400x900?text=Sukat+1','https://placehold.co/1400x900?text=Sukat+2']},
-    { id:'villapaita',  name:'Villapaita',   price:8.00, sizes:'XS–XXL',   blurb:'Klassinen pyöröneule.', images:['https://placehold.co/1400x900?text=Villapaita+1','https://placehold.co/1400x900?text=Villapaita+2']},
-  ];
-
-  // OSTOSKORI
-  let CART = JSON.parse(localStorage.getItem('cart')||'{}');
-  function saveCart(){ localStorage.setItem('cart', JSON.stringify(CART)); updateBadge(); }
-  function updateBadge(){
-    const n = Object.values(CART).reduce((a,b)=>a+b,0);
-    const ic=$('#cartCount'); const tx=$('#cartCountText');
-    if(ic) ic.textContent=String(n);
-    if(tx) tx.textContent = n ? `(${n})` : '';
-  }
-  const $drawer=$('#cartDrawer');
-  function openCart(){ $drawer.classList.add('open'); renderCart(); }
-  function closeCart(){ $drawer.classList.remove('open'); }
-  $('#openCartText')?.addEventListener('click', openCart);
-  $('#openCartIcon')?.addEventListener('click', openCart);
-  $('#closeCart')?.addEventListener('click', closeCart);
-  $('#closeCartX')?.addEventListener('click', closeCart);
-
-  function renderCart(){
-    const root = $('#cartItems'); root.innerHTML=''; let sub=0;
-    Object.entries(CART).forEach(([id,q])=>{
-      const p = window.KAAVIOT.find(x=>x.id===id); if(!p) return;
-      sub += p.price*q;
-      root.appendChild(el('div',{class:'py-3 flex items-center justify-between'},
-        el('div',{}, el('div',{class:'font-semibold'}, p.name), el('div',{class:'text-sm opacity-70'}, fmtEUR(p.price))),
-        el('button',{'data-remove':id, class:'px-2 border border-[rgba(0,0,0,.15)] rounded'}, 'Poista')
-      ));
-    });
-    $('#subTotal').textContent = fmtEUR(sub);
-    root.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{ const id=b.dataset.remove; delete CART[id]; saveCart(); renderCart(); });
-  }
-  function addToCart(id){ CART[id]=(CART[id]||0)+1; saveCart(); openCart(); }
-  window.addToCart = addToCart; updateBadge();
-
-  document.getElementById('checkout').addEventListener('click', ()=>{
-    const ids = Object.keys(CART); if(ids.length===0) return alert('Ostoskori on tyhjä.');
-    const email = "kauppa@esimerkki.fi";
-    const form = el('form',{method:'POST', action:'https://www.paypal.com/cgi-bin/webscr', target:'_blank'},
-      el('input',{type:'hidden',name:'cmd',value:'_cart'}),
-      el('input',{type:'hidden',name:'upload',value:'1'}),
-      el('input',{type:'hidden',name:'business',value:email}),
-      el('input',{type:'hidden',name:'currency_code',value:'EUR'}),
-      el('input',{type:'hidden',name:'return',value: location.origin+'/#success'}),
-      el('input',{type:'hidden',name:'cancel_return',value: location.origin+'/#cancel'})
-    );
-    let i=1;
-    ids.forEach(id=>{
-      const p = window.KAAVIOT.find(x=>x.id===id); if(!p) return;
-      form.appendChild(el('input',{type:'hidden',name:`item_name_${i}`,value:p.name}));
-      form.appendChild(el('input',{type:'hidden',name:`amount_${i}`,   value:Number(p.price||0).toFixed(2)}));
-      form.appendChild(el('input',{type:'hidden',name:`quantity_${i}`, value:1}));
-      i++;
-    });
-    document.body.appendChild(form); form.submit(); form.remove();
-  });
-
-  // NAV: näytä linkit kun mahtuvat, muuten ☰ + ostoskori-ikoni
-  (function(){
-    const container = document.getElementById('hdrRow');
-    const brand     = document.getElementById('brandBlock');
-    const nav       = document.getElementById('mainNav');
-    const right     = document.getElementById('rightBlock');
-    const menuBtn   = document.getElementById('openMenu');
-    const cartIcon  = document.getElementById('openCartIcon');
-    const cartText  = document.getElementById('openCartText');
-
-    let navVisible = true;
-
-    function measureNavWidth(){
-      const wasHidden = nav.classList.contains('nav-hidden');
-      if (wasHidden) nav.classList.remove('nav-hidden');
-      nav.classList.add('nav-measure');
-      const w = Math.ceil(nav.scrollWidth);
-      nav.classList.remove('nav-measure');
-      if (wasHidden) nav.classList.add('nav-hidden');
-      return w;
-    }
-    function canShowNav(){
-      const cw   = container.clientWidth;
-      const bw   = Math.ceil(brand.getBoundingClientRect().width);
-      const rbw  = Math.ceil(right.getBoundingClientRect().width);
-      const navW = measureNavWidth();
-      return navW <= Math.max(0, cw - bw - rbw - 24);
-    }
-    function applyState(showNav){
-      navVisible = !!showNav;
-      if (navVisible){
-        nav.classList.remove('nav-hidden');
-        menuBtn.classList.add('hidden');
-        cartIcon.classList.add('hidden');
-        cartText.classList.remove('hidden');
-      }else{
-        nav.classList.add('nav-hidden');
-        menuBtn.classList.remove('hidden');
-        cartIcon.classList.remove('hidden');
-        cartText.classList.add('hidden');
+      function fits(){
+        const cw = hdr.clientWidth;
+        const left = hdr.children[0].getBoundingClientRect().width;  // brand
+        const right = hdr.children[2].getBoundingClientRect().width; // iconit
+        // pieni turvamarginaali
+        return (left + right + nav.scrollWidth + 20) <= cw;
       }
-    }
-    function compute(){
-      if (navVisible){
-        if (!canShowNav()) applyState(false);
-      }else{
-        if (canShowNav())  applyState(true);
+      function apply(){
+        if (fits()){
+          nav.style.visibility='visible';
+          nav.style.position='';
+          menuBtn.style.display='none';
+        }else{
+          nav.style.visibility='hidden';
+          nav.style.position='absolute';
+          menuBtn.style.display='grid';
+        }
       }
-    }
-    let t=null; const schedule=()=>{ if(t) return; t=setTimeout(()=>{ t=null; compute(); }, 120); };
-    window.addEventListener('resize', schedule, {passive:true});
-    if ('fonts' in document) document.fonts.ready.then(compute);
-    compute();
+      window.addEventListener('resize',()=>{ requestAnimationFrame(apply); }, {passive:true});
+      if ('fonts' in document) document.fonts.ready.then(apply); else apply();
+    })();
 
-    // Drawer
+    // --- MENU DRAWER ---
     (function(){
       const drawer = document.getElementById('menuDrawer');
-      const openBtn = document.getElementById('openMenu');
-      const closeA = document.getElementById('closeMenu');
-      const closeX = document.getElementById('closeMenuX');
-      function open(){ drawer.classList.add('open'); openBtn.setAttribute('aria-expanded','true'); }
-      function close(){ drawer.classList.remove('open'); openBtn.setAttribute('aria-expanded','false'); }
-      openBtn.addEventListener('click', open);
-      closeA?.addEventListener('click', close);
-      closeX?.addEventListener('click', close);
-      drawer.addEventListener('click', e=>{ if(e.target===drawer) close(); });
+      const btn = document.getElementById('menuBtn');
+      const backdrop = document.getElementById('menuBackdrop');
+      function open(){ drawer.classList.add('open'); }
+      function close(){ drawer.classList.remove('open'); }
+      btn.addEventListener('click', open);
+      backdrop.addEventListener('click', close);
+      drawer.querySelectorAll('[data-close-menu]').forEach(a=>a.addEventListener('click', close));
       document.addEventListener('keydown', e=>{ if(e.key==='Escape') close(); });
-      drawer.querySelectorAll?.('[data-menu-close]')?.forEach(a=>a.addEventListener('click', close));
     })();
-  })();
 
-  // KAAVIOT UI – inline-laajennus rivin alle (4 saraketta leveäksi kun tilaa)
-  (function(){
-    const grid  = document.getElementById('patternsGrid');
-    let selectedId = null;
-    let expander = null; let current=null; let imgIdx=0;
+    // --- CART (kevyt demo) ---
+    const cartBtn = document.getElementById('openCart');
+    const cartDrawer = document.getElementById('cartDrawer');
+    document.getElementById('cartBackdrop').addEventListener('click',()=>cartDrawer.classList.remove('open'));
+    cartBtn.addEventListener('click', ()=> cartDrawer.classList.add('open'));
 
-    const DATA = window.KAAVIOT;
+    // --- DATA: KAAVAT ---
+    const PATTERNS = [
+      {id:'laukku', title:'Laukku', price:12, sizes:['One size'], images:[
+        'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1600&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1511389026070-a14ae610a1be?q=80&w=1600&auto=format&fit=crop'
+      ]},
+      {id:'usva', title:'Usva paita', price:14, sizes:['S','M','L','XL'], images:[
+        'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1600&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600&auto=format&fit=crop'
+      ]},
+      {id:'panta', title:'Neulepanta', price:9, sizes:['One size'], images:[
+        'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?q=80&w=1600&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1503342217505-b0a15cf70489?q=80&w=1600&auto=format&fit=crop'
+      ]},
+      {id:'kauluri', title:'Kauluri', price:10, sizes:['One size'], images:[
+        'https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?q=80&w=1600&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1503342217505-b0a15cf70489?q=80&w=1600&auto=format&fit=crop'
+      ]},
+      {id:'beanie', title:'Pipo', price:8, sizes:['One size'], images:[
+        'https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?q=80&w=1600&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600&auto=format&fit=crop'
+      ]},
+      {id:'sukat', title:'Sukat', price:7, sizes:['36–38','39–41','42–44'], images:[
+        'https://images.unsplash.com/photo-1520975892443-4b1b1b1d0f56?q=80&w=1600&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1520975922321-6ca0a0a5a0d3?q=80&w=1600&auto=format&fit=crop'
+      ]},
+      {id:'toppap', title:'Neuletakki', price:15, sizes:['S','M','L'], images:[
+        'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1600&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1600&auto=format&fit=crop'
+      ]},
+      {id:'kassi', title:'Kassi', price:6, sizes:['One size'], images:[
+        'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1600&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1511389026070-a14ae610a1be?q=80&w=1600&auto=format&fit=crop'
+      ]}
+    ];
 
-    // Laatta-ruudukko
-    DATA.forEach((p)=>{
-      const tile = document.createElement('article');
-      tile.className = 'tile card';
-      tile.setAttribute('data-id', p.id);
-      const img = document.createElement('img');
-      img.src = (p.images||[])[0] || 'https://placehold.co/900?text=Kaava';
-      img.alt = p.name;
-      const cap = document.createElement('div');
-      cap.className = 'tile-caption';
-      cap.textContent = p.name;
-      tile.appendChild(img); tile.appendChild(cap);
-      grid.appendChild(tile);
-    });
+    // --- RENDER KAAVAT + INLINE EXPANDER ---
+    (function(){
+      const grid = document.getElementById('patternGrid');
 
-    function columns(){
-      const cs = getComputedStyle(grid).gridTemplateColumns;
-      return Math.max(1, cs.split(' ').length);
-    }
-    function insertAfterRow(tileEl){
-      const tiles = Array.from(grid.querySelectorAll('.tile, .expander'));
-      const onlyTiles = tiles.filter(n=>n.classList.contains('tile'));
-      const idx = onlyTiles.indexOf(tileEl);
-      const cols = columns();
-      const rowEndIdx = Math.min(onlyTiles.length-1, Math.floor(idx/cols)*cols + (cols-1));
-      const after = onlyTiles[rowEndIdx];
-      if (expander.parentNode !== grid){ grid.insertBefore(expander, after.nextSibling); }
-      else { grid.insertBefore(expander, after.nextSibling); }
-    }
-    function buildExpander(){
-      expander = el('div',{class:'expander'});
-      const top = el('div',{class:'ex-top'},
-        el('div',{id:'exTitle',class:'font-semibold'}, ''),
-        el('button',{id:'exClose',class:'px-3 py-1 rounded border border-[rgba(0,0,0,.15)]'}, 'pienennä')
-      );
-      const row = el('div',{class:'ex-row'},
-        el('div',{class:'ex-view'},
-          el('img',{id:'exImg',alt:'Kaava'}),
-          el('button',{id:'exPrev',class:'ex-prev'},'◀'),
-          el('button',{id:'exNext',class:'ex-next'},'▶')
-        ),
-        el('div',{class:'ex-info'},
-          el('h3',{id:'exName',class:'text-2xl mb-2'}, ''),
-          el('p',{id:'exBlurb',class:'opacity-80 mb-2 normalcase'}, ''),
-          el('div',{class:'mb-2'}, el('span',{class:'font-semibold'},'Koot: '), el('span',{id:'exSizes'},'')),
-          el('div',{id:'exPrice',class:'text-xl font-bold mb-4'}, ''),
-          el('button',{id:'exBuy',class:'btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2'},'Osta')
-        )
-      );
-      expander.appendChild(top); expander.appendChild(row);
-      expander.querySelector('#exPrev').addEventListener('click', ()=>nav(-1));
-      expander.querySelector('#exNext').addEventListener('click', ()=>nav(+1));
-      expander.querySelector('#exClose').addEventListener('click', ()=>clearSelection());
-    }
-    buildExpander();
-
-    function openFor(p, tileEl){
-      current = p; imgIdx = 0;
-      expander.querySelector('#exTitle').textContent = p.name;
-      expander.querySelector('#exName').textContent  = p.name;
-      expander.querySelector('#exBlurb').textContent = p.blurb || '';
-      expander.querySelector('#exSizes').textContent = p.sizes || '';
-      expander.querySelector('#exPrice').textContent = fmtEUR(p.price||0);
-      expander.querySelector('#exImg').src = (p.images||[])[0] || 'https://placehold.co/900?text=Kaava';
-      expander.querySelector('#exBuy').onclick = () => window.addToCart ? window.addToCart(p.id) : null;
-      insertAfterRow(tileEl);
-    }
-    function nav(dir){
-      if(!current || !current.images || !current.images.length) return;
-      const n = current.images.length;
-      imgIdx = (imgIdx + dir + n) % n;
-      expander.querySelector('#exImg').src = current.images[imgIdx];
-    }
-    function markSelected(tile, on){
-      tile.classList.toggle('tile--selected', !!on);
-      tile.innerHTML='';
-      const p = DATA.find(x=>x.id===tile.dataset.id);
-      tile.appendChild(Object.assign(document.createElement('img'),{src:(p.images||[])[0]||'https://placehold.co/900?text=Kaava',alt:p.name}));
-      tile.appendChild(Object.assign(document.createElement('div'),{className:'tile-caption',textContent:p.name}));
-      if (on){
-        const btn = Object.assign(document.createElement('button'),{className:'min-full',type:'button',textContent:'pienennä'});
-        btn.addEventListener('click', (e)=>{ e.stopPropagation(); clearSelection(); });
-        tile.appendChild(btn);
+      // apu: lisää expander oikeaan kohtaan (rivin alle)
+      function insertExpanderAfterRow(index, expanderEl){
+        // neljä per rivi -> etsi rivin viimeinen
+        const perRow = getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+        const rowEndIndex = Math.min(((Math.floor(index / perRow)+1)*perRow)-1, PATTERNS.length-1);
+        const afterEl = grid.children[rowEndIndex];
+        afterEl.after(expanderEl);
       }
-    }
-    function clearSelection(){
-      if(!selectedId) return;
-      const prev = grid.querySelector(`.tile[data-id="${selectedId}"]`);
-      if (prev) markSelected(prev, false);
-      if (expander.parentNode === grid) grid.removeChild(expander);
-      selectedId = null; current = null; imgIdx = 0;
-    }
-    function selectTile(tile){
-      const id = tile.getAttribute('data-id');
-      if (id===selectedId){ clearSelection(); return; }
-      clearSelection();
-      selectedId = id;
-      markSelected(tile, true);
-      const p = DATA.find(x=>x.id===id);
-      openFor(p, tile);
-    }
-    grid.addEventListener('click', (e)=>{
-      const tile = e.target.closest('.tile'); if(!tile || !grid.contains(tile)) return;
-      selectTile(tile);
-    });
-    let roTimer=null;
-    addEventListener('resize', ()=>{
-      if(!selectedId || !expander.parentNode) return;
-      if(roTimer) clearTimeout(roTimer);
-      roTimer=setTimeout(()=>{
-        const tile = grid.querySelector(`.tile[data-id="${selectedId}"]`);
-        if(tile) insertAfterRow(tile);
-      },120);
-    }, {passive:true});
-  })();
+
+      // luo yhden kortin
+      function tileEl(p, idx){
+        const t = document.createElement('div');
+        t.className='tile';
+        t.dataset.id=p.id; t.dataset.index=idx;
+        t.innerHTML = `<img alt="${p.title}" src="${p.images[0]}"><div class="label">${p.title}</div>`;
+        t.addEventListener('click', ()=>toggleExpand(idx, t));
+        return t;
+      }
+
+      // luo expander
+      function makeExpander(p){
+        const wrap = document.createElement('div');
+        wrap.className='expander';
+        wrap.innerHTML = `
+          <div class="sheet">
+            <div class="viewer">
+              <img alt="${p.title}" src="${p.images[0]}" id="view-${p.id}">
+              <button class="arrow left" aria-label="Edellinen kuva">◀</button>
+              <button class="arrow right" aria-label="Seuraava kuva">▶</button>
+            </div>
+            <div class="info">
+              <h3>${p.title}</h3>
+              <div class="price">${new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(p.price)}</div>
+              <p>Tämä kaava sisältää selkeät ohjeet ja tulostettavat osat.</p>
+              <div class="sizes">${p.sizes.map(s=>`<span>${s}</span>`).join('')}</div>
+              <div style="margin-top:12px;display:flex;gap:8px;">
+                <button id="add-${p.id}" style="padding:.55rem 1rem;border-radius:9999px;border:1px solid rgba(0,0,0,.15);font-weight:800;">Lisää ostoskoriin</button>
+                <button id="close-${p.id}" style="padding:.55rem 1rem;border-radius:9999px;border:1px solid rgba(0,0,0,.15);font-weight:800;">Pienennä</button>
+              </div>
+            </div>
+          </div>`;
+        // karuselli
+        let i=0;
+        const img = wrap.querySelector(`#view-${p.id}`);
+        const prev = wrap.querySelector('.arrow.left');
+        const next = wrap.querySelector('.arrow.right');
+        const set = (k)=>{ i=(k+p.images.length)%p.images.length; img.src=p.images[i]; };
+        prev.addEventListener('click', e=>{ e.stopPropagation(); set(i-1); });
+        next.addEventListener('click', e=>{ e.stopPropagation(); set(i+1); });
+        // ostoskori
+        wrap.querySelector(`#add-${p.id}`).addEventListener('click', ()=>{
+          addToCart(p); 
+          document.getElementById('cartDrawer').classList.add('open');
+        });
+        return wrap;
+      }
+
+      let open = {idx:-1, expander:null, tile:null};
+
+      function closeOpen(){
+        if(open.expander){
+          open.expander.classList.remove('open');
+          open.expander.remove();
+          open.tile?.classList.remove('active');
+          open = {idx:-1,expander:null,tile:null};
+        }
+      }
+
+      function toggleExpand(idx, tile){
+        if(open.idx===idx){ closeOpen(); return; }
+        closeOpen();
+        const p = PATTERNS[idx];
+        const exp = makeExpander(p);
+        insertExpanderAfterRow(idx, exp);
+        // close button
+        exp.querySelector(`#close-${p.id}`).addEventListener('click', closeOpen);
+        exp.classList.add('open');
+        tile.classList.add('active');
+        open = {idx, expander:exp, tile};
+      }
+
+      // render tiles
+      PATTERNS.forEach((p,i)=> grid.appendChild(tileEl(p,i)));
+
+      // Reflow: jos ikkunan koko muuttuu, siirrä expander oikeaan kohtaan
+      window.addEventListener('resize', ()=>{
+        if(open.idx<0) return;
+        const ex = open.expander;
+        insertExpanderAfterRow(open.idx, ex);
+      }, {passive:true});
+
+      // pieni kori-demo
+      const cart = [];
+      function addToCart(p){
+        cart.push(p);
+        document.getElementById('cartItems').innerHTML = cart.map(x=>`<div>${x.title} – ${new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x.price)}</div>`).join('') || 'Kori on tyhjä.';
+        const sum = cart.reduce((a,b)=>a+b.price,0);
+        document.getElementById('cartSum').textContent = new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(sum);
+        document.getElementById('cartCount').textContent = String(cart.length);
+      }
+      window.addToCart = addToCart;
+    })();
   </script>
 </body>
 </html>
