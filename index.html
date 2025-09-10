@@ -147,6 +147,15 @@
       .intro-copy{ padding: 2px 2px; }
     }
 
+    /* --- Esittely: kuvat kiinni sivun reunoihin --- */
+    #mikaonrumat .intro-inner{ gap:0; padding:0; }
+    #mikaonrumat .intro-img{ border:none; border-radius:0; min-height:320px; }
+    #mikaonrumat .intro-img.left{  margin-left:  calc(50% - 50vw); }
+    #mikaonrumat .intro-img.right{ margin-right: calc(50% - 50vw); }
+    @media (max-width: 900px){
+      #mikaonrumat .intro-img{ min-height:240px; }
+    }
+
     /* Kaaviot: neliöt + rivin alle laajennus */
     .card{ background:var(--ivory); border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
     .pattern-grid{ display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:12px; align-items:start; }
@@ -162,15 +171,75 @@
     .min-full{ position:absolute; inset:0; display:grid; place-items:center; background:rgba(0,0,0,.04); color:var(--deep-blue); font-weight:800; text-decoration:underline; }
     .min-full:hover{ background:rgba(0,0,0,.08); }
 
-    .expander{ grid-column:1 / -1; background:var(--ivory); border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
-    .ex-row{ display:grid; grid-template-columns: 1fr; min-height:260px; }
-    @media (min-width:1024px){ .ex-row{ grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); } }
-    .ex-view{ position:relative; background:#000; min-height:260px; min-width:0; }
-    .ex-info{ padding:1rem 1.1rem; overflow:auto; min-width:0; overflow-wrap:anywhere; }
-    .ex-view img{ width:100%; height:100%; object-fit:contain; background:#000; }
-    .ex-prev,.ex-next{ position:absolute; top:50%; transform:translateY(-50%); width:42px; height:42px; display:grid; place-items:center; border-radius:9999px; background:var(--ivory); border:1px solid rgba(0,0,0,.15); font-weight:800; }
-    .ex-prev{ left:10px; } .ex-next{ right:10px; }
-    .ex-top{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.6rem .9rem; border-bottom:1px solid rgba(0,0,0,.1); }
+    /* ----- KAAVOJEN ISOKSI AVAUS: lähes koko sivun kokoinen neliö ----- */
+    .expander{
+      grid-column: 1 / -1;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+      border-left: 0;
+      border-right: 0;
+      border-radius: 0;
+      overflow: hidden;
+      background: var(--ivory);
+      border-top: 1px solid rgba(0,0,0,.12);
+      border-bottom: 1px solid rgba(0,0,0,.12);
+    }
+    .ex-row{
+      display: grid;
+      grid-template-columns: auto minmax(320px, 520px); /* vasen neliö | oikea info */
+      align-items: stretch;
+      gap: 0;
+      padding-right: 16px;
+    }
+    .ex-view{
+      position: relative;
+      justify-self: start;
+      background: #000;
+    }
+    .ex-view::before{
+      content: "";
+      display: block;
+      padding-bottom: 100%; /* neliö */
+    }
+    .ex-view img{
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background:#000;
+    }
+    .ex-prev,.ex-next{
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42px; height: 42px;
+      display: grid; place-items: center;
+      border-radius: 9999px;
+      background: var(--ivory);
+      border: 1px solid rgba(0,0,0,.15);
+      font-weight: 800;
+      z-index: 2;
+    }
+    .ex-prev{ left: 10px; } .ex-next{ right: 10px; }
+    .ex-info{
+      padding: 16px 8px 16px 18px;
+      overflow: auto;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+    .ex-top{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+      padding: .6rem .9rem;
+      border-bottom: 1px solid rgba(0,0,0,.1);
+    }
+    @media (max-width: 1023.98px){
+      .ex-row{ grid-template-columns: 1fr; padding-right: 0; }
+      .ex-info{ padding: 14px; }
+    }
 
     /* Footer (uusi responsiivinen malli) */
     .footer-bar{ position:relative; z-index:2; background: var(--olive); color: var(--ink); }
@@ -318,7 +387,7 @@
       </div>
     </section>
 
-    <!-- FOOTER (vain tämä osa on muokattu) -->
+    <!-- FOOTER -->
     <footer id="yhteys" class="footer-bar">
       <div class="footer-grid">
         <!-- Vasen pystyjono: Instagram & Ota yhteyttä -->
@@ -338,7 +407,7 @@
           <img src="assets/logo.svg" alt="RUMAT STUDIO logo">
         </div>
 
-        <!-- Alarivi: TikTok vasemmalla | Y-tunnus oikealla -->
+        <!-- Alarivi: TikTok vasemmalla | Y-tunnus oikealla (ilman otsikkoa) -->
         <div class="footer-bottom">
           <a class="footer-handle" href="https://www.tiktok.com/@rumat.studio" target="_blank" rel="noreferrer">rumat.studio</a>
           <div class="footer-ytunnus">Y-3436822-5</div>
