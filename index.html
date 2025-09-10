@@ -124,14 +124,15 @@
       gap:14px; align-items:stretch; padding: 18px;
     }
     .intro-img{
-      border-radius:18px; border:1px solid rgba(0,0,0,.12);
       background-size: cover; background-position:center; background-repeat:no-repeat;
       min-height: 280px;
+      border:1px solid rgba(0,0,0,.12);
     }
+    /* Vaihdettu vasemman kuvan fallback parempaan rajaukseen */
     .intro-img.left{
       background-image:
         url('assets/intro-left.jpg'),
-        url('https://images.unsplash.com/photo-1470115636492-6d2b56f9146e?q=80&w=1600&auto=format&fit=crop');
+        url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop');
     }
     .intro-img.right{
       background-image:
@@ -143,20 +144,25 @@
     .intro-copy p{ margin:0 0 .8rem 0; line-height:1.55; }
     @media (max-width: 900px){
       .intro-inner{ grid-template-columns: 1fr; }
-      .intro-img{ min-height: 220px; }
+      .intro-img{ min-height: 240px; }
       .intro-copy{ padding: 2px 2px; }
     }
 
-    /* --- Esittely: kuvat kiinni sivun reunoihin --- */
+    /* --- Esittely: kuvat kiinni sivun reunoihin + vain sisemmät kulmat pyöristetty --- */
     #mikaonrumat .intro-inner{ gap:0; padding:0; }
-    #mikaonrumat .intro-img{ border:none; border-radius:0; min-height:320px; }
-    #mikaonrumat .intro-img.left{  margin-left:  calc(50% - 50vw); }
-    #mikaonrumat .intro-img.right{ margin-right: calc(50% - 50vw); }
-    @media (max-width: 900px){
-      #mikaonrumat .intro-img{ min-height:240px; }
+    #mikaonrumat .intro-img{ border-left:0; border-right:0; }
+    #mikaonrumat .intro-img.left{
+      margin-left:  calc(50% - 50vw);
+      border-radius: 0 18px 18px 0;           /* vain sisemmät kulmat */
+      border-right: 1px solid rgba(0,0,0,.12);
+    }
+    #mikaonrumat .intro-img.right{
+      margin-right: calc(50% - 50vw);
+      border-radius: 18px 0 0 18px;           /* vain sisemmät kulmat */
+      border-left: 1px solid rgba(0,0,0,.12);
     }
 
-    /* Kaaviot: neliöt + rivin alle laajennus */
+    /* Kaaviot: neliöt + rivin alle laajennus (THUMB-KOOT ENNALLAAN) */
     .card{ background:var(--ivory); border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
     .pattern-grid{ display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:12px; align-items:start; }
     @media (min-width: 768px){ .pattern-grid{ grid-template-columns: repeat(4,minmax(0,1fr)); gap:14px; } }
@@ -171,7 +177,7 @@
     .min-full{ position:absolute; inset:0; display:grid; place-items:center; background:rgba(0,0,0,.04); color:var(--deep-blue); font-weight:800; text-decoration:underline; }
     .min-full:hover{ background:rgba(0,0,0,.08); }
 
-    /* ----- KAAVOJEN ISOKSI AVAUS: lähes koko sivun kokoinen neliö ----- */
+    /* ----- KAAVOJEN ISOKSI AVAUS: lähes koko sivun kokoinen neliö vasemmalla ----- */
     .expander{
       grid-column: 1 / -1;
       margin-left: calc(50% - 50vw);
@@ -241,7 +247,7 @@
       .ex-info{ padding: 14px; }
     }
 
-    /* Footer (uusi responsiivinen malli) */
+    /* Footer */
     .footer-bar{ position:relative; z-index:2; background: var(--olive); color: var(--ink); }
     .footer-grid{
       max-width: 72rem; margin: 0 auto;
@@ -374,9 +380,12 @@
           <h2 class="text-3xl mb-4">Suunnittelija</h2>
           <div class="grid md:grid-cols-[320px_1fr] gap-6 items-start">
             <div>
-              <img src="assets/designer.jpg"
-                   onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1517445312885-9d7f7d7b4c53?q=80&w=1200&auto=format&fit=crop';"
-                   alt="Suunnittelija" class="rounded-xl border border-[rgba(0,0,0,.12)] object-cover w-full h-[300px] md:h-[420px]">
+              <!-- UUSI KUVA + varakuva -->
+              <img
+                src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1200&auto=format&fit=crop"
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200&auto=format&fit=crop';"
+                alt="Suunnittelija"
+                class="rounded-xl border border-[rgba(0,0,0,.12)] object-cover w-full h-[300px] md:h-[420px]">
             </div>
             <div class="space-y-4 normalcase">
               <p>Aaltonen on itsevarma neuloja, joka ei rajoita luovuuttaan vain yhteen tekemisen tapaan. Neulomisen rinnalla myös asusteiden ompelu on tärkeä osa ilmaisua – ja ennen kaikkea intohimo. Lapsuuden kiinnostus vaatteiden suunnitteluun johti muodin ja tekstiilisuunnittelun opintoihin vuonna 2021.</p>
@@ -625,7 +634,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     })();
   })();
 
-  // KAAVIOT UI – inline-laajennus rivin alle (4 saraketta leveäksi kun tilaa)
+  // KAAVIOT UI – inline-laajennus rivin alle (thumbn. koot säilyvät)
   (function(){
     const grid  = document.getElementById('patternsGrid');
     let selectedId = null;
