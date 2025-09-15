@@ -23,7 +23,7 @@
       --band-radius: 16px;
     }
     html{ scroll-padding-top: var(--header-h); }
-    body{ font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial; color:var(--ink); background:var(--ivory); margin:0; }
+    body{ font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial; color:var(--ink); background:var(--ivory); margin:0; overflow-x:hidden; }
 
     /* Otsikot: erittäin paksu (900), versaalit */
     h1, h2, h3, h4, h5, h6{
@@ -110,59 +110,43 @@
     @media (min-width:640px){ .hero-logo{ height:7rem; width:7rem; } }
     video::-webkit-media-controls { display:none !important; }
 
-    /* Full-bleed helper */
-    .full-bleed{ margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
-
     /* Bandit ja kortit */
     .band{ background:var(--ivory); border-radius:var(--band-radius); overflow:hidden; }
     .band-inner{ max-width:72rem; margin:0 auto; padding:3rem 1rem; }
 
-    /* Esittely: kuvat reunoissa, teksti keskellä */
-    .intro-inner{
+    /* Esittely: kuvat kiinni sivun reunoihin, teksti keskellä, sisemmät kulmat pyöristetyt */
+    .intro-wide{ margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
+    .intro-grid{
       display:grid;
-      grid-template-columns: minmax(180px, 1fr) minmax(0, 2fr) minmax(180px, 1fr);
-      gap:14px; align-items:stretch; padding: 18px;
+      grid-template-columns: 1fr minmax(300px, 64rem) 1fr;
+      gap:14px; align-items:stretch; padding: 18px 0;
     }
     .intro-img{
       background-size: cover; background-position:center; background-repeat:no-repeat;
-      min-height: 280px;
-      border:1px solid rgba(0,0,0,.12);
+      min-height: 300px; border:1px solid rgba(0,0,0,.12);
     }
-    /* Vaihdettu vasemman kuvan fallback parempaan rajaukseen */
     .intro-img.left{
       background-image:
         url('assets/intro-left.jpg'),
-        url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop');
+        url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1600&auto=format&fit=crop'); /* selkeästi rajautuva kuva */
+      border-radius: 0 18px 18px 0; /* vain sisemmät kulmat */
     }
     .intro-img.right{
       background-image:
         url('assets/intro-right.jpg'),
-        url('https://images.unsplash.com/photo-1482192505345-5655af888cc4?q=80&w=1600&auto=format&fit=crop');
+        url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1600&auto=format&fit=crop');
+      border-radius: 18px 0 0 18px; /* vain sisemmät kulmat */
     }
-    .intro-copy{ padding: 6px 8px; min-width:0; }
+    .intro-copy{ padding: 6px 12px; min-width:0; }
     .intro-copy .logo{ width:56px; height:56px; display:block; margin:0 auto 12px; object-fit:contain; }
     .intro-copy p{ margin:0 0 .8rem 0; line-height:1.55; }
     @media (max-width: 900px){
-      .intro-inner{ grid-template-columns: 1fr; }
-      .intro-img{ min-height: 240px; }
+      .intro-grid{ grid-template-columns: 1fr; padding: 8px 0; }
+      .intro-img{ min-height: 220px; border-radius: 12px; }
       .intro-copy{ padding: 2px 2px; }
     }
 
-    /* --- Esittely: kuvat kiinni sivun reunoihin + vain sisemmät kulmat pyöristetty --- */
-    #mikaonrumat .intro-inner{ gap:0; padding:0; }
-    #mikaonrumat .intro-img{ border-left:0; border-right:0; }
-    #mikaonrumat .intro-img.left{
-      margin-left:  calc(50% - 50vw);
-      border-radius: 0 18px 18px 0;           /* vain sisemmät kulmat */
-      border-right: 1px solid rgba(0,0,0,.12);
-    }
-    #mikaonrumat .intro-img.right{
-      margin-right: calc(50% - 50vw);
-      border-radius: 18px 0 0 18px;           /* vain sisemmät kulmat */
-      border-left: 1px solid rgba(0,0,0,.12);
-    }
-
-    /* Kaaviot: neliöt + rivin alle laajennus (THUMB-KOOT ENNALLAAN) */
+    /* Kaaviot: neliöt + rivin alle laajennus (ruudukon mitat ennallaan) */
     .card{ background:var(--ivory); border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
     .pattern-grid{ display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:12px; align-items:start; }
     @media (min-width: 768px){ .pattern-grid{ grid-template-columns: repeat(4,minmax(0,1fr)); gap:14px; } }
@@ -177,88 +161,24 @@
     .min-full{ position:absolute; inset:0; display:grid; place-items:center; background:rgba(0,0,0,.04); color:var(--deep-blue); font-weight:800; text-decoration:underline; }
     .min-full:hover{ background:rgba(0,0,0,.08); }
 
-    /* ----- KAAVOJEN ISOKSI AVAUS: lähes koko sivun kokoinen neliö vasemmalla ----- */
-    .expander{
-      grid-column: 1 / -1;
-      margin-left: calc(50% - 50vw);
-      margin-right: calc(50% - 50vw);
-      border-left: 0;
-      border-right: 0;
-      border-radius: 0;
-      overflow: hidden;
-      background: var(--ivory);
-      border-top: 1px solid rgba(0,0,0,.12);
-      border-bottom: 1px solid rgba(0,0,0,.12);
-    }
-    .ex-row{
-      display: grid;
-      grid-template-columns: auto minmax(320px, 520px); /* vasen neliö | oikea info */
-      align-items: stretch;
-      gap: 0;
-      padding-right: 16px;
-    }
-    .ex-view{
-      position: relative;
-      justify-self: start;
-      background: #000;
-    }
-    .ex-view::before{
-      content: "";
-      display: block;
-      padding-bottom: 100%; /* neliö */
-    }
-    .ex-view img{
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      background:#000;
-    }
-    .ex-prev,.ex-next{
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 42px; height: 42px;
-      display: grid; place-items: center;
-      border-radius: 9999px;
-      background: var(--ivory);
-      border: 1px solid rgba(0,0,0,.15);
-      font-weight: 800;
-      z-index: 2;
-    }
-    .ex-prev{ left: 10px; } .ex-next{ right: 10px; }
-    .ex-info{
-      padding: 16px 8px 16px 18px;
-      overflow: auto;
-      min-width: 0;
-      overflow-wrap: anywhere;
-    }
-    .ex-top{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: .75rem;
-      padding: .6rem .9rem;
-      border-bottom: 1px solid rgba(0,0,0,.1);
-    }
-    @media (max-width: 1023.98px){
-      .ex-row{ grid-template-columns: 1fr; padding-right: 0; }
-      .ex-info{ padding: 14px; }
-    }
+    .expander{ grid-column:1 / -1; background:var(--ivory); border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
+    .ex-row{ display:grid; grid-template-columns: 1fr; min-height:260px; }
+    @media (min-width:1024px){ .ex-row{ grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); } }
+    .ex-view{ position:relative; background:#000; min-height:min(80vh, 1600px); min-width:0; }
+    .ex-info{ padding:1rem 1.1rem; overflow:auto; min-width:0; overflow-wrap:anywhere; }
+    .ex-view img{ width:100%; height:100%; object-fit:contain; background:#000; }
+    .ex-prev,.ex-next{ position:absolute; top:50%; transform:translateY(-50%); width:42px; height:42px; display:grid; place-items:center; border-radius:9999px; background:var(--ivory); border:1px solid rgba(0,0,0,.15); font-weight:800; }
+    .ex-prev{ left:10px; } .ex-next{ right:10px; }
+    .ex-top{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.6rem .9rem; border-bottom:1px solid rgba(0,0,0,.1); }
 
-    /* Footer */
+    /* FOOTER (uusi malli) */
     .footer-bar{ position:relative; z-index:2; background: var(--olive); color: var(--ink); }
     .footer-grid{
       max-width: 72rem; margin: 0 auto;
       padding: 1.5rem 1rem;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-areas:
-        "left logo"
-        "bottom bottom";
-      gap: 1rem 2rem;
-      align-items:start;
+      display:grid; gap:1rem 2rem; align-items:start;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-areas: "social contact logo";
     }
     .footer-col h6{
       font-size:.8rem; font-weight:900; text-transform:uppercase;
@@ -267,27 +187,21 @@
     .footer-handle, .footer-link{ color:var(--ink); opacity:.85; text-decoration:none; }
     .footer-handle:hover, .footer-link:hover{ text-decoration:underline; }
 
-    .footer-left{ grid-area:left; display:flex; flex-direction:column; gap:.9rem; }
+    .footer-social{ grid-area:social; display:flex; flex-direction:column; gap:.9rem; }
+    .footer-contact{ grid-area:contact; display:flex; flex-direction:column; gap:.9rem; }
     .footer-logoBox{ grid-area:logo; display:flex; justify-content:flex-end; align-items:flex-start; }
     .footer-logoBox img{ height:72px; width:auto; object-fit:contain; }
 
-    .footer-bottom{
-      grid-area:bottom;
-      display:flex; justify-content:space-between; align-items:center;
-      padding-top:.6rem; border-top:1px solid rgba(0,0,0,.15);
-    }
-    .footer-ytunnus{ font-weight:900; font-size:.95rem; }
+    .footer-copy{ text-align:center; font-size:.85rem; opacity:.85; padding:10px 1rem 16px; }
 
-    @media (max-width: 700px){
+    @media (max-width: 860px){
       .footer-grid{
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
         grid-template-areas:
-          "logo"
-          "left"
-          "bottom";
-        gap: 1rem;
+          "contact logo"
+          "social  logo";
       }
-      .footer-logoBox{ justify-content:flex-start; }
+      .footer-logoBox{ justify-content:center; }
     }
   </style>
 </head>
@@ -351,14 +265,19 @@
       <div class="band full-bleed">
         <div class="band-inner">
           <h2 class="mb-4">Liian rumat ollakseen totta</h2>
-          <div class="intro-inner">
-            <div class="intro-img left"  aria-hidden="true"></div>
-            <div class="intro-copy">
-              <img class="logo" src="assets/logo.svg" alt="RUMAT STUDIO">
-              <div id="intro-text" class="text-[15px] sm:text-base normalcase"></div>
+
+          <!-- Reunasta reunaan -kuvat + keskiteksti -->
+          <div class="intro-wide">
+            <div class="intro-grid">
+              <div class="intro-img left"  aria-hidden="true"></div>
+              <div class="intro-copy">
+                <img class="logo" src="assets/logo.svg" alt="RUMAT STUDIO">
+                <div id="intro-text" class="text-[15px] sm:text-base normalcase"></div>
+              </div>
+              <div class="intro-img right" aria-hidden="true"></div>
             </div>
-            <div class="intro-img right" aria-hidden="true"></div>
           </div>
+
         </div>
       </div>
     </section>
@@ -380,12 +299,9 @@
           <h2 class="text-3xl mb-4">Suunnittelija</h2>
           <div class="grid md:grid-cols-[320px_1fr] gap-6 items-start">
             <div>
-              <!-- UUSI KUVA + varakuva -->
-              <img
-                src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=1200&auto=format&fit=crop"
-                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200&auto=format&fit=crop';"
-                alt="Suunnittelija"
-                class="rounded-xl border border-[rgba(0,0,0,.12)] object-cover w-full h-[300px] md:h-[420px]">
+              <img src="assets/designer.jpg"
+                   onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200&auto=format&fit=crop';"
+                   alt="Suunnittelija" class="rounded-xl border border-[rgba(0,0,0,.12)] object-cover w-full h-[300px] md:h-[420px]">
             </div>
             <div class="space-y-4 normalcase">
               <p>Aaltonen on itsevarma neuloja, joka ei rajoita luovuuttaan vain yhteen tekemisen tapaan. Neulomisen rinnalla myös asusteiden ompelu on tärkeä osa ilmaisua – ja ennen kaikkea intohimo. Lapsuuden kiinnostus vaatteiden suunnitteluun johti muodin ja tekstiilisuunnittelun opintoihin vuonna 2021.</p>
@@ -399,27 +315,32 @@
     <!-- FOOTER -->
     <footer id="yhteys" class="footer-bar">
       <div class="footer-grid">
-        <!-- Vasen pystyjono: Instagram & Ota yhteyttä -->
-        <div class="footer-left">
+        <!-- Vasen: Instagram + TikTok -->
+        <div class="footer-social">
           <div class="footer-col">
             <h6>Instagram</h6>
             <a class="footer-handle" href="https://instagram.com/rumat.studio" target="_blank" rel="noreferrer">rumat.studio</a>
           </div>
           <div class="footer-col">
-            <h6>Ota yhteyttä</h6>
-            <a class="footer-link" href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>
+            <h6>TikTok</h6>
+            <a class="footer-handle" href="https://www.tiktok.com/@rumat.studio" target="_blank" rel="noreferrer">rumat.studio</a>
           </div>
         </div>
 
-        <!-- Oikea: iso logo -->
-        <div class="footer-logoBox">
-          <img src="assets/logo.svg" alt="RUMAT STUDIO logo">
+        <!-- Keskellä: Ota yhteyttä + Y-tunnus -->
+        <div class="footer-contact">
+          <div class="footer-col">
+            <h6>Ota yhteyttä</h6>
+            <a class="footer-link" href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>
+          </div>
+          <div class="footer-col">
+            <div class="footer-ytunnus">Y-3436822-5</div>
+          </div>
         </div>
 
-        <!-- Alarivi: TikTok vasemmalla | Y-tunnus oikealla (ilman otsikkoa) -->
-        <div class="footer-bottom">
-          <a class="footer-handle" href="https://www.tiktok.com/@rumat.studio" target="_blank" rel="noreferrer">rumat.studio</a>
-          <div class="footer-ytunnus">Y-3436822-5</div>
+        <!-- Oikea: Iso logo -->
+        <div class="footer-logoBox">
+          <img src="assets/logo.svg" alt="RUMAT STUDIO logo">
         </div>
       </div>
 
@@ -634,7 +555,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     })();
   })();
 
-  // KAAVIOT UI – inline-laajennus rivin alle (thumbn. koot säilyvät)
+  // KAAVIOT UI – inline-laajennus rivin alle (4 saraketta leveäksi kun tilaa)
   (function(){
     const grid  = document.getElementById('patternsGrid');
     let selectedId = null;
