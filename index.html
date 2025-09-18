@@ -13,13 +13,12 @@
   <!-- EmailJS selainkirjasto -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
-    /* ====== EmailJS asetukset (ilman koodiedittiä) ======
+    /* ====== EmailJS asetukset ======
        Paina sivulla Ctrl+E (tai macOS: Cmd+E) ja syötä:
        - Public Key
        - Service ID
        - Template ID
-       Avaimet talletetaan localStorageen ja init ajetaan automaattisesti.
-       Voit myös kutsua konsolista: window.configureEmailJS()
+       Avaimet tallennetaan localStorageen. Voit myös kutsua: window.configureEmailJS()
     */
     function getEmailCfg(){
       return {
@@ -64,8 +63,6 @@
       --ink:#202020;         /* tekstit */
       --olive:#A1A266;       /* footer-tausta */
       --deep-blue:#345563;   /* otsikot */
-      --blue:#789FAB;        /* varalle */
-      --light-blue:#DEEEEE;  /* varalle */
       --ivory:#F6F6F4;       /* taustat & yläpalkki */
       --header-h:64px;
       --band-radius: 16px;
@@ -83,6 +80,7 @@
     }
     .normalcase{ text-transform:none !important; }
 
+    /* Yläpalkki */
     header{ background:var(--ivory); border-bottom:1px solid rgba(0,0,0,.08); }
     #hdrRow{ position:relative; grid-template-columns:auto 1fr; }
     #brandText{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:min(42vw,460px); color:var(--ink); }
@@ -111,29 +109,41 @@
     #cartDrawer .panel{ right:0; }
     #checkoutDrawer .panel{ right:0; }
 
-    .hero{ position:relative; height: calc(100svh - var(--header-h)); display:grid; place-items:center; overflow:hidden; text-align:center; }
-    .hero::before,.hero::after{ content:none !important; }
-    .hero-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; z-index:-1; pointer-events:none; }
-    .hero-logo{ height:6.5rem; width:6.5rem; object-fit:contain; }
-    @media (min-width:640px){ .hero-logo{ height:7rem; width:7rem; } }
-    video::-webkit-media-controls { display:none !important; }
+    /* HERO – vain kuva */
+    .hero{
+      position:relative;
+      height: calc(100svh - var(--header-h));
+      display:grid; place-items:center;
+      overflow:hidden; text-align:center;
+      background: #000;
+    }
+    .hero-img{
+      position:absolute; inset:0; width:100%; height:100%;
+      object-fit:cover; object-position:center;
+      z-index:-1;
+    }
 
+    /* Bandit ja kortit */
     .band{ background:var(--ivory); border-radius:var(--band-radius); overflow:hidden; }
     .band-inner{ max-width:72rem; margin:0 auto; padding:3rem 1rem; }
 
+    /* Esittely */
     .intro-wide{ margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
-    .intro-grid{ display:grid; grid-template-columns: 1fr minmax(300px, 64rem) 1fr; gap:14px; align-items:stretch; padding: 18px 0; }
-    .intro-img{ background-size: cover; background-position:center; background-repeat:no-repeat; min-height: 300px; border:1px solid rgba(0,0,0,.12); }
+    .intro-grid{
+      display:grid;
+      grid-template-columns: 1fr minmax(300px, 64rem) 1fr;
+      gap:14px; align-items:stretch; padding: 18px 0;
+    }
+    .intro-img{
+      background-size: cover; background-position:center; background-repeat:no-repeat;
+      min-height: 300px; border:1px solid rgba(0,0,0,.12);
+    }
     .intro-img.left{
-      background-image:
-        url('assets/intro-left.jpg'),
-        url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1600&auto=format&fit=crop');
+      background-image: url('assets/intro-left.jpg');
       border-radius: 0 18px 18px 0;
     }
     .intro-img.right{
-      background-image:
-        url('assets/intro-right.jpg'),
-        url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1600&auto=format&fit=crop');
+      background-image: url('assets/intro-right.jpg');
       border-radius: 18px 0 0 18px;
     }
     .intro-copy{ padding: 6px 12px; min-width:0; }
@@ -145,6 +155,7 @@
       .intro-copy{ padding: 2px 2px; }
     }
 
+    /* Kaaviot */
     .card{ background:var(--ivory); border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
     .pattern-grid{ display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:12px; align-items:start; }
     @media (min-width: 768px){ .pattern-grid{ grid-template-columns: repeat(4,minmax(0,1fr)); gap:14px; } }
@@ -169,6 +180,7 @@
     .ex-prev{ left:10px; } .ex-next{ right:10px; }
     .ex-top{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.6rem .9rem; border-bottom:1px solid rgba(0,0,0,.1); }
 
+    /* FOOTER */
     .footer-bar{ position:relative; z-index:2; background: var(--olive); color: var(--ink); }
     .footer-grid{
       max-width: 72rem; margin: 0 auto;
@@ -201,6 +213,7 @@
       .footer-logoBox{ justify-content:center; }
     }
 
+    /* Toast */
     .toast { position: fixed; top: 76px; left: 0; right: 0; display:flex; justify-content:center; z-index:70; pointer-events:none; }
     .toast > div{ pointer-events:auto; }
   </style>
@@ -249,19 +262,16 @@
 
   <!-- CONTENT -->
   <main class="pt-[64px]">
-    <!-- HERO -->
+    <!-- HERO (vain kuva) -->
     <section id="etusivu" class="hero px-4">
-      <video class="hero-video" autoplay muted loop playsinline webkit-playsinline preload="auto" poster="assets/aurora-poster.jpg">
-        <source src="assets/aurora.webm" type="video/webm">
-        <source src="assets/aurora.mp4"  type="video/mp4">
-      </video>
-      <img src="assets/logo.svg" alt="RUMAT STUDIO logo" class="hero-logo">
+      <img src="assets/hero.jpg" alt="RUMAT STUDIO hero" class="hero-img"
+           onerror="this.onerror=null;this.src='assets/placeholder.jpg';">
     </section>
 
     <!-- TILAUSVIESTI -->
     <section id="orderMsg" class="max-w-3xl mx-auto my-4 px-4 hidden"></section>
 
-    <!-- MIKÄ ON RUMAT? -->
+    <!-- MIKÄ ON RUMAT? (esittely) -->
     <section id="mikaonrumat" class="py-0">
       <div class="band full-bleed">
         <div class="band-inner">
@@ -300,7 +310,7 @@
           <div class="grid md:grid-cols-[320px_1fr] gap-6 items-start">
             <div>
               <img src="assets/designer.jpg"
-                   onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200&auto=format&fit=crop';"
+                   onerror="this.onerror=null;this.src='assets/placeholder.jpg';"
                    alt="Suunnittelija" class="rounded-xl border border-[rgba(0,0,0,.12)] object-cover w-full h-[300px] md:h-[420px]">
             </div>
             <div class="space-y-4 normalcase">
@@ -358,14 +368,13 @@
         <div class="text-sm grid grid-cols-2 gap-y-1">
           <div class="text-[color:#202020]/70">Välisumma</div><div class="text-right" id="subTotal">€0,00</div>
         </div>
-        <!-- MUUTETTU: "Kassalle" -->
         <button id="checkout" class="btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2">Kassalle</button>
         <div id="paypalWarn" class="text-xs text-[color:#202020]/70"></div>
       </div>
     </div>
   </div>
 
-  <!-- KASSA DRAWER (asiakkaan tiedot) -->
+  <!-- KASSA DRAWER -->
   <div id="checkoutDrawer" class="drawer" aria-hidden="true">
     <div class="absolute inset-0 bg-black/40" id="closeCheckout" aria-label="Sulje kassa"></div>
     <div class="panel p-6 flex flex-col">
@@ -454,20 +463,22 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   (function(){ const intro = document.getElementById('intro-text'); if(intro) intro.innerHTML = parasToHTML(defaultContent.pitch); })();
 
   /* =============== KAAVIOT =============== */
-  // Hinnat 0,01 €; mukana ilmainen, dummy-kaava ja "Tulossa" -tuote
+  // Hinnat alkuun 0,01 €; mukana ilmainen, dummy-kaava ja "Tulossa" -tuote.
+  // Kaikkien tuotteiden kuvat = omat assets-polut.
+  const IMG = (id, n=1)=>`assets/patterns/${id}-${n}.jpg`;
   window.KAAVIOT = [
-    { id:'dummy-kaava', name:'Dummy kaava', price:0.01, sizes:'PDF', blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla kaavoilla. Ostettaessa saat linkin dummy-PDF:ään.', images:['https://placehold.co/1400x900?text=Dummy+kaava'] , isDummy:true},
-    { id:'ilmainen-ohje', name:'Ilmainen ohje', price:0.00, sizes:'One size', blurb:'Täysin ilmainen kokeiltava ohje.', images:['https://placehold.co/1400x900?text=Ilmainen+ohje'] },
-    { id:'takki', name:'Takki', price:0.01, sizes:'XS–XL', blurb:'Työn alla – pian saatavilla.', images:['https://placehold.co/1400x900?text=Takki'], comingSoon:true },
+    { id:'dummy-kaava', name:'Dummy kaava', price:0.01, sizes:'PDF', blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla kaavoilla. Ostettaessa saat linkin dummy-PDF:ään.', images:[IMG('dummy-kaava',1), IMG('dummy-kaava',2)], isDummy:true},
+    { id:'ilmainen-ohje', name:'Ilmainen ohje', price:0.00, sizes:'One size', blurb:'Täysin ilmainen kokeiltava ohje.', images:[IMG('ilmainen-ohje',1)] },
+    { id:'takki', name:'Takki', price:0.01, sizes:'XS–XL', blurb:'Työn alla – pian saatavilla.', images:[IMG('takki',1)], comingSoon:true },
 
-    { id:'laukku',      name:'Laukku',       price:0.01, sizes:'One size', blurb:'Sling-laukku kaava (PDF).', images:['https://placehold.co/1400x900?text=Laukku+1','https://placehold.co/1400x900?text=Laukku+2']},
-    { id:'usva-paita',  name:'Usva paita',   price:0.01, sizes:'XS–XL',    blurb:'Rento paita raglan-hihoilla.', images:['https://placehold.co/1400x900?text=Usva+1','https://placehold.co/1400x900?text=Usva+2']},
-    { id:'neule-panta', name:'Neule panta',  price:0.01, sizes:'S–L',      blurb:'Helppo aloittelijalle.', images:['https://placehold.co/1400x900?text=Panta+1','https://placehold.co/1400x900?text=Panta+2']},
-    { id:'kauluri',     name:'Kauluri',      price:0.01, sizes:'One size', blurb:'Nopea viikonloppuprojekti.', images:['https://placehold.co/1400x900?text=Kauluri+1','https://placehold.co/1400x900?text=Kauluri+2']},
-    { id:'pipo',        name:'Pipo',         price:0.01, sizes:'S–L',      blurb:'Peruspipo, selkeä ohje.', images:['https://placehold.co/1400x900?text=Pipo+1','https://placehold.co/1400x900?text=Pipo+2']},
-    { id:'lapaset',     name:'Lapaset',      price:0.01, sizes:'S–XL',     blurb:'Tiivis peruslapanen.', images:['https://placehold.co/1400x900?text=Lapaset+1','https://placehold.co/1400x900?text=Lapaset+2']},
-    { id:'sukat',       name:'Sukat',        price:0.01, sizes:'36–46',    blurb:'Vahvistettu kantapää.', images:['https://placehold.co/1400x900?text=Sukat+1','https://placehold.co/1400x900?text=Sukat+2']},
-    { id:'villapaita',  name:'Villapaita',   price:0.01, sizes:'XS–XXL',   blurb:'Klassinen pyöröneule.', images:['https://placehold.co/1400x900?text=Villapaita+1','https://placehold.co/1400x900?text=Villapaita+2']},
+    { id:'laukku',      name:'Laukku',       price:0.01, sizes:'One size', blurb:'Sling-laukku kaava (PDF).', images:[IMG('laukku',1), IMG('laukku',2)]},
+    { id:'usva-paita',  name:'Usva paita',   price:0.01, sizes:'XS–XL',    blurb:'Rento paita raglan-hihoilla.', images:[IMG('usva-paita',1), IMG('usva-paita',2)]},
+    { id:'neule-panta', name:'Neule panta',  price:0.01, sizes:'S–L',      blurb:'Helppo aloittelijalle.', images:[IMG('neule-panta',1), IMG('neule-panta',2)]},
+    { id:'kauluri',     name:'Kauluri',      price:0.01, sizes:'One size', blurb:'Nopea viikonloppuprojekti.', images:[IMG('kauluri',1), IMG('kauluri',2)]},
+    { id:'pipo',        name:'Pipo',         price:0.01, sizes:'S–L',      blurb:'Peruspipo, selkeä ohje.', images:[IMG('pipo',1), IMG('pipo',2)]},
+    { id:'lapaset',     name:'Lapaset',      price:0.01, sizes:'S–XL',     blurb:'Tiivis peruslapanen.', images:[IMG('lapaset',1), IMG('lapaset',2)]},
+    { id:'sukat',       name:'Sukat',        price:0.01, sizes:'36–46',    blurb:'Vahvistettu kantapää.', images:[IMG('sukat',1), IMG('sukat',2)]},
+    { id:'villapaita',  name:'Villapaita',   price:0.01, sizes:'XS–XXL',   blurb:'Klassinen pyöröneule.', images:[IMG('villapaita',1), IMG('villapaita',2)]},
   ];
 
   // OSTOSKORI
@@ -603,7 +614,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   function pdfEscape(s){
     return String(s).replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)');
   }
-  // Palauttaa string-muotoisen PDF:n (yksi sivu, Helvetica)
   function makeDummyPDF({title='Dummy-kaava', lines=[]}={}){
     const header = '%PDF-1.4\n%âãÏÓ\n';
     const obj5 = '5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n';
@@ -613,7 +623,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     lines.forEach((L,i)=>{ y -= (i===0?30:leading); content += `1 0 0 1 50 ${y} Tm (${pdfEscape(L)}) Tj\n`; });
     content += 'ET\n';
     const stream = `4 0 obj\n<< /Length ${content.length} >>\nstream\n${content}endstream\nendobj\n`;
-    const obj3 = '3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n';
+    const obj3 = '3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n`;
     const obj2 = '2 0 obj\n<< /Type /Pages /Count 1 /Kids [3 0 R] >>\nendobj\n';
     const obj1 = '1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n';
 
@@ -628,7 +638,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     const trailer = `trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xrefStart}\n%%EOF`;
     return header + order.join('') + xref + trailer;
   }
-  // Tekee Blobin, ObjectURL:n JA data:-URL:n (base64) – sähköpostia varten
   function generateDummyPDF(order){
     const items = (order?.items||[]).map(x=>`${x.name} × ${x.qty} — ${(x.price||0).toFixed(2)} €`);
     const c = order?.customer||{};
@@ -658,7 +667,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     const dataUrl = `data:application/pdf;base64,${base64}`;
     return {blob, url, dataUrl};
   }
-  // Lisää latauslinkki sivulle JA talteen data:URL
   function offerDummyDownload(order){
     const {url, dataUrl} = generateDummyPDF(order||{});
     try{ localStorage.setItem('lastDummyDataUrl', dataUrl); }catch(e){}
@@ -709,10 +717,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     showToast('Tilaus vahvistettu. Kiitos!', 'success');
     CART = {}; saveCart(); renderCart();
 
-    // Luo ja näytä dummy-PDF linkki + tallenna data:URL sähköpostia varten
     offerDummyDownload(order);
-
-    // Lähetä tilausvahvistus (asiakkaalle + Annelle)
     sendConfirmationEmails(order);
   }
 
@@ -865,8 +870,9 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       tile.className = 'tile card';
       tile.setAttribute('data-id', p.id);
       const img = document.createElement('img');
-      img.src = (p.images||[])[0] || 'https://placehold.co/900?text=Kaava';
+      img.src = (p.images||[])[0] || 'assets/placeholder.jpg';
       img.alt = p.name;
+      img.onerror = function(){ this.onerror=null; this.src='assets/placeholder.jpg'; };
       const cap = document.createElement('div');
       cap.className = 'tile-caption';
       cap.textContent = p.name + (p.comingSoon ? ' · Tulossa' : p.price===0 ? ' · Ilmainen' : '');
@@ -896,13 +902,13 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       );
       const row = el('div',{class:'ex-row'},
         el('div',{class:'ex-view'},
-          el('img',{id:'exImg',alt:'Kaava'}),
+          el('img',{id:'exImg',alt:'Kaava', onerror(){ this.onerror=null; this.src='assets/placeholder.jpg'; }}),
           el('button',{id:'exPrev',class:'ex-prev'},'◀'),
           el('button',{id:'exNext',class:'ex-next'},'▶')
         ),
         el('div',{class:'ex-info'},
           el('h3',{id:'exName',class:'text-2xl mb-2'}, ''),
-          el('p'){/* spacer */},
+          el('div',{style:'height:8px'}),
           el('p',{id:'exBlurb',class:'opacity-80 mb-2 normalcase'}, ''),
           el('div',{class:'mb-2'}, el('span',{class:'font-semibold'},'Koot: '), el('span',{id:'exSizes'},'')),
           el('div',{id:'exPrice',class:'text-xl font-bold mb-4'}, ''),
@@ -923,7 +929,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       expander.querySelector('#exBlurb').textContent = p.blurb || '';
       expander.querySelector('#exSizes').textContent = p.sizes || '';
       expander.querySelector('#exPrice').textContent = p.price===0 ? 'ILMAINEN' : fmtEUR(p.price||0);
-      expander.querySelector('#exImg').src = (p.images||[])[0] || 'https://placehold.co/900?text=Kaava';
+      expander.querySelector('#exImg').src = (p.images||[])[0] || 'assets/placeholder.jpg';
       const actions = expander.querySelector('#exActions'); actions.innerHTML='';
       if (p.comingSoon){
         actions.appendChild(el('span',{class:'inline-block px-4 py-2 rounded-full border border-[rgba(0,0,0,.15)]'}, 'Tulossa'));
@@ -938,13 +944,16 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       if(!current || !current.images || !current.images.length) return;
       const n = current.images.length;
       imgIdx = (imgIdx + dir + n) % n;
-      expander.querySelector('#exImg').src = current.images[imgIdx];
+      expander.querySelector('#exImg').src = current.images[imgIdx] || 'assets/placeholder.jpg';
     }
     function markSelected(tile, on){
       tile.classList.toggle('tile--selected', !!on);
       tile.innerHTML='';
       const p = DATA.find(x=>x.id===tile.dataset.id);
-      tile.appendChild(Object.assign(document.createElement('img'),{src:(p.images||[])[0]||'https://placehold.co/900?text=Kaava',alt:p.name}));
+      const im = document.createElement('img');
+      im.src = (p.images||[])[0] || 'assets/placeholder.jpg';
+      im.alt = p.name; im.onerror = function(){ this.onerror=null; this.src='assets/placeholder.jpg'; };
+      tile.appendChild(im);
       const capTxt = p.name + (p.comingSoon ? ' · Tulossa' : p.price===0 ? ' · Ilmainen' : '');
       tile.appendChild(Object.assign(document.createElement('div'),{className:'tile-caption',textContent:capTxt}));
       if (on){
