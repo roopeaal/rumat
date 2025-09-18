@@ -533,25 +533,42 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       el('input',{type:'hidden',name:'return',value: location.origin+'/#success'}),
       el('input',{type:'hidden',name:'cancel_return',value: location.origin+'/#cancel'})
     );
-    let i=1; let snapshot = [];
-    ids.forEach(id=>{
-      const p = window.KAAVIOT.find(x=>x.id===id); if(!p) return;
-      const qty = CART[id]||1;
-      snapshot.push({id, name:p.name, price:p.price||0, qty, isDummy: !!p.isDummy});
-      form.appendChild(el('input',{type:'hidden',name:`item_name_${i}`,value:p.name}));
-      form.appendChild(el('input',{type:'hidden',name:`amount_${i}`,   value:Number(p.price||0).toFixed(2)}));
-      form.appendChild(el('input',{type:'hidden',name:`quantity_${i}`, value:qty}));
-      i++;
-    });
-    // Tallennetaan viimeisin tilaus (vahvistusta varten paluun jälkeen)
-    localStorage.setItem('lastOrder', JSON.stringify({
-      email: customerEmail,
-      items: snapshot,
-      createdAt: new Date().toISOString()
-    }));
+    let snapshot = [];
+ids.forEach(id=>{
+  const p = window.KAAVIOT.find(x=>x.id===id); if(!p) return;
+  const qty = CART[id]||1;
+  snapshot.push({id, name:p.name, price:p.price||0, qty, isDummy: !!p.isDummy});
+});
 
-    document.body.appendChild(form); form.submit(); form.remove();
-    showToast('Siirryt PayPaliin maksamaan…', 'info');
+const order = { email: customerEmail, items: snapshot, createdAt: new Date().toISOString() };
+localStorage.setItem('lastOrder', JSON.stringify(order));
+
+const paid = snapshot.filter(x=>x.price>0);
+if (paid.length===0){
+  // Täysin ilmainen tilaus: käsitellään heti onnistuneena
+  showSuccess(order);
+  return;
+}
+
+// Muuten -> ohjataan PayPaliin vain maksulliset rivit
+const email = "aaltonen96@outlook.com";
+const form2 = el('form',{method:'POST', action:'https://www.paypal.com/cgi-bin/webscr', target:'_blank'},
+  el('input',{type:'hidden',name:'cmd',value:'_cart'}),
+  el('input',{type:'hidden',name:'upload',value:'1'}),
+  el('input',{type:'hidden',name:'business',value:email}),
+  el('input',{type:'hidden',name:'currency_code',value:'EUR'}),
+  el('input',{type:'hidden',name:'return',value: location.origin+'/#success'}),
+  el('input',{type:'hidden',name:'cancel_return',value: location.origin+'/#cancel'})
+);
+let j=1; paid.forEach(x=>{
+  form2.appendChild(el('input',{type:'hidden',name:`item_name_${j}`,value:x.name}));
+  form2.appendChild(el('input',{type:'hidden',name:`amount_${j}`,   value:Number(x.price||0).toFixed(2)}));
+  form2.appendChild(el('input',{type:'hidden',name:`quantity_${j}`, value:x.qty}));
+  j++;
+});
+
+document.body.appendChild(form2); form2.submit(); form2.remove();
+showToast('Siirryt PayPaliin maksamaan…', 'info');
   });
 
   // Tilauksen onnistuminen / epäonnistuminen (hash)
@@ -795,16 +812,9 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       if (p.comingSoon){
         actions.appendChild(el('span',{class:'inline-block px-4 py-2 rounded-full border border-[rgba(0,0,0,.15)]'}, 'Tulossa'));
       } else if (p.price===0){
-        const getBtn = el('button',{class:'btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2'},'Lataa ilmaiseksi');
-        getBtn.addEventListener('click', ()=>{
-          // Ilmaisen tuotteen lataus (dummy-tekstitiedosto)
-          const text = `${p.name} (ilmainen) — kiitos!`;
-          const blob = new Blob([text],{type:'text/plain'});
-          const url = URL.createObjectURL(blob);
-          const a = el('a',{href:url,download:`${p.id}.txt`}); a.click();
-          showToast('Lataus alkaa…','success');
-        });
-        actions.appendChild(getBtn);
+        const buyBtn = el('button',{id:'exBuy',class:'btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2'},'Osta (0,00 €)');
+        buyBtn.onclick = () => window.addToCart ? window.addToCart(p.id) : null;
+        actions.appendChild(buyBtn);
       } else {
         const buyBtn = el('button',{id:'exBuy',class:'btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2'},'Osta');
         buyBtn.onclick = () => window.addToCart ? window.addToCart(p.id) : null;
