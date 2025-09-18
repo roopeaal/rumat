@@ -71,7 +71,7 @@
       --olive:#A1A266; 
       --deep-blue:#345563; 
       --ivory:#F6F6F4;
-      --light-blue:#A9D7F7;   /* VALEANSININEN LOGOVÄRI */
+      --light-blue:#DEEEEE;   /* vaaleansininen logo */
       --header-h:64px; 
       --band-radius: 16px;
     }
@@ -126,7 +126,16 @@
     .logo-ink { --logo-color: var(--ink); }
     .logo-white { --logo-color: #fff; }
     .logo-light { --logo-color: var(--light-blue); } /* vaaleansininen */
-    .svg-logo--footer{ width:72px; height:72px; } /* alapalkin koko */
+
+    /* HERO: logo isommaksi */
+    .hero .svg-logo{ width: 9rem; height: 9rem; }
+    @media (min-width:640px){ .hero .svg-logo{ width: 11rem; height: 11rem; } }
+    @media (min-width:1024px){ .hero .svg-logo{ width: 12rem; height: 12rem; } }
+
+    /* HEADER: logo suuremmaksi */
+    .svg-logo--header{ width: 2.5rem; height: 2.5rem; }
+    @media (min-width:640px){ .svg-logo--header{ width: 2.75rem; height: 2.75rem; } }
+    @media (min-width:1024px){ .svg-logo--header{ width: 3rem; height: 3rem; } }
 
     /* Bandit & kortit */
     .band{ background:var(--ivory); border-radius:var(--band-radius); overflow:hidden; }
@@ -185,7 +194,9 @@
     .footer-handle:hover,.footer-link:hover{ text-decoration:underline; }
     .footer-social{ grid-area:social; display:flex; flex-direction:column; gap:.9rem; }
     .footer-contact{ grid-area:contact; display:flex; flex-direction:column; gap:.9rem; }
-    .footer-logoBox{ grid-area:logo; display:flex; justify-content:flex-end; align-items:flex-start; }
+    .footer-logoBox{ grid-area:logo; display:flex; justify-content:flex-end; align-items:flex-start; font-size:1rem; line-height:1; }
+    /* Footer: logo yhtä korkea kuin teksti (1em) */
+    .svg-logo--footer{ width:1em; height:1em; aspect-ratio:1/1; vertical-align:-0.125em; }
     .footer-copy{ text-align:center; font-size:.85rem; opacity:.85; padding:10px 1rem 16px; }
     @media (max-width:860px){ .footer-grid{ grid-template-columns:1fr 1fr; grid-template-areas:"contact logo" "social logo"; } .footer-logoBox{ justify-content:center; } }
 
@@ -202,9 +213,9 @@
   <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50">
     <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-4 grid gap-3">
-      <!-- Logo -->
+      <!-- Logo (suurempi, väritettävä) -->
       <a id="brandBlock" href="#etusivu" aria-label="Etusivu" class="flex items-center gap-3 min-w-0">
-        <img alt="RUMAT STUDIO logo" class="h-9 w-9 object-contain" src="assets/logo.svg" onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
+        <span class="svg-logo svg-logo--header logo-ink" role="img" aria-label="RUMAT STUDIO"></span>
         <span id="brandText" class="uppercase text-sm tracking-widest"><span class="strong">RUMAT</span>&nbsp;<span class="light">STUDIO</span></span>
       </a>
 
@@ -242,7 +253,7 @@
 
   <!-- CONTENT -->
   <main class="pt-[64px]">
-    <!-- HERO (kuva + vaaleansininen logo keskellä) -->
+    <!-- HERO (kuva + vaaleansininen logo keskellä, isompi) -->
     <section id="etusivu" class="hero px-4">
       <img src="assets/hero.jpg" alt="RUMAT STUDIO hero" class="hero-img"
            onerror="this.onerror=null;this.src='assets/placeholder.jpg';">
@@ -335,7 +346,7 @@
           </div>
         </div>
 
-        <!-- Oikea: Iso logo (vaaleansininen) -->
+        <!-- Oikea: Iso logo (vaaleansininen, yhtä korkea kuin teksti) -->
         <div class="footer-logoBox">
           <span class="svg-logo svg-logo--footer logo-light" role="img" aria-label="RUMAT STUDIO"></span>
         </div>
@@ -393,7 +404,13 @@
         <!-- KSL 6:16 – digisisältö -->
         <label class="flex gap-2 items-start text-sm">
           <input type="checkbox" id="acceptDigitalWaiver" required>
-          <span>Hyväksyn, että digitaalisen sisällön toimittaminen alkaa heti, enkä voi peruuttaa ostosta (KSL 6:16).</span>
+          <span>
+            Hyväksyn, että digitaalisen sisällön toimittaminen alkaa heti, enkä voi peruuttaa ostosta (KSL 6:16).
+            <br>
+            <a class="underline" href="legal/terms.html" target="_blank" rel="noopener">
+              Lue Toimitus- ja sopimusehdot (PDF)
+            </a>
+          </span>
         </label>
       </form>
 
