@@ -109,9 +109,35 @@
     #menuDrawer .panel{ left:0; } #cartDrawer .panel{ right:0; } #checkoutDrawer .panel{ right:0; }
     #cookieDrawer .panel{ right:0; }
 
-    /* Hero */
-    .hero{ position:relative; height: calc(100svh - var(--header-h)); display:grid; place-items:center; overflow:hidden; text-align:center; background:#000; }
-    .hero-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; z-index:0; }
+    /* ==================== HERO ==================== */
+    .hero{
+      position:relative;
+      height: calc(100svh - var(--header-h));
+      display:grid;
+      place-items:center;
+      overflow:hidden;              /* rajaa ylimenevä */
+      text-align:center;
+      background:#000;
+    }
+    /* KUVA ILMAN "ZOOMI"-EFEKTIÄ:
+       - lukitaan korkeus hero-alueen korkeuteen
+       - leveys määräytyy mittasuhteesta
+       - keskitetään; kun näkymä kapenee, sivuilta rajautuu pois */
+    .hero-img{
+      position:absolute;
+      top:50%;
+      left:50%;
+      height:100%;
+      width:auto;
+      max-width:none;
+      transform:translate(-50%, -50%);
+      z-index:0;
+      object-fit:contain;
+      object-position:center;
+      transition:none !important;
+      animation:none !important;
+      will-change:auto;
+    }
 
     /* === VÄRITETTÄVÄ SVG-LOGO (mask) === */
     .svg-logo{
@@ -206,13 +232,13 @@
       grid-area:logo;
       display:flex;
       justify-content:flex-end;
-      align-items:stretch;          /* venytä lapsi (logo) solun täyteen korkeuteen */
+      align-items:stretch;
     }
     .svg-logo--footer{
-      height:100%;                  /* tee logosta koko sarakkeen korkuinen */
+      height:100%;
       width:auto;
       aspect-ratio:1/1;
-      min-height:96px;              /* tarvittaessa nosta esim. 120px */
+      min-height:96px;
     }
 
     .footer-copy{ text-align:center; font-size:.85rem; opacity:.85; padding:10px 1rem 16px; }
@@ -225,7 +251,7 @@
           "social  logo";
       }
       .footer-logoBox{ justify-content:center; }
-      .svg-logo--footer{ min-height:72px; } /* mobiilissa maltillisempi minimi */
+      .svg-logo--footer{ min-height:72px; }
     }
 
     /* Toast */
