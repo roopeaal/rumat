@@ -464,7 +464,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
 
   document.getElementById('checkout').addEventListener('click', ()=>{
     const ids = Object.keys(CART); if(ids.length===0) return alert('Ostoskori on tyhjä.');
-    const email = "aaltonen96@outlook.com";
+    const email = "kauppa@esimerkki.fi";
     const form = el('form',{method:'POST', action:'https://www.paypal.com/cgi-bin/webscr', target:'_blank'},
       el('input',{type:'hidden',name:'cmd',value:'_cart'}),
       el('input',{type:'hidden',name:'upload',value:'1'}),
