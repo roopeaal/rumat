@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Toimitus- ja sopimusehdot – RUMAT STUDIO</title>
+  <link rel="icon" href="assets/favicon.ico">
+  <style>
+    :root{ --ink:#202020; --deep:#345563; }
+    html,body{ height:100%; }
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
+      color: var(--ink); margin: 0; background: #fff;
+    }
+    .wrap{ max-width: 760px; margin: 32px auto; padding: 0 16px 64px; }
+    header{ display:flex; align-items:center; gap:12px; margin-bottom: 20px; }
+    header img{ width:48px; height:48px; object-fit:contain; }
+    h1{ margin:0 0 8px; font-weight:900; text-transform:uppercase; color:var(--deep); letter-spacing:.02em; }
+    h2,h3,h4{ color:var(--deep); margin-top:1.75rem; }
+    p,li{ line-height:1.55; }
+    .meta{ color:#555; font-size:14px; margin-bottom:16px; }
+    .toolbar{ position:sticky; top:0; background:#fff; border-bottom:1px solid #e5e5e5; padding:10px 0; margin-bottom:16px; }
+    .btn{ display:inline-block; border:1px solid #d0d0d0; padding:.55rem .9rem; border-radius:9999px; text-decoration:none; color:#111; }
+    .btn:hover{ background:#f4f4f4; }
+    .muted{ color:#666; font-size:14px; }
+    @media print{
+      .toolbar{ display:none !important; }
+      a[href^="http"]::after{ content:" (" attr(href) ")"; font-size:12px; color:#666; }
+      body{ margin:0; }
+      @page{ size:A4; margin:16mm; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="toolbar no-print">
+      <a class="btn" href="index.html">← Takaisin sivustolle</a>
+      &nbsp;
+      <button class="btn" onclick="window.print()">Tulosta / Tallenna PDF</button>
+    </div>
+
+    <header>
+      <img src="assets/logo.svg" alt="RUMAT STUDIO" onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
+      <div>
+        <h1>Toimitus- ja sopimusehdot</h1>
+        <div class="meta">Viimeksi päivitetty: <strong>18.9.2025</strong></div>
+      </div>
+    </header>
+
+    <h2>Soveltamisala</h2>
+    <p>Nämä ehdot koskevat RUMAT STUDION verkkokaupasta ostettavia <strong>digitaalisia tuotteita</strong> (esim. PDF-kaavat).</p>
+
+    <h2>Tilaaminen ja sopimus</h2>
+    <p>Tilaus tehdään lisäämällä tuotteet ostoskoriin ja syöttämällä kassalla yhteystiedot. Sopimus syntyy, kun saat tilausvahvistuksen.</p>
+
+    <h2>Hinnat ja maksutavat</h2>
+    <p>Hinnat ilmoitetaan euroissa (EUR). Mikäli arvonlisävero soveltuu, se sisältyy hintaan ja eritellään kuitissa. Maksu tapahtuu PayPalin kautta.</p>
+
+    <h2>Toimitus</h2>
+    <p>Digitaaliset tuotteet toimitetaan latauslinkkinä ja/tai sähköpostitse tilausvahvistuksen yhteydessä. Testivaiheessa toimitetaan “dummy-kaava”, joka korvataan myöhemmin varsinaisella tuotteella.</p>
+
+    <h2>Peruuttamisoikeus (digisisältö)</h2>
+    <p>Kuluttajansuojalain 6:16 mukaan digitaalisen sisällön ostossa <strong>peruuttamisoikeus ei koske</strong> toimitusta, jos toimitus on aloitettu ja olet antanut siihen nimenomaisen suostumuksen. Kassalla vaaditaan tätä koskeva hyväksyntä.</p>
+
+    <h2>Virheet ja reklamaatiot</h2>
+    <p>Jos digituotteessa on virhe (esim. latauslinkki ei toimi), ota yhteyttä kohtuullisessa ajassa: <a href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>. Korjaamme virheen, toimitamme uuden tiedoston tai hyvitämme kohtuullisesti.</p>
+
+    <h2>Asiakaspalvelu</h2>
+    <p>RUMAT STUDIO — Y-3436822-5 — <a href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a></p>
+
+    <p class="muted">© <span id="year"></span> RUMAT STUDIO</p>
+  </div>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
