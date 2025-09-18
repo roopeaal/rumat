@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Tietosuojaseloste – RUMAT STUDIO</title>
+  <link rel="icon" href="assets/favicon.ico">
+  <style>
+    :root{ --ink:#202020; --deep:#345563; }
+    html,body{ height:100%; }
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif;
+      color: var(--ink); margin: 0; background: #fff;
+    }
+    .wrap{ max-width: 760px; margin: 32px auto; padding: 0 16px 64px; }
+    header{ display:flex; align-items:center; gap:12px; margin-bottom: 20px; }
+    header img{ width:48px; height:48px; object-fit:contain; }
+    h1{ margin:0 0 8px; font-weight:900; text-transform:uppercase; color:var(--deep); letter-spacing:.02em; }
+    h2,h3,h4{ color:var(--deep); margin-top:1.75rem; }
+    p,li{ line-height:1.55; }
+    .meta{ color:#555; font-size:14px; margin-bottom:16px; }
+    .toolbar{ position:sticky; top:0; background:#fff; border-bottom:1px solid #e5e5e5; padding:10px 0; margin-bottom:16px; }
+    .btn{ display:inline-block; border:1px solid #d0d0d0; padding:.55rem .9rem; border-radius:9999px; text-decoration:none; color:#111; }
+    .btn:hover{ background:#f4f4f4; }
+    .muted{ color:#666; font-size:14px; }
+    @media print{
+      .toolbar{ display:none !important; }
+      a[href^="http"]::after{ content:" (" attr(href) ")"; font-size:12px; color:#666; }
+      body{ margin:0; }
+      @page{ size:A4; margin:16mm; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="toolbar no-print">
+      <a class="btn" href="index.html">← Takaisin sivustolle</a>
+      &nbsp;
+      <button class="btn" onclick="window.print()">Tulosta / Tallenna PDF</button>
+    </div>
+
+    <header>
+      <img src="assets/logo.svg" alt="RUMAT STUDIO" onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
+      <div>
+        <h1>Tietosuojaseloste</h1>
+        <div class="meta">Viimeksi päivitetty: <strong>18.9.2025</strong></div>
+      </div>
+    </header>
+
+    <p><strong>Rekisterinpitäjä:</strong> RUMAT STUDIO (Y-3436822-5), sähköposti: <a href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a></p>
+
+    <h2>Käsittelyn tarkoitukset</h2>
+    <ul>
+      <li>Verkkokaupan tilausten vastaanotto, käsittely ja toimittaminen (digitaaliset tuotteet)</li>
+      <li>Asiakaspalvelu ja reklamaatioasiat</li>
+      <li>Kirjanpitovelvoitteiden täyttäminen</li>
+      <li>Vapaaehtoinen markkinointiviestintä suostumuksella</li>
+      <li>Sivuston kehittäminen analytiikan avulla suostumuksella</li>
+    </ul>
+
+    <h2>Käsiteltävät tiedot</h2>
+    <p>Nimi, sähköposti, osoite, puhelin (valinnainen), tilauksen sisältö ja ajankohta, maksutapahtuman tunniste (kortti- tai tilitietoja ei tallenneta meille), eväste- ja käyttötiedot (vain suostumuksella).</p>
+
+    <h2>Oikeusperuste</h2>
+    <p>Sopimuksen täytäntöönpano (tilaukset), lakisääteinen velvoite (kirjanpito), suostumus (markkinointi ja analytiikka), oikeutettu etu (petosten estäminen).</p>
+
+    <h2>Säilytysajat</h2>
+    <ul>
+      <li>Tilaus- ja kirjanpitoaineisto: vähintään 6 vuotta tilikauden päättymisestä</li>
+      <li>Asiakaspalveluviestit: enimmillään 12 kk asian päättymisestä</li>
+      <li>Markkinointisuostumukset: kunnes peruutat suostumuksen</li>
+      <li>Analytiikkatiedot: enintään 26 kk (jos analytiikka käytössä)</li>
+    </ul>
+
+    <h2>Tietolähteet ja vastaanottajat</h2>
+    <p>Tiedot saadaan sinulta ja maksunvälittäjältä (PayPal). Välitämme tarpeellisia tietoja palveluntarjoajille (hosting, sähköposti/EmailJS, maksunvälittäjä PayPal) sopimuksen täyttämiseksi. Osa palveluntarjoajista voi sijaita EU/ETA:n ulkopuolella; käytämme tällöin asianmukaisia suojatoimia (esim. mallisopimuslausekkeet).</p>
+
+    <h2>Rekisteröidyn oikeudet</h2>
+    <p>Oikeus tarkastaa, oikaista ja poistaa tiedot; rajoittaa käsittelyä; siirtää tiedot; vastustaa käsittelyä; peruuttaa suostumus. Käytä oikeuksiasi: <a href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>. Oikeus valittaa Tietosuojavaltuutetulle.</p>
+
+    <h2>Evästeet</h2>
+    <p>Käytämme välttämättömiä evästeitä sivuston toimintaan. Analytiikkaevästeet asetetaan vain suostumuksellasi. Voit muuttaa valintoja sivun alareunasta “Evästeasetukset”.</p>
+
+    <p class="muted">© <span id="year"></span> RUMAT STUDIO</p>
+  </div>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
