@@ -115,12 +115,12 @@
       height: calc(100svh - var(--header-h));
       display:grid; place-items:center;
       overflow:hidden; text-align:center;
-      background:#000;
+      background:#000; /* varaväri jos kuva puuttuu */
     }
     .hero-img{
       position:absolute; inset:0; width:100%; height:100%;
       object-fit:cover; object-position:center;
-      z-index:-1;
+      z-index:0; /* ✅ korjaus: ei -1 */
     }
 
     /* Bandit ja kortit */
@@ -265,7 +265,7 @@
     <!-- HERO (vain kuva) -->
     <section id="etusivu" class="hero px-4">
       <img src="assets/hero.jpg" alt="RUMAT STUDIO hero" class="hero-img"
-           onerror="this.onerror=null;this.src='assets/placeholder.jpg';">
+           onerror="this.onerror=null;console.warn('Hero-kuva puuttuu, käytetään placeholderia');this.src='assets/placeholder.jpg';">
     </section>
 
     <!-- TILAUSVIESTI -->
@@ -648,7 +648,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     lines.forEach((L,i)=>{ y -= (i===0?30:leading); content += `1 0 0 1 50 ${y} Tm (${pdfEscape(L)}) Tj\n`; });
     content += 'ET\n';
     const stream = `4 0 obj\n<< /Length ${content.length} >>\nstream\n${content}endstream\nendobj\n`;
-    const obj3 = '3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n';
+    const obj3 = '3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n`;
     const obj2 = '2 0 obj\n<< /Type /Pages /Count 1 /Kids [3 0 R] >>\nendobj\n';
     const obj1 = '1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n';
 
@@ -781,7 +781,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       order_json: JSON.stringify(order, null, 2),
       items: itemsList,
       total: totalStr,
-      dummy_link: dummyDataUrl || (location.origin + '/assets/placeholder.jpg'),
+      dummy_link: dummyDataUrl || (location.origin + '/assets/dummy-kaava.pdf'),
       customer_block: addressBlock
     };
 
