@@ -530,8 +530,8 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       el('input',{type:'hidden',name:'upload',value:'1'}),
       el('input',{type:'hidden',name:'business',value:email}),
       el('input',{type:'hidden',name:'currency_code',value:'EUR'}),
-      el('input',{type:'hidden',name:'return',value: location.origin+'/#success'}),
-      el('input',{type:'hidden',name:'cancel_return',value: location.origin+'/#cancel'})
+      el('input',{type:'hidden',name:'return',value: (()=>{const u=new URL(location.href); u.hash='success'; return u.href;})()}),
+      el('input',{type:'hidden',name:'cancel_return',value: (()=>{const u=new URL(location.href); u.hash='cancel'; return u.href;})()})
     );
     let snapshot = [];
 ids.forEach(id=>{
@@ -557,8 +557,8 @@ const form2 = el('form',{method:'POST', action:'https://www.paypal.com/cgi-bin/w
   el('input',{type:'hidden',name:'upload',value:'1'}),
   el('input',{type:'hidden',name:'business',value:email}),
   el('input',{type:'hidden',name:'currency_code',value:'EUR'}),
-  el('input',{type:'hidden',name:'return',value: location.origin+'/#success'}),
-  el('input',{type:'hidden',name:'cancel_return',value: location.origin+'/#cancel'})
+  el('input',{type:'hidden',name:'return',value: (()=>{const u=new URL(location.href); u.hash='success'; return u.href;})()}),
+  el('input',{type:'hidden',name:'cancel_return',value: (()=>{const u=new URL(location.href); u.hash='cancel'; return u.href;})()})
 );
 let j=1; paid.forEach(x=>{
   form2.appendChild(el('input',{type:'hidden',name:`item_name_${j}`,value:x.name}));
@@ -575,7 +575,7 @@ showToast('Siirryt PayPaliin maksamaan…', 'info');
   function handleReturn(){
     const h = location.hash;
     const msgBox = $('#orderMsg');
-    if (h==="#success"){
+    if (h && h.indexOf('#success')===0){
       // Näytetään vahvistus
       const order = JSON.parse(localStorage.getItem('lastOrder')||'null');
       const items = (order?.items||[]);
@@ -605,7 +605,7 @@ showToast('Siirryt PayPaliin maksamaan…', 'info');
         offerDummyDownload();
       }
     }
-    if (h==="#cancel"){
+    if (h && h.indexOf('#cancel')===0){
       showToast('Maksu keskeytettiin tai epäonnistui.', 'error');
       msgBox.classList.remove('hidden');
       msgBox.innerHTML = `
