@@ -10,17 +10,53 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- OPTIONAL: EmailJS asiakaspuolen lähetykseen (VAATII oman tunnuksen) -->
-  <!-- Vaihda PUBLIC_KEY / SERVICE_ID / TEMPLATE_ID omiksi arvoiksi, tai poista koko lohko jos et käytä EmailJS:ää. -->
+  <!-- EmailJS selainkirjasto -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
-    // *** SÄÄTÖ: jos haluat oikeat sähköpostit suoraan sivulta, täytä nämä. ***
-    const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY";   // esim. "6m8Zx..."
-    const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";   // esim. "service_abc123"
-    const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID"; // esim. "template_order"
-    if (window.emailjs && EMAILJS_PUBLIC_KEY && !EMAILJS_PUBLIC_KEY.startsWith("YOUR_")) {
-      window.emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+    /* ====== EmailJS asetukset (ilman koodiedittiä) ======
+       Paina sivulla Ctrl+E (tai macOS: Cmd+E) ja syötä:
+       - Public Key
+       - Service ID
+       - Template ID
+       Avaimet talletetaan localStorageen ja init ajetaan automaattisesti.
+       Voit myös kutsua konsolista: window.configureEmailJS()
+    */
+    function getEmailCfg(){
+      return {
+        PUBLIC_KEY:  localStorage.getItem('emailjs_public')  || '',
+        SERVICE_ID:  localStorage.getItem('emailjs_service') || '',
+        TEMPLATE_ID: localStorage.getItem('emailjs_template')|| ''
+      };
     }
+    function setEmailCfg(pub, svc, tpl){
+      if (pub) localStorage.setItem('emailjs_public', pub);
+      if (svc) localStorage.setItem('emailjs_service', svc);
+      if (tpl) localStorage.setItem('emailjs_template', tpl);
+    }
+    window.configureEmailJS = function(){
+      const cur = getEmailCfg();
+      const pub = prompt('EmailJS Public Key', cur.PUBLIC_KEY||'')||'';
+      const svc = prompt('EmailJS Service ID', cur.SERVICE_ID||'')||'';
+      const tpl = prompt('EmailJS Template ID', cur.TEMPLATE_ID||'')||'';
+      setEmailCfg(pub.trim(), svc.trim(), tpl.trim());
+      const cfg = getEmailCfg();
+      if (window.emailjs && cfg.PUBLIC_KEY){
+        try{ window.emailjs.init({ publicKey: cfg.PUBLIC_KEY }); alert('EmailJS alustettu.'); }
+        catch(e){ console.error(e); alert('EmailJS-alustus epäonnistui. Tarkista avaimet.'); }
+      }
+    };
+    (function(){
+      const cfg = getEmailCfg();
+      if (window.emailjs && cfg.PUBLIC_KEY){
+        try{ window.emailjs.init({ publicKey: cfg.PUBLIC_KEY }); }catch(e){ console.warn(e); }
+      }
+      // Pikanäppäin: Ctrl/Cmd + E → syötä avaimet
+      window.addEventListener('keydown', (e)=>{
+        if ((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='e'){
+          e.preventDefault(); window.configureEmailJS();
+        }
+      });
+    })();
   </script>
 
   <style>
@@ -31,14 +67,12 @@
       --blue:#789FAB;        /* varalle */
       --light-blue:#DEEEEE;  /* varalle */
       --ivory:#F6F6F4;       /* taustat & yläpalkki */
-
       --header-h:64px;
       --band-radius: 16px;
     }
     html{ scroll-padding-top: var(--header-h); }
     body{ font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial; color:var(--ink); background:var(--ivory); margin:0; overflow-x:hidden; }
 
-    /* Otsikot: erittäin paksu (900), versaalit */
     h1, h2, h3, h4, h5, h6{
       font-family: Montserrat, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       font-weight: 900 !important;
@@ -49,64 +83,33 @@
     }
     .normalcase{ text-transform:none !important; }
 
-    /* Yläpalkki */
     header{ background:var(--ivory); border-bottom:1px solid rgba(0,0,0,.08); }
-    #hdrRow{
-      position:relative;
-      grid-template-columns:auto 1fr; /* vasen (logo) | keskellä (nav) */
-    }
-    #brandText{
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-      max-width:min(42vw,460px); color:var(--ink);
-    }
+    #hdrRow{ position:relative; grid-template-columns:auto 1fr; }
+    #brandText{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:min(42vw,460px); color:var(--ink); }
     #brandText .strong{ font-weight:900; }
     #brandText .light{ font-weight:600; }
 
-    #mainNav{
-      justify-self:center;
-      display:flex; gap:1.5rem; white-space:nowrap;
-      font-size:13px; text-transform:uppercase; letter-spacing:.2em;
-    }
+    #mainNav{ justify-self:center; display:flex; gap:1.5rem; white-space:nowrap; font-size:13px; text-transform:uppercase; letter-spacing:.2em; }
     #mainNav a{ color:var(--ink); text-decoration:none; }
     .nav-hidden{ display:none !important; }
     .nav-measure{ position:absolute !important; visibility:hidden !important; display:flex !important; white-space:nowrap !important; }
 
-    /* Oikean reunan ikonit aivan oikeaan laitaan */
-    #rightBlock{
-      position:absolute; right:12px; top:50%; transform:translateY(-50%);
-      display:flex; align-items:center; gap:.5rem; white-space:nowrap;
-    }
-    .icon-btn{
-      position:relative; width:38px; height:38px; display:grid; place-items:center;
-      border-radius:9999px; background:rgba(0,0,0,.06); border:1px solid rgba(0,0,0,.16); color:var(--ink);
-    }
+    #rightBlock{ position:absolute; right:12px; top:50%; transform:translateY(-50%); display:flex; align-items:center; gap:.5rem; white-space:nowrap; }
+    .icon-btn{ position:relative; width:38px; height:38px; display:grid; place-items:center; border-radius:9999px; background:rgba(0,0,0,.06); border:1px solid rgba(0,0,0,.16); color:var(--ink); }
     .icon-btn:hover{ background:rgba(0,0,0,.10); }
-    .cart-text-btn{
-      border:1px solid rgba(0,0,0,.16); padding:.45rem .8rem; border-radius:9999px;
-      color:var(--ink); background:rgba(0,0,0,.04);
-    }
+    .cart-text-btn{ border:1px solid rgba(0,0,0,.16); padding:.45rem .8rem; border-radius:9999px; color:var(--ink); background:rgba(0,0,0,.04); }
     .cart-text-btn:hover{ background:rgba(0,0,0,.08); }
-    .badge{
-      position:absolute; top:-4px; right:-4px; min-width:18px; height:18px; padding:0 4px;
-      display:grid; place-items:center; border-radius:9999px; background:var(--ink); color:#fff;
-      font-size:11px; font-weight:700; border:1px solid rgba(0,0,0,.15);
-    }
+    .badge{ position:absolute; top:-4px; right:-4px; min-width:18px; height:18px; padding:0 4px; display:grid; place-items:center; border-radius:9999px; background:var(--ink); color:#fff; font-size:11px; font-weight:700; border:1px solid rgba(0,0,0,.15); }
 
-    /* Yleinen nappi */
     .btn{ border-radius:9999px; padding:.6rem 1rem; border:1px solid rgba(0,0,0,.16); background:rgba(0,0,0,.04); }
     .btn:hover{ background:rgba(0,0,0,.08); }
 
-    /* Drawerit (valikko & ostoskori) */
     .drawer{ position:fixed; inset:0; z-index:60; display:none; }
     .drawer.open{ display:block; }
-    .drawer > .panel{
-      position:absolute; top:0; bottom:0; width:min(420px,90vw);
-      background: var(--ivory); box-shadow: 0 10px 30px rgba(0,0,0,.20);
-    }
+    .drawer > .panel{ position:absolute; top:0; bottom:0; width:min(420px,90vw); background: var(--ivory); box-shadow: 0 10px 30px rgba(0,0,0,.20); }
     #menuDrawer .panel{ left:0; }
     #cartDrawer .panel{ right:0; }
 
-    /* HERO – vain video + logo */
     .hero{ position:relative; height: calc(100svh - var(--header-h)); display:grid; place-items:center; overflow:hidden; text-align:center; }
     .hero::before,.hero::after{ content:none !important; }
     .hero-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; z-index:-1; pointer-events:none; }
@@ -114,32 +117,23 @@
     @media (min-width:640px){ .hero-logo{ height:7rem; width:7rem; } }
     video::-webkit-media-controls { display:none !important; }
 
-    /* Bandit ja kortit */
     .band{ background:var(--ivory); border-radius:var(--band-radius); overflow:hidden; }
     .band-inner{ max-width:72rem; margin:0 auto; padding:3rem 1rem; }
 
-    /* Esittely */
     .intro-wide{ margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
-    .intro-grid{
-      display:grid;
-      grid-template-columns: 1fr minmax(300px, 64rem) 1fr;
-      gap:14px; align-items:stretch; padding: 18px 0;
-    }
-    .intro-img{
-      background-size: cover; background-position:center; background-repeat:no-repeat;
-      min-height: 300px; border:1px solid rgba(0,0,0,.12);
-    }
+    .intro-grid{ display:grid; grid-template-columns: 1fr minmax(300px, 64rem) 1fr; gap:14px; align-items:stretch; padding: 18px 0; }
+    .intro-img{ background-size: cover; background-position:center; background-repeat:no-repeat; min-height: 300px; border:1px solid rgba(0,0,0,.12); }
     .intro-img.left{
       background-image:
         url('assets/intro-left.jpg'),
         url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1600&auto=format&fit=crop');
-      border-radius: 0 18px 18px 0; /* vain sisemmät kulmat */
+      border-radius: 0 18px 18px 0;
     }
     .intro-img.right{
       background-image:
         url('assets/intro-right.jpg'),
         url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1600&auto=format&fit=crop');
-      border-radius: 18px 0 0 18px; /* vain sisemmät kulmat */
+      border-radius: 18px 0 0 18px;
     }
     .intro-copy{ padding: 6px 12px; min-width:0; }
     .intro-copy .logo{ width:56px; height:56px; display:block; margin:0 auto 12px; object-fit:contain; }
@@ -150,7 +144,6 @@
       .intro-copy{ padding: 2px 2px; }
     }
 
-    /* Kaaviot */
     .card{ background:var(--ivory); border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
     .pattern-grid{ display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:12px; align-items:start; }
     @media (min-width: 768px){ .pattern-grid{ grid-template-columns: repeat(4,minmax(0,1fr)); gap:14px; } }
@@ -175,7 +168,6 @@
     .ex-prev{ left:10px; } .ex-next{ right:10px; }
     .ex-top{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.6rem .9rem; border-bottom:1px solid rgba(0,0,0,.1); }
 
-    /* FOOTER */
     .footer-bar{ position:relative; z-index:2; background: var(--olive); color: var(--ink); }
     .footer-grid{
       max-width: 72rem; margin: 0 auto;
@@ -184,7 +176,10 @@
       grid-template-columns: 1fr 1fr 1fr;
       grid-template-areas: "social contact logo";
     }
-    .footer-col h6{ font-size:.8rem; font-weight:900; text-transform:uppercase; letter-spacing:.12em; margin:0 0 .35rem; color:var(--ink); }
+    .footer-col h6{
+      font-size:.8rem; font-weight:900; text-transform:uppercase;
+      letter-spacing:.12em; margin:0 0 .35rem; color:var(--ink);
+    }
     .footer-handle, .footer-link{ color:var(--ink); opacity:.85; text-decoration:none; }
     .footer-handle:hover, .footer-link:hover{ text-decoration:underline; }
 
@@ -195,16 +190,10 @@
 
     .footer-copy{ text-align:center; font-size:.85rem; opacity:.85; padding:10px 1rem 16px; }
     @media (max-width: 860px){
-      .footer-grid{
-        grid-template-columns: 1fr 1fr;
-        grid-template-areas:
-          "contact logo"
-          "social  logo";
-      }
+      .footer-grid{ grid-template-columns: 1fr 1fr; grid-template-areas: "contact logo" "social  logo"; }
       .footer-logoBox{ justify-content:center; }
     }
 
-    /* Ilmoitus/Toast */
     .toast { position: fixed; top: 76px; left: 0; right: 0; display:flex; justify-content:center; z-index:70; pointer-events:none; }
     .toast > div{ pointer-events:auto; }
   </style>
@@ -233,10 +222,8 @@
           <span aria-hidden="true" style="font-size:20px;line-height:1">☰</span><span class="sr-only">Valikko</span>
         </button>
 
-        <!-- Tekstinä kun nav mahtuu -->
         <button id="openCartText" class="cart-text-btn">Ostoskori <span id="cartCountText" class="opacity-80"></span></button>
 
-        <!-- Ikonina kun nav EI mahdu -->
         <button id="openCartIcon" class="icon-btn hidden" aria-label="Ostoskori">
           <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -250,9 +237,10 @@
     </div>
   </header>
 
-  <!-- Toast -->
+  <!-- Toast placeholder -->
   <div id="toast" class="toast"></div>
 
+  <!-- CONTENT -->
   <main class="pt-[64px]">
     <!-- HERO -->
     <section id="etusivu" class="hero px-4">
@@ -309,8 +297,8 @@
                    alt="Suunnittelija" class="rounded-xl border border-[rgba(0,0,0,.12)] object-cover w-full h-[300px] md:h-[420px]">
             </div>
             <div class="space-y-4 normalcase">
-              <p>Aaltonen on itsevarma neuloja...</p>
-              <p>Pian Aaltonen valmistuu taiteen maisteriksi...</p>
+              <p>Aaltonen on itsevarma neuloja, joka ei rajoita luovuuttaan vain yhteen tekemisen tapaan. Neulomisen rinnalla myös asusteiden ompelu on tärkeä osa ilmaisua – ja ennen kaikkea intohimo. Lapsuuden kiinnostus vaatteiden suunnitteluun johti muodin ja tekstiilisuunnittelun opintoihin vuonna 2021.</p>
+              <p>Pian Aaltonen valmistuu taiteen maisteriksi, mukanaan vankka osaaminen ja omat suosikkitekniikat, joita hän on hionut opintojen aikana. Neulomisen ja asusteiden lisäksi Aaltonen on syventynyt erityisesti vaatteiden kierrätykseen, korjaamiseen liittyviin asenteisiin sekä kriittiseen tarkasteluun siitä, miten kuluttamista ohjataan – ja millaisia seurauksia sillä on ympäristölle.</p>
             </div>
           </div>
         </div>
@@ -336,13 +324,16 @@
             <h6>Ota yhteyttä</h6>
             <a class="footer-link" href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>
           </div>
-          <div class="footer-col"><div class="footer-ytunnus">Y-3436822-5</div></div>
+          <div class="footer-col">
+            <div class="footer-ytunnus">Y-3436822-5</div>
+          </div>
         </div>
 
         <div class="footer-logoBox">
           <img src="assets/logo.svg" alt="RUMAT STUDIO logo">
         </div>
       </div>
+
       <div class="footer-copy">© <span id="year"></span> RUMAT STUDIO</div>
     </footer>
   </main>
@@ -391,34 +382,35 @@
       if(k==='class') n.className=v; else if(k==='html') n.innerHTML=v;
       else if(k.startsWith('on')) n.addEventListener(k.slice(2),v); else n.setAttribute(k,v);
     });
-    kids.forEach(k=>{ if(k==null) return; if(typeof k==='string') n.appendChild(document.createTextNode(k)); else n.appendChild(k)});
+    kids.forEach(k=>{ if(k==null) return; if(typeof k==='string') n.appendChild(document.createTextNode(k)); else n.appendChild(k);});
     return n;
   };
 
-  // Toast
   function showToast(msg, type='info', ms=4000){
     const t=$('#toast'); if(!t) return alert(msg);
     const color = type==='error' ? 'bg-red-600' : type==='success' ? 'bg-emerald-600' : 'bg-stone-800';
     const box = el('div',{class:`${color} text-white text-sm px-4 py-2 rounded-full shadow`}, msg);
-    t.appendChild(box);
-    setTimeout(()=>{ box.remove(); }, ms);
+    t.appendChild(box); setTimeout(()=>{ box.remove(); }, ms);
   }
 
-  // Vuosi
   (function(){ const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear(); })();
 
-  // Esittelyteksti
   function parasToHTML(s){ return String(s||'').trim().split(/\n\s*\n/).map(p=>`<p>${p.trim()}</p>`).join('\n'); }
   const defaultContent = {
-    pitch: `RUMAT STUDIO syntyi lapsuuden haaveesta...`
+    pitch: `RUMAT STUDIO syntyi lapsuuden haaveesta ja vuosien aikana kypsyneestä intohimosta vaatesuunnitteluun. Vuonna 2023 visio alkoi muovautumaan nykyiseen muotoonsa: ajattomia ja kestäviä vaatteita, jotka syntyvät harkitusta rakkaudesta ja intohimosta luovaan tekemiseen.
+
+RUMAT STUDIO pohjautuu vahvaan arvopohjaan. Se ei ole pelkkä tuotemerkki, vaan se rohkaisee pohtimaan omaa kulutuskäyttäytymistä ja inspiroi tekemään itse tai ainakin arvostamaan vaatteiden alkuperää ja tekijöitä niiden takana.
+
+Taustalla on halu luoda ajattomia, kestäviä ja harkiten suunniteltuja vaatteita vastalauseena kertakäyttöiselle pikamuodille. Jokainen vaate suunnitellaan kestämään sekä käytössä että ajassa. Suunnittelussa otetaan huomioon materiaalien laatu, vaatteen käyttötarkoitus ja visuaalinen ilme, mutta myös tuotannon ekologinen ja eettinen kestävyys. Käsityönä valmistetut vaatteet vaativat aikaa ja siten nostavat vaatteen arvoa niin konkreettisesti kuin tunnearvossakin.
+
+Tulevaisuuden suunnitelmissa on oman studiollisen avaaminen pääkaupunkiseudulle. Tila toimisi kohtaamispaikkana, jossa voi sovittaa mallikappaleita, osallistua työpajoihin ja verkostoitua muiden kestävästä arvosta kiinnostuneiden muotoilijoiden, ompelijoiden ja suunnittelijoiden kanssa.
+
+Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkityksellisyydestä käyttömukavuuteen asti. Tavoitteena ei ole täydellisyys, vaan rohkeus ja kehitys. Nimi RUMAT STUDIO viittaa juuri tähän: lapsen sallittuun keskeneräisyyteen, mutta tähdätä silti johonkin merkitykselliseen.`,
   };
-  (function(){
-    const intro = document.getElementById('intro-text');
-    if(intro) intro.innerHTML = parasToHTML(defaultContent.pitch);
-  })();
+  (function(){ const intro = document.getElementById('intro-text'); if(intro) intro.innerHTML = parasToHTML(defaultContent.pitch); })();
 
   /* =============== KAAVIOT =============== */
-  // Hinnat alkuun 0,01 € (pyydetty), mukana ilmainen ja tulossa-tuote sekä "dummy" kaava
+  // Hinnat 0,01 €; mukana ilmainen, dummy-kaava ja "Tulossa" -tuote
   window.KAAVIOT = [
     { id:'dummy-kaava', name:'Dummy kaava', price:0.01, sizes:'PDF', blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla kaavoilla. Ostettaessa saat linkin dummy-PDF:ään.', images:['https://placehold.co/1400x900?text=Dummy+kaava'] , isDummy:true},
     { id:'ilmainen-ohje', name:'Ilmainen ohje', price:0.00, sizes:'One size', blurb:'Täysin ilmainen kokeiltava ohje.', images:['https://placehold.co/1400x900?text=Ilmainen+ohje'] },
@@ -514,7 +506,7 @@
     }
 
     // PayPal-lomake: VAIN maksulliset rivit
-    const email = "aaltonen96@outlook.com"; // *** PAYPAL-MYYJÄ ***
+    const email = "aaltonen96@outlook.com"; // PAYPAL-myyjä
     const form = el('form',{method:'POST', action:'https://www.paypal.com/cgi-bin/webscr', target:'_blank'},
       el('input',{type:'hidden',name:'cmd',value:'_cart'}),
       el('input',{type:'hidden',name:'upload',value:'1'}),
@@ -536,7 +528,7 @@
     showToast('Siirryt PayPaliin maksamaan…', 'info');
   });
 
-  // Yhteinen onnistumiskäsittely (PayPal-paluu tai ilmainen tilaus)
+  // Onnistuminen / epäonnistuminen
   function showSuccess(order){
     const msgBox = $('#orderMsg');
     const items = (order?.items||[]);
@@ -560,7 +552,6 @@
     offerDummyDownload(); // lähetä aina dummy-kaava
   }
 
-  // Tilauksen onnistuminen / epäonnistuminen
   function handleReturn(){
     const h = location.hash || '';
     if (h && h.indexOf('#success')===0){
@@ -594,34 +585,40 @@
   // Sähköpostit (asiakas + Anne) EmailJS:llä, jos konffattu
   function sendConfirmationEmails(order){
     const anneEmail = 'anne@example.com'; // VAIHDA oikeaan osoitteeseen
-    if (!window.emailjs || EMAILJS_PUBLIC_KEY.startsWith('YOUR_')){
+    const cfg = (typeof getEmailCfg === 'function') ? getEmailCfg() : {PUBLIC_KEY:'',SERVICE_ID:'',TEMPLATE_ID:''};
+
+    if (!window.emailjs || !cfg.PUBLIC_KEY || !cfg.SERVICE_ID || !cfg.TEMPLATE_ID){
+      // Ei konffattu: ohjeistus
       const warn = $('#paypalWarn');
-      if (warn) warn.textContent = 'Huom: automaattinen sähköpostivahvistus ei ole käytössä (EmailJS-asetukset puuttuvat).';
+      if (warn) warn.textContent = 'Huom: automaattinen sähköpostivahvistus ei ole käytössä – paina Ctrl/Cmd+E lisätäksesi EmailJS-avaimet.';
       console.info('EmailJS ei konffattu. Tilauksen tiedot:', order);
       return;
     }
+
     const base = {
       order_json: JSON.stringify(order, null, 2),
       items: (order.items||[]).map(x=>`${x.name} x ${x.qty}`).join(', '),
       total: (order.items||[]).reduce((s,x)=>s + (x.price||0)*x.qty,0).toFixed(2) + ' €',
       dummy_link: location.origin + '/assets/dummy-kaava.pdf'
     };
+
     // Asiakkaalle
-    window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+    window.emailjs.send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, {
       to_email: order.email,
       subject: 'RUMAT STUDIO – tilausvahvistus',
       message: `Kiitos ostoksesta! ${base.items}. Kokonaissumma ${base.total}. Dummy-kaava: ${base.dummy_link}`,
       ...base
     }).then(()=>{
-      showToast('Tilausvahvistus lähetetty sähköpostiin.', 'success');
+      showToast('Tilausvahvistus lähetetty.', 'success');
     }).catch(err=>{
       console.error(err); showToast('Sähköpostin lähetys epäonnistui (asiakas).', 'error');
     });
+
     // Annelle
-    window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+    window.emailjs.send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, {
       to_email: anneEmail,
       subject: 'Uusi tilaus – RUMAT STUDIO',
-      message: `Uusi tilaus: ${base.items}. Kokonaissumma ${base.total}. \nAsiakas: ${order.email}`,
+      message: `Uusi tilaus: ${base.items}. Kokonaissumma ${base.total}.\nAsiakas: ${order.email}`,
       ...base
     }).catch(err=>{ console.error(err); });
   }
