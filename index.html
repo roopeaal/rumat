@@ -61,57 +61,104 @@
 
   <style>
     :root{
-      --ink:#202020; --olive:#A1A266; --deep-blue:#345563; --blue:#789FAB; --light-blue:#DEEEEE; --ivory:#F6F6F4;
-      --header-h:64px; --band-radius: 16px;
+      --ink:#202020;         /* tekstit */
+      --olive:#A1A266;       /* footer-tausta */
+      --deep-blue:#345563;   /* otsikot */
+      --blue:#789FAB;        /* varalle */
+      --light-blue:#DEEEEE;  /* varalle */
+      --ivory:#F6F6F4;       /* taustat & yläpalkki */
+      --header-h:64px;
+      --band-radius: 16px;
     }
     html{ scroll-padding-top: var(--header-h); }
     body{ font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial; color:var(--ink); background:var(--ivory); margin:0; overflow-x:hidden; }
-    h1,h2,h3,h4,h5,h6{ font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; font-weight:900!important; text-transform:uppercase; color:var(--deep-blue); letter-spacing:.02em; margin:0 0 .6rem;}
-    .normalcase{ text-transform:none!important; }
+
+    h1, h2, h3, h4, h5, h6{
+      font-family: Montserrat, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight: 900 !important;
+      text-transform: uppercase;
+      color: var(--deep-blue);
+      letter-spacing: .02em;
+      margin: 0 0 .6rem;
+    }
+    .normalcase{ text-transform:none !important; }
+
     header{ background:var(--ivory); border-bottom:1px solid rgba(0,0,0,.08); }
     #hdrRow{ position:relative; grid-template-columns:auto 1fr; }
     #brandText{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:min(42vw,460px); color:var(--ink); }
-    #brandText .strong{ font-weight:900; } #brandText .light{ font-weight:600; }
+    #brandText .strong{ font-weight:900; }
+    #brandText .light{ font-weight:600; }
+
     #mainNav{ justify-self:center; display:flex; gap:1.5rem; white-space:nowrap; font-size:13px; text-transform:uppercase; letter-spacing:.2em; }
     #mainNav a{ color:var(--ink); text-decoration:none; }
-    .nav-hidden{ display:none!important; }
-    .nav-measure{ position:absolute!important; visibility:hidden!important; display:flex!important; white-space:nowrap!important; }
+    .nav-hidden{ display:none !important; }
+    .nav-measure{ position:absolute !important; visibility:hidden !important; display:flex !important; white-space:nowrap !important; }
+
     #rightBlock{ position:absolute; right:12px; top:50%; transform:translateY(-50%); display:flex; align-items:center; gap:.5rem; white-space:nowrap; }
     .icon-btn{ position:relative; width:38px; height:38px; display:grid; place-items:center; border-radius:9999px; background:rgba(0,0,0,.06); border:1px solid rgba(0,0,0,.16); color:var(--ink); }
     .icon-btn:hover{ background:rgba(0,0,0,.10); }
     .cart-text-btn{ border:1px solid rgba(0,0,0,.16); padding:.45rem .8rem; border-radius:9999px; color:var(--ink); background:rgba(0,0,0,.04); }
     .cart-text-btn:hover{ background:rgba(0,0,0,.08); }
     .badge{ position:absolute; top:-4px; right:-4px; min-width:18px; height:18px; padding:0 4px; display:grid; place-items:center; border-radius:9999px; background:var(--ink); color:#fff; font-size:11px; font-weight:700; border:1px solid rgba(0,0,0,.15); }
+
     .btn{ border-radius:9999px; padding:.6rem 1rem; border:1px solid rgba(0,0,0,.16); background:rgba(0,0,0,.04); }
     .btn:hover{ background:rgba(0,0,0,.08); }
+
     .drawer{ position:fixed; inset:0; z-index:60; display:none; }
     .drawer.open{ display:block; }
-    .drawer>.panel{ position:absolute; top:0; bottom:0; width:min(540px,94vw); background:var(--ivory); box-shadow: 0 10px 30px rgba(0,0,0,.20); }
-    #menuDrawer .panel{ left:0; } #cartDrawer .panel{ right:0; } #checkoutDrawer .panel{ right:0; }
+    .drawer > .panel{ position:absolute; top:0; bottom:0; width:min(540px,94vw); background: var(--ivory); box-shadow: 0 10px 30px rgba(0,0,0,.20); }
+    #menuDrawer .panel{ left:0; }
+    #cartDrawer .panel{ right:0; }
+    #checkoutDrawer .panel{ right:0; }
+
     .hero{ position:relative; height: calc(100svh - var(--header-h)); display:grid; place-items:center; overflow:hidden; text-align:center; }
+    .hero::before,.hero::after{ content:none !important; }
     .hero-video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; z-index:-1; pointer-events:none; }
     .hero-logo{ height:6.5rem; width:6.5rem; object-fit:contain; }
     @media (min-width:640px){ .hero-logo{ height:7rem; width:7rem; } }
+    video::-webkit-media-controls { display:none !important; }
+
     .band{ background:var(--ivory); border-radius:var(--band-radius); overflow:hidden; }
     .band-inner{ max-width:72rem; margin:0 auto; padding:3rem 1rem; }
+
     .intro-wide{ margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
     .intro-grid{ display:grid; grid-template-columns: 1fr minmax(300px, 64rem) 1fr; gap:14px; align-items:stretch; padding: 18px 0; }
     .intro-img{ background-size: cover; background-position:center; background-repeat:no-repeat; min-height: 300px; border:1px solid rgba(0,0,0,.12); }
-    .intro-img.left{ background-image:url('assets/intro-left.jpg'), url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1600&auto=format&fit=crop'); border-radius: 0 18px 18px 0; }
-    .intro-img.right{ background-image:url('assets/intro-right.jpg'), url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1600&auto=format&fit=crop'); border-radius: 18px 0 0 18px; }
+    .intro-img.left{
+      background-image:
+        url('assets/intro-left.jpg'),
+        url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1600&auto=format&fit=crop');
+      border-radius: 0 18px 18px 0;
+    }
+    .intro-img.right{
+      background-image:
+        url('assets/intro-right.jpg'),
+        url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1600&auto=format&fit=crop');
+      border-radius: 18px 0 0 18px;
+    }
     .intro-copy{ padding: 6px 12px; min-width:0; }
     .intro-copy .logo{ width:56px; height:56px; display:block; margin:0 auto 12px; object-fit:contain; }
     .intro-copy p{ margin:0 0 .8rem 0; line-height:1.55; }
-    @media (max-width: 900px){ .intro-grid{ grid-template-columns: 1fr; padding: 8px 0; } .intro-img{ min-height: 220px; border-radius: 12px; } .intro-copy{ padding: 2px 2px; } }
+    @media (max-width: 900px){
+      .intro-grid{ grid-template-columns: 1fr; padding: 8px 0; }
+      .intro-img{ min-height: 220px; border-radius: 12px; }
+      .intro-copy{ padding: 2px 2px; }
+    }
+
     .card{ background:var(--ivory); border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
     .pattern-grid{ display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap:12px; align-items:start; }
-    @media (min-width:768px){ .pattern-grid{ grid-template-columns: repeat(4,minmax(0,1fr)); gap:14px; } }
+    @media (min-width: 768px){ .pattern-grid{ grid-template-columns: repeat(4,minmax(0,1fr)); gap:14px; } }
     .tile{ position:relative; cursor:pointer; aspect-ratio:1/1; display:block; }
     .tile img{ width:100%; height:100%; object-fit:cover; display:block; }
-    .tile-caption{ position:absolute; left:0; right:0; bottom:0; padding:.45rem .65rem; background:linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.0)); color:#fff; font-weight:800; letter-spacing:.06em; text-transform:uppercase; font-size:.85rem; }
+    .tile-caption{
+      position:absolute; left:0; right:0; bottom:0; padding:.45rem .65rem;
+      background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,.0));
+      color:#fff; font-weight:800; letter-spacing:.06em; text-transform:uppercase; font-size:.85rem;
+    }
     .tile--selected{ outline:2px solid var(--deep-blue); }
     .min-full{ position:absolute; inset:0; display:grid; place-items:center; background:rgba(0,0,0,.04); color:var(--deep-blue); font-weight:800; text-decoration:underline; }
     .min-full:hover{ background:rgba(0,0,0,.08); }
+
     .expander{ grid-column:1 / -1; background:var(--ivory); border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
     .ex-row{ display:grid; grid-template-columns: 1fr; min-height:260px; }
     @media (min-width:1024px){ .ex-row{ grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); } }
@@ -121,19 +168,41 @@
     .ex-prev,.ex-next{ position:absolute; top:50%; transform:translateY(-50%); width:42px; height:42px; display:grid; place-items:center; border-radius:9999px; background:var(--ivory); border:1px solid rgba(0,0,0,.15); font-weight:800; }
     .ex-prev{ left:10px; } .ex-next{ right:10px; }
     .ex-top{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.6rem .9rem; border-bottom:1px solid rgba(0,0,0,.1); }
+
     .footer-bar{ position:relative; z-index:2; background: var(--olive); color: var(--ink); }
-    .footer-grid{ max-width: 72rem; margin: 0 auto; padding: 1.5rem 1rem; display:grid; gap:1rem 2rem; align-items:start; grid-template-columns: 1fr 1fr 1fr; grid-template-areas: "social contact logo"; }
-    .footer-col h6{ font-size:.8rem; font-weight:900; text-transform:uppercase; letter-spacing:.12em; margin:0 0 .35rem; color:var(--ink); }
-    .footer-handle,.footer-link{ color:var(--ink); opacity:.85; text-decoration:none; }
-    .footer-handle:hover,.footer-link:hover{ text-decoration:underline; }
+    .footer-grid{
+      max-width: 72rem; margin: 0 auto;
+      padding: 1.5rem 1rem;
+      display:grid; gap:1rem 2rem; align-items:start;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-areas: "social contact logo";
+    }
+    .footer-col h6{
+      font-size:.8rem; font-weight:900; text-transform:uppercase;
+      letter-spacing:.12em; margin:0 0 .35rem; color:var(--ink);
+    }
+    .footer-handle, .footer-link{ color:var(--ink); opacity:.85; text-decoration:none; }
+    .footer-handle:hover, .footer-link:hover{ text-decoration:underline; }
+
     .footer-social{ grid-area:social; display:flex; flex-direction:column; gap:.9rem; }
     .footer-contact{ grid-area:contact; display:flex; flex-direction:column; gap:.9rem; }
     .footer-logoBox{ grid-area:logo; display:flex; justify-content:flex-end; align-items:flex-start; }
     .footer-logoBox img{ height:72px; width:auto; object-fit:contain; }
+
     .footer-copy{ text-align:center; font-size:.85rem; opacity:.85; padding:10px 1rem 16px; }
-    @media (max-width: 860px){ .footer-grid{ grid-template-columns: 1fr 1fr; grid-template-areas:"contact logo" "social  logo"; } .footer-logoBox{ justify-content:center; } }
-    .toast{ position: fixed; top: 76px; left: 0; right: 0; display:flex; justify-content:center; z-index:70; pointer-events:none; }
-    .toast>div{ pointer-events:auto; }
+
+    @media (max-width: 860px){
+      .footer-grid{
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+          "contact logo"
+          "social  logo";
+      }
+      .footer-logoBox{ justify-content:center; }
+    }
+
+    .toast { position: fixed; top: 76px; left: 0; right: 0; display:flex; justify-content:center; z-index:70; pointer-events:none; }
+    .toast > div{ pointer-events:auto; }
   </style>
 </head>
 
@@ -163,8 +232,10 @@
         <button id="openCartText" class="cart-text-btn">Ostoskori <span id="cartCountText" class="opacity-80"></span></button>
 
         <button id="openCartIcon" class="icon-btn hidden" aria-label="Ostoskori">
-          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="9" cy="20" r="1.8"></circle><circle cx="17" cy="20" r="1.8"></circle>
+          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="20" r="1.8"></circle>
+            <circle cx="17" cy="20" r="1.8"></circle>
             <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 8H7.1"></path>
           </svg>
           <span class="badge" id="cartCount">0</span>
@@ -195,6 +266,7 @@
       <div class="band full-bleed">
         <div class="band-inner">
           <h2 class="mb-4">Liian rumat ollakseen totta</h2>
+
           <div class="intro-wide">
             <div class="intro-grid">
               <div class="intro-img left"  aria-hidden="true"></div>
@@ -205,6 +277,7 @@
               <div class="intro-img right" aria-hidden="true"></div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
@@ -252,17 +325,22 @@
             <a class="footer-handle" href="https://www.tiktok.com/@rumat.studio" target="_blank" rel="noreferrer">rumat.studio</a>
           </div>
         </div>
+
         <div class="footer-contact">
           <div class="footer-col">
             <h6>Ota yhteyttä</h6>
             <a class="footer-link" href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>
           </div>
-          <div class="footer-col"><div class="footer-ytunnus">Y-3436822-5</div></div>
+          <div class="footer-col">
+            <div class="footer-ytunnus">Y-3436822-5</div>
+          </div>
         </div>
+
         <div class="footer-logoBox">
           <img src="assets/logo.svg" alt="RUMAT STUDIO logo">
         </div>
       </div>
+
       <div class="footer-copy">© <span id="year"></span> RUMAT STUDIO</div>
     </footer>
   </main>
@@ -460,7 +538,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   function collectCustomer(){
     const f = $('#checkoutForm'); if(!f) return null;
     const data = Object.fromEntries(new FormData(f).entries());
-    // perusvalidointi
     if(!data.firstName || !data.lastName || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email) || !data.address || !data.zip || !data.city || !data.country){
       showToast('Täytä pakolliset kentät oikein (nimi, sähköposti, osoite, postinumero, kaupunki, maa).', 'error', 6000);
       return null;
@@ -487,7 +564,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
 
     const order = {
       customer,
-      email: customer.email, // taaksepäin yhteensopivuus
+      email: customer.email,
       items: snapshot,
       createdAt: new Date().toISOString()
     };
@@ -522,9 +599,83 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     showToast('Siirryt PayPaliin maksamaan…', 'info');
   });
 
+  // ----- PDF-apurit: tehdään pieni, oikea PDF yhdelle sivulle -----
+  function pdfEscape(s){
+    return String(s).replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)');
+  }
+  // Palauttaa string-muotoisen PDF:n (yksi sivu, Helvetica)
+  function makeDummyPDF({title='Dummy-kaava', lines=[]}={}){
+    const header = '%PDF-1.4\n%âãÏÓ\n';
+    const obj5 = '5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n';
+    let y = 800; const leading = 18;
+    let content = 'BT\n/F1 20 Tf 50 820 Td ('+pdfEscape(title)+') Tj\nET\n';
+    content += 'BT\n/F1 12 Tf\n';
+    lines.forEach((L,i)=>{ y -= (i===0?30:leading); content += `1 0 0 1 50 ${y} Tm (${pdfEscape(L)}) Tj\n`; });
+    content += 'ET\n';
+    const stream = `4 0 obj\n<< /Length ${content.length} >>\nstream\n${content}endstream\nendobj\n`;
+    const obj3 = '3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n';
+    const obj2 = '2 0 obj\n<< /Type /Pages /Count 1 /Kids [3 0 R] >>\nendobj\n';
+    const obj1 = '1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n';
+
+    const order = [obj1,obj2,obj3,stream,obj5];
+    let acc = header.length;
+    const objOffsets = [];
+    for (let s of order){ objOffsets.push(acc); acc += s.length; }
+    const xrefStart = acc;
+    let xref = 'xref\n0 6\n';
+    xref += '0000000000 65535 f \n';
+    objOffsets.forEach(off=>{ xref += `${String(off).padStart(10,'0')} 00000 n \n`; });
+    const trailer = `trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xrefStart}\n%%EOF`;
+    return header + order.join('') + xref + trailer;
+  }
+  // Tekee Blobin, ObjectURL:n JA data:-URL:n (base64) – sähköpostia varten
+  function generateDummyPDF(order){
+    const items = (order?.items||[]).map(x=>`${x.name} × ${x.qty} — ${(x.price||0).toFixed(2)} €`);
+    const c = order?.customer||{};
+    const lines = [
+      'Tämä on väliaikainen DUMMY-KAAVA.',
+      'Korvataan myöhemmin oikealla kaavalla.',
+      '',
+      'Tilaus:',
+      ...items,
+      '',
+      'Asiakas:',
+      `${(c.firstName||'')} ${(c.lastName||'')}`,
+      `${c.address||''}`,
+      `${(c.zip||'')} ${(c.city||'')}, ${c.country||''}`,
+      `${c.email||''}${c.phone?(' / '+c.phone):''}`,
+      '',
+      `Päiväys: ${new Date().toLocaleString('fi-FI')}`
+    ];
+    const pdfStr = makeDummyPDF({title:'RUMAT STUDIO – Dummy-kaava', lines});
+    const enc = new TextEncoder(); const bytes = enc.encode(pdfStr);
+    const blob = new Blob([bytes], {type:'application/pdf'});
+    const url = URL.createObjectURL(blob);
+    // base64 data URL sähköpostiin
+    let binary=''; const chunk=0x8000;
+    for(let i=0;i<bytes.length;i+=chunk){ binary += String.fromCharCode.apply(null, bytes.subarray(i,i+chunk)); }
+    const base64 = btoa(binary);
+    const dataUrl = `data:application/pdf;base64,${base64}`;
+    return {blob, url, dataUrl};
+  }
+  // Lisää latauslinkki sivulle JA talteen data:URL
+  function offerDummyDownload(order){
+    const {url, dataUrl} = generateDummyPDF(order||{});
+    try{ localStorage.setItem('lastDummyDataUrl', dataUrl); }catch(e){}
+    const msgBox = document.getElementById('orderMsg');
+    const a = document.createElement('a');
+    a.href = url; a.download = 'dummy-kaava.pdf';
+    a.className = 'underline text-emerald-800';
+    a.textContent = 'Lataa dummy-kaava (PDF)';
+    const wrap = document.createElement('div');
+    wrap.className = 'mt-3';
+    wrap.appendChild(a);
+    msgBox.appendChild(wrap);
+  }
+
   // Onnistuminen / epäonnistuminen
-  function showSuccess(order){
-    const msgBox = $('#orderMsg');
+  async function showSuccess(order){
+    const msgBox = document.getElementById('orderMsg');
     const items = (order?.items||[]);
     const total = items.reduce((s,x)=>s + (x.price||0)*x.qty,0);
     const c = order?.customer || {};
@@ -532,7 +683,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     msgBox.innerHTML = `
       <div class="border border-emerald-200 bg-emerald-50 rounded-2xl p-4">
         <h3 class="text-xl font-extrabold text-emerald-900 uppercase tracking-wide mb-2">Tilaus vastaanotettu</h3>
-        <p class="text-emerald-900/80">Kiitos, <strong>${(c.firstName||'') + ' ' + (c.lastName||'')}</strong>! Vahvistus on lähetetty osoitteeseen <strong>${order?.email||c.email||''}</strong>.</p>
+        <p class="text-emerald-900/80">Kiitos, <strong>${(c.firstName||'') + ' ' + (c.lastName||'')}</strong>! Vahvistus on (yritetty) lähettää osoitteeseen <strong>${order?.email||c.email||''}</strong>.</p>
 
         <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -550,15 +701,19 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
               ${(c.zip||'')+' '+(c.city||'')}<br/>
               ${c.country||''}<br/>
               ${c.email||''}${c.phone?('<br/>'+c.phone):''}
-              ${c.notes?('<br/><em>'+c.notes.replace(/</g,'&lt;')+'</em>'):''}
+              ${c.notes?('<br/><em>'+String(c.notes).replace(/</g,'&lt;')+'</em>'):''}
             </div>
           </div>
         </div>
       </div>`;
     showToast('Tilaus vahvistettu. Kiitos!', 'success');
     CART = {}; saveCart(); renderCart();
+
+    // Luo ja näytä dummy-PDF linkki + tallenna data:URL sähköpostia varten
+    offerDummyDownload(order);
+
+    // Lähetä tilausvahvistus (asiakkaalle + Annelle)
     sendConfirmationEmails(order);
-    offerDummyDownload(); // lähetä aina dummy-kaava
   }
 
   function handleReturn(){
@@ -581,40 +736,31 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   window.addEventListener('hashchange', handleReturn);
   handleReturn();
 
-  // Dummy-PDF (demo – korvaa oikealla tiedostolla myöhemmin)
-  function offerDummyDownload(){
-    const content = `Dummy-kaava\n\nTämä on väliaikainen PDF; korvataan oikealla tuotteella. Kiitos!`;
-    const blob = new Blob([content], {type:'application/pdf'}); // DEMO: oikea PDF kannattaa jakaa tiedostona
-    const url = URL.createObjectURL(blob);
-    const a = el('a',{href:url, download:'dummy-kaava.pdf', class:'underline text-emerald-800'}, 'Lataa dummy-kaava (PDF)');
-    const msgBox = $('#orderMsg');
-    msgBox.appendChild(el('div',{class:'mt-3'}, a));
-  }
-
   // Sähköpostit (asiakas + Anne) EmailJS:llä, jos konffattu
   function sendConfirmationEmails(order){
-    const anneEmail = 'anne@example.com'; // VAIHDA oikeaan osoitteeseen
+    const anneEmail = 'aaltonen96@outlook.com'; // Anne
     const cfg = (typeof getEmailCfg === 'function') ? getEmailCfg() : {PUBLIC_KEY:'',SERVICE_ID:'',TEMPLATE_ID:''};
 
-    if (!window.emailjs || !cfg.PUBLIC_KEY || !cfg.SERVICE_ID || !cfg.TEMPLATE_ID){
-      const warn = $('#paypalWarn');
-      if (warn) warn.textContent = 'Huom: automaattinen sähköpostivahvistus ei ole käytössä – paina Ctrl/Cmd+E lisätäksesi EmailJS-avaimet.';
-      console.info('EmailJS ei konffattu. Tilauksen tiedot:', order);
-      return;
-    }
-
-    const c = order.customer || {};
+    const c = order?.customer || {};
     const itemsList = (order.items||[]).map(x=>`${x.name} x ${x.qty}`).join(', ');
     const totalStr  = (order.items||[]).reduce((s,x)=>s + (x.price||0)*x.qty,0).toFixed(2) + ' €';
     const addressBlock = `${(c.firstName||'')} ${(c.lastName||'')}\n${c.address||''}\n${(c.zip||'')} ${(c.city||'')}\n${c.country||''}\n${c.email||''}${c.phone?('\n'+c.phone):''}${c.notes?('\n'+c.notes):''}`;
 
+    const dummyDataUrl = localStorage.getItem('lastDummyDataUrl') || '';
     const base = {
       order_json: JSON.stringify(order, null, 2),
       items: itemsList,
       total: totalStr,
-      dummy_link: location.origin + '/assets/dummy-kaava.pdf',
+      dummy_link: dummyDataUrl || (location.origin + '/assets/dummy-kaava.pdf'),
       customer_block: addressBlock
     };
+
+    if (!window.emailjs || !cfg.PUBLIC_KEY || !cfg.SERVICE_ID || !cfg.TEMPLATE_ID){
+      const warn = $('#paypalWarn');
+      if (warn) warn.textContent = 'Huom: automaattinen sähköpostivahvistus ei ole käytössä – paina Ctrl/Cmd+E lisätäksesi EmailJS-avaimet.';
+      console.info('EmailJS ei konffattu. Tilauksen tiedot (ei lähetetty sähköpostia):', order);
+      return;
+    }
 
     // Asiakkaalle
     window.emailjs.send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, {
@@ -629,7 +775,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     window.emailjs.send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, {
       to_email: anneEmail,
       subject: 'Uusi tilaus – RUMAT STUDIO',
-      message: `Uusi tilaus vastaanotettu.\n\nTuotteet: ${itemsList}\nYhteensä: ${totalStr}\n\nAsiakastiedot:\n${addressBlock}`,
+      message: `Uusi tilaus vastaanotettu.\n\nTuotteet: ${itemsList}\nYhteensä: ${totalStr}\n\nAsiakastiedot:\n${addressBlock}\n\nDummy-kaava: ${base.dummy_link}`,
       ...base
     }).catch(err=> console.error(err));
   }
@@ -756,6 +902,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
         ),
         el('div',{class:'ex-info'},
           el('h3',{id:'exName',class:'text-2xl mb-2'}, ''),
+          el('p'){/* spacer */},
           el('p',{id:'exBlurb',class:'opacity-80 mb-2 normalcase'}, ''),
           el('div',{class:'mb-2'}, el('span',{class:'font-semibold'},'Koot: '), el('span',{id:'exSizes'},'')),
           el('div',{id:'exPrice',class:'text-xl font-bold mb-4'}, ''),
