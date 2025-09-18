@@ -67,14 +67,23 @@
 
   <style>
     :root{
-      --ink:#202020; 
-      --olive:#A1A266; 
-      --deep-blue:#345563; 
+      --ink:#202020;
+      --olive:#A1A266;
+      --deep-blue:#345563;
       --ivory:#F6F6F4;
       --light-blue:#DEEEEE;   /* vaaleansininen logo */
-      --header-h:64px; 
+      --header-h:64px;
       --band-radius: 16px;
+
+      /* Intro-kuvien mitoitus */
+      --intro-side-w: 380px;   /* leveiden näkymien sivupalstan tavoiteleveys */
+      --intro-aspect-w: 3;     /* leveys */
+      --intro-aspect-h: 4;     /* korkeus = pidempi -> “korkeammat” kuvat */
     }
+    @media (min-width: 1200px){
+      :root{ --intro-side-w: 440px; }
+    }
+
     html{ scroll-padding-top: var(--header-h); }
     body{ font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial; color:var(--ink); background:var(--ivory); margin:0; overflow-x:hidden; }
 
@@ -119,24 +128,17 @@
       text-align:center;
       background:#000;
     }
-    /* KUVA ILMAN "ZOOMI"-EFEKTIÄ:
-       - lukitaan korkeus hero-alueen korkeuteen
-       - leveys määräytyy mittasuhteesta
-       - keskitetään; kun näkymä kapenee, sivuilta rajautuu pois */
+    /* Täytä koko näkymä: reunasta reunaan ilman "zoomi-animaatiota" */
     .hero-img{
       position:absolute;
-      top:50%;
-      left:50%;
+      inset:0;
+      width:100%;
       height:100%;
-      width:auto;
-      max-width:none;
-      transform:translate(-50%, -50%);
-      z-index:0;
-      object-fit:contain;
+      object-fit:cover;             /* peittää koko alan, reunat osuvat sivun reunoihin */
       object-position:center;
-      transition:none !important;
-      animation:none !important;
-      will-change:auto;
+      transition:none!important;
+      animation:none!important;
+      z-index:0;
     }
 
     /* === VÄRITETTÄVÄ SVG-LOGO (mask) === */
@@ -167,19 +169,24 @@
     .band{ background:var(--ivory); border-radius:var(--band-radius); overflow:hidden; }
     .band-inner{ max-width:72rem; margin:0 auto; padding:3rem 1rem; }
 
-    /* Intro */
+    /* ==================== Intro ==================== */
     .intro-wide{ margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
     .intro-grid{
       display:grid;
-      grid-template-columns: 1fr minmax(300px, 64rem) 1fr;
-      gap:14px; align-items:stretch; padding:18px 0;
+      grid-template-columns:
+        minmax(240px, var(--intro-side-w))
+        minmax(300px, 64rem)
+        minmax(240px, var(--intro-side-w));
+      gap:14px;
+      align-items:stretch;
+      padding:18px 0;
     }
+    /* Sivukuvat: pidä SAMA KUVARASIO (aspect-ratio) kaikkialla */
     .intro-img{
       background-size:cover; background-position:center; background-repeat:no-repeat;
-      height:320px; border:1px solid rgba(0,0,0,.12);
-    }
-    @media (min-width:1200px){
-      .intro-img{ height:360px; }
+      aspect-ratio: calc(var(--intro-aspect-w) / var(--intro-aspect-h)); /* esim 3/4 = korkea */
+      border:1px solid rgba(0,0,0,.12);
+      min-width:0;
     }
     .intro-img.left{  background-image:url('assets/intro-left.jpg');  border-radius:0 18px 18px 0; }
     .intro-img.right{ background-image:url('assets/intro-right.jpg'); border-radius:18px 0 0 18px; }
@@ -187,9 +194,22 @@
     .intro-copy .logo{ width:56px; height:56px; display:block; margin:0 auto 12px; object-fit:contain; }
     .intro-copy p{ margin:0 0 .8rem; line-height:1.55; }
 
+    /* Kapea näkymä: teksti "ympäröi" kuvia (floatit), sama kuvasuhde säilyy luonnollisesti */
     @media (max-width:900px){
       .intro-grid{ grid-template-columns: 1fr; padding: 12px 0; }
-      .intro-img{ border-radius:12px; }
+      .intro-img{ display:none; } /* piilota taustakuvat kapealla */
+      .intro-copy{ position:relative; }
+      .intro-float{
+        display:block;
+        width:min(60%, 320px);
+        height:auto;             /* pitää luonnollisen kuvasuhteen */
+        border:1px solid rgba(0,0,0,.12);
+        border-radius:12px;
+        background:#fff;
+      }
+      .intro-float.left{  float:left;  margin:0 14px 10px 0; }  /* yläreuna tasoittuu ensimmäisen tekstin kanssa */
+      .intro-float.right{ float:right; margin:10px 0 0 14px; }  /* sijoitetaan lopun kohdalle -> alareuna samassa tasossa tekstin lopun kanssa */
+      .intro-copy::after{ content:""; display:block; clear:both; }
     }
 
     /* Kaaviot */
@@ -329,6 +349,7 @@
               <div class="intro-copy">
                 <img class="logo" src="assets/logo.svg" alt="RUMAT STUDIO"
                      onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
+                <!-- Floattavat versiot kapeille näytöille lisätään JS:llä -->
                 <div id="intro-text" class="text-[15px] sm:text-base normalcase"></div>
               </div>
               <div class="intro-img right" aria-hidden="true"></div>
@@ -569,6 +590,8 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   };
   (function(){
     const intro=$('#intro-text'); if(intro) intro.innerHTML=parasToHTML(defaultContent.pitch);
+
+    // Taustakuvat leveillä näkymillä + placeholder-varmistus
     function setBg(el,url){
       if(!el) return;
       const t=new Image();
@@ -578,6 +601,39 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     }
     setBg(document.querySelector('.intro-img.left'),'assets/intro-left.jpg');
     setBg(document.querySelector('.intro-img.right'),'assets/intro-right.jpg');
+
+    // Kapeilla näytöillä lisätään floattavat kuvat tekstin joukkoon:
+    const copy = document.querySelector('.intro-copy');
+    let injected = false;
+    function injectFloats(){
+      if (injected || !copy) return;
+      const lf = document.createElement('img');
+      lf.className = 'intro-float left';
+      setSafeImgSrc(lf,'assets/intro-left.jpg');
+
+      const rf = document.createElement('img');
+      rf.className = 'intro-float right';
+      setSafeImgSrc(rf,'assets/intro-right.jpg');
+
+      // sijoitus: vasen heti logon jälkeen -> yläreuna samaan tasoon tekstin kanssa
+      const logo = copy.querySelector('.logo');
+      if (logo && logo.nextSibling) copy.insertBefore(lf, logo.nextSibling);
+      else copy.insertBefore(lf, copy.firstChild);
+
+      // oikea aivan lopussa -> alareuna linjassa tekstin lopun kanssa
+      copy.appendChild(rf);
+
+      injected = true;
+    }
+    function removeFloats(){
+      if (!copy) return;
+      copy.querySelectorAll('.intro-float').forEach(n=>n.remove());
+      injected = false;
+    }
+    const mq = window.matchMedia('(max-width: 900px)');
+    function mqHandler(e){ if(e.matches) injectFloats(); else removeFloats(); }
+    mq.addEventListener ? mq.addEventListener('change', mqHandler) : mq.addListener(mqHandler);
+    mqHandler(mq);
   })();
 
   /* ================== Tuotedata ================== */
