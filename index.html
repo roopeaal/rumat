@@ -107,6 +107,9 @@
     /* Hero */
     .hero{ position:relative; height: calc(100svh - var(--header-h)); display:grid; place-items:center; overflow:hidden; text-align:center; background:#000; }
     .hero-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; z-index:0; }
+    /* >>> Logo takaisin heroon <<< */
+    .hero-logo{ height:6.5rem; width:6.5rem; object-fit:contain; z-index:1; }
+    @media (min-width:640px){ .hero-logo{ height:7rem; width:7rem; } }
 
     /* Bandit & kortit */
     .band{ background:var(--ivory); border-radius:var(--band-radius); overflow:hidden; }
@@ -114,14 +117,30 @@
 
     /* Intro */
     .intro-wide{ margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
-    .intro-grid{ display:grid; grid-template-columns: 1fr minmax(300px, 64rem) 1fr; gap:14px; align-items:stretch; padding:18px 0; }
-    .intro-img{ background-size:cover; background-position:center; background-repeat:no-repeat; min-height:300px; border:1px solid rgba(0,0,0,.12); }
+    .intro-grid{
+      display:grid;
+      grid-template-columns: 1fr minmax(300px, 64rem) 1fr;
+      gap:14px; align-items:stretch; padding:18px 0;
+    }
+    .intro-img{
+      background-size:cover; background-position:center; background-repeat:no-repeat;
+      /* Pidetään AINA sama korkeus, jolloin “koko ja muoto” säilyy */
+      height:320px; border:1px solid rgba(0,0,0,.12);
+    }
+    @media (min-width:1200px){
+      .intro-img{ height:360px; }
+    }
     .intro-img.left{  background-image:url('assets/intro-left.jpg');  border-radius:0 18px 18px 0; }
     .intro-img.right{ background-image:url('assets/intro-right.jpg'); border-radius:18px 0 0 18px; }
     .intro-copy{ padding: 6px 12px; min-width:0; }
     .intro-copy .logo{ width:56px; height:56px; display:block; margin:0 auto 12px; object-fit:contain; }
     .intro-copy p{ margin:0 0 .8rem; line-height:1.55; }
-    @media (max-width:900px){ .intro-grid{ grid-template-columns:1fr; padding:8px 0; } .intro-img{ min-height:220px; border-radius:12px; } .intro-copy{ padding:2px; } }
+
+    /* HUOM: emme enää pienennä kuvia mobiilissa, jotta koko pysyy samana */
+    @media (max-width:900px){
+      .intro-grid{ grid-template-columns: 1fr; padding: 12px 0; }
+      .intro-img{ border-radius:12px; }
+    }
 
     /* Kaaviot */
     .card{ background:var(--ivory); border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
@@ -209,9 +228,11 @@
 
   <!-- CONTENT -->
   <main class="pt-[64px]">
-    <!-- HERO (kuva) -->
+    <!-- HERO (kuva + logo keskellä) -->
     <section id="etusivu" class="hero px-4">
       <img src="assets/hero.jpg" alt="RUMAT STUDIO hero" class="hero-img"
+           onerror="this.onerror=null;this.src='assets/placeholder.jpg';">
+      <img src="assets/logo.svg" alt="RUMAT STUDIO" class="hero-logo"
            onerror="this.onerror=null;this.src='assets/placeholder.jpg';">
     </section>
 
@@ -464,7 +485,13 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   };
   (function(){
     const intro=$('#intro-text'); if(intro) intro.innerHTML=parasToHTML(defaultContent.pitch);
-    function setBg(el,url){ if(!el) return; const t=new Image(); t.onload=()=>el.style.backgroundImage=`url('${url}')`; t.onerror=()=>el.style.backgroundImage=`url('assets/placeholder.jpg')`; t.src=url; }
+    function setBg(el,url){
+      if(!el) return;
+      const t=new Image();
+      t.onload=()=>el.style.backgroundImage=`url('${url}')`;
+      t.onerror=()=>el.style.backgroundImage=`url('assets/placeholder.jpg')`;
+      t.src=url;
+    }
     setBg(document.querySelector('.intro-img.left'),'assets/intro-left.jpg');
     setBg(document.querySelector('.intro-img.right'),'assets/intro-right.jpg');
   })();
@@ -808,4 +835,3 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   </script>
 </body>
 </html>
-
