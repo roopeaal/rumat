@@ -24,9 +24,12 @@
       --olive:#A1A266;
       --deep-blue:#345563;
       --ivory:#F6F6F4;
-      --light-blue:#DEEEEE;   /* vaaleansininen logo */
+      --light-blue:#DEEEEE;
       --header-h:64px;
       --band-radius: 16px;
+
+      /* Esittelykuvien suhteellinen leveys (säätää rivin pituutta) */
+      --intro-float-w: clamp(140px, 36vw, 220px);
     }
     html{ scroll-padding-top: var(--header-h); }
     body{ font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial; color:var(--ink); background:var(--ivory); margin:0; overflow-x:hidden; }
@@ -78,8 +81,6 @@
       object-fit:cover; object-position:center;
       transition:none!important; animation:none!important; z-index:0;
     }
-
-    /* VÄRITETTÄVÄ LOGO (mask) */
     .svg-logo{ --logo-color: var(--ink); display:inline-block; width: 9rem; height: 9rem; background-color: var(--logo-color);
       -webkit-mask: url('assets/logo.svg') no-repeat center / contain; mask: url('assets/logo.svg') no-repeat center / contain; }
     @media (min-width:640px){ .svg-logo{ width:11rem; height:11rem; } }
@@ -92,17 +93,32 @@
     .band{ background:var(--ivory); border-radius:var(--band-radius); overflow:hidden; }
     .band-inner{ max-width:72rem; margin:0 auto; padding:3rem 1rem; }
 
-    /* Intro: poistetaan vanhat taustakuvat ja lisätään kelluvat pikkukuvat */
+    /* Intro – poistetaan vanhat taustakuvat; käytetään kelluvia pikkukuvia (molemmat näkyvät) */
     .intro-wide{ margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
     .intro-grid{ display:grid; grid-template-columns: 1fr; gap:14px; align-items:start; padding:18px 0; }
-    .intro-img{ display:none !important; }
+    .intro-img{ display:none !important; } /* ei käytössä */
     .intro-copy{ padding: 6px 12px; min-width:0; }
     .intro-copy .logo{ width:56px; height:56px; display:block; margin:0 auto 12px; object-fit:contain; }
-    .intro-copy p{ margin:0 0 .8rem; line-height:1.55; }
-    .intro-float{ display:block; width: clamp(140px, 28vw, 220px); border:1px solid rgba(0,0,0,.12); border-radius:12px; background:#fff; height:auto; }
+    .intro-copy p{ margin:0 0 .8rem; line-height:1.6; }
+
+    .intro-float{
+      display:block;
+      width: var(--intro-float-w);
+      height:auto;
+      border:1px solid rgba(0,0,0,.12);
+      border-radius:12px;
+      background:#fff;
+      shape-outside: inset(0 round 12px);
+    }
     .intro-float.left{  float:left;  margin:0 14px 10px 0; }
     .intro-float.right{ float:right; margin:0 0 10px 14px; }
+
     .intro-copy::after{ content:""; display:block; clear:both; }
+
+    /* Pienillä ruuduilla pidetään teksti-ilma varmana */
+    @media (max-width: 420px){
+      :root{ --intro-float-w: clamp(120px, 44vw, 180px); }
+    }
 
     /* Kaaviot */
     .card{ background:var(--ivory); border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
@@ -154,7 +170,7 @@
       .svg-logo--footer{ height: clamp(140px, 45vw, 320px); }
     }
 
-    /* Mobiilissa: pakota ikonit näkyviin (fallback) */
+    /* Mobiilissa: pakota ikonit näkyviin */
     @media (max-width: 760px){
       #mainNav{ display:none !important; }
       #openMenu, #openCartIcon{ display:grid !important; }
@@ -172,13 +188,11 @@
   <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50">
     <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-4 grid gap-3">
-      <!-- Logo -->
       <a id="brandBlock" href="#etusivu" aria-label="Etusivu" class="flex items-center gap-3 min-w-0">
         <span class="svg-logo svg-logo--header logo-ink" role="img" aria-label="RUMAT STUDIO"></span>
         <span id="brandText" class="uppercase text-sm tracking-widest"><span class="strong">RUMAT</span>&nbsp;<span class="light">STUDIO</span></span>
       </a>
 
-      <!-- Nav -->
       <nav id="mainNav" class="justify-self-center">
         <a href="#mikaonrumat"  class="hover:underline underline-offset-4">Mikä on RUMAT?</a>
         <a href="#kaaviot"      class="hover:underline underline-offset-4">Kaavat</a>
@@ -186,9 +200,7 @@
         <a href="#yhteys"       class="hover:underline underline-offset-4">Ota yhteyttä</a>
       </nav>
 
-      <!-- Oikea reuna -->
       <div id="rightBlock" class="flex items-center gap-2">
-        <!-- Fallback onclick varmistaa toiminnan vaikka muu JS ei ehtisi -->
         <button id="openMenu" class="icon-btn hidden" aria-controls="menuDrawer" aria-expanded="false" aria-label="Valikko"
                 onclick="try{document.getElementById('menuDrawer').classList.add('open'); this.setAttribute('aria-expanded','true');}catch(e){}">
           <span aria-hidden="true" style="font-size:20px;line-height:1">☰</span><span class="sr-only">Valikko</span>
@@ -240,7 +252,6 @@
               <div class="intro-copy">
                 <img class="logo" src="assets/logo.svg" alt="RUMAT STUDIO"
                      onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
-                <!-- Tekstit tulevat JS:llä -->
                 <div id="intro-text" class="text-[15px] sm:text-base normalcase"></div>
               </div>
               <div class="intro-img right" aria-hidden="true"></div>
@@ -273,8 +284,8 @@
                    alt="Suunnittelija" class="rounded-xl border border-[rgba(0,0,0,.12)] object-cover w-full h-[300px] md:h-[420px]">
             </div>
             <div class="space-y-4 normalcase">
-              <p>Aaltonen on itsevarma neuloja, joka ei rajoita luovuuttaan vain yhteen tekemisen tapaan...</p>
-              <p>Pian Aaltonen valmistuu taiteen maisteriksi...</p>
+              <p>Aaltonen on itsevarma neuloja, joka ei rajoita luovuuttaan vain yhteen tekemisen tapaan. Neulomisen rinnalla myös asusteiden ompelu on tärkeä osa ilmaisua – ja ennen kaikkea intohimo. Lapsuuden kiinnostus vaatteiden suunnitteluun johti muodin ja tekstiilisuunnittelun opintoihin vuonna 2021.</p>
+              <p>Pian Aaltonen valmistuu taiteen maisteriksi, mukanaan vankka osaaminen ja omat suosikkitekniikat, joita hän on hionut opintojen aikana. Neulomisen ja asusteiden lisäksi Aaltonen on syventynyt erityisesti vaatteiden kierrätykseen, korjaamiseen liittyviin asenteisiin sekä kriittiseen tarkasteluun siitä, miten kuluttamista ohjataan – ja millaisia seurauksia sillä on ympäristölle.</p>
             </div>
           </div>
         </div>
@@ -465,7 +476,7 @@
   window.configureEmailJS=function(){ var cur=getEmailCfg(); var pub=prompt('EmailJS Public Key',cur.PUBLIC_KEY||'')||''; var svc=prompt('EmailJS Service ID',cur.SERVICE_ID||'')||''; var tpl=prompt('EmailJS Template ID',cur.TEMPLATE_ID||'')||''; setEmailCfg(pub.trim(),svc.trim(),tpl.trim()); try{ if(window.emailjs && pub) window.emailjs.init({ publicKey: pub }); alert('EmailJS alustettu.'); }catch(e){ alert('EmailJS-alustus epäonnistui.'); } };
   (function(){ var cfg=getEmailCfg(); try{ if(window.emailjs && cfg.PUBLIC_KEY) window.emailjs.init({ publicKey: cfg.PUBLIC_KEY }); }catch(e){} document.addEventListener('keydown',function(e){ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='e'){ e.preventDefault(); window.configureEmailJS(); } }); })();
 
-  /* ===== Intro-tekstit ja kelluvat kuvat (molemmat näkyviin) ===== */
+  /* ===== Intro-tekstit + Varmasti kaksi kuvaa näkyviin ===== */
   (function(){
     try{
       var defaultContent = {
@@ -476,16 +487,25 @@
 
       var copy = document.querySelector('.intro-copy'); if(!copy) return;
 
+      // Luo kaksi kelluvaa kuvaa ja aseta aina näkyviin heti tekstialkuun
       var lf = document.createElement('img'); lf.className='intro-float left'; setSafeImgSrc(lf,'assets/intro-left.jpg'); lf.alt='RUMAT STUDIO esittelykuva (vasen)';
       var rf = document.createElement('img'); rf.className='intro-float right'; setSafeImgSrc(rf,'assets/intro-right.jpg'); rf.alt='RUMAT STUDIO esittelykuva (oikea)';
 
       var logo = copy.querySelector('.logo');
-      if (logo && logo.nextSibling) copy.insertBefore(lf, logo.nextSibling); else copy.insertBefore(lf, copy.firstChild);
+      // Vasen heti logon jälkeen
+      if (logo && logo.parentNode === copy) {
+        copy.insertBefore(lf, logo.nextSibling);
+      } else {
+        copy.insertBefore(lf, copy.firstChild);
+      }
 
-      var paras = Array.prototype.slice.call(copy.querySelectorAll('p'));
-      // Sijoita oikea kuva toisen kappaleen jälkeen, jos löytyy, muuten viimeiseksi
-      var anchor = paras.length >= 2 ? paras[1] : (paras[0] || null);
-      copy.insertBefore(rf, anchor ? anchor.nextSibling : null);
+      // Oikea lisätään varmasti näkyvään kohtaan: ensimmäisen kappaleen perään (tai loppuun)
+      var firstP = copy.querySelector('p');
+      if (firstP && firstP.parentNode === copy) {
+        copy.insertBefore(rf, firstP.nextSibling);
+      } else {
+        copy.appendChild(rf);
+      }
     }catch(e){ console.error(e); }
   })();
 
@@ -513,10 +533,10 @@
   var $drawer=$('#cartDrawer');
   function openCart(){ try{$drawer.classList.add('open'); renderCart();}catch(e){} }
   function closeCart(){ try{$drawer.classList.remove('open');}catch(e){} }
-  var btnOpenCartText = $('#openCartText'); if(btnOpenCartText) btnOpenCartText.addEventListener('click', openCart);
-  var btnOpenCartIcon = $('#openCartIcon'); if(btnOpenCartIcon) btnOpenCartIcon.addEventListener('click', openCart);
-  var btnCloseCart = $('#closeCart'); if(btnCloseCart) btnCloseCart.addEventListener('click', closeCart);
-  var btnCloseCartX = $('#closeCartX'); if(btnCloseCartX) btnCloseCartX.addEventListener('click', closeCart);
+  $('#openCartText')&&$('#openCartText').addEventListener('click', openCart);
+  $('#openCartIcon')&&$('#openCartIcon').addEventListener('click', openCart);
+  $('#closeCart')&&$('#closeCart').addEventListener('click', closeCart);
+  $('#closeCartX')&&$('#closeCartX').addEventListener('click', closeCart);
 
   function renderCart(){
     try{
@@ -552,10 +572,10 @@
   var checkoutDrawer=$('#checkoutDrawer');
   function openCheckout(){ try{ checkoutDrawer.classList.add('open'); fillCheckoutFromStorage(); }catch(e){} }
   function closeCheckout(){ try{ checkoutDrawer.classList.remove('open'); }catch(e){} }
-  var btnCheckout = $('#checkout'); if(btnCheckout) btnCheckout.addEventListener('click', function(){ if(Object.keys(CART).length===0) return alert('Ostoskori on tyhjä.'); closeCart(); openCheckout(); });
-  var btnCloseCheckout = $('#closeCheckout'); if(btnCloseCheckout) btnCloseCheckout.addEventListener('click', closeCheckout);
-  var btnCloseCheckoutX = $('#closeCheckoutX'); if(btnCloseCheckoutX) btnCloseCheckoutX.addEventListener('click', closeCheckout);
-  var btnCheckoutBack = $('#checkoutBack'); if(btnCheckoutBack) btnCheckoutBack.addEventListener('click', function(e){ e.preventDefault(); closeCheckout(); openCart(); });
+  $('#checkout')&&$('#checkout').addEventListener('click', function(){ if(Object.keys(CART).length===0) return alert('Ostoskori on tyhjä.'); closeCart(); openCheckout(); });
+  $('#closeCheckout')&&$('#closeCheckout').addEventListener('click', closeCheckout);
+  $('#closeCheckoutX')&&$('#closeCheckoutX').addEventListener('click', closeCheckout);
+  $('#checkoutBack')&&$('#checkoutBack').addEventListener('click', function(e){ e.preventDefault(); closeCheckout(); openCart(); });
 
   function fillCheckoutFromStorage(){ try{ var f=$('#checkoutForm'); if(!f) return; var saved={}; try{ saved=JSON.parse(localStorage.getItem('customer')||'{}'); }catch(e){}
     ['firstName','lastName','email','phone','address','zip','city','country','notes'].forEach(function(k){ if(saved[k] && f.elements[k]) f.elements[k].value=saved[k]; });
@@ -570,7 +590,7 @@
     localStorage.setItem('customer',JSON.stringify(data)); return data;
   }
 
-  var btnCheckoutPay=$('#checkoutPay'); if(btnCheckoutPay) btnCheckoutPay.addEventListener('click',function(e){
+  $('#checkoutPay')&&$('#checkoutPay').addEventListener('click',function(e){
     e.preventDefault();
     var customer=collectCustomer(); if(!customer) return;
     var ids=Object.keys(CART); if(ids.length===0){ closeCheckout(); return; }
@@ -658,7 +678,7 @@
           items.map(function(x){return '<li>'+x.name+' × '+x.qty+' — '+fmtEUR((x.price||0)*x.qty)+'</li>';}).join('')+
         '</ul><div class="mt-2 font-bold">Yhteensä: '+fmtEUR(total)+'</div></div>'+
         '<div><div class="font-semibold mb-1">Asiakastiedot:</div><div class="text-sm">'+
-          ((c.firstName||'')+' '+(c.lastName||''))+'<br/>'+(c.address||'')+'<br/>'+((c.zip||'')+' '+(c.city||''))+'<br/>'+(c.country||'')+'<br/>'+(c.email||'')+(c.phone?('<br/>'+c.phone):'')+(c.notes?('<br/><em>'+String(c.notes).replace(/</g,'&lt;')+'</em>'):'')+
+          ((c.firstName||'')+' '+(c.lastName||''))+'<br/>'+(c.address||'')+'<br/>'+((c.zip||'')+' '+(c.city||''))+'<br/>'+(c.country||'' )+'<br/>'+(c.email||'')+(c.phone?('<br/>'+c.phone):'')+(c.notes?('<br/><em>'+String(c.notes).replace(/</g,'&lt;')+'</em>'):'')+
         '</div></div></div></div>';
     showToast('Tilaus vahvistettu. Kiitos!','success');
     CART={}; saveCart(); renderCart(); offerDummyDownload(order); sendConfirmationEmails(order);
@@ -716,7 +736,7 @@
       var t=null; function schedule(){ if(t) return; t=setTimeout(function(){ t=null; compute(); },80); }
       window.addEventListener('resize', schedule, {passive:true}); if(document.fonts && document.fonts.ready) document.fonts.ready.then(compute); compute();
 
-      // Menu drawer (JS-ohjaus + linkit sulkevat)
+      // Menu drawer
       var drawer=$('#menuDrawer'), openBtn=$('#openMenu'), closeA=$('#closeMenu'), closeX=$('#closeMenuX');
       function open(){ try{ drawer.classList.add('open'); openBtn && openBtn.setAttribute('aria-expanded','true'); }catch(e){} }
       function close(){ try{ drawer.classList.remove('open'); openBtn && openBtn.setAttribute('aria-expanded','false'); }catch(e){} }
@@ -730,13 +750,12 @@
     }catch(e){}
   })();
 
-  /* ===== Kaaviot UI (try/catch → ei riko muuta jos jokin kuva puuttuu) ===== */
+  /* ===== Kaaviot UI ===== */
   (function(){
     try{
       var grid=$('#patternsGrid'); if(!grid) return;
       var selectedId=null, expander=null, current=null, imgIdx=0; var DATA=window.KAAVIOT||[];
 
-      // Laatat
       DATA.forEach(function(p){
         var tile=document.createElement('article'); tile.className='tile card'; tile.setAttribute('data-id',p.id);
         var img=createImg((p.images||[])[0], p.name);
@@ -820,15 +839,15 @@
     try{
       var link=$('#openCookiePrefs'); if(link) link.addEventListener('click',function(e){ e.preventDefault(); document.getElementById('cookieDrawer').classList.add('open'); var c=getConsent(); var ca=$('#consentAnalytics'); if(ca) ca.checked=!!c.analytics; });
       var d=$('#cookieDrawer');
-      var savePrefs=$('#cookieSavePrefs'); if(savePrefs) savePrefs.addEventListener('click',function(){ var c={ necessary:true, analytics: !!($('#consentAnalytics') && $('#consentAnalytics').checked) }; setConsent(c); d.classList.remove('open'); postConsentApply(); showToast('Evästeasetukset tallennettu.','success'); });
-      var acceptAll2=$('#cookieAcceptAll2'); if(acceptAll2) acceptAll2.addEventListener('click',function(){ var c={ necessary:true, analytics:true }; setConsent(c); d.classList.remove('open'); postConsentApply(); showToast('Kaikki ei-välttämättömät evästeet hyväksytty.','success'); });
+      $('#cookieSavePrefs')&&$('#cookieSavePrefs').addEventListener('click',function(){ var c={ necessary:true, analytics: !!($('#consentAnalytics') && $('#consentAnalytics').checked) }; setConsent(c); d.classList.remove('open'); postConsentApply(); showToast('Evästeasetukset tallennettu.','success'); });
+      $('#cookieAcceptAll2')&&$('#cookieAcceptAll2').addEventListener('click',function(){ var c={ necessary:true, analytics:true }; setConsent(c); d.classList.remove('open'); postConsentApply(); showToast('Kaikki ei-välttämättömät evästeet hyväksytty.','success'); });
 
       var banner=$('#cookieBanner'); var c0=getConsent();
       function show(){ banner.style.display='block'; } function hide(){ banner.style.display='none'; }
       if(!('necessary' in c0)){ show(); } else { postConsentApply(); }
-      var btnCustomize=$('#cookieCustomize'); if(btnCustomize) btnCustomize.addEventListener('click',function(){ hide(); document.getElementById('cookieDrawer').classList.add('open'); });
-      var btnReject=$('#cookieReject'); if(btnReject) btnReject.addEventListener('click',function(){ setConsent({necessary:true, analytics:false}); hide(); postConsentApply(); showToast('Ei-välttämättömät evästeet hylätty.','info'); });
-      var btnAcceptAll=$('#cookieAcceptAll'); if(btnAcceptAll) btnAcceptAll.addEventListener('click',function(){ setConsent({necessary:true, analytics:true}); hide(); postConsentApply(); showToast('Kaikki ei-välttämättömät evästeet hyväksytty.','success'); });
+      $('#cookieCustomize')&&$('#cookieCustomize').addEventListener('click',function(){ hide(); document.getElementById('cookieDrawer').classList.add('open'); });
+      $('#cookieReject')&&$('#cookieReject').addEventListener('click',function(){ setConsent({necessary:true, analytics:false}); hide(); postConsentApply(); showToast('Ei-välttämättömät evästeet hylätty.','info'); });
+      $('#cookieAcceptAll')&&$('#cookieAcceptAll').addEventListener('click',function(){ setConsent({necessary:true, analytics:true}); hide(); postConsentApply(); showToast('Kaikki ei-välttämättömät evästeet hyväksytty.','success'); });
     }catch(e){}
   })();
   </script>
