@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- EmailJS selainkirjasto -->
+  <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
   <style>
@@ -28,8 +28,8 @@
       --header-h:64px;
       --band-radius: 16px;
 
-      /* Esittelykuvien suhteellinen leveys (säätää rivin pituutta) */
-      --intro-float-w: clamp(140px, 36vw, 220px);
+      /* Leveä näyttö: kummankin esittelykuvan leveys */
+      --intro-float-w: clamp(240px, 28vw, 380px);
     }
     html{ scroll-padding-top: var(--header-h); }
     body{ font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial; color:var(--ink); background:var(--ivory); margin:0; overflow-x:hidden; }
@@ -67,20 +67,9 @@
     #cookieDrawer .panel{ right:0; }
 
     /* HERO */
-    .hero{
-      position:relative;
-      height: calc(100svh - var(--header-h));
-      display:grid;
-      place-items:center;
-      overflow:hidden;
-      text-align:center;
-      background:#000;
-    }
-    .hero-img{
-      position:absolute; inset:0; width:100%; height:100%;
-      object-fit:cover; object-position:center;
-      transition:none!important; animation:none!important; z-index:0;
-    }
+    .hero{ position:relative; height: calc(100svh - var(--header-h)); display:grid; place-items:center; overflow:hidden; text-align:center; background:#000; }
+    .hero-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; transition:none!important; animation:none!important; z-index:0; }
+
     .svg-logo{ --logo-color: var(--ink); display:inline-block; width: 9rem; height: 9rem; background-color: var(--logo-color);
       -webkit-mask: url('assets/logo.svg') no-repeat center / contain; mask: url('assets/logo.svg') no-repeat center / contain; }
     @media (min-width:640px){ .svg-logo{ width:11rem; height:11rem; } }
@@ -93,31 +82,40 @@
     .band{ background:var(--ivory); border-radius:var(--band-radius); overflow:hidden; }
     .band-inner{ max-width:72rem; margin:0 auto; padding:3rem 1rem; }
 
-    /* Intro – poistetaan vanhat taustakuvat; käytetään kelluvia pikkukuvia (molemmat näkyvät) */
+    /* === Esittely – kaksi kelluvaa kuvaa, kiinni sivun reunoissa === */
     .intro-wide{ margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
-    .intro-grid{ display:grid; grid-template-columns: 1fr; gap:14px; align-items:start; padding:18px 0; }
-    .intro-img{ display:none !important; } /* ei käytössä */
+    .intro-grid{ display:grid; grid-template-columns:1fr; gap:14px; align-items:start; padding:18px 0; }
+    .intro-img{ display:none !important; } /* ei käytössä enää */
     .intro-copy{ padding: 6px 12px; min-width:0; }
     .intro-copy .logo{ width:56px; height:56px; display:block; margin:0 auto 12px; object-fit:contain; }
     .intro-copy p{ margin:0 0 .8rem; line-height:1.6; }
 
     .intro-float{
-      display:block;
-      width: var(--intro-float-w);
-      height:auto;
-      border:1px solid rgba(0,0,0,.12);
-      border-radius:12px;
-      background:#fff;
-      shape-outside: inset(0 round 12px);
+      display:block; width:var(--intro-float-w); height:auto;
+      border:1px solid rgba(0,0,0,.12); background:#fff;
+      /* Tekstin kierto pehmeästi kulmista */
+      shape-outside: inset(0 round 18px);
+      shape-margin: 14px;
     }
-    .intro-float.left{  float:left;  margin:0 14px 10px 0; }
-    .intro-float.right{ float:right; margin:0 0 10px 14px; }
+    /* Vasemmalla: kiinni vasempaan reunaan */
+    .intro-float.left{
+      float:left;
+      margin:0 16px 12px calc(50% - 50vw);
+      border-radius:0 18px 18px 0;
+    }
+    /* Oikealla: kiinni oikeaan reunaan.
+       HUOM: lisäsin pienen yläreunan marginaalin, jotta typografia hengittää. */
+    .intro-float.right{
+      float:right;
+      margin:12px calc(50% - 50vw) 0 16px;
+      border-radius:18px 0 0 18px;
+    }
 
-    .intro-copy::after{ content:""; display:block; clear:both; }
-
-    /* Pienillä ruuduilla pidetään teksti-ilma varmana */
-    @media (max-width: 420px){
-      :root{ --intro-float-w: clamp(120px, 44vw, 180px); }
+    /* Pienillä ruuduilla säädetään kuvien leveyttä, ja varmistetaan että
+       oikea kuva siirtyy tarvittaessa alas – teksti ei koskaan jää oikean kuvan ALLE,
+       koska kuva lisätään DOMissa viimeiseksi (ks. JS). */
+    @media (max-width: 640px){
+      :root{ --intro-float-w: clamp(180px, 44vw, 260px); }
     }
 
     /* Kaaviot */
@@ -397,7 +395,7 @@
     </div>
   </div>
 
-  <!-- VALIKKO DRAWER -->
+  <!-- MENU DRAWER -->
   <div id="menuDrawer" class="drawer" aria-hidden="true">
     <div class="absolute inset-0 bg-black/40" id="closeMenu" aria-label="Sulje valikko"
          onclick="try{document.getElementById('menuDrawer').classList.remove('open'); document.getElementById('openMenu').setAttribute('aria-expanded','false');}catch(e){}"></div>
@@ -416,7 +414,7 @@
     </div>
   </div>
 
-  <!-- EVÄSTE-ASETUKSET -->
+  <!-- EVÄSTE-ASETUKSET & -BANNERI (sama kuin aiemmin, ei muutoksia merkittävästi) -->
   <div id="cookieDrawer" class="drawer" aria-hidden="true">
     <div class="absolute inset-0 bg-black/40" data-close-cookie aria-label="Sulje"
          onclick="try{document.getElementById('cookieDrawer').classList.remove('open');}catch(e){}"></div>
@@ -440,7 +438,6 @@
     </div>
   </div>
 
-  <!-- EVÄSTEBANNERI -->
   <div id="cookieBanner" class="px-4 pb-4">
     <div class="mx-auto max-w-5xl rounded-2xl border border-stone-300 bg-white shadow p-4">
       <div class="flex flex-col sm:flex-row gap-3 sm:items-center justify-between">
@@ -455,7 +452,7 @@
   </div>
 
   <script>
-  /* ===== Pienet apurit ===== */
+  /* === Apurit === */
   function fmtEUR(x){ return new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x); }
   function $(s){ return document.querySelector(s); }
   function el(tag,attrs){ var n=document.createElement(tag); attrs=attrs||{}; for(var k in attrs){ var v=attrs[k];
@@ -470,46 +467,41 @@
     var box=el('div',{class:color+' text-white text-sm px-4 py-2 rounded-full shadow'},msg); t.appendChild(box); setTimeout(function(){box.remove();},ms); }
   (function(){ var y=$('#year'); if(y) y.textContent=new Date().getFullYear(); })();
 
-  /* ===== EmailJS asetukset (Ctrl/Cmd+E) ===== */
+  /* === EmailJS asetukset (Ctrl/Cmd+E) === */
   function getEmailCfg(){ try{ return { PUBLIC_KEY:localStorage.getItem('emailjs_public')||'', SERVICE_ID:localStorage.getItem('emailjs_service')||'', TEMPLATE_ID:localStorage.getItem('emailjs_template')||'' }; }catch(e){ return {PUBLIC_KEY:'',SERVICE_ID:'',TEMPLATE_ID:''}; } }
   function setEmailCfg(pub,svc,tpl){ if(pub) localStorage.setItem('emailjs_public',pub); if(svc) localStorage.setItem('emailjs_service',svc); if(tpl) localStorage.setItem('emailjs_template',tpl); }
   window.configureEmailJS=function(){ var cur=getEmailCfg(); var pub=prompt('EmailJS Public Key',cur.PUBLIC_KEY||'')||''; var svc=prompt('EmailJS Service ID',cur.SERVICE_ID||'')||''; var tpl=prompt('EmailJS Template ID',cur.TEMPLATE_ID||'')||''; setEmailCfg(pub.trim(),svc.trim(),tpl.trim()); try{ if(window.emailjs && pub) window.emailjs.init({ publicKey: pub }); alert('EmailJS alustettu.'); }catch(e){ alert('EmailJS-alustus epäonnistui.'); } };
   (function(){ var cfg=getEmailCfg(); try{ if(window.emailjs && cfg.PUBLIC_KEY) window.emailjs.init({ publicKey: cfg.PUBLIC_KEY }); }catch(e){} document.addEventListener('keydown',function(e){ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='e'){ e.preventDefault(); window.configureEmailJS(); } }); })();
 
-  /* ===== Intro-tekstit + Varmasti kaksi kuvaa näkyviin ===== */
+  /* === Intro-tekstit + kuvien asettelu === */
   (function(){
-    try{
-      var defaultContent = {
-        pitch: "RUMAT STUDIO syntyi lapsuuden haaveesta ja vuosien aikana kypsyneestä intohimosta vaatesuunnitteluun. Vuonna 2023 visio alkoi muovautumaan nykyiseen muotoonsa: ajattomia ja kestäviä vaatteita, jotka syntyvät harkitusta rakkaudesta ja intohimosta luovaan tekemiseen.\n\nRUMAT STUDIO pohjautuu vahvaan arvopohjaan. Se ei ole pelkkä tuotemerkki, vaan se rohkaisee pohtimaan omaa kulutuskäyttäytymistä ja inspiroi tekemään itse tai ainakin arvostamaan vaatteiden alkuperää ja tekijöitä niiden takana.\n\nTaustalla on halu luoda ajattomia, kestäviä ja harkiten suunniteltuja vaatteita vastalauseena kertakäyttöiselle pikamuodille. Jokainen vaate suunnitellaan kestämään sekä käytössä että ajassa. Suunnittelussa otetaan huomioon materiaalien laatu, vaatteen käyttötarkoitus ja visuaalinen ilme, mutta myös tuotannon ekologinen ja eettinen kestävyys. Käsityönä valmistetut vaatteet vaativat aikaa ja siten nostavat vaatteen arvoa niin konkreettisesti kuin tunnearvossakin.\n\nTulevaisuuden suunnitelmissa on oman studiollisen avaaminen pääkaupunkiseudulle. Tila toimisi kohtaamispaikkana, jossa voi sovittaa mallikappaleita, osallistua työpajoihin ja verkostoitua muiden kestävästä arvosta kiinnostuneiden muotoilijoiden, ompelijoiden ja suunnittelijoiden kanssa.\n\nJokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkityksellisyydestä käyttömukavuuteen asti. Tavoitteena ei ole täydellisyys, vaan rohkeus ja kehitys. Nimi RUMAT STUDIO viittaa juuri tähän: lapsen sallittuun keskeneräisyyteen, mutta tähdätä silti johonkin merkitykselliseen."
-      };
-      function parasToHTML(s){ return String(s||'').trim().split(/\n\s*\n/).map(function(p){return '<p>'+p.trim()+'</p>';}).join('\n'); }
-      var introBox = $('#intro-text'); if(introBox) introBox.innerHTML = parasToHTML(defaultContent.pitch);
+    var defaultContent = {
+      pitch: "RUMAT STUDIO syntyi lapsuuden haaveesta ja vuosien aikana kypsyneestä intohimosta vaatesuunnitteluun. Vuonna 2023 visio alkoi muovautumaan nykyiseen muotoonsa: ajattomia ja kestäviä vaatteita, jotka syntyvät harkitusta rakkaudesta ja intohimosta luovaan tekemiseen.\n\nRUMAT STUDIO pohjautuu vahvaan arvopohjaan. Se ei ole pelkkä tuotemerkki, vaan se rohkaisee pohtimaan omaa kulutuskäyttäytymistä ja inspiroi tekemään itse tai ainakin arvostamaan vaatteiden alkuperää ja tekijöitä niiden takana.\n\nTaustalla on halu luoda ajattomia, kestäviä ja harkiten suunniteltuja vaatteita vastalauseena kertakäyttöiselle pikamuodille. Jokainen vaate suunnitellaan kestämään sekä käytössä että ajassa. Suunnittelussa otetaan huomioon materiaalien laatu, vaatteen käyttötarkoitus ja visuaalinen ilme, mutta myös tuotannon ekologinen ja eettinen kestävyys. Käsityönä valmistetut vaatteet vaativat aikaa ja siten nostavat vaatteen arvoa niin konkreettisesti kuin tunnearvossakin.\n\nTulevaisuuden suunnitelmissa on oman studiollisen avaaminen pääkaupunkiseudulle. Tila toimisi kohtaamispaikkana, jossa voi sovittaa mallikappaleita, osallistua työpajoihin ja verkostoitua muiden kestävästä arvosta kiinnostuneiden muotoilijoiden, ompelijoiden ja suunnittelijoiden kanssa.\n\nJokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkityksellisyydestä käyttömukavuuteen asti. Tavoitteena ei ole täydellisyys, vaan rohkeus ja kehitys. Nimi RUMAT STUDIO viittaa juuri tähän: lapsen sallittuun keskeneräisyyteen, mutta tähdätä silti johonkin merkitykselliseen."
+    };
+    function parasToHTML(s){ return String(s||'').trim().split(/\n\s*\n/).map(function(p){return '<p>'+p.trim()+'</p>';}).join('\n'); }
+    var introBox = $('#intro-text'); if(introBox) introBox.innerHTML = parasToHTML(defaultContent.pitch);
 
-      var copy = document.querySelector('.intro-copy'); if(!copy) return;
+    var copy = document.querySelector('.intro-copy'); if(!copy) return;
 
-      // Luo kaksi kelluvaa kuvaa ja aseta aina näkyviin heti tekstialkuun
-      var lf = document.createElement('img'); lf.className='intro-float left'; setSafeImgSrc(lf,'assets/intro-left.jpg'); lf.alt='RUMAT STUDIO esittelykuva (vasen)';
-      var rf = document.createElement('img'); rf.className='intro-float right'; setSafeImgSrc(rf,'assets/intro-right.jpg'); rf.alt='RUMAT STUDIO esittelykuva (oikea)';
+    // Vasemman kuvan luonti: lisätään heti alkuun (jotta teksti ei tule sen yläpuolelle)
+    var lf = document.createElement('img'); lf.className='intro-float left'; setSafeImgSrc(lf,'assets/intro-left.jpg'); lf.alt='Esittelykuva (vasen)';
+    var logo = copy.querySelector('.logo');
+    if (logo && logo.parentNode === copy) {
+      copy.insertBefore(lf, logo.nextSibling);
+    } else {
+      copy.insertBefore(lf, copy.firstChild);
+    }
 
-      var logo = copy.querySelector('.logo');
-      // Vasen heti logon jälkeen
-      if (logo && logo.parentNode === copy) {
-        copy.insertBefore(lf, logo.nextSibling);
-      } else {
-        copy.insertBefore(lf, copy.firstChild);
-      }
+    // Oikea kuva: lisätään LOPPUUN, jotta mobiilissa teksti ei jää sen alapuolelle.
+    var rf = document.createElement('img'); rf.className='intro-float right'; setSafeImgSrc(rf,'assets/intro-right.jpg'); rf.alt='Esittelykuva (oikea)';
+    copy.appendChild(rf);
 
-      // Oikea lisätään varmasti näkyvään kohtaan: ensimmäisen kappaleen perään (tai loppuun)
-      var firstP = copy.querySelector('p');
-      if (firstP && firstP.parentNode === copy) {
-        copy.insertBefore(rf, firstP.nextSibling);
-      } else {
-        copy.appendChild(rf);
-      }
-    }catch(e){ console.error(e); }
+    // Clear both (säilyttää kelluvuuksien korkeuden)
+    var clearfix = document.createElement('div'); clearfix.style.clear = 'both';
+    copy.appendChild(clearfix);
   })();
 
-  /* ===== Tuotedata ===== */
+  /* === Tuotedata === */
   function IMG(id,n){ n=n||1; return 'assets/patterns/'+id+'-'+n+'.jpg'; }
   window.KAAVIOT = [
     { id:'dummy-kaava',   name:'Dummy kaava',    price:0.01, sizes:'PDF',      blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla kaavoilla. Ostettaessa saat linkin dummy-PDF:ään.', images:[IMG('dummy-kaava',1),IMG('dummy-kaava',2)], isDummy:true, deliverable:true, file:'auto-dummy' },
@@ -526,13 +518,12 @@
     { id:'villapaita', name:'Villapaita', price:0.01, sizes:'XS–XXL',   blurb:'Klassinen pyöröneule.',        images:[IMG('villapaita',1),IMG('villapaita',2)], deliverable:false },
   ];
 
-  /* ===== Ostoskori ===== */
+  /* === Ostoskori === */
   var CART = JSON.parse(localStorage.getItem('cart')||'{}');
   function saveCart(){ localStorage.setItem('cart', JSON.stringify(CART)); updateBadge(); }
   function updateBadge(){ try{ var n=Object.values(CART).reduce(function(a,b){return a+b;},0); var ic=$('#cartCount'); var tx=$('#cartCountText'); if(ic) ic.textContent=String(n); if(tx) tx.textContent=n?('('+n+')'):''; }catch(e){} }
-  var $drawer=$('#cartDrawer');
-  function openCart(){ try{$drawer.classList.add('open'); renderCart();}catch(e){} }
-  function closeCart(){ try{$drawer.classList.remove('open');}catch(e){} }
+  function openCart(){ try{document.getElementById('cartDrawer').classList.add('open'); renderCart();}catch(e){} }
+  function closeCart(){ try{document.getElementById('cartDrawer').classList.remove('open');}catch(e){} }
   $('#openCartText')&&$('#openCartText').addEventListener('click', openCart);
   $('#openCartIcon')&&$('#openCartIcon').addEventListener('click', openCart);
   $('#closeCart')&&$('#closeCart').addEventListener('click', closeCart);
@@ -568,7 +559,7 @@
   }catch(e){} }
   window.addToCart = addToCart; updateBadge();
 
-  /* ===== Kassa & PayPal ===== */
+  /* === Kassa & PayPal === */
   var checkoutDrawer=$('#checkoutDrawer');
   function openCheckout(){ try{ checkoutDrawer.classList.add('open'); fillCheckoutFromStorage(); }catch(e){} }
   function closeCheckout(){ try{ checkoutDrawer.classList.remove('open'); }catch(e){} }
@@ -625,7 +616,7 @@
     showToast('Siirryt PayPaliin maksamaan…','info');
   });
 
-  /* ===== Vahvistus & PDF ===== */
+  /* === Vahvistus & PDF === */
   function pdfEscape(s){ return String(s).replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)'); }
   function makeDummyPDF(opt){
     opt=opt||{}; var title=opt.title||'Dummy-kaava'; var lines=opt.lines||[];
@@ -719,7 +710,7 @@
     }).catch(function(){});
   }
 
-  /* ===== Nav & valikko-draweri ===== */
+  /* === Navin näyttölogiikka + menudraweri === */
   (function(){
     try{
       var container=$('#hdrRow'), brand=$('#brandBlock'), nav=$('#mainNav'), right=$('#rightBlock'), menuBtn=$('#openMenu'), cartIcon=$('#openCartIcon'), cartText=$('#openCartText');
@@ -750,7 +741,7 @@
     }catch(e){}
   })();
 
-  /* ===== Kaaviot UI ===== */
+  /* === Kaaviot UI === */
   (function(){
     try{
       var grid=$('#patternsGrid'); if(!grid) return;
@@ -807,7 +798,8 @@
         if(!deliver){
           actions.appendChild(el('span',{class:'inline-block px-4 py-2 rounded-full border border-[rgba(0,0,0,.15)]'},'Tulossa'));
         }else{
-          var buyBtn=el('button',{id:'exBuy',class:'btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2'}, p.price===0?'Osta (0,00 €)':'Osta');
+          var label = p.price===0 ? 'Lisää ostoskoriin (0,00 €)' : 'Lisää ostoskoriin';
+          var buyBtn=el('button',{id:'exBuy',class:'btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2'}, label);
           buyBtn.onclick=function(){ window.addToCart ? window.addToCart(p.id) : null; };
           actions.appendChild(buyBtn);
         }
@@ -829,7 +821,7 @@
     }catch(e){ console.error(e); }
   })();
 
-  /* ===== Evästeet ===== */
+  /* === Evästeet (kuten aiemmin) === */
   var CONSENT_KEY='cookieConsent.v1';
   function getConsent(){ try{ return JSON.parse(localStorage.getItem(CONSENT_KEY)||'{}'); }catch(e){return {};} }
   function setConsent(c){ localStorage.setItem(CONSENT_KEY, JSON.stringify(c||{})); }
