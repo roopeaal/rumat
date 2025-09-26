@@ -20,9 +20,9 @@
       --header-h:64px; --band-radius:16px;
 
       /* Esittelykuvien KOKO (ei skaalata JS:llä) */
-      --intro-img-w: 360px;      /* leveys px */
-      --intro-img-h: 520px;      /* korkeus px */
-      --intro-gap:   16px;       /* väli tekstiin */
+      --intro-img-w: 360px;
+      --intro-img-h: 520px;
+      --intro-gap:   16px;
     }
 
     html{ scroll-padding-top: var(--header-h); }
@@ -76,12 +76,12 @@
 
     .intro-img{
       width:var(--intro-img-w);
-      height:var(--intro-img-h);        /* KIINTEÄ korkeus */
+      height:var(--intro-img-h);
       background-size:cover; background-position:center; background-repeat:no-repeat;
       border:1px solid rgba(0,0,0,.12);
     }
     .intro-left{  float:left;  margin-right:var(--intro-gap);  border-radius:0 18px 18px 0; }
-    .intro-right{ float:right; margin-left: var(--intro-gap);  border-radius:18px 0 0 18px; }
+    .intro-right{ float:right; margin-left: var(--intro-gap);  border-radius:18px 0 0 18px; margin-top:0; }
 
     .intro-copy .logo{ width:56px; height:56px; display:block; margin:0 auto 12px; object-fit:contain; }
     .intro-copy p{ margin:0 0 .8rem; line-height:1.55; }
@@ -181,6 +181,7 @@
 
           <div class="intro-wide">
             <div class="intro-flow" id="introFlow">
+              <!-- HUOM: molemmat kuvat ovat ENNEN tekstiä → teksti voi kiertää myös oikean kuvan YLÄPUOLELTA kun se on laskenut -->
               <div class="intro-img intro-left"  aria-hidden="true"></div>
               <div class="intro-img intro-right" aria-hidden="true"></div>
 
@@ -323,7 +324,7 @@
     </div>
   </div>
 
-  <!-- Cookie drawer + banner (lyhennetty) -->
+  <!-- Cookie drawer + banner (tiivistetty) -->
   <div id="cookieDrawer" class="drawer" aria-hidden="true">
     <div class="absolute inset-0 bg-black/40" data-close-cookie aria-label="Sulje" onclick="document.getElementById('cookieDrawer').classList.remove('open');"></div>
     <div class="panel p-6">
@@ -383,22 +384,26 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     setBg(document.querySelector('.intro-right'),'assets/intro-right.jpg');
   })();
 
-  /* ===== Oikean kuvan synkronointi (vain sijainti, EI kokoa) =====
-     - vasen kuva pysyy ylhäällä (margin-top: 0)
-     - oikean kuvan margin-top = max(0, tekstin_korkeus - kuvan_korkeus)
-       → näin oikean kuvan ALAREUNA pysyy tekstin viimeisen rivin tasalla
-  */
+  /* ===== Oikean kuvan sijainti: leveällä 0px, kaventuessa laskee rivien tahtiin ===== */
+  const FULL_SYNC_BREAKPOINT = 1200; // px – tällä ja yli kuvat tasan samassa tasossa
   function positionRightIntroImage(){
     const right=document.querySelector('.intro-right');
     const left =document.querySelector('.intro-left');
     const copy =document.querySelector('.intro-copy');
     if(!right||!left||!copy) return;
 
-    left.style.marginTop='0px';           // vasen aina ylhäällä
+    left.style.marginTop='0px'; // vasen pysyy yläreunassa
 
-    const imgH = right.getBoundingClientRect().height;      // kiinteä korkeus CSS:stä
-    const copyH= copy.getBoundingClientRect().height;       // tekstin korkeus
-    const offset = Math.max(0, Math.round(copyH - imgH));   // paljonko pitää laskea
+    // Täydellä/leveällä ruudulla: kuvat samalla tasolla
+    if (window.innerWidth >= FULL_SYNC_BREAKPOINT){
+      right.style.marginTop = '0px';
+      return;
+    }
+
+    // Kapeammalla: oikea laskee tekstikorkeuden mukaan
+    const imgH  = right.getBoundingClientRect().height;  // kiinteä korkeus
+    const copyH = copy.getBoundingClientRect().height;    // tekstin korkeus
+    const offset = Math.max(0, Math.round(copyH - imgH)); // pitää alareunan tekstin tasalla
     right.style.marginTop = offset + 'px';
   }
   window.addEventListener('load', positionRightIntroImage);
@@ -594,4 +599,3 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   </script>
 </body>
 </html>
-
