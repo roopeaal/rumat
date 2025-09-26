@@ -19,10 +19,10 @@
       --ink:#202020; --olive:#A1A266; --deep-blue:#345563; --ivory:#F6F6F4; --light-blue:#DEEEEE;
       --header-h:64px; --band-radius:16px;
 
-      /* Esittelykuvien koko & gutterit */
-      --intro-img-w: 360px;
-      --intro-gap:   16px;
-      --intro-gutter: clamp(16px, 4vw, 40px); /* teksti ei mene reunoihin kiinni */
+      /* Esittely: koot ja gutterit */
+      --intro-img-w: 360px;                   /* neliömäinen “kuvapilari” */
+      --intro-gap:   clamp(12px, 1.2vw, 18px);/* sisämarginaali kuvan ja tekstin väliin */
+      --intro-gutter: clamp(16px, 4vw, 40px); /* ettei teksti osu sivun reunoihin */
     }
 
     html{ scroll-padding-top: var(--header-h); }
@@ -57,10 +57,7 @@
     /* Hero */
     .hero{ position:relative; height: calc(100svh - var(--header-h)); display:grid; place-items:center; overflow:hidden; text-align:center; background:#000; }
     .hero-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; }
-
-    /* Mask-logo */
-    .svg-logo{ --logo-color: var(--ink); display:inline-block; width:9rem; height:9rem; background-color:var(--logo-color);
-      -webkit-mask:url('assets/logo.svg') no-repeat center / contain; mask:url('assets/logo.svg') no-repeat center / contain; }
+    .svg-logo{ --logo-color: var(--ink); display:inline-block; width:9rem; height:9rem; background-color:var(--logo-color); -webkit-mask:url('assets/logo.svg') no-repeat center / contain; mask:url('assets/logo.svg') no-repeat center / contain; }
     @media (min-width:640px){ .svg-logo{ width:11rem; height:11rem; } }
     @media (min-width:1024px){ .svg-logo{ width:12rem; height:12rem; } }
     .logo-ink{ --logo-color:var(--ink); } .logo-light{ --logo-color:var(--light-blue); }
@@ -69,31 +66,42 @@
     .band{ background:var(--ivory); border-radius:var(--band-radius); overflow:hidden; }
     .band-inner{ max-width:72rem; margin:0 auto; padding:3rem 1rem; }
 
-    /* ===== Esittely: kuvat hieman alle sivun korkuisiksi + turvalliset gutterit tekstille ===== */
+    /* ===== Esittely: “neliö”-tekstilayout kuvia ympäröiden (Word: Square) ===== */
     .intro-wide{ margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw); }
     .intro-flow{ position:relative; padding:18px 0; padding-inline: var(--intro-gutter); }
     .intro-flow::after{ content:""; display:block; clear:both; } /* clearfix */
 
     .intro-img{
       width:var(--intro-img-w);
-      /* fallback */
-      height: clamp(520px, 86vh, 920px);
-      /* parempi mobiililla (safe viewport); yliajaa yllä olevan kun tuettu */
-      height: clamp(520px, 86svh, 920px);
+      height: clamp(540px, 86svh, 920px);           /* hieman alle koko sivun korkeus */
       background-size:cover; background-position:center; background-repeat:no-repeat;
       border:1px solid rgba(0,0,0,.12);
+
+      /* TÄRKEÄÄ: neliömäinen tekstin kierto jokaiselta sivulta */
+      float:left;                                    /* default – ylikirjoitetaan oikealle .intro-rightissa */
+      shape-outside: inset(0);                       /* neliö */
+      -webkit-shape-outside: inset(0);
+      shape-margin: var(--intro-gap);                /* puskuri tekstin ja kuvan väliin */
     }
-    /* Vasen kuva liimataan vasempaan reunaan mutta teksti pysyy gutterin sisällä */
+
+    /* Vasen kuva kiinni vasempaan reunaan, mutta teksti pysyy gutterin sisällä */
     .intro-left{
       float:left;
-      margin: 0 var(--intro-gap) 0 calc(-1 * var(--intro-gutter)); /* “vuoto” reunaan */
+      margin: 0 var(--intro-gap) 0 calc(-1 * var(--intro-gutter)); /* “vuoto” reunaan, sisäreunaan gap */
       border-radius:0 18px 18px 0;
+      background-image:url('assets/intro-left.jpg');
     }
-    /* Oikea kuva liimataan oikeaan reunaan ja siirtyy alas rivien myötä */
+
+    /* Oikea kuva kiinni oikeaan reunaan – putoaa alaspäin tekstirivien lisääntyessä */
     .intro-right{
       float:right;
-      margin: 0 calc(-1 * var(--intro-gutter)) 0 var(--intro-gap); /* “vuoto” reunaan */
+      margin: 0 calc(-1 * var(--intro-gutter)) 0 var(--intro-gap);
       border-radius:18px 0 0 18px;
+      background-image:url('assets/intro-right.jpg');
+      float:right;
+      /* neliö-wrap myös oikealla */
+      shape-outside: inset(0);
+      -webkit-shape-outside: inset(0);
     }
 
     .intro-copy .logo{ width:56px; height:56px; display:block; margin:0 auto 12px; object-fit:contain; }
@@ -119,7 +127,7 @@
     .ex-prev{ left:10px; } .ex-next{ right:10px; }
     .ex-top{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.6rem .9rem; border-bottom:1px solid rgba(0,0,0,.1); }
 
-    /* Footer (isoa mask-logoa varten) */
+    /* Footer (iso logo) */
     .footer-bar{ position:relative; z-index:2; background:var(--olive); color:var(--ink); }
     .footer-grid{ max-width:72rem; margin:0 auto; padding:1.5rem 1rem; display:grid; gap:1rem 2rem; align-items:center; grid-template-columns:1fr 1fr 1fr; grid-template-areas:"social contact logo"; min-height: clamp(180px, 22vw, 420px); }
     .footer-col h6{ font-size:.8rem; font-weight:900; text-transform:uppercase; letter-spacing:.12em; margin:0 0 .35rem; color:var(--ink); }
@@ -192,6 +200,7 @@
         <div class="band-inner">
           <h2 class="mb-4">Liian rumat ollakseen totta</h2>
 
+          <!-- Reunasta reunaan kuvat, teksti kiertää neliöinä “Word Square” -->
           <div class="intro-wide">
             <div class="intro-flow" id="introFlow">
               <div class="intro-img intro-left"  aria-hidden="true"></div>
@@ -378,7 +387,7 @@
   window.configureEmailJS=function(){const cur=getEmailCfg();const pub=prompt('EmailJS Public Key',cur.PUBLIC_KEY||'')||'';const svc=prompt('EmailJS Service ID',cur.SERVICE_ID||'')||'';const tpl=prompt('EmailJS Template ID',cur.TEMPLATE_ID||'')||'';setEmailCfg(pub.trim(),svc.trim(),tpl.trim());try{if(window.emailjs&&pub)window.emailjs.init({publicKey:pub});alert('EmailJS alustettu.');}catch(e){alert('EmailJS-alustus epäonnistui.');}};
   (function(){const cfg=getEmailCfg();try{if(window.emailjs&&cfg.PUBLIC_KEY)window.emailjs.init({publicKey:cfg.PUBLIC_KEY});}catch(e){}document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='e'){e.preventDefault();window.configureEmailJS();}});})();
 
-  /* Esittelyteksti + taustakuvat */
+  /* Esittelyteksti + taustat */
   function parasToHTML(s){return String(s||'').trim().split(/\n\s*\n/).map(p=>`<p>${p.trim()}</p>`).join('\n');}
   const defaultContent={pitch:`RUMAT STUDIO syntyi lapsuuden haaveesta ja vuosien aikana kypsyneestä intohimosta vaatesuunnitteluun. Vuonna 2023 visio alkoi muovautumaan nykyiseen muotoonsa: ajattomia ja kestäviä vaatteita, jotka syntyvät harkitusta rakkaudesta ja intohimosta luovaan tekemiseen.
 
@@ -396,23 +405,21 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     setBg(document.querySelector('.intro-right'),'assets/intro-right.jpg');
   })();
 
-  /* Oikean kuvan dynaaminen pudotus */
-  const FULL_SYNC_BREAKPOINT = 1280; // px – tällä ja yli kuvat samalla tasolla
+  /* Dynaaminen pudotus: oikean kuvan ALAREUNA ≈ tekstin viimeinen rivi; vasen pysyy ylhäällä */
+  const FULL_SYNC_BREAKPOINT = 1280; // px – tällä ja yli kuvat samassa tasossa
   function positionRightIntroImage(){
     const right=document.querySelector('.intro-right');
     const left =document.querySelector('.intro-left');
     const copy =document.querySelector('.intro-copy');
     if(!right||!left||!copy) return;
 
-    // Vasen pysyy aina yläreunassa
-    left.style.marginTop='0px';
+    left.style.marginTop='0px'; // vasen aina ylhäällä
 
     if (window.innerWidth >= FULL_SYNC_BREAKPOINT){
       right.style.marginTop = '0px'; // täysleveydellä kuvat tasan
       return;
     }
 
-    // Kohdista oikean kuvan ALAREUNA tekstin alareunaan
     const imgH  = right.getBoundingClientRect().height;
     const copyH = copy.getBoundingClientRect().height;
     const offset = Math.max(0, Math.round(copyH - imgH));
@@ -428,7 +435,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     { id:'dummy-kaava',   name:'Dummy kaava',   price:0.01, sizes:'PDF',      blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla kaavoilla. Ostettaessa saat linkin dummy-PDF:ään.', images:[IMG('dummy-kaava',1),IMG('dummy-kaava',2)], isDummy:true, deliverable:true, file:'auto-dummy' },
     { id:'ilmainen-ohje', name:'Ilmainen ohje', price:0.00, sizes:'One size', blurb:'Täysin ilmainen kokeiltava ohje (toistaiseksi dummy-PDF).', images:[IMG('ilmainen-ohje',1)], deliverable:true, file:'auto-dummy' },
 
-    /* Tulossa → ei “Lisää ostoskoriin” vaan Tulossa */
+    /* Tulossa → ei “Lisää ostoskoriin” */
     { id:'takki',      name:'Takki',      price:0.01, sizes:'XS–XL',    blurb:'Työn alla – pian saatavilla.', images:[IMG('takki',1)],        deliverable:false },
     { id:'laukku',     name:'Laukku',     price:0.01, sizes:'One size', blurb:'Sling-laukku kaava (PDF).',    images:[IMG('laukku',1),IMG('laukku',2)], deliverable:false },
     { id:'usva-paita', name:'Usva paita', price:0.01, sizes:'XS–XL',    blurb:'Rento paita raglan-hihoilla.', images:[IMG('usva-paita',1),IMG('usva-paita',2)], deliverable:false },
