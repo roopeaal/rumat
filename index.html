@@ -59,10 +59,7 @@
     const CONSENT_KEY = 'cookieConsent.v1';
     function getConsent(){ try{ return JSON.parse(localStorage.getItem(CONSENT_KEY)||'{}'); }catch{return {};}}
     function setConsent(c){ localStorage.setItem(CONSENT_KEY, JSON.stringify(c||{})); }
-    function enableAnalytics(){
-      // Lisää oma analytiikka vain suostumuksen jälkeen (esim. GA4)
-      console.log('Analytiikka käytössä suostumuksella.');
-    }
+    function enableAnalytics(){ console.log('Analytiikka käytössä suostumuksella.'); }
   </script>
 
   <style>
@@ -174,7 +171,9 @@
       margin-top:0; /* JS asettaa dynaamisesti */
     }
 
-    .intro-copy{ max-width:64rem; margin-inline:auto; padding-inline: clamp(8px, 1.6vw, 16px); overflow:visible; }
+    /* TÄRKEÄ: anna tekstille vapaa leveys, jotta se voi levitä oikean kuvan yläpuolelle,
+       mutta pidä sivuille turvavälit .intro-flow:n paddingilla */
+    .intro-copy{ margin:0; max-width:none; padding-inline: clamp(8px,1.6vw,16px); overflow:visible; }
     .intro-copy .logo{ width:56px; height:56px; display:block; margin:0 auto 12px; object-fit:contain; }
     .intro-copy p{ margin:0 0 .8rem; line-height:1.6; }
 
@@ -214,16 +213,10 @@
     .footer-handle:hover,.footer-link:hover{ text-decoration:underline; }
     .footer-social{ grid-area:social; display:flex; flex-direction:column; gap:.9rem; }
     .footer-contact{ grid-area:contact; display:flex; flex-direction:column; gap:.9rem; }
-
-    /* Footer-logo: suuri, vaaleansininen */
     .footer-logoBox{ grid-area:logo; display:flex; justify-content:flex-end; align-items:flex-start; }
     .svg-logo--footer{ width: clamp(120px, 18vw, 220px); height: clamp(120px, 18vw, 220px); }
-
     .footer-copy{ text-align:center; font-size:.85rem; opacity:.85; padding:10px 1rem 16px; }
-    @media (max-width:860px){
-      .footer-grid{ grid-template-columns:1fr 1fr; grid-template-areas:"contact logo" "social logo"; }
-      .footer-logoBox{ justify-content:center; }
-    }
+    @media (max-width:860px){ .footer-grid{ grid-template-columns:1fr 1fr; grid-template-areas:"contact logo" "social logo"; } .footer-logoBox{ justify-content:center; } }
 
     /* Toast */
     .toast{ position:fixed; top:76px; left:0; right:0; display:flex; justify-content:center; z-index:70; pointer-events:none; }
@@ -538,15 +531,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   };
   (function(){
     const intro=$('#intro-text'); if(intro) intro.innerHTML=parasToHTML(defaultContent.pitch);
-
-    // aseta taustat (fallback placeholderiin)
-    function setBg(el,url){
-      if(!el) return;
-      const t=new Image();
-      t.onload=()=>el.style.backgroundImage=`url('${url}')`;
-      t.onerror=()=>el.style.backgroundImage=`url('assets/placeholder.jpg')`;
-      t.src=url;
-    }
+    function setBg(el,url){ if(!el) return; const t=new Image(); t.onload=()=>el.style.backgroundImage=`url('${url}')`; t.onerror=()=>el.style.backgroundImage=`url('assets/placeholder.jpg')`; t.src=url; }
     setBg(document.getElementById('introLeft'),  'assets/intro-left.jpg');
     setBg(document.getElementById('introRight'), 'assets/intro-right.jpg');
   })();
@@ -575,7 +560,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     { id:'dummy-kaava',   name:'Dummy kaava',    price:0.01, sizes:'PDF',      blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla kaavoilla. Ostettaessa saat linkin dummy-PDF:ään.', images:[IMG('dummy-kaava',1),IMG('dummy-kaava',2)], isDummy:true, deliverable:true, file:'auto-dummy' },
     { id:'ilmainen-ohje', name:'Ilmainen ohje',  price:0.00, sizes:'One size', blurb:'Täysin ilmainen kokeiltava ohje (toistaiseksi dummy-PDF).', images:[IMG('ilmainen-ohje',1)], deliverable:true, file:'auto-dummy' },
 
-    /* Alla olevat eivät vielä lähde asiakkaalle → Tulossa */
+    /* Tulossa → ei ostopainiketta */
     { id:'takki',        name:'Takki',        price:0.01, sizes:'XS–XL',    blurb:'Työn alla – pian saatavilla.', images:[IMG('takki',1)],        deliverable:false },
     { id:'laukku',       name:'Laukku',       price:0.01, sizes:'One size', blurb:'Sling-laukku kaava (PDF).',    images:[IMG('laukku',1),IMG('laukku',2)], deliverable:false },
     { id:'usva-paita',   name:'Usva paita',   price:0.01, sizes:'XS–XL',    blurb:'Rento paita raglan-hihoilla.', images:[IMG('usva-paita',1),IMG('usva-paita',2)], deliverable:false },
@@ -812,7 +797,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   /* ================== NAV & drawerit ================== */
   (function(){
     const container=$('#hdrRow'), brand=$('#brandBlock'), nav=$('#mainNav'), right=$('#rightBlock'), menuBtn=$('#openMenu'), cartIcon=$('#openCartIcon'), cartText=$('#openCartText');
-    let navVisible=true; const GAP=72; // puskuri, jotta ikonit tulevat ajoissa
+    let navVisible=true; const GAP=72;
 
     function measureNavWidth(){ const wasHidden=nav.classList.contains('nav-hidden'); if(wasHidden) nav.classList.remove('nav-hidden'); nav.classList.add('nav-measure'); const w=Math.ceil(nav.scrollWidth); nav.classList.remove('nav-measure'); if(wasHidden) nav.classList.add('nav-hidden'); return w;}
     function canShowNav(){ const cw=container.clientWidth; const bw=Math.ceil(brand.getBoundingClientRect().width); const rbw=Math.ceil(right.getBoundingClientRect().width); const navW=measureNavWidth(); return navW<=Math.max(0,cw-bw-rbw-GAP); }
@@ -890,22 +875,12 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   function openCookiePrefs(){ const d=$('#cookieDrawer'); const c=getConsent(); $('#consentAnalytics').checked=!!c.analytics; d.classList.add('open'); }
   function closeCookiePrefs(){ $('#cookieDrawer').classList.remove('open'); }
   (function(){
-    // Footer-linkki
     $('#openCookiePrefs')?.addEventListener('click',(e)=>{ e.preventDefault(); openCookiePrefs(); });
-
-    // Drawer
     const d=$('#cookieDrawer');
     d.querySelectorAll('[data-close-cookie]')?.forEach(b=>b.addEventListener('click', closeCookiePrefs));
-    $('#cookieSavePrefs')?.addEventListener('click',()=>{
-      const c={ necessary:true, analytics: !!$('#consentAnalytics').checked };
-      setConsent(c); closeCookiePrefs(); postConsentApply(); showToast('Evästeasetukset tallennettu.','success');
-    });
-    $('#cookieAcceptAll2')?.addEventListener('click',()=>{
-      const c={ necessary:true, analytics:true };
-      setConsent(c); closeCookiePrefs(); postConsentApply(); showToast('Kaikki ei-välttämättömät evästeet hyväksytty.','success');
-    });
+    $('#cookieSavePrefs')?.addEventListener('click',()=>{ const c={ necessary:true, analytics: !!$('#consentAnalytics').checked }; setConsent(c); closeCookiePrefs(); postConsentApply(); showToast('Evästeasetukset tallennettu.','success'); });
+    $('#cookieAcceptAll2')?.addEventListener('click',()=>{ const c={ necessary:true, analytics:true }; setConsent(c); closeCookiePrefs(); postConsentApply(); showToast('Kaikki ei-välttämättömät evästeet hyväksytty.','success'); });
 
-    // Banneri
     const banner=$('#cookieBanner'); const c0=getConsent();
     function show(){ banner.style.display='block'; }
     function hide(){ banner.style.display='none'; }
