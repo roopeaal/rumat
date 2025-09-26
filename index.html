@@ -4,7 +4,6 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>RUMAT STUDIO</title>
-
   <meta name="description" content="RUMAT STUDIO – ajattomia ja kestäviä kaavoja ja digiohjeita.">
   <link rel="icon" href="assets/favicon.ico">
   <link rel="preload" as="image" href="assets/hero.jpg">
@@ -12,59 +11,39 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>
-    function getEmailCfg(){ return {
-      PUBLIC_KEY:  localStorage.getItem('emailjs_public')  || '',
-      SERVICE_ID:  localStorage.getItem('emailjs_service') || '',
-      TEMPLATE_ID: localStorage.getItem('emailjs_template')|| ''
-    }; }
-    function setEmailCfg(pub,svc,tpl){ if(pub)localStorage.setItem('emailjs_public',pub); if(svc)localStorage.setItem('emailjs_service',svc); if(tpl)localStorage.setItem('emailjs_template',tpl); }
-    window.configureEmailJS=function(){
-      const cur=getEmailCfg();
-      const pub=prompt('EmailJS Public Key',cur.PUBLIC_KEY||'')||'';
-      const svc=prompt('EmailJS Service ID',cur.SERVICE_ID||'')||'';
-      const tpl=prompt('EmailJS Template ID',cur.TEMPLATE_ID||'')||'';
-      setEmailCfg(pub.trim(),svc.trim(),tpl.trim());
-      const cfg=getEmailCfg(); if(window.emailjs&&cfg.PUBLIC_KEY){ try{ emailjs.init({publicKey:cfg.PUBLIC_KEY}); alert('EmailJS alustettu.'); }catch(e){ alert('EmailJS-alustus epäonnistui.'); } }
-    };
-    (function(){ const cfg=getEmailCfg(); if(window.emailjs&&cfg.PUBLIC_KEY){ try{ emailjs.init({publicKey:cfg.PUBLIC_KEY}); }catch{} }
-      window.addEventListener('keydown',(e)=>{ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='e'){ e.preventDefault(); window.configureEmailJS(); }});
-    })();
-
-    const CONSENT_KEY='cookieConsent.v1';
-    function getConsent(){ try{return JSON.parse(localStorage.getItem(CONSENT_KEY)||'{}');}catch{return {}} }
-    function setConsent(c){ localStorage.setItem(CONSENT_KEY,JSON.stringify(c||{})); }
-    function enableAnalytics(){ console.log('Analytiikka päällä suostumuksella'); }
-  </script>
 
   <style>
     :root{
       --ink:#202020; --olive:#A1A266; --deep-blue:#345563; --ivory:#F6F6F4; --light-blue:#DEEEEE;
       --header-h:64px; --band-radius:16px;
 
-      /* Esittelypalkki */
-      --intro-img-w: 360px;                                         /* kuvien leveys */
-      --intro-img-h: clamp(620px, calc(100svh - 140px), 880px);     /* kuvien korkeus (ei veny kapealla) */
-      --intro-gap:   16px;                                          /* väli kuviin ja tekstiin */
-      --side-safe:   clamp(16px, 4vw, 32px);                        /* reunoihin turvaväli */
+      /* Esittely: kuvat hieman alle sivun korkuisiksi + turvagutterit */
+      --intro-img-w: 360px;
+      --intro-img-h: clamp(620px, calc(100svh - var(--header-h) - 140px), 880px);
+      --intro-gap:   16px;
+      --side-safe:   clamp(16px, 4vw, 32px);
     }
+
     html{ scroll-padding-top: var(--header-h); }
     body{ font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial; color:var(--ink); background:var(--ivory); margin:0; overflow-x:hidden; }
 
     h1,h2,h3,h4,h5,h6{ font-weight:900!important; text-transform:uppercase; color:var(--deep-blue); letter-spacing:.02em; margin:0 0 .6rem; }
     .normalcase{ text-transform:none!important; }
 
+    /* Header */
     header{ background:var(--ivory); border-bottom:1px solid rgba(0,0,0,.08); }
-    #hdrRow{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; }
+    #hdrRow{ position:relative; display:grid; grid-template-columns:auto 1fr auto; align-items:center; }
     #brandText{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:min(42vw,460px); color:var(--ink); }
-    #mainNav{ justify-self:center; display:flex; gap:1.5rem; white-space:nowrap; font-size:13px; text-transform:uppercase; letter-spacing:.2em; }
+    #brandText .strong{ font-weight:900; } #brandText .light{ font-weight:600; }
+    #mainNav{ justify-self:center; display:flex; gap:1.5rem; white-space:nowrap; font-size:13px; text-transform:uppercase; letter-spacing:.2em; min-width:0; }
     #mainNav a{ color:var(--ink); text-decoration:none; }
     .nav-hidden{ display:none!important; } .nav-measure{ position:absolute!important; visibility:hidden!important; display:flex!important; white-space:nowrap!important; }
-    #rightBlock{ justify-self:end; display:flex; align-items:center; gap:.5rem; white-space:nowrap; }
+    #rightBlock{ position:static; justify-self:end; display:flex; align-items:center; gap:.5rem; white-space:nowrap; }
     .icon-btn{ position:relative; width:38px; height:38px; display:grid; place-items:center; border-radius:9999px; background:rgba(0,0,0,.06); border:1px solid rgba(0,0,0,.16); color:var(--ink); }
+    .icon-btn:hover{ background:rgba(0,0,0,.10); }
     .cart-text-btn{ border:1px solid rgba(0,0,0,.16); padding:.45rem .8rem; border-radius:9999px; color:var(--ink); background:rgba(0,0,0,.04); }
+    .cart-text-btn:hover{ background:rgba(0,0,0,.08); }
     .badge{ position:absolute; top:-4px; right:-4px; min-width:18px; height:18px; padding:0 4px; display:grid; place-items:center; border-radius:9999px; background:var(--ink); color:#fff; font-size:11px; font-weight:700; border:1px solid rgba(0,0,0,.15); }
 
     .btn{ border-radius:9999px; padding:.6rem 1rem; border:1px solid rgba(0,0,0,.16); background:rgba(0,0,0,.04); }
@@ -72,93 +51,124 @@
 
     .drawer{ position:fixed; inset:0; z-index:60; display:none; }
     .drawer.open{ display:block; }
-    .drawer>.panel{ position:absolute; top:0; bottom:0; width:min(640px,94vw); background:var(--ivory); box-shadow:0 10px 30px rgba(0,0,0,.2); overflow:auto; }
+    .drawer > .panel{ position:absolute; top:0; bottom:0; width:min(640px,94vw); background:var(--ivory); box-shadow:0 10px 30px rgba(0,0,0,.2); overflow:auto; }
     #menuDrawer .panel{ left:0; } #cartDrawer .panel{ right:0; } #checkoutDrawer .panel{ right:0; }
 
-    .hero{ position:relative; height:calc(100svh - var(--header-h)); display:grid; place-items:center; overflow:hidden; text-align:center; background:#000; }
-    .hero-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; z-index:0; }
-
-    .svg-logo{ --logo-color:var(--ink); display:inline-block; width:6.5rem; height:6.5rem; background-color:var(--logo-color);
-      -webkit-mask:url('assets/logo.svg') no-repeat center/contain; mask:url('assets/logo.svg') no-repeat center/contain; }
-    .logo-light{ --logo-color:var(--light-blue); }
-    .hero .svg-logo{ width:11rem; height:11rem; }
-    .svg-logo--header{ width:2.8rem; height:2.8rem; }
-    .svg-logo--footer{ width: clamp(120px,18vw,220px); height: clamp(120px,18vw,220px); }
+    /* Hero */
+    .hero{ position:relative; height: calc(100svh - var(--header-h)); display:grid; place-items:center; overflow:hidden; text-align:center; background:#000; }
+    .hero-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; }
+    .svg-logo{ --logo-color: var(--ink); display:inline-block; width:9rem; height:9rem; background-color:var(--logo-color);
+      -webkit-mask:url('assets/logo.svg') no-repeat center / contain; mask:url('assets/logo.svg') no-repeat center / contain; }
+    @media (min-width:640px){ .svg-logo{ width:11rem; height:11rem; } }
+    @media (min-width:1024px){ .svg-logo{ width:12rem; height:12rem; } }
+    .logo-ink{ --logo-color:var(--ink); } .logo-light{ --logo-color:var(--light-blue); }
+    .svg-logo--header{ width:3rem; height:3rem; }
 
     .band{ background:var(--ivory); border-radius:var(--band-radius); overflow:hidden; }
     .band-inner{ max-width:72rem; margin:0 auto; padding:3rem 1rem; }
 
-    /* ===== ESITTELY – Wordin "neliö"-kääriytys ===== */
+    /* ===== Esittelykuvat: vakio koko, teksti virtaa ympärillä, oikea laskee ===== */
     .intro-wide{ margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw); }
-    .intro-flow{ position:relative; padding-block:18px; padding-inline:var(--side-safe); }
+    .intro-flow{ position:relative; padding:18px 0; padding-left:var(--side-safe); padding-right:var(--side-safe); }
     .intro-flow::after{ content:""; display:block; clear:both; }
 
-    .intro-img{ width:var(--intro-img-w); height:var(--intro-img-h); background-size:cover; background-position:center; background-repeat:no-repeat; border:1px solid rgba(0,0,0,.12); }
-    /* neliö-kääriytys: pelkkä float riittää (shape-outside ei pakollinen) */
-    .intro-left{  float:left;  margin-right:var(--intro-gap);  margin-left:calc(-1 * var(--side-safe)); border-radius:0 18px 18px 0; }
-    .intro-right{ float:right; margin-left:var(--intro-gap);   margin-right:calc(-1 * var(--side-safe)); border-radius:18px 0 0 18px; }
+    .intro-img{
+      width:var(--intro-img-w);
+      height:var(--intro-img-h);
+      background-size:cover; background-position:center; background-repeat:no-repeat;
+      border:1px solid rgba(0,0,0,.12);
+      /* tärkeä: kerrotaan tekstille kuvan muoto – näin wrap toimii täsmällisesti */
+      shape-outside: inset(0 round 18px);
+    }
+    /* kiinni seinissä negatiivisilla marginaaleilla (gutterit kompensoituna) */
+    .intro-left{
+      float:left;
+      margin-left: calc(-1 * var(--side-safe));
+      margin-right: var(--intro-gap);
+      border-radius:0 18px 18px 0;
+      margin-top:0; /* vasen ei liiku */
+    }
+    .intro-right{
+      float:right;
+      margin-right: calc(-1 * var(--side-safe));
+      margin-left: var(--intro-gap);
+      border-radius:18px 0 0 18px;
+      margin-top:0; /* JS säätää tämän */
+    }
 
-    .intro-copy{ margin:0; max-width:none; padding-inline: clamp(8px,1.6vw,16px); overflow:visible; }
+    .intro-copy{ max-width:64rem; margin-inline:auto; padding-inline: clamp(8px, 1.6vw, 16px); }
     .intro-copy .logo{ width:56px; height:56px; display:block; margin:0 auto 12px; object-fit:contain; }
     .intro-copy p{ margin:0 0 .8rem; line-height:1.6; }
 
-    @media (max-width:900px){
-      .intro-img{ width:100%; height:min(72vh,640px); float:none; margin:0; border-radius:12px; }
-      .intro-left{  margin-bottom:12px; margin-left:0; }
-      .intro-right{ margin-top:12px!important; margin-right:0; }
-      .intro-copy{ padding-inline:2px; }
-    }
-
+    /* Kaaviot */
     .card{ background:var(--ivory); border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
-    .pattern-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .pattern-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; align-items:start; }
     @media (min-width:768px){ .pattern-grid{ grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; } }
-    .tile{ position:relative; cursor:pointer; aspect-ratio:1/1; }
+    .tile{ position:relative; cursor:pointer; aspect-ratio:1/1; display:block; }
     .tile img{ width:100%; height:100%; object-fit:cover; display:block; }
     .tile-caption{ position:absolute; left:0; right:0; bottom:0; padding:.45rem .65rem; background:linear-gradient(to top,rgba(0,0,0,.55),rgba(0,0,0,0)); color:#fff; font-weight:800; letter-spacing:.06em; text-transform:uppercase; font-size:.85rem; }
     .tile--selected{ outline:2px solid var(--deep-blue); }
-    .expander{ grid-column:1/-1; border:1px solid rgba(0,0,0,.12); border-radius:16px; overflow:hidden; }
-    .ex-row{ display:grid; grid-template-columns:1fr; }
+    .min-full{ position:absolute; inset:0; display:grid; place-items:center; background:rgba(0,0,0,.04); color:var(--deep-blue); font-weight:800; text-decoration:underline; }
+    .min-full:hover{ background:rgba(0,0,0,.08); }
+    .expander{ grid-column:1 / -1; background:var(--ivory); border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
+    .ex-row{ display:grid; grid-template-columns:1fr; min-height:260px; }
     @media (min-width:1024px){ .ex-row{ grid-template-columns:minmax(0,1.6fr) minmax(0,1fr); } }
-    .ex-view{ position:relative; background:#000; min-height:min(80vh,1600px); }
+    .ex-view{ position:relative; background:#000; min-height:min(80vh,1600px); min-width:0; }
+    .ex-info{ padding:1rem 1.1rem; overflow:auto; min-width:0; overflow-wrap:anywhere; }
     .ex-view img{ width:100%; height:100%; object-fit:contain; background:#000; }
     .ex-prev,.ex-next{ position:absolute; top:50%; transform:translateY(-50%); width:42px; height:42px; display:grid; place-items:center; border-radius:9999px; background:var(--ivory); border:1px solid rgba(0,0,0,.15); font-weight:800; }
     .ex-prev{ left:10px; } .ex-next{ right:10px; }
+    .ex-top{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.6rem .9rem; border-bottom:1px solid rgba(0,0,0,.1); }
 
-    .footer-bar{ background:var(--olive); color:var(--ink); }
-    .footer-grid{ max-width:72rem; margin:0 auto; padding:1.5rem 1rem; display:grid; gap:1rem 2rem; grid-template-columns:1fr 1fr 1fr; grid-template-areas:"social contact logo"; }
+    /* Footer */
+    .footer-bar{ position:relative; z-index:2; background:var(--olive); color:var(--ink); }
+    .footer-grid{ max-width:72rem; margin:0 auto; padding:1.5rem 1rem; display:grid; gap:1rem 2rem; align-items:center; grid-template-columns:1fr 1fr 1fr; grid-template-areas:"social contact logo"; min-height:clamp(180px,22vw,420px); }
+    .footer-col h6{ font-size:.8rem; font-weight:900; text-transform:uppercase; letter-spacing:.12em; margin:0 0 .35rem; color:var(--ink); }
+    .footer-handle,.footer-link{ color:var(--ink); opacity:.9; text-decoration:none; }
+    .footer-handle:hover,.footer-link:hover{ text-decoration:underline; }
     .footer-social{ grid-area:social; display:flex; flex-direction:column; gap:.9rem; }
     .footer-contact{ grid-area:contact; display:flex; flex-direction:column; gap:.9rem; }
-    .footer-logoBox{ grid-area:logo; display:flex; justify-content:flex-end; align-items:flex-start; }
+    .footer-logoBox{ grid-area:logo; display:flex; justify-content:flex-end; align-items:center; }
+    .svg-logo--footer{ height:clamp(160px,24vw,520px); width:auto; aspect-ratio:1/1; }
     .footer-copy{ text-align:center; font-size:.85rem; opacity:.85; padding:10px 1rem 16px; }
-    @media (max-width:860px){ .footer-grid{ grid-template-columns:1fr 1fr; grid-template-areas:"contact logo" "social logo"; } .footer-logoBox{ justify-content:center; } }
 
     .toast{ position:fixed; top:76px; left:0; right:0; display:flex; justify-content:center; z-index:70; pointer-events:none; }
     .toast>div{ pointer-events:auto; }
-
     #cookieBanner{ position:fixed; z-index:80; left:0; right:0; bottom:0; display:none; }
   </style>
 </head>
+
 <body>
   <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50">
-    <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-4">
+    <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-4 grid gap-3">
       <a id="brandBlock" href="#etusivu" aria-label="Etusivu" class="flex items-center gap-3 min-w-0">
-        <span class="svg-logo svg-logo--header logo-light" role="img" aria-label="RUMAT STUDIO"></span>
-        <span id="brandText" class="uppercase text-sm tracking-widest"><span class="font-black">RUMAT</span>&nbsp;<span class="font-semibold">STUDIO</span></span>
+        <span class="svg-logo svg-logo--header logo-ink" role="img" aria-label="RUMAT STUDIO"></span>
+        <span id="brandText" class="uppercase text-sm tracking-widest"><span class="strong">RUMAT</span>&nbsp;<span class="light">STUDIO</span></span>
       </a>
+
       <nav id="mainNav" class="justify-self-center">
         <a href="#mikaonrumat"  class="hover:underline underline-offset-4">Mikä on RUMAT?</a>
         <a href="#kaaviot"      class="hover:underline underline-offset-4">Kaavat</a>
         <a href="#suunnittelija"class="hover:underline underline-offset-4">Suunnittelija</a>
         <a href="#yhteys"       class="hover:underline underline-offset-4">Ota yhteyttä</a>
       </nav>
+
       <div id="rightBlock" class="flex items-center gap-2">
-        <button id="openMenu" class="icon-btn hidden" aria-controls="menuDrawer" aria-expanded="false" aria-label="Valikko">
+        <button id="openMenu" class="icon-btn hidden" aria-controls="menuDrawer" aria-expanded="false" aria-label="Valikko"
+                onclick="document.getElementById('menuDrawer').classList.add('open'); this.setAttribute('aria-expanded','true');">
           <span aria-hidden="true" style="font-size:20px;line-height:1">☰</span><span class="sr-only">Valikko</span>
         </button>
-        <button id="openCartText" class="cart-text-btn">Ostoskori <span id="cartCountText" class="opacity-80"></span></button>
-        <button id="openCartIcon" class="icon-btn hidden" aria-label="Ostoskori">
-          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.8"></circle><circle cx="17" cy="20" r="1.8"></circle><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 8H7.1"></path></svg>
+
+        <button id="openCartText" class="cart-text-btn" onclick="document.getElementById('cartDrawer').classList.add('open');">
+          Ostoskori <span id="cartCountText" class="opacity-80"></span>
+        </button>
+
+        <button id="openCartIcon" class="icon-btn hidden" aria-label="Ostoskori"
+                onclick="document.getElementById('cartDrawer').classList.add('open');">
+          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="20" r="1.8"></circle><circle cx="17" cy="20" r="1.8"></circle><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 8H7.1"></path>
+          </svg>
           <span class="badge" id="cartCount">0</span>
         </button>
       </div>
@@ -170,11 +180,14 @@
   <main class="pt-[64px]">
     <!-- HERO -->
     <section id="etusivu" class="hero px-4">
-      <img src="assets/hero.jpg" alt="RUMAT STUDIO hero" class="hero-img" onerror="this.onerror=null;this.src='assets/placeholder.jpg';">
+      <img src="assets/hero.jpg" alt="RUMAT STUDIO hero" class="hero-img"
+           onerror="this.onerror=null;this.src='assets/placeholder.jpg';">
       <span class="svg-logo logo-light" role="img" aria-label="RUMAT STUDIO"></span>
     </section>
 
-    <!-- Esittely -->
+    <section id="orderMsg" class="max-w-3xl mx-auto my-4 px-4 hidden"></section>
+
+    <!-- ESITTELY -->
     <section id="mikaonrumat" class="py-0">
       <div class="band full-bleed">
         <div class="band-inner">
@@ -182,16 +195,13 @@
 
           <div class="intro-wide">
             <div class="intro-flow" id="introFlow">
-              <!-- Vasen kuva, aina ylhäällä -->
-              <div class="intro-img intro-left" id="introLeft" style="background-image:url('assets/intro-left.jpg')"></div>
+              <!-- KUVAT ensin (float) → teksti voi tulla oikean kuvan YLÄPUOLELLE kun se on laskenut -->
+              <div class="intro-img intro-left"  aria-hidden="true"></div>
+              <div class="intro-img intro-right" aria-hidden="true"></div>
 
-              <!-- Teksti + oikea kuva (oikea siirretään kappaleiden väliin JS:llä) -->
-              <div class="intro-copy" id="introCopy">
+              <div class="intro-copy">
                 <img class="logo" src="assets/logo.svg" alt="RUMAT STUDIO" onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
                 <div id="intro-text" class="text-[15px] sm:text-base normalcase"></div>
-
-                <!-- Oikea kuva (float:right) – JS sijoittaa ennen sopivaa kappaletta -->
-                <div class="intro-img intro-right" id="introRight" style="background-image:url('assets/intro-right.jpg')"></div>
               </div>
             </div>
           </div>
@@ -200,7 +210,7 @@
       </div>
     </section>
 
-    <!-- Kaaviot -->
+    <!-- KAAVIOT -->
     <section id="kaaviot" class="py-0">
       <div class="band full-bleed">
         <div class="band-inner">
@@ -210,20 +220,27 @@
       </div>
     </section>
 
-    <!-- Suunnittelija -->
+    <!-- SUUNNITTELIJA -->
     <section id="suunnittelija" class="py-0">
       <div class="band full-bleed">
         <div class="band-inner">
           <h2 class="text-3xl mb-4">Suunnittelija</h2>
           <div class="grid md:grid-cols-[320px_1fr] gap-6 items-start">
-            <div><img src="assets/designer.jpg" onerror="this.onerror=null;this.src='assets/placeholder.jpg';" alt="Suunnittelija" class="rounded-xl border border-[rgba(0,0,0,.12)] object-cover w-full h-[300px] md:h-[420px]"></div>
-            <div class="space-y-4 normalcase"><p>Aaltonen on itsevarma neuloja...</p><p>Pian Aaltonen valmistuu taiteen maisteriksi...</p></div>
+            <div>
+              <img src="assets/designer.jpg"
+                   onerror="this.onerror=null;this.src='assets/placeholder.jpg';"
+                   alt="Suunnittelija" class="rounded-xl border border-[rgba(0,0,0,.12)] object-cover w-full h-[300px] md:h-[420px]">
+            </div>
+            <div class="space-y-4 normalcase">
+              <p>Aaltonen on itsevarma neuloja, joka ei rajoita luovuuttaan vain yhteen tekemisen tapaan. Neulomisen rinnalla myös asusteiden ompelu on tärkeä osa ilmaisua – ja ennen kaikkea intohimo. Lapsuuden kiinnostus vaatteiden suunnitteluun johti muodin ja tekstiilisuunnittelun opintoihin vuonna 2021.</p>
+              <p>Pian Aaltonen valmistuu taiteen maisteriksi, mukanaan vankka osaaminen ja omat suosikkitekniikat, joita hän on hionut opintojen aikana. Neulomisen ja asusteiden lisäksi Aaltonen on syventynyt erityisesti vaatteiden kierrätykseen, korjaamiseen liittyviin asenteisiin sekä kriittiseen tarkasteluun siitä, miten kuluttamista ohjataan – ja millaisia seurauksia sillä on ympäristölle.</p>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Footer -->
+    <!-- FOOTER -->
     <footer id="yhteys" class="footer-bar">
       <div class="footer-grid">
         <div class="footer-social">
@@ -232,7 +249,8 @@
         </div>
         <div class="footer-contact">
           <div class="footer-col"><h6>Ota yhteyttä</h6><a class="footer-link" href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a></div>
-          <div class="footer-col"><div class="footer-ytunnus">Y-3436822-5</div>
+          <div class="footer-col">
+            <div class="footer-ytunnus">Y-3436822-5</div>
             <div class="mt-2 flex flex-col gap-1 text-sm">
               <a class="footer-link" href="legal/privacy.html" target="_blank" rel="noopener">Tietosuojaseloste (PDF)</a>
               <a class="footer-link" href="legal/terms.html" target="_blank" rel="noopener">Toimitus- ja sopimusehdot (PDF)</a>
@@ -240,30 +258,77 @@
             </div>
           </div>
         </div>
-        <div class="footer-logoBox"><span class="svg-logo svg-logo--footer logo-light" role="img" aria-label="RUMAT STUDIO"></span></div>
+        <div class="footer-logoBox">
+          <span class="svg-logo svg-logo--footer logo-light" role="img" aria-label="RUMAT STUDIO"></span>
+        </div>
       </div>
       <div class="footer-copy">© <span id="year"></span> RUMAT STUDIO</div>
     </footer>
   </main>
 
-  <!-- OSTOSKORI + KASSA + VALIKKO (sama logiikka kuin aiemmin, lyhennettynä vain ostoskorin avaamiseksi) -->
+  <!-- DRAWERS -->
   <div id="cartDrawer" class="drawer" aria-hidden="true">
-    <div class="absolute inset-0 bg-black/40" id="closeCart"></div>
+    <div class="absolute inset-0 bg-black/40" id="closeCart" aria-label="Sulje ostoskori"
+         onclick="document.getElementById('cartDrawer').classList.remove('open');"></div>
     <div class="panel p-5 flex flex-col">
-      <div class="flex items-center justify-between mb-4"><h3 class="text-xl">Ostoskori</h3><button id="closeCartX">✕</button></div>
+      <div class="flex items-center justify-between mb-4"><h3 class="text-xl">Ostoskori</h3>
+        <button id="closeCartX" class="text-stone-500 hover:text-stone-800" onclick="document.getElementById('cartDrawer').classList.remove('open');">✕</button></div>
       <div id="cartItems" class="flex-1 overflow-auto divide-y"></div>
       <div class="mt-4 space-y-3">
-        <div class="text-sm grid grid-cols-2 gap-y-1"><div class="text-stone-600">Välisumma</div><div id="subTotal" class="text-right">€0,00</div></div>
-        <button id="checkout" class="btn bg-[color:var(--deep-blue)] text-white">Kassalle</button>
-        <div id="paypalWarn" class="text-xs text-stone-600"></div>
+        <div class="text-sm grid grid-cols-2 gap-y-1"><div class="text-[color:#202020]/70">Välisumma</div><div class="text-right" id="subTotal">€0,00</div></div>
+        <button id="checkout" class="btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2">Kassalle</button>
+        <div id="paypalWarn" class="text-xs text-[color:#202020]/70"></div>
       </div>
     </div>
   </div>
 
+  <div id="checkoutDrawer" class="drawer" aria-hidden="true">
+    <div class="absolute inset-0 bg-black/40" id="closeCheckout"
+         onclick="document.getElementById('checkoutDrawer').classList.remove('open');" aria-label="Sulje kassa"></div>
+    <div class="panel p-6 flex flex-col">
+      <div class="flex items-center justify-between mb-4"><h3 class="text-xl">Kassa</h3>
+        <button id="closeCheckoutX" class="text-stone-500 hover:text-stone-800" onclick="document.getElementById('checkoutDrawer').classList.remove('open');">✕</button></div>
+
+      <form id="checkoutForm" class="flex-1 overflow-auto space-y-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div><label class="text-sm font-semibold">Etunimi</label><input required name="firstName" class="w-full mt-1 border rounded px-3 py-2" /></div>
+          <div><label class="text-sm font-semibold">Sukunimi</label><input required name="lastName"  class="w-full mt-1 border rounded px-3 py-2" /></div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div><label class="text-sm font-semibold">Sähköposti</label><input required type="email" name="email" class="w-full mt-1 border rounded px-3 py-2" /></div>
+          <div><label class="text-sm font-semibold">Puhelin (valinn.)</label><input name="phone" class="w-full mt-1 border rounded px-3 py-2" /></div>
+        </div>
+        <div><label class="text-sm font-semibold">Osoite</label><input required name="address" class="w-full mt-1 border rounded px-3 py-2" /></div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div><label class="text-sm font-semibold">Postinumero</label><input required name="zip" class="w-full mt-1 border rounded px-3 py-2" /></div>
+          <div><label class="text-sm font-semibold">Kaupunki</label><input required name="city" class="w-full mt-1 border rounded px-3 py-2" /></div>
+          <div><label class="text-sm font-semibold">Maa</label><input required name="country" class="w-full mt-1 border rounded px-3 py-2" value="Suomi" /></div>
+        </div>
+        <div><label class="text-sm font-semibold">Lisätiedot (valinn.)</label><textarea name="notes" rows="3" class="w-full mt-1 border rounded px-3 py-2"></textarea></div>
+
+        <label class="flex gap-2 items-start text-sm">
+          <input type="checkbox" id="acceptDigitalWaiver" required>
+          <span>Hyväksyn, että digitaalisen sisällön toimittaminen alkaa heti, enkä voi peruuttaa ostosta (KSL 6:16).<br>
+            <a class="underline" href="legal/terms.html" target="_blank" rel="noopener">Lue Toimitus- ja sopimusehdot (PDF)</a></span>
+        </label>
+      </form>
+
+      <div class="mt-4 flex items-center justify-between gap-3">
+        <button id="checkoutBack" class="btn" onclick="document.getElementById('checkoutDrawer').classList.remove('open');document.getElementById('cartDrawer').classList.add('open');">Takaisin</button>
+        <button id="checkoutPay" class="btn bg-[color:var(--deep-blue)] text-white">Jatka maksamaan</button>
+      </div>
+
+      <p class="text-xs text-stone-500 mt-2">Huom: Maksulliset tuotteet maksetaan PayPalissa (myyjä: <strong>aaltonen96@outlook.com</strong>). Ilmaiset tilaukset vahvistetaan heti.</p>
+    </div>
+  </div>
+
   <div id="menuDrawer" class="drawer" aria-hidden="true">
-    <div class="absolute inset-0 bg-black/40" id="closeMenu"></div>
+    <div class="absolute inset-0 bg-black/40" id="closeMenu" aria-label="Sulje valikko"
+         onclick="document.getElementById('menuDrawer').classList.remove('open'); document.getElementById('openMenu').setAttribute('aria-expanded','false');"></div>
     <div class="panel p-6 flex flex-col gap-4">
-      <div class="flex items-center justify-between"><h3 class="text-xl">Valikko</h3><button id="closeMenuX">✕</button></div>
+      <div class="flex items-center justify-between"><h3 class="text-xl">Valikko</h3>
+        <button id="closeMenuX" class="text-stone-500 hover:text-stone-800"
+                onclick="document.getElementById('menuDrawer').classList.remove('open'); document.getElementById('openMenu').setAttribute('aria-expanded','false');">✕</button></div>
       <nav class="flex flex-col gap-3 text-lg">
         <a href="#mikaonrumat"  class="py-2 border-b" data-menu-close>Mikä on RUMAT?</a>
         <a href="#kaaviot"      class="py-2 border-b" data-menu-close>Kaavat</a>
@@ -274,160 +339,217 @@
   </div>
 
   <script>
-  const fmtEUR = x => new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
-  const $ = s => document.querySelector(s);
-  const el=(t,a={},...k)=>{ const n=document.createElement(t); Object.entries(a).forEach(([k2,v])=>{
-    if(k2==='class') n.className=v; else if(k2==='html') n.innerHTML=v; else if(k2.startsWith('on')) n.addEventListener(k2.slice(2),v); else n.setAttribute(k2,v);
-  }); k.forEach(c=>{ if(c==null) return; n.appendChild(typeof c==='string'?document.createTextNode(c):c);}); return n; };
-  (function(){ const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear(); })();
+  /* Helpers */
+  const fmtEUR=x=>new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
+  const $=s=>document.querySelector(s);
+  const el=(t,a={},...k)=>{const n=document.createElement(t);Object.entries(a).forEach(([k2,v])=>{if(k2==='class')n.className=v;else if(k2==='html')n.innerHTML=v;else if(k2.startsWith('on'))n.addEventListener(k2.slice(2),v);else n.setAttribute(k2,v);});k.forEach(c=>{if(c==null)return;typeof c==='string'?n.appendChild(document.createTextNode(c)):n.appendChild(c);});return n;};
+  function setSafeImgSrc(img,src){img.src=src||'assets/placeholder.jpg';img.onerror=function(){this.onerror=null;this.src='assets/placeholder.jpg';};}
+  function createImg(src,alt){const im=document.createElement('img');im.alt=alt||'';im.loading='lazy';setSafeImgSrc(im,src);return im;}
+  function showToast(msg,type='info',ms=4000){const t=$('#toast');if(!t)return alert(msg);const color=type==='error'?'bg-red-600':type==='success'?'bg-emerald-600':'bg-stone-800';const box=el('div',{class:`${color} text-white text-sm px-4 py-2 rounded-full shadow`},msg);t.appendChild(box);setTimeout(()=>box.remove(),ms);}
+  (function(){const y=$('#year');if(y)y.textContent=new Date().getFullYear();})();
 
-  // Esittelyteksti sisään
-  function parasToHTML(s){ return String(s||'').trim().split(/\n\s*\n/).map(p=>`<p>${p.trim()}</p>`).join('\n'); }
-  const defaultContent={ pitch:`RUMAT STUDIO syntyi lapsuuden haaveesta... 
+  /* Esittelyteksti + bg:t */
+  function parasToHTML(s){return String(s||'').trim().split(/\n\s*\n/).map(p=>`<p>${p.trim()}</p>`).join('\n');}
+  const defaultContent={pitch:`RUMAT STUDIO syntyi lapsuuden haaveesta ja vuosien aikana kypsyneestä intohimosta vaatesuunnitteluun. Vuonna 2023 visio alkoi muovautumaan nykyiseen muotoonsa: ajattomia ja kestäviä vaatteita, jotka syntyvät harkitusta rakkaudesta ja intohimosta luovaan tekemiseen.
 
-RUMAT STUDIO pohjautuu vahvaan arvopohjaan...
+RUMAT STUDIO pohjautuu vahvaan arvopohjaan. Se ei ole pelkkä tuotemerkki, vaan se rohkaisee pohtimaan omaa kulutuskäyttäytymistä ja inspiroi tekemään itse tai ainakin arvostamaan vaatteiden alkuperää ja tekijöitä niiden takana.
 
-Taustalla on halu luoda ajattomia...
+Taustalla on halu luoda ajattomia, kestäviä ja harkiten suunniteltuja vaatteita vastalauseena kertakäyttöiselle pikamuodille. Jokainen vaate suunnitellaan kestämään sekä käytössä että ajassa. Suunnittelussa otetaan huomioon materiaalien laatu, vaatteen käyttötarkoitus ja visuaalinen ilme, mutta myös tuotannon ekologinen ja eettinen kestävyys. Käsityönä valmistetut vaatteet vaativat aikaa ja siten nostavat vaatteen arvoa niin konkreettisesti kuin tunnearvossakin.
 
-Tulevaisuuden suunnitelmissa on oman studiollisen avaaminen...
+Tulevaisuuden suunnitelmissa on oman studiollisen avaaminen pääkaupunkiseudulle. Tila toimisi kohtaamispaikkana, jossa voi sovittaa mallikappaleita, osallistua työpajoihin ja verkostoitua muiden kestävästä arvosta kiinnostuneiden muotoilijoiden, ompelijoiden ja suunnittelijoiden kanssa.
 
-Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella...` };
-  (function(){ const intro=document.getElementById('intro-text'); if(intro) intro.innerHTML=parasToHTML(defaultContent.pitch); })();
+Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkityksellisyydestä käyttömukavuuteen asti. Tavoitteena ei ole täydellisyys, vaan rohkeus ja kehitys. Nimi RUMAT STUDIO viittaa juuri tähän: lapsen sallittuun keskeneräisyyteen, mutta tähdätä silti johonkin merkitykselliseen.`};
+  (function(){
+    const intro=$('#intro-text'); if(intro) intro.innerHTML=parasToHTML(defaultContent.pitch);
+    function setBg(el,url){ if(!el) return; const t=new Image(); t.onload=()=>el.style.backgroundImage=`url('${url}')`; t.onerror=()=>el.style.backgroundImage=`url('assets/placeholder.jpg')`; t.src=url; }
+    setBg(document.querySelector('.intro-left'),'assets/intro-left.jpg');
+    setBg(document.querySelector('.intro-right'),'assets/intro-right.jpg');
+  })();
 
-  // ===== OIKEAN KUVAN SIJOITTELU KAPPALEIDEN VÄLIIN =====
-  function placeRightImage(){
-    const copy = document.getElementById('introCopy');
-    const right = document.getElementById('introRight');
-    if(!copy||!right) return;
+  /* Oikean kuvan pudotus – iteratiivinen, jotta teksti pääsee kuvan yläpuolelle */
+  function positionRightIntroImage(){
+    const right=document.querySelector('.intro-right');
+    const left =document.querySelector('.intro-left');
+    const copy =document.querySelector('.intro-copy');
+    if(!right||!left||!copy) return;
 
-    // Mobiilissa ei sijoittelua
-    if (window.matchMedia('(max-width:900px)').matches){ copy.appendChild(right); right.style.marginTop='12px'; return; }
-
-    // varmista että oikea kuva on copy-divissä
-    if(right.parentNode!==copy) copy.appendChild(right);
-
-    // mittaa oikean kuvan korkeus (CSS asettaa)
-    right.style.visibility='hidden';
-    right.style.float='right';
+    // nollaa ennen mittauksia (välttää “lukkiutumisen”)
     right.style.marginTop='0px';
-    const h = right.getBoundingClientRect().height || parseFloat(getComputedStyle(right).height);
-    right.style.visibility='';
+    left.style.marginTop='0px';
 
-    // Kohdetaite: haluamme, että kuvan alareuna ~ tekstin alareunan tasalla
-    const targetTop = Math.max(0, copy.scrollHeight - h);
-
-    // Etsi kappale, jonka kohdalla kuvan kannattaa alkaa
-    const paras = Array.from(copy.querySelectorAll('#intro-text > p'));
-    let before = null;
-    for(const p of paras){
-      const top = p.offsetTop;
-      const bottom = top + p.offsetHeight;
-      if (bottom >= targetTop){ before = p; break; }
+    // iteratiivinen lähentyminen: muutetaan marginaalia kunnes korkeus ei muutu
+    let last=-1, guard=0;
+    while(guard++<12){
+      const style=getComputedStyle(copy);
+      const padT=parseFloat(style.paddingTop)||0, padB=parseFloat(style.paddingBottom)||0;
+      const copyH=copy.scrollHeight + padT + padB;      // todellinen tekstin korkeus
+      const imgH =right.offsetHeight;                   // kuvan kiinteä korkeus
+      const need =Math.max(0, Math.round(copyH - imgH + 1)); // +1px varmuus
+      if(need===last) break;
+      right.style.marginTop = need+'px';
+      last = need;
     }
-    if (before){ copy.insertBefore(right, before); }
-    else { copy.appendChild(right); }
-
-    right.style.marginTop = '0px'; // ei ylimääräistä siirtoa
   }
-  window.addEventListener('load', placeRightImage);
-  window.addEventListener('resize', ()=>requestAnimationFrame(placeRightImage), {passive:true});
-  if('fonts' in document) document.fonts.ready.then(placeRightImage);
-  new ResizeObserver(()=>placeRightImage()).observe(document.getElementById('introCopy'));
+  window.addEventListener('load', positionRightIntroImage);
+  window.addEventListener('resize', ()=>{ clearTimeout(window.__introR); window.__introR=setTimeout(positionRightIntroImage, 60); }, {passive:true});
+  if ('fonts' in document){ document.fonts.ready.then(positionRightIntroImage); }
 
-  // ---------- Tuotteet ----------
+  /* Tuotedata */
   const IMG=(id,n=1)=>`assets/patterns/${id}-${n}.jpg`;
   window.KAAVIOT=[
-    { id:'dummy-kaava', name:'Dummy kaava', price:0.01, sizes:'PDF', blurb:'Väliaikainen testikaava…', images:[IMG('dummy-kaava',1),IMG('dummy-kaava',2)], isDummy:true, deliverable:true, file:'auto-dummy' },
-    { id:'ilmainen-ohje', name:'Ilmainen ohje', price:0, sizes:'One size', blurb:'Ilmainen ohje (dummy-PDF).', images:[IMG('ilmainen-ohje',1)], deliverable:true, file:'auto-dummy' },
-    { id:'takki', name:'Takki', price:0.01, sizes:'XS–XL', blurb:'Työn alla – pian saatavilla.', images:[IMG('takki',1)], deliverable:false },
-    { id:'laukku', name:'Laukku', price:0.01, sizes:'One size', blurb:'Sling-laukku.', images:[IMG('laukku',1)], deliverable:false },
-    { id:'usva-paita', name:'Usva paita', price:0.01, sizes:'XS–XL', blurb:'Rento paita.', images:[IMG('usva-paita',1)], deliverable:false },
+    { id:'dummy-kaava',   name:'Dummy kaava',   price:0.01, sizes:'PDF',      blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla kaavoilla. Ostettaessa saat linkin dummy-PDF:ään.', images:[IMG('dummy-kaava',1),IMG('dummy-kaava',2)], isDummy:true, deliverable:true, file:'auto-dummy' },
+    { id:'ilmainen-ohje', name:'Ilmainen ohje', price:0.00, sizes:'One size', blurb:'Täysin ilmainen kokeiltava ohje (toistaiseksi dummy-PDF).', images:[IMG('ilmainen-ohje',1)], deliverable:true, file:'auto-dummy' },
+
+    { id:'takki',      name:'Takki',      price:0.01, sizes:'XS–XL',    blurb:'Työn alla – pian saatavilla.', images:[IMG('takki',1)],        deliverable:false },
+    { id:'laukku',     name:'Laukku',     price:0.01, sizes:'One size', blurb:'Sling-laukku kaava (PDF).',    images:[IMG('laukku',1),IMG('laukku',2)], deliverable:false },
+    { id:'usva-paita', name:'Usva paita', price:0.01, sizes:'XS–XL',    blurb:'Rento paita raglan-hihoilla.', images:[IMG('usva-paita',1),IMG('usva-paita',2)], deliverable:false },
+    { id:'neule-panta',name:'Neule panta',price:0.01, sizes:'S–L',      blurb:'Helppo aloittelijalle.',       images:[IMG('neule-panta',1),IMG('neule-panta',2)], deliverable:false },
+    { id:'kauluri',    name:'Kauluri',    price:0.01, sizes:'One size', blurb:'Nopea viikonloppuprojekti.',   images:[IMG('kauluri',1),IMG('kauluri',2)], deliverable:false },
+    { id:'pipo',       name:'Pipo',       price:0.01, sizes:'S–L',      blurb:'Peruspipo, selkeä ohje.',      images:[IMG('pipo',1),IMG('pipo',2)], deliverable:false },
+    { id:'lapaset',    name:'Lapaset',    price:0.01, sizes:'S–XL',     blurb:'Tiivis peruslapanen.',         images:[IMG('lapaset',1),IMG('lapaset',2)], deliverable:false },
+    { id:'sukat',      name:'Sukat',      price:0.01, sizes:'36–46',    blurb:'Vahvistettu kantapää.',        images:[IMG('sukat',1),IMG('sukat',2)], deliverable:false },
+    { id:'villapaita', name:'Villapaita', price:0.01, sizes:'XS–XXL',   blurb:'Klassinen pyöröneule.',        images:[IMG('villapaita',1),IMG('villapaita',2)], deliverable:false },
   ];
 
+  /* Ostoskori */
   let CART=JSON.parse(localStorage.getItem('cart')||'{}');
-  function saveCart(){ localStorage.setItem('cart',JSON.stringify(CART)); updateBadge(); }
+  function saveCart(){ localStorage.setItem('cart', JSON.stringify(CART)); updateBadge(); }
   function updateBadge(){ const n=Object.values(CART).reduce((a,b)=>a+b,0); const ic=$('#cartCount'); const tx=$('#cartCountText'); if(ic) ic.textContent=String(n); if(tx) tx.textContent=n?`(${n})`:''; }
-  function openCart(){ $('#cartDrawer').classList.add('open'); renderCart(); }
-  function closeCart(){ $('#cartDrawer').classList.remove('open'); }
-  $('#openCartText')?.addEventListener('click',openCart); $('#openCartIcon')?.addEventListener('click',openCart);
-  $('#closeCart')?.addEventListener('click',closeCart); $('#closeCartX')?.addEventListener('click',closeCart);
+  function openCart(){ document.getElementById('cartDrawer').classList.add('open'); renderCart(); }
+  function closeCart(){ document.getElementById('cartDrawer').classList.remove('open'); }
+  $('#openCartText')?.addEventListener('click', openCart); $('#openCartIcon')?.addEventListener('click', openCart);
+  $('#closeCart')?.addEventListener('click', closeCart); $('#closeCartX')?.addEventListener('click', closeCart);
 
   function renderCart(){
     const root=$('#cartItems'); root.innerHTML=''; let sub=0;
     Object.entries(CART).forEach(([id,q])=>{
-      const p=window.KAAVIOT.find(x=>x.id===id); if(!p) return; sub+=(p.price||0)*q;
+      const p=window.KAAVIOT.find(x=>x.id===id); if(!p) return; sub += (p.price||0)*q;
       root.appendChild(el('div',{class:'py-3 flex items-center justify-between gap-3'},
         el('div',{}, el('div',{class:'font-semibold'},p.name), el('div',{class:'text-sm opacity-70'},fmtEUR(p.price||0))),
-        el('div',{}, el('button',{'data-remove':id,class:'px-2 border rounded'},'Poista'))
+        el('div',{class:'flex items-center gap-2'},
+          el('button',{'data-dec':id,class:'px-2 border border-[rgba(0,0,0,.15)] rounded'},'−'),
+          el('span',{},String(q)),
+          el('button',{'data-inc':id,class:'px-2 border border-[rgba(0,0,0,.15)] rounded'},'+'),
+          el('button',{'data-remove':id,class:'px-2 border border-[rgba(0,0,0,.15)] rounded'},'Poista')
+        )
       ));
     });
     $('#subTotal').textContent=fmtEUR(sub);
-    root.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{ delete CART[b.dataset.remove]; saveCart(); renderCart(); });
+    root.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{ const id=b.dataset.remove; delete CART[id]; saveCart(); renderCart(); });
+    root.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{ const id=b.dataset.inc; CART[id]=(CART[id]||0)+1; saveCart(); renderCart(); });
+    root.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{ const id=b.dataset.dec; CART[id]=Math.max(0,(CART[id]||0)-1); if(CART[id]===0) delete CART[id]; saveCart(); renderCart(); });
   }
-  function addToCart(id){ const p=window.KAAVIOT.find(x=>x.id===id); if(!p) return;
-    if(!(p.deliverable||p.isDummy||p.file)) return alert('Tuote on tulossa – ei vielä ostettavissa.');
+
+  function canDeliver(p){ return !!(p && (p.deliverable || p.isDummy || p.file)); }
+  function addToCart(id){
+    const p=window.KAAVIOT.find(x=>x.id===id); if(!p) return;
+    if (!canDeliver(p)){ showToast('Tuote on tulossa – ei vielä myynnissä.','info'); return; }
     CART[id]=(CART[id]||0)+1; saveCart(); openCart();
   }
-  window.addToCart=addToCart; updateBadge();
+  window.addToCart = addToCart; updateBadge();
 
-  // Malli kaavioruudukko + expander (ostopainike = Lisää ostoskoriin)
-  (function(){
-    const grid=document.getElementById('patternsGrid'); let exp=null, cur=null, idx=0;
-    function safeImg(src,alt){ const i=new Image(); i.alt=alt||''; i.loading='lazy'; i.src=src||'assets/placeholder.jpg'; i.onerror=()=>i.src='assets/placeholder.jpg'; return i; }
-    window.KAAVIOT.forEach(p=>{
-      const a=document.createElement('article'); a.className='tile card'; a.dataset.id=p.id;
-      a.appendChild(safeImg((p.images||[])[0],p.name));
-      const cap=document.createElement('div'); cap.className='tile-caption';
-      cap.textContent=p.name + (p.deliverable||p.isDummy||p.file ? (p.price===0?' · Ilmainen':'') : ' · Tulossa');
-      a.appendChild(cap); grid.appendChild(a);
+  /* Kassa + PayPal (lyhennetty) */
+  const checkoutDrawer=$('#checkoutDrawer');
+  function openCheckout(){ checkoutDrawer.classList.add('open'); fillCheckoutFromStorage(); }
+  function closeCheckout(){ checkoutDrawer.classList.remove('open'); }
+  $('#checkout').addEventListener('click', ()=>{ if(Object.keys(CART).length===0) return alert('Ostoskori on tyhjä.'); closeCart(); openCheckout(); });
+
+  function fillCheckoutFromStorage(){ const f=$('#checkoutForm'); if(!f) return; const saved=JSON.parse(localStorage.getItem('customer')||'{}'); ['firstName','lastName','email','phone','address','zip','city','country','notes'].forEach(k=>{ if(saved[k]) f.elements[k].value=saved[k]; }); }
+  function collectCustomer(){
+    const f=$('#checkoutForm'); if(!f) return null;
+    const waiver=$('#acceptDigitalWaiver'); if(!waiver?.checked){ showToast('Hyväksy digisisällön toimitus heti -ehto.','error'); return null; }
+    const data=Object.fromEntries(new FormData(f).entries());
+    if(!data.firstName||!data.lastName||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email)||!data.address||!data.zip||!data.city||!data.country){ showToast('Täytä pakolliset kentät oikein.','error',6000); return null; }
+    localStorage.setItem('customer',JSON.stringify(data)); return data;
+  }
+
+  $('#checkoutPay').addEventListener('click',(e)=>{
+    e.preventDefault();
+    const customer=collectCustomer(); if(!customer) return;
+    const ids=Object.keys(CART); if(ids.length===0){ closeCheckout(); return; }
+
+    const snapshot=[]; let totalPaid=0;
+    ids.forEach(id=>{ const p=window.KAAVIOT.find(x=>x.id===id); if(!p) return; const qty=CART[id]||1; snapshot.push({id,name:p.name,price:p.price||0,qty,isDummy:!!p.isDummy}); totalPaid += Math.max(0,(p.price||0))*qty; });
+    const order={ customer, email:customer.email, items:snapshot, createdAt:new Date().toISOString() };
+    localStorage.setItem('lastOrder', JSON.stringify(order));
+
+    if (totalPaid<=0){ closeCheckout(); showToast('Tilaus vahvistettu (ilmainen).','success'); return; }
+
+    const email="aaltonen96@outlook.com";
+    const form=el('form',{method:'POST', action:'https://www.paypal.com/cgi-bin/webscr', target:'_blank'},
+      el('input',{type:'hidden',name:'cmd',value:'_cart'}),
+      el('input',{type:'hidden',name:'upload',value:'1'}),
+      el('input',{type:'hidden',name:'business',value:email}),
+      el('input',{type:'hidden',name:'currency_code',value:'EUR'}),
+      el('input',{type:'hidden',name:'return',value:(()=>{const u=new URL(location.href); u.hash='success'; return u.href;})()}),
+      el('input',{type:'hidden',name:'cancel_return',value:(()=>{const u=new URL(location.href); u.hash='cancel'; return u.href;})()})
+    );
+    let i=1; snapshot.filter(x=>x.price>0).forEach(x=>{
+      form.appendChild(el('input',{type:'hidden',name:`item_name_${i}`,value:x.name}));
+      form.appendChild(el('input',{type:'hidden',name:`amount_${i}`,   value:Number(x.price||0).toFixed(2)}));
+      form.appendChild(el('input',{type:'hidden',name:`quantity_${i}`, value:x.qty}));
+      i++;
     });
-    function cols(){ const cs=getComputedStyle(grid).gridTemplateColumns; return Math.max(1,cs.split(' ').length); }
-    function insertAfterRow(tile){ const tiles=[...grid.querySelectorAll('.tile, .expander')]; const only=tiles.filter(x=>x.classList.contains('tile')); const i=only.indexOf(tile); const c=cols(); const end=Math.min(only.length-1, Math.floor(i/c)*c+(c-1)); const after=only[end]; grid.insertBefore(exp, after.nextSibling); }
-    function build(){ exp=document.createElement('div'); exp.className='expander'; exp.innerHTML=`<div class="ex-top"><div id="exTitle" class="font-semibold"></div><button id="exClose" class="px-3 py-1 rounded border">pienennä</button></div>
-      <div class="ex-row"><div class="ex-view"><img id="exImg"><button id="exPrev" class="ex-prev">◀</button><button id="exNext" class="ex-next">▶</button></div>
-      <div class="ex-info"><h3 id="exName" class="text-2xl mb-2"></h3><p id="exBlurb" class="opacity-80 mb-2 normalcase"></p>
-      <div class="mb-2"><span class="font-semibold">Koot: </span><span id="exSizes"></span></div><div id="exPrice" class="text-xl font-bold mb-4"></div><div id="exActions"></div></div></div>`;
-      exp.querySelector('#exPrev').onclick=()=>nav(-1); exp.querySelector('#exNext').onclick=()=>nav(1); exp.querySelector('#exClose').onclick=()=>{ exp.remove(); cur=null; };
-    }
-    build();
-    function openFor(p,tile){ cur=p; idx=0;
-      exp.querySelector('#exTitle').textContent=p.name;
-      exp.querySelector('#exName').textContent=p.name;
-      exp.querySelector('#exBlurb').textContent=p.blurb||'';
-      exp.querySelector('#exSizes').textContent=p.sizes||'';
-      exp.querySelector('#exPrice').textContent=p.price===0?'ILMAINEN':fmtEUR(p.price||0);
-      exp.querySelector('#exImg').src=(p.images||[])[0]||'assets/placeholder.jpg';
-      const act=exp.querySelector('#exActions'); act.innerHTML='';
-      if(!(p.deliverable||p.isDummy||p.file)){ act.textContent='Tulossa'; act.className='inline-block px-4 py-2 rounded-full border'; }
-      else{
-        const b=document.createElement('button');
-        b.className='btn bg-[color:var(--deep-blue)] text-white'; b.textContent=p.price===0?'Lisää ostoskoriin (0,00 €)':'Lisää ostoskoriin';
-        b.onclick=()=>addToCart(p.id); act.appendChild(b);
-      }
-      insertAfterRow(tile);
-    }
-    function nav(d){ if(!cur) return; const arr=cur.images||[]; if(!arr.length) return; idx=(idx+d+arr.length)%arr.length; exp.querySelector('#exImg').src=arr[idx]; }
-    grid.addEventListener('click',(e)=>{ const t=e.target.closest('.tile'); if(!t) return; if(!exp.parentNode) grid.appendChild(exp); openFor(window.KAAVIOT.find(x=>x.id===t.dataset.id),t); });
-    window.addEventListener('resize',()=>{ if(cur&&exp.parentNode){ const t=[...grid.querySelectorAll('.tile')].find(x=>x.dataset.id===cur.id); if(t) insertAfterRow(t); }},{passive:true});
-  })();
+    document.body.appendChild(form); form.submit(); form.remove();
+    showToast('Siirryt PayPaliin maksamaan…','info');
+  });
 
-  // header nav show/hide
+  /* Navi näkyvyys (kuten ennen) */
+  (function(){const container=$('#hdrRow'),brand=$('#brandBlock'),nav=$('#mainNav'),right=$('#rightBlock'),menuBtn=$('#openMenu'),cartIcon=$('#openCartIcon'),cartText=$('#openCartText');let navVisible=true;const GAP=72;function measureNavWidth(){const wasHidden=nav.classList.contains('nav-hidden');if(wasHidden)nav.classList.remove('nav-hidden');nav.classList.add('nav-measure');const w=Math.ceil(nav.scrollWidth);nav.classList.remove('nav-measure');if(wasHidden)nav.classList.add('nav-hidden');return w;}function canShowNav(){const cw=container.clientWidth;const bw=Math.ceil(brand.getBoundingClientRect().width);const rbw=Math.ceil(right.getBoundingClientRect().width);const navW=measureNavWidth();return navW<=Math.max(0,cw-bw-rbw-GAP);}function applyState(show){navVisible=!!show;if(navVisible){nav.classList.remove('nav-hidden');menuBtn.classList.add('hidden');cartIcon.classList.add('hidden');cartText.classList.remove('hidden');}else{nav.classList.add('nav-hidden');menuBtn.classList.remove('hidden');cartIcon.classList.remove('hidden');cartText.classList.add('hidden');}}function compute(){if(navVisible){if(!canShowNav())applyState(false);}else{if(canShowNav())applyState(true);}}let t=null;const schedule=()=>{if(t)return;t=setTimeout(()=>{t=null;compute();},80);};window.addEventListener('resize',schedule,{passive:true});if('fonts'in document)document.fonts.ready.then(compute);compute();})();
+
+  /* Kaaviot UI (lyhyesti, “Lisää ostoskoriin” -nappi) */
   (function(){
-    const container=document.getElementById('hdrRow'), brand=document.getElementById('brandBlock'), nav=document.getElementById('mainNav'), right=document.getElementById('rightBlock'), menuBtn=document.getElementById('openMenu'), cartIcon=document.getElementById('openCartIcon'), cartText=document.getElementById('openCartText');
-    let navVisible=true; const GAP=72;
-    function measure(){ const was=nav.classList.contains('nav-hidden'); if(was) nav.classList.remove('nav-hidden'); nav.classList.add('nav-measure'); const w=Math.ceil(nav.scrollWidth); nav.classList.remove('nav-measure'); if(was) nav.classList.add('nav-hidden'); return w; }
-    function canShow(){ const cw=container.clientWidth; const bw=Math.ceil(brand.getBoundingClientRect().width); const rw=Math.ceil(right.getBoundingClientRect().width); return measure()<=Math.max(0,cw-bw-rw-GAP); }
-    function apply(show){ navVisible=!!show; if(show){ nav.classList.remove('nav-hidden'); menuBtn.classList.add('hidden'); cartIcon.classList.add('hidden'); cartText.classList.remove('hidden'); }else{ nav.classList.add('nav-hidden'); menuBtn.classList.remove('hidden'); cartIcon.classList.remove('hidden'); cartText.classList.add('hidden'); } }
-    function compute(){ if(navVisible){ if(!canShow()) apply(false);} else { if(canShow()) apply(true);} }
-    let t=null; const schedule=()=>{ if(t) return; t=setTimeout(()=>{ t=null; compute(); },80); };
-    window.addEventListener('resize',schedule,{passive:true}); if('fonts' in document) document.fonts.ready.then(compute); compute();
+    const grid=$('#patternsGrid'); let selectedId=null; let expander=null; let current=null; let imgIdx=0; const DATA=window.KAAVIOT;
 
-    const drawer=document.getElementById('menuDrawer'); const openBtn=document.getElementById('openMenu'); const closeA=document.getElementById('closeMenu'); const closeX=document.getElementById('closeMenuX');
-    function open(){ drawer.classList.add('open'); openBtn.setAttribute('aria-expanded','true'); }
-    function close(){ drawer.classList.remove('open'); openBtn.setAttribute('aria-expanded','false'); }
-    openBtn.addEventListener('click',open); closeA?.addEventListener('click',close); closeX?.addEventListener('click',close);
-    drawer.addEventListener('click',e=>{ if(e.target===drawer) close(); }); document.addEventListener('keydown',e=>{ if(e.key==='Escape') close(); });
-    drawer.querySelectorAll?.('[data-menu-close]')?.forEach(a=>a.addEventListener('click',close));
+    DATA.forEach((p)=>{ const tile=document.createElement('article'); tile.className='tile card'; tile.setAttribute('data-id',p.id);
+      const img=createImg((p.images||[])[0], p.name); const cap=document.createElement('div'); cap.className='tile-caption';
+      const deliver = !!(p.deliverable || p.isDummy || p.file);
+      const labelSuffix = !deliver ? ' · Tulossa' : (p.price===0 ? ' · Ilmainen' : '');
+      cap.textContent = p.name + labelSuffix;
+      tile.appendChild(img); tile.appendChild(cap); grid.appendChild(tile); });
+
+    function columns(){ const cs=getComputedStyle(grid).gridTemplateColumns; return Math.max(1, cs.split(' ').length); }
+    function insertAfterRow(tileEl){ const tiles=Array.from(grid.querySelectorAll('.tile, .expander')); const onlyTiles=tiles.filter(n=>n.classList.contains('tile')); const idx=onlyTiles.indexOf(tileEl); const cols=columns(); const rowEndIdx=Math.min(onlyTiles.length-1, Math.floor(idx/cols)*cols+(cols-1)); const after=onlyTiles[rowEndIdx]; grid.insertBefore(expander, after.nextSibling); }
+    function buildExpander(){ expander=el('div',{class:'expander'}); const top=el('div',{class:'ex-top'}, el('div',{id:'exTitle',class:'font-semibold'},''), el('button',{id:'exClose',class:'px-3 py-1 rounded border border-[rgba(0,0,0,.15)]'},'pienennä'));
+      const row=el('div',{class:'ex-row'},
+        el('div',{class:'ex-view'}, createImg('assets/placeholder.jpg','Kaava'), el('button',{id:'exPrev',class:'ex-prev'},'◀'), el('button',{id:'exNext',class:'ex-next'},'▶')),
+        el('div',{class:'ex-info'}, el('h3',{id:'exName',class:'text-2xl mb-2'},''), el('div',{style:'height:8px'}), el('p',{id:'exBlurb',class:'opacity-80 mb-2 normalcase'},''), el('div',{class:'mb-2'}, el('span',{class:'font-semibold'},'Koot: '), el('span',{id:'exSizes'},'')), el('div',{id:'exPrice',class:'text-xl font-bold mb-4'},''), el('div',{id:'exActions'}))
+      ); expander.appendChild(top); expander.appendChild(row); expander.querySelector('#exPrev').addEventListener('click',()=>nav(-1)); expander.querySelector('#exNext').addEventListener('click',()=>nav(+1)); expander.querySelector('#exClose').addEventListener('click',()=>clearSelection()); }
+    buildExpander();
+
+    function openFor(p,tileEl){
+      current=p; imgIdx=0;
+      expander.querySelector('#exTitle').textContent=p.name;
+      expander.querySelector('#exName').textContent=p.name;
+      expander.querySelector('#exBlurb').textContent=p.blurb||'';
+      expander.querySelector('#exSizes').textContent=p.sizes||'';
+      expander.querySelector('#exPrice').textContent=p.price===0?'ILMAINEN':fmtEUR(p.price||0);
+      const exImg=expander.querySelector('.ex-view img'); setSafeImgSrc(exImg,(p.images||[])[0]);
+
+      const actions=expander.querySelector('#exActions'); actions.innerHTML='';
+      const deliver = !!(p.deliverable || p.isDummy || p.file);
+      if (!deliver){
+        actions.appendChild(el('span',{class:'inline-block px-4 py-2 rounded-full border border-[rgba(0,0,0,.15)]'},'Tulossa'));
+      } else {
+        const label = p.price===0 ? 'Lisää ostoskoriin (0,00 €)' : 'Lisää ostoskoriin';
+        const buyBtn=el('button',{id:'exBuy',class:'btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2'}, label);
+        buyBtn.onclick = () => window.addToCart ? window.addToCart(p.id) : null;
+        actions.appendChild(buyBtn);
+      }
+      insertAfterRow(tileEl);
+    }
+    function nav(dir){ if(!current) return; const imgs=current.images||[]; imgIdx=imgs.length ? (imgIdx+dir+imgs.length)%imgs.length : 0; const exImg=expander.querySelector('.ex-view img'); setSafeImgSrc(exImg, imgs[imgIdx]); }
+    function markSelected(tile,on){ tile.classList.toggle('tile--selected',!!on); tile.innerHTML=''; const p=DATA.find(x=>x.id===tile.dataset.id); tile.appendChild(createImg((p.images||[])[0], p.name));
+      const deliver = !!(p.deliverable || p.isDummy || p.file);
+      const capTxt = p.name + (!deliver ? ' · Tulossa' : (p.price===0 ? ' · Ilmainen' : ''));
+      tile.appendChild(Object.assign(document.createElement('div'),{className:'tile-caption',textContent:capTxt}));
+      if (on){ const btn=Object.assign(document.createElement('button'),{className:'min-full',type:'button',textContent:'pienennä'}); btn.addEventListener('click',(e)=>{ e.stopPropagation(); clearSelection(); }); tile.appendChild(btn); }
+    }
+    function clearSelection(){ if(!selectedId) return; const prev=grid.querySelector(`.tile[data-id="${selectedId}"]`); if(prev) markSelected(prev,false); if(expander.parentNode===grid) grid.removeChild(expander); selectedId=null; current=null; imgIdx=0; }
+    function selectTile(tile){ const id=tile.getAttribute('data-id'); if(id===selectedId){ clearSelection(); return; } clearSelection(); selectedId=id; markSelected(tile,true); const p=DATA.find(x=>x.id===id); openFor(p,tile); }
+
+    grid.addEventListener('click',(e)=>{ const tile=e.target.closest('.tile'); if(!tile||!grid.contains(tile)) return; selectTile(tile); });
+    let roTimer=null; addEventListener('resize',()=>{ if(!selectedId||!expander.parentNode) return; if(roTimer) clearTimeout(roTimer); roTimer=setTimeout(()=>{ const tile=grid.querySelector(`.tile[data-id="${selectedId}"]`); if(tile) insertAfterRow(tile); },120); },{passive:true});
   })();
   </script>
 </body>
