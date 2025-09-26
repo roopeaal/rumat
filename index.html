@@ -19,9 +19,10 @@
       --ink:#202020; --olive:#A1A266; --deep-blue:#345563; --ivory:#F6F6F4; --light-blue:#DEEEEE;
       --header-h:64px; --band-radius:16px;
 
-      /* Esittelykuvien KOKO (ei skaalata JS:llä) */
+      /* Esittelykuvien VAKIOKOKO (ei skaalata ikkunan mukana) */
       --intro-img-w: 360px;
-      --intro-img-h: 520px;
+      /* Nostettu selvästi, jotta koko teksti mahtuu väliin isolla näytöllä */
+      --intro-img-h: 900px;
       --intro-gap:   16px;
     }
 
@@ -69,7 +70,7 @@
     .band{ background:var(--ivory); border-radius:var(--band-radius); overflow:hidden; }
     .band-inner{ max-width:72rem; margin:0 auto; padding:3rem 1rem; }
 
-    /* ===== Esittely: KOKO PYSYY, oikea kuva liikkuu alaspäin ===== */
+    /* ===== Esittely: VAKIOKOKOISET kuvat, oikea liikkuu alas tekstin mukana ===== */
     .intro-wide{ margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw); }
     .intro-flow{ position:relative; padding:18px 0; }
     .intro-flow::after{ content:""; display:block; clear:both; } /* clearfix */
@@ -80,7 +81,7 @@
       background-size:cover; background-position:center; background-repeat:no-repeat;
       border:1px solid rgba(0,0,0,.12);
     }
-    .intro-left{  float:left;  margin-right:var(--intro-gap);  border-radius:0 18px 18px 0; }
+    .intro-left{  float:left;  margin-right:var(--intro-gap);  border-radius:0 18px 18px 0; margin-top:0; }
     .intro-right{ float:right; margin-left: var(--intro-gap);  border-radius:18px 0 0 18px; margin-top:0; }
 
     .intro-copy .logo{ width:56px; height:56px; display:block; margin:0 auto 12px; object-fit:contain; }
@@ -106,7 +107,7 @@
     .ex-prev{ left:10px; } .ex-next{ right:10px; }
     .ex-top{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.6rem .9rem; border-bottom:1px solid rgba(0,0,0,.1); }
 
-    /* Footer */
+    /* Footer (isoa mask-logoa varten) */
     .footer-bar{ position:relative; z-index:2; background:var(--olive); color:var(--ink); }
     .footer-grid{ max-width:72rem; margin:0 auto; padding:1.5rem 1rem; display:grid; gap:1rem 2rem; align-items:center; grid-template-columns:1fr 1fr 1fr; grid-template-areas:"social contact logo"; min-height: clamp(180px, 22vw, 420px); }
     .footer-col h6{ font-size:.8rem; font-weight:900; text-transform:uppercase; letter-spacing:.12em; margin:0 0 .35rem; color:var(--ink); }
@@ -181,7 +182,7 @@
 
           <div class="intro-wide">
             <div class="intro-flow" id="introFlow">
-              <!-- HUOM: molemmat kuvat ovat ENNEN tekstiä → teksti voi kiertää myös oikean kuvan YLÄPUOLELTA kun se on laskenut -->
+              <!-- Molemmat kuvat ennen tekstiä → teksti voi mennä myös oikean kuvan YLÄPUOLELLE kun se on laskenut -->
               <div class="intro-img intro-left"  aria-hidden="true"></div>
               <div class="intro-img intro-right" aria-hidden="true"></div>
 
@@ -385,29 +386,31 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   })();
 
   /* ===== Oikean kuvan sijainti: leveällä 0px, kaventuessa laskee rivien tahtiin ===== */
-  const FULL_SYNC_BREAKPOINT = 1200; // px – tällä ja yli kuvat tasan samassa tasossa
+  const FULL_SYNC_BREAKPOINT = 1200; // px – tällä ja yli kuvat yläreunassa tasan
   function positionRightIntroImage(){
     const right=document.querySelector('.intro-right');
     const left =document.querySelector('.intro-left');
     const copy =document.querySelector('.intro-copy');
     if(!right||!left||!copy) return;
 
-    left.style.marginTop='0px'; // vasen pysyy yläreunassa
+    // Vasen pysyy aina yläreunassa (vakio koko)
+    left.style.marginTop='0px';
 
-    // Täydellä/leveällä ruudulla: kuvat samalla tasolla
     if (window.innerWidth >= FULL_SYNC_BREAKPOINT){
+      // Täydellä leveydellä kuvat samalla tasolla
       right.style.marginTop = '0px';
       return;
     }
 
-    // Kapeammalla: oikea laskee tekstikorkeuden mukaan
-    const imgH  = right.getBoundingClientRect().height;  // kiinteä korkeus
-    const copyH = copy.getBoundingClientRect().height;    // tekstin korkeus
-    const offset = Math.max(0, Math.round(copyH - imgH)); // pitää alareunan tekstin tasalla
+    // Laske tekstin korkeus ja kohdenna oikean kuvan ALAREUNA tekstin alareunaan
+    const imgH  = right.getBoundingClientRect().height;  // vakio 900px
+    const copyH = copy.getBoundingClientRect().height;    // rivien määrä * line-height
+    const offset = Math.max(0, Math.round(copyH - imgH));
     right.style.marginTop = offset + 'px';
   }
   window.addEventListener('load', positionRightIntroImage);
   window.addEventListener('resize', ()=>{ clearTimeout(window.__introR); window.__introR=setTimeout(positionRightIntroImage, 80); }, {passive:true});
+  if ('fonts' in document){ document.fonts.ready.then(positionRightIntroImage); }
 
   /* Tuotedata */
   const IMG=(id,n=1)=>`assets/patterns/${id}-${n}.jpg`;
