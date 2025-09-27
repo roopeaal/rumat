@@ -13,6 +13,13 @@
   <!-- EmailJS selainkirjasto -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
+    /* ====== EmailJS asetukset ======
+       Paina sivulla Ctrl+E (tai macOS: Cmd+E) ja syötä:
+       - Public Key
+       - Service ID
+       - Template ID
+       Avaimet tallennetaan localStorageen. Voit myös kutsua: window.configureEmailJS()
+    */
     function getEmailCfg(){
       return {
         PUBLIC_KEY:  localStorage.getItem('emailjs_public')  || '',
@@ -42,6 +49,7 @@
       if (window.emailjs && cfg.PUBLIC_KEY){
         try{ window.emailjs.init({ publicKey: cfg.PUBLIC_KEY }); }catch(e){ console.warn(e); }
       }
+      // Pikanäppäin: Ctrl/Cmd + E → syötä avaimet
       window.addEventListener('keydown', (e)=>{
         if ((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='e'){
           e.preventDefault(); window.configureEmailJS();
@@ -52,10 +60,10 @@
 
   <style>
     :root{
-      --ink:#202020;
-      --olive:#A1A266;
-      --deep-blue:#345563;
-      --ivory:#F6F6F4;
+      --ink:#202020;         /* tekstit */
+      --olive:#A1A266;       /* footer-tausta */
+      --deep-blue:#345563;   /* otsikot */
+      --ivory:#F6F6F4;       /* taustat & yläpalkki */
       --header-h:64px;
       --band-radius: 16px;
     }
@@ -74,43 +82,22 @@
 
     /* Yläpalkki */
     header{ background:var(--ivory); border-bottom:1px solid rgba(0,0,0,.08); }
-    #hdrRow{
-      position:relative;
-      display:grid;                /* ✅ varmistetaan grid myös CSS:ssä */
-      grid-template-columns:auto 1fr auto; /* ✅ 3 palstaa: brändi | nav | oikea reuna */
-      align-items:center;
-    }
+    #hdrRow{ position:relative; grid-template-columns:auto 1fr; }
     #brandText{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:min(42vw,460px); color:var(--ink); }
     #brandText .strong{ font-weight:900; }
     #brandText .light{ font-weight:600; }
 
-    #mainNav{ justify-self:center; display:flex; gap:1.5rem; white-space:nowrap; font-size:13px; text-transform:uppercase; letter-spacing:.2em; min-width:0; }
+    #mainNav{ justify-self:center; display:flex; gap:1.5rem; white-space:nowrap; font-size:13px; text-transform:uppercase; letter-spacing:.2em; }
     #mainNav a{ color:var(--ink); text-decoration:none; }
     .nav-hidden{ display:none !important; }
     .nav-measure{ position:absolute !important; visibility:hidden !important; display:flex !important; white-space:nowrap !important; }
 
-    /* ✅ ei enää absolute: antaa navin kutistua ennen kuin ikonit vaihtuvat */
-    #rightBlock{
-      position:static;
-      justify-self:end;
-      display:flex; align-items:center; gap:.5rem; white-space:nowrap;
-      transform:none;
-    }
-    .icon-btn{
-      position:relative; width:38px; height:38px; display:grid; place-items:center;
-      border-radius:9999px; background:rgba(0,0,0,.06); border:1px solid rgba(0,0,0,.16); color:var(--ink);
-    }
+    #rightBlock{ position:absolute; right:12px; top:50%; transform:translateY(-50%); display:flex; align-items:center; gap:.5rem; white-space:nowrap; }
+    .icon-btn{ position:relative; width:38px; height:38px; display:grid; place-items:center; border-radius:9999px; background:rgba(0,0,0,.06); border:1px solid rgba(0,0,0,.16); color:var(--ink); }
     .icon-btn:hover{ background:rgba(0,0,0,.10); }
-    .cart-text-btn{
-      border:1px solid rgba(0,0,0,.16); padding:.45rem .8rem; border-radius:9999px;
-      color:var(--ink); background:rgba(0,0,0,.04);
-    }
+    .cart-text-btn{ border:1px solid rgba(0,0,0,.16); padding:.45rem .8rem; border-radius:9999px; color:var(--ink); background:rgba(0,0,0,.04); }
     .cart-text-btn:hover{ background:rgba(0,0,0,.08); }
-    .badge{
-      position:absolute; top:-4px; right:-4px; min-width:18px; height:18px; padding:0 4px;
-      display:grid; place-items:center; border-radius:9999px; background:var(--ink); color:#fff;
-      font-size:11px; font-weight:700; border:1px solid rgba(0,0,0,.15);
-    }
+    .badge{ position:absolute; top:-4px; right:-4px; min-width:18px; height:18px; padding:0 4px; display:grid; place-items:center; border-radius:9999px; background:var(--ink); color:#fff; font-size:11px; font-weight:700; border:1px solid rgba(0,0,0,.15); }
 
     .btn{ border-radius:9999px; padding:.6rem 1rem; border:1px solid rgba(0,0,0,.16); background:rgba(0,0,0,.04); }
     .btn:hover{ background:rgba(0,0,0,.08); }
@@ -128,12 +115,12 @@
       height: calc(100svh - var(--header-h));
       display:grid; place-items:center;
       overflow:hidden; text-align:center;
-      background:#000;
+      background:#000; /* varaväri jos kuva puuttuu */
     }
     .hero-img{
       position:absolute; inset:0; width:100%; height:100%;
       object-fit:cover; object-position:center;
-      z-index:0; /* korjaus */
+      z-index:0; /* ✅ korjaus: ei -1 */
     }
 
     /* Bandit ja kortit */
@@ -151,8 +138,14 @@
       background-size: cover; background-position:center; background-repeat:no-repeat;
       min-height: 300px; border:1px solid rgba(0,0,0,.12);
     }
-    .intro-img.left{  background-image: url('assets/intro-left.jpg');  border-radius: 0 18px 18px 0; }
-    .intro-img.right{ background-image: url('assets/intro-right.jpg'); border-radius: 18px 0 0 18px; }
+    .intro-img.left{
+      background-image: url('assets/intro-left.jpg');
+      border-radius: 0 18px 18px 0;
+    }
+    .intro-img.right{
+      background-image: url('assets/intro-right.jpg');
+      border-radius: 18px 0 0 18px;
+    }
     .intro-copy{ padding: 6px 12px; min-width:0; }
     .intro-copy .logo{ width:56px; height:56px; display:block; margin:0 auto 12px; object-fit:contain; }
     .intro-copy p{ margin:0 0 .8rem 0; line-height:1.55; }
@@ -196,7 +189,10 @@
       grid-template-columns: 1fr 1fr 1fr;
       grid-template-areas: "social contact logo";
     }
-    .footer-col h6{ font-size:.8rem; font-weight:900; text-transform:uppercase; letter-spacing:.12em; margin:0 0 .35rem; color:var(--ink); }
+    .footer-col h6{
+      font-size:.8rem; font-weight:900; text-transform:uppercase;
+      letter-spacing:.12em; margin:0 0 .35rem; color:var(--ink);
+    }
     .footer-handle, .footer-link{ color:var(--ink); opacity:.85; text-decoration:none; }
     .footer-handle:hover, .footer-link:hover{ text-decoration:underline; }
 
@@ -226,16 +222,14 @@
 <body>
   <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50">
-    <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-4 grid gap-3">
-      <!-- Logo -->
-      <a id="brandBlock" href="#etusivu" aria-label="Etusivu" class="flex items-center gap-3 min-w-0">
+    <div id="hdrRow" class="relative mx-auto max-w-6xl px-4 py-4 grid items-center gap-3">
+      <a id="brandBlock" href="#etusivu" aria-label="Etusivu" class="flex items-center gap-3">
         <img alt="RUMAT STUDIO logo" class="h-9 w-9 object-contain" src="assets/logo.svg" onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
         <span id="brandText" class="uppercase text-sm tracking-widest">
           <span class="strong">RUMAT</span>&nbsp;<span class="light">STUDIO</span>
         </span>
       </a>
 
-      <!-- Nav keskellä -->
       <nav id="mainNav" class="justify-self-center">
         <a href="#mikaonrumat"  class="hover:underline underline-offset-4">Mikä on RUMAT?</a>
         <a href="#kaaviot"      class="hover:underline underline-offset-4">Kaavat</a>
@@ -243,7 +237,6 @@
         <a href="#yhteys"       class="hover:underline underline-offset-4">Ota yhteyttä</a>
       </nav>
 
-      <!-- Oikea reuna: teksti/ikonit -->
       <div id="rightBlock" class="flex items-center gap-2">
         <button id="openMenu" class="icon-btn hidden" aria-controls="menuDrawer" aria-expanded="false" aria-label="Valikko">
           <span aria-hidden="true" style="font-size:20px;line-height:1">☰</span><span class="sr-only">Valikko</span>
@@ -269,20 +262,21 @@
 
   <!-- CONTENT -->
   <main class="pt-[64px]">
-    <!-- HERO -->
+    <!-- HERO (vain kuva) -->
     <section id="etusivu" class="hero px-4">
       <img src="assets/hero.jpg" alt="RUMAT STUDIO hero" class="hero-img"
-           onerror="this.onerror=null;this.src='assets/placeholder.jpg';">
+           onerror="this.onerror=null;console.warn('Hero-kuva puuttuu, käytetään placeholderia');this.src='assets/placeholder.jpg';">
     </section>
 
     <!-- TILAUSVIESTI -->
     <section id="orderMsg" class="max-w-3xl mx-auto my-4 px-4 hidden"></section>
 
-    <!-- MIKÄ ON RUMAT? -->
+    <!-- MIKÄ ON RUMAT? (esittely) -->
     <section id="mikaonrumat" class="py-0">
       <div class="band full-bleed">
         <div class="band-inner">
           <h2 class="mb-4">Liian rumat ollakseen totta</h2>
+
           <div class="intro-wide">
             <div class="intro-grid">
               <div class="intro-img left"  aria-hidden="true"></div>
@@ -293,6 +287,7 @@
               <div class="intro-img right" aria-hidden="true"></div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
@@ -319,8 +314,8 @@
                    alt="Suunnittelija" class="rounded-xl border border-[rgba(0,0,0,.12)] object-cover w-full h-[300px] md:h-[420px]">
             </div>
             <div class="space-y-4 normalcase">
-              <p>Aaltonen on itsevarma neuloja, joka ei rajoita luovuuttaan vain yhteen tekemisen tapaan...</p>
-              <p>Pian Aaltonen valmistuu taiteen maisteriksi...</p>
+              <p>Aaltonen on itsevarma neuloja, joka ei rajoita luovuuttaan vain yhteen tekemisen tapaan. Neulomisen rinnalla myös asusteiden ompelu on tärkeä osa ilmaisua – ja ennen kaikkea intohimo. Lapsuuden kiinnostus vaatteiden suunnitteluun johti muodin ja tekstiilisuunnittelun opintoihin vuonna 2021.</p>
+              <p>Pian Aaltonen valmistuu taiteen maisteriksi, mukanaan vankka osaaminen ja omat suosikkitekniikat, joita hän on hionut opintojen aikana. Neulomisen ja asusteiden lisäksi Aaltonen on syventynyt erityisesti vaatteiden kierrätykseen, korjaamiseen liittyviin asenteisiin sekä kriittiseen tarkasteluun siitä, miten kuluttamista ohjataan – ja millaisia seurauksia sillä on ympäristölle.</p>
             </div>
           </div>
         </div>
@@ -346,7 +341,9 @@
             <h6>Ota yhteyttä</h6>
             <a class="footer-link" href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>
           </div>
-          <div class="footer-col"><div class="footer-ytunnus">Y-3436822-5</div></div>
+          <div class="footer-col">
+            <div class="footer-ytunnus">Y-3436822-5</div>
+          </div>
         </div>
 
         <div class="footer-logoBox">
@@ -402,12 +399,6 @@
           <div><label class="text-sm font-semibold">Maa</label><input required name="country" class="w-full mt-1 border rounded px-3 py-2" value="Suomi" /></div>
         </div>
         <div><label class="text-sm font-semibold">Lisätiedot (valinn.)</label><textarea name="notes" rows="3" class="w-full mt-1 border rounded px-3 py-2"></textarea></div>
-
-        <!-- (Suositus) Digisisällön peruutus -checkbox
-        <label class="flex gap-2 items-start text-sm">
-          <input type="checkbox" id="acceptDigitalWaiver" required>
-          <span>Hyväksyn, että digitaalisen sisällön toimittaminen alkaa heti, enkä voi peruuttaa ostosta (KSL 6:16).</span>
-        </label> -->
       </form>
 
       <div class="mt-4 flex items-center justify-between gap-3">
@@ -448,6 +439,7 @@
     return n;
   };
 
+  // ------- Yleinen kuvan fallback (placeholder) -------
   function setSafeImgSrc(img, src){
     img.src = src || 'assets/placeholder.jpg';
     img.onerror = function(){ this.onerror=null; this.src='assets/placeholder.jpg'; };
@@ -455,7 +447,6 @@
   function createImg(src, alt){
     const im = document.createElement('img');
     im.alt = alt || '';
-    im.loading = 'lazy';
     setSafeImgSrc(im, src);
     return im;
   }
@@ -471,10 +462,19 @@
 
   function parasToHTML(s){ return String(s||'').trim().split(/\n\s*\n/).map(p=>`<p>${p.trim()}</p>`).join('\n'); }
   const defaultContent = {
-    pitch: `RUMAT STUDIO syntyi lapsuuden haaveesta...`
+    pitch: `RUMAT STUDIO syntyi lapsuuden haaveesta ja vuosien aikana kypsyneestä intohimosta vaatesuunnitteluun. Vuonna 2023 visio alkoi muovautumaan nykyiseen muotoonsa: ajattomia ja kestäviä vaatteita, jotka syntyvät harkitusta rakkaudesta ja intohimosta luovaan tekemiseen.
+
+RUMAT STUDIO pohjautuu vahvaan arvopohjaan. Se ei ole pelkkä tuotemerkki, vaan se rohkaisee pohtimaan omaa kulutuskäyttäytymistä ja inspiroi tekemään itse tai ainakin arvostamaan vaatteiden alkuperää ja tekijöitä niiden takana.
+
+Taustalla on halu luoda ajattomia, kestäviä ja harkiten suunniteltuja vaatteita vastalauseena kertakäyttöiselle pikamuodille. Jokainen vaate suunnitellaan kestämään sekä käytössä että ajassa. Suunnittelussa otetaan huomioon materiaalien laatu, vaatteen käyttötarkoitus ja visuaalinen ilme, mutta myös tuotannon ekologinen ja eettinen kestävyys. Käsityönä valmistetut vaatteet vaativat aikaa ja siten nostavat vaatteen arvoa niin konkreettisesti kuin tunnearvossakin.
+
+Tulevaisuuden suunnitelmissa on oman studiollisen avaaminen pääkaupunkiseudulle. Tila toimisi kohtaamispaikkana, jossa voi sovittaa mallikappaleita, osallistua työpajoihin ja verkostoitua muiden kestävästä arvosta kiinnostuneiden muotoilijoiden, ompelijoiden ja suunnittelijoiden kanssa.
+
+Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkityksellisyydestä käyttömukavuuteen asti. Tavoitteena ei ole täydellisyys, vaan rohkeus ja kehitys. Nimi RUMAT STUDIO viittaa juuri tähän: lapsen sallittuun keskeneräisyyteen, mutta tähdätä silti johonkin merkitykselliseen.`,
   };
   (function(){ const intro = document.getElementById('intro-text'); if(intro) intro.innerHTML = parasToHTML(defaultContent.pitch); })();
 
+  // Fallback intro-taustakuviin (jos puuttuvat, käytä placeholderia)
   (function introBgFallbacks(){
     function setBgWithFallback(el, url){
       if(!el) return;
@@ -487,6 +487,9 @@
     setBgWithFallback(document.querySelector('.intro-img.right'), 'assets/intro-right.jpg');
   })();
 
+  /* =============== KAAVIOT =============== */
+  // Hinnat alkuun 0,01 €; mukana ilmainen, dummy-kaava ja "Tulossa".
+  // Kaikkien tuotteiden kuvat = omat assets-polut.
   const IMG = (id, n=1)=>`assets/patterns/${id}-${n}.jpg`;
   window.KAAVIOT = [
     { id:'dummy-kaava', name:'Dummy kaava', price:0.01, sizes:'PDF', blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla kaavoilla. Ostettaessa saat linkin dummy-PDF:ään.', images:[IMG('dummy-kaava',1), IMG('dummy-kaava',2)], isDummy:true},
@@ -579,12 +582,14 @@
     return data;
   }
 
+  // Maksuun eteneminen kassalta
   $('#checkoutPay').addEventListener('click', (e)=>{
     e.preventDefault();
     const customer = collectCustomer(); if(!customer) return;
 
     const ids = Object.keys(CART); if(ids.length===0){ closeCheckout(); return; }
 
+    // Kootaan tilaus (ilmaiset mukana snapshotissa mutta ei PayPalissa)
     const snapshot = []; let totalPaid = 0;
     ids.forEach(id=>{
       const p = window.KAAVIOT.find(x=>x.id===id); if(!p) return;
@@ -602,12 +607,14 @@
     localStorage.setItem('lastOrder', JSON.stringify(order));
 
     if (totalPaid <= 0){
+      // Täysin ilmainen tilaus -> ohita PayPal
       closeCheckout();
       showSuccess(order);
       return;
     }
 
-    const email = "aaltonen96@outlook.com";
+    // PayPal-lomake: VAIN maksulliset rivit
+    const email = "aaltonen96@outlook.com"; // PAYPAL-myyjä
     const form = el('form',{method:'POST', action:'https://www.paypal.com/cgi-bin/webscr', target:'_blank'},
       el('input',{type:'hidden',name:'cmd',value:'_cart'}),
       el('input',{type:'hidden',name:'upload',value:'1'}),
@@ -628,6 +635,7 @@
     showToast('Siirryt PayPaliin maksamaan…', 'info');
   });
 
+  // ----- PDF-apurit: tehdään pieni, oikea PDF yhdelle sivulle -----
   function pdfEscape(s){
     return String(s).replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)');
   }
@@ -677,6 +685,7 @@
     const enc = new TextEncoder(); const bytes = enc.encode(pdfStr);
     const blob = new Blob([bytes], {type:'application/pdf'});
     const url = URL.createObjectURL(blob);
+    // base64 data URL sähköpostiin
     let binary=''; const chunk=0x8000;
     for(let i=0;i<bytes.length;i+=chunk){ binary += String.fromCharCode.apply(null, bytes.subarray(i,i+chunk)); }
     const base64 = btoa(binary);
@@ -691,10 +700,13 @@
     a.href = url; a.download = 'dummy-kaava.pdf';
     a.className = 'underline text-emerald-800';
     a.textContent = 'Lataa dummy-kaava (PDF)';
-    const wrap = document.createElement('div'); wrap.className = 'mt-3'; wrap.appendChild(a);
+    const wrap = document.createElement('div');
+    wrap.className = 'mt-3';
+    wrap.appendChild(a);
     msgBox.appendChild(wrap);
   }
 
+  // Onnistuminen / epäonnistuminen
   async function showSuccess(order){
     const msgBox = document.getElementById('orderMsg');
     const items = (order?.items||[]);
@@ -705,6 +717,7 @@
       <div class="border border-emerald-200 bg-emerald-50 rounded-2xl p-4">
         <h3 class="text-xl font-extrabold text-emerald-900 uppercase tracking-wide mb-2">Tilaus vastaanotettu</h3>
         <p class="text-emerald-900/80">Kiitos, <strong>${(c.firstName||'') + ' ' + (c.lastName||'')}</strong>! Vahvistus on (yritetty) lähettää osoitteeseen <strong>${order?.email||c.email||''}</strong>.</p>
+
         <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <div class="font-semibold mb-1">Tilaus:</div>
@@ -728,6 +741,7 @@
       </div>`;
     showToast('Tilaus vahvistettu. Kiitos!', 'success');
     CART = {}; saveCart(); renderCart();
+
     offerDummyDownload(order);
     sendConfirmationEmails(order);
   }
@@ -752,8 +766,9 @@
   window.addEventListener('hashchange', handleReturn);
   handleReturn();
 
+  // Sähköpostit (asiakas + Anne) EmailJS:llä, jos konffattu
   function sendConfirmationEmails(order){
-    const anneEmail = 'aaltonen96@outlook.com';
+    const anneEmail = 'aaltonen96@outlook.com'; // Anne
     const cfg = (typeof getEmailCfg === 'function') ? getEmailCfg() : {PUBLIC_KEY:'',SERVICE_ID:'',TEMPLATE_ID:''};
 
     const c = order?.customer || {};
@@ -777,6 +792,7 @@
       return;
     }
 
+    // Asiakkaalle
     window.emailjs.send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, {
       to_email: order.email || c.email,
       subject: 'RUMAT STUDIO – tilausvahvistus',
@@ -785,6 +801,7 @@
     }).then(()=> showToast('Tilausvahvistus lähetetty.', 'success'))
       .catch(err=>{ console.error(err); showToast('Sähköpostin lähetys epäonnistui (asiakas).', 'error'); });
 
+    // Annelle
     window.emailjs.send(cfg.SERVICE_ID, cfg.TEMPLATE_ID, {
       to_email: anneEmail,
       subject: 'Uusi tilaus – RUMAT STUDIO',
@@ -793,7 +810,7 @@
     }).catch(err=> console.error(err));
   }
 
-  // NAV-responsiivisuus: näytä linkit kun mahtuvat, muuten ☰ + kori-ikoni
+  // NAV: näytä linkit kun mahtuvat, muuten ☰ + ostoskori-ikoni
   (function(){
     const container = document.getElementById('hdrRow');
     const brand     = document.getElementById('brandBlock');
@@ -804,7 +821,6 @@
     const cartText  = document.getElementById('openCartText');
 
     let navVisible = true;
-    const GAP = 72; // ✅ puskuri: vaihda ikonit ennen kuin alkaisi mennä päällekkäin
 
     function measureNavWidth(){
       const wasHidden = nav.classList.contains('nav-hidden');
@@ -820,7 +836,7 @@
       const bw   = Math.ceil(brand.getBoundingClientRect().width);
       const rbw  = Math.ceil(right.getBoundingClientRect().width);
       const navW = measureNavWidth();
-      return navW <= Math.max(0, cw - bw - rbw - GAP);
+      return navW <= Math.max(0, cw - bw - rbw - 24);
     }
     function applyState(showNav){
       navVisible = !!showNav;
@@ -843,7 +859,7 @@
         if (canShowNav())  applyState(true);
       }
     }
-    let t=null; const schedule=()=>{ if(t) return; t=setTimeout(()=>{ t=null; compute(); }, 80); };
+    let t=null; const schedule=()=>{ if(t) return; t=setTimeout(()=>{ t=null; compute(); }, 120); };
     window.addEventListener('resize', schedule, {passive:true});
     if ('fonts' in document) document.fonts.ready.then(compute);
     compute();
@@ -865,7 +881,7 @@
     })();
   })();
 
-  // KAAVIOT UI – inline-laajennus
+  // KAAVIOT UI – inline-laajennus rivin alle
   (function(){
     const grid  = document.getElementById('patternsGrid');
     let selectedId = null;
@@ -873,6 +889,7 @@
 
     const DATA = window.KAAVIOT;
 
+    // Laatta-ruudukko
     DATA.forEach((p)=>{
       const tile = document.createElement('article');
       tile.className = 'tile card';
@@ -896,7 +913,8 @@
       const cols = columns();
       const rowEndIdx = Math.min(onlyTiles.length-1, Math.floor(idx/cols)*cols + (cols-1));
       const after = onlyTiles[rowEndIdx];
-      grid.insertBefore(expander, after.nextSibling);
+      if (expander.parentNode !== grid){ grid.insertBefore(expander, after.nextSibling); }
+      else { grid.insertBefore(expander, after.nextSibling); }
     }
     function buildExpander(){
       expander = el('div',{class:'expander'});
@@ -933,6 +951,7 @@
       expander.querySelector('#exBlurb').textContent = p.blurb || '';
       expander.querySelector('#exSizes').textContent = p.sizes || '';
       expander.querySelector('#exPrice').textContent = p.price===0 ? 'ILMAINEN' : fmtEUR(p.price||0);
+      // päivitä pääkuva turvallisesti
       const exImg = expander.querySelector('.ex-view img');
       setSafeImgSrc(exImg, (p.images||[])[0]);
       const actions = expander.querySelector('#exActions'); actions.innerHTML='';
