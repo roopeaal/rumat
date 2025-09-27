@@ -19,10 +19,22 @@
       --ink:#202020; --olive:#A1A266; --deep-blue:#345563; --ivory:#F6F6F4; --light-blue:#DEEEEE;
       --header-h:64px; --band-radius:16px;
 
-      /* Esittely: koot ja gutterit */
-      --intro-img-w: 360px;                   /* neliömäinen “kuvapilari” */
-      --intro-gap:   clamp(12px, 1.2vw, 18px);/* sisämarginaali kuvan ja tekstin väliin */
-      --intro-gutter: clamp(16px, 4vw, 40px); /* ettei teksti osu sivun reunoihin */
+      /* Esittely (kiinteät koot per breakpoint) */
+      --intro-gutter: 40px;   /* sivumarginaali ettei teksti liimaannu reunoihin */
+      --intro-gap: 16px;      /* väli kuvan ja tekstin välillä */
+
+      /* Desktop-oletus (≥1280px) */
+      --intro-img-w: 520px;
+      --intro-img-h: 820px;
+    }
+    @media (max-width:1279.98px){
+      :root{ --intro-img-w: 460px; --intro-img-h: 740px; --intro-gutter: 32px; }
+    }
+    @media (max-width:1023.98px){
+      :root{ --intro-img-w: 380px; --intro-img-h: 620px; --intro-gutter: 28px; }
+    }
+    @media (max-width:767.98px){
+      :root{ --intro-img-w: 260px; --intro-img-h: 440px; --intro-gutter: 20px; }
     }
 
     html{ scroll-padding-top: var(--header-h); }
@@ -66,40 +78,40 @@
     .band{ background:var(--ivory); border-radius:var(--band-radius); overflow:hidden; }
     .band-inner{ max-width:72rem; margin:0 auto; padding:3rem 1rem; }
 
-    /* ===== Esittely: “neliö”-tekstilayout kuvia ympäröiden (Word: Square) ===== */
+    /* ===== Esittely – KIINTEÄT KUVAT + “neliö”-wrap (Word: Square) ===== */
     .intro-wide{ margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw); }
     .intro-flow{ position:relative; padding:18px 0; padding-inline: var(--intro-gutter); }
     .intro-flow::after{ content:""; display:block; clear:both; } /* clearfix */
 
     .intro-img{
-      width:var(--intro-img-w);
-      height: clamp(540px, 86svh, 920px);           /* hieman alle koko sivun korkeus */
+      width: var(--intro-img-w);
+      height: var(--intro-img-h);
       background-size:cover; background-position:center; background-repeat:no-repeat;
       border:1px solid rgba(0,0,0,.12);
 
-      /* TÄRKEÄÄ: neliömäinen tekstin kierto jokaiselta sivulta */
-      float:left;                                    /* default – ylikirjoitetaan oikealle .intro-rightissa */
-      shape-outside: inset(0);                       /* neliö */
+      /* NELIÖ: teksti kiertää kaikkialta missä kuvaa ei ole */
+      float:left;                           /* vasen on oletus */
+      shape-outside: inset(0);
       -webkit-shape-outside: inset(0);
-      shape-margin: var(--intro-gap);                /* puskuri tekstin ja kuvan väliin */
+      shape-margin: var(--intro-gap);
     }
 
-    /* Vasen kuva kiinni vasempaan reunaan, mutta teksti pysyy gutterin sisällä */
+    /* Vasen: kiinni vasempaan “seinään”, mutta sisäpuolelle gap */
     .intro-left{
       float:left;
-      margin: 0 var(--intro-gap) 0 calc(-1 * var(--intro-gutter)); /* “vuoto” reunaan, sisäreunaan gap */
+      margin: 0 var(--intro-gap) 0 calc(-1 * var(--intro-gutter));  /* bleed vasempaan reunaan */
       border-radius:0 18px 18px 0;
       background-image:url('assets/intro-left.jpg');
     }
 
-    /* Oikea kuva kiinni oikeaan reunaan – putoaa alaspäin tekstirivien lisääntyessä */
+    /* Oikea: kiinni oikeaan reunaan, putoaa alaspäin tekstin kasvaessa */
     .intro-right{
       float:right;
-      margin: 0 calc(-1 * var(--intro-gutter)) 0 var(--intro-gap);
+      margin: 0 calc(-1 * var(--intro-gutter)) 0 var(--intro-gap);  /* bleed oikeaan reunaan */
       border-radius:18px 0 0 18px;
       background-image:url('assets/intro-right.jpg');
-      float:right;
-      /* neliö-wrap myös oikealla */
+
+      /* Square-wrap myös oikealle */
       shape-outside: inset(0);
       -webkit-shape-outside: inset(0);
     }
@@ -166,11 +178,9 @@
                 onclick="document.getElementById('menuDrawer').classList.add('open'); this.setAttribute('aria-expanded','true');">
           <span aria-hidden="true" style="font-size:20px;line-height:1">☰</span><span class="sr-only">Valikko</span>
         </button>
-
         <button id="openCartText" class="cart-text-btn" onclick="document.getElementById('cartDrawer').classList.add('open');">
           Ostoskori <span id="cartCountText" class="opacity-80"></span>
         </button>
-
         <button id="openCartIcon" class="icon-btn hidden" aria-label="Ostoskori"
                 onclick="document.getElementById('cartDrawer').classList.add('open');">
           <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -192,22 +202,21 @@
       <span class="svg-logo logo-light" role="img" aria-label="RUMAT STUDIO"></span>
     </section>
 
-    <section id="orderMsg" class="max-w-3xl mx-auto my-4 px-4 hidden"></section>
-
-    <!-- ESITTELY -->
+    <!-- ESITTELY: kiinteät kuvat + square-wrap -->
     <section id="mikaonrumat" class="py-0">
       <div class="band full-bleed">
         <div class="band-inner">
           <h2 class="mb-4">Liian rumat ollakseen totta</h2>
 
-          <!-- Reunasta reunaan kuvat, teksti kiertää neliöinä “Word Square” -->
           <div class="intro-wide">
             <div class="intro-flow" id="introFlow">
+              <!-- Kiinteät “pilarit” -->
               <div class="intro-img intro-left"  aria-hidden="true"></div>
               <div class="intro-img intro-right" aria-hidden="true"></div>
 
               <div class="intro-copy">
-                <img class="logo" src="assets/logo.svg" alt="RUMAT STUDIO" onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
+                <img class="logo" src="assets/logo.svg" alt="RUMAT STUDIO"
+                     onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
                 <div id="intro-text" class="text-[15px] sm:text-base normalcase"></div>
               </div>
             </div>
@@ -273,7 +282,7 @@
     </footer>
   </main>
 
-  <!-- DRAWERS -->
+  <!-- DRAWERS (ostoskori, kassa, valikko) -->
   <div id="cartDrawer" class="drawer" aria-hidden="true">
     <div class="absolute inset-0 bg-black/40" id="closeCart" aria-label="Sulje ostoskori"
          onclick="document.getElementById('cartDrawer').classList.remove('open');"></div>
@@ -345,7 +354,7 @@
     </div>
   </div>
 
-  <!-- Cookie drawer + banner -->
+  <!-- Cookie drawer + banner (lyhyesti) -->
   <div id="cookieDrawer" class="drawer" aria-hidden="true">
     <div class="absolute inset-0 bg-black/40" data-close-cookie aria-label="Sulje" onclick="document.getElementById('cookieDrawer').classList.remove('open');"></div>
     <div class="panel p-6">
@@ -358,7 +367,7 @@
       </div>
     </div>
   </div>
-  <div id="cookieBanner" class="px-4 pb-4">
+  <div id="cookieBanner" class="px-4 pb-4" style="display:none">
     <div class="mx-auto max-w-5xl rounded-2xl border border-stone-300 bg-white shadow p-4">
       <div class="flex flex-col sm:flex-row gap-3 sm:items-center justify-between">
         <div class="text-sm normalcase">Käytämme evästeitä sivuston toimintaan ja kehittämiseen.</div>
@@ -379,7 +388,7 @@
   function setSafeImgSrc(img,src){img.src=src||'assets/placeholder.jpg';img.onerror=function(){this.onerror=null;this.src='assets/placeholder.jpg';};}
   function createImg(src,alt){const im=document.createElement('img');im.alt=alt||'';im.loading='lazy';setSafeImgSrc(im,src);return im;}
   function showToast(msg,type='info',ms=4000){const t=$('#toast');if(!t)return alert(msg);const color=type==='error'?'bg-red-600':type==='success'?'bg-emerald-600':'bg-stone-800';const box=el('div',{class:`${color} text-white text-sm px-4 py-2 rounded-full shadow`},msg);t.appendChild(box);setTimeout(()=>box.remove(),ms);}
-  (function(){const y=$('#year');if(y)y.textContent=new Date().getFullYear();})();
+  (function(){const y=document.getElementById('year');if(y)y.textContent=new Date().getFullYear();})();
 
   /* EmailJS quick-setup (Ctrl/Cmd+E) */
   function getEmailCfg(){try{return{PUBLIC_KEY:localStorage.getItem('emailjs_public')||'',SERVICE_ID:localStorage.getItem('emailjs_service')||'',TEMPLATE_ID:localStorage.getItem('emailjs_template')||''};}catch(e){return{PUBLIC_KEY:'',SERVICE_ID:'',TEMPLATE_ID:''};}}
@@ -387,7 +396,7 @@
   window.configureEmailJS=function(){const cur=getEmailCfg();const pub=prompt('EmailJS Public Key',cur.PUBLIC_KEY||'')||'';const svc=prompt('EmailJS Service ID',cur.SERVICE_ID||'')||'';const tpl=prompt('EmailJS Template ID',cur.TEMPLATE_ID||'')||'';setEmailCfg(pub.trim(),svc.trim(),tpl.trim());try{if(window.emailjs&&pub)window.emailjs.init({publicKey:pub});alert('EmailJS alustettu.');}catch(e){alert('EmailJS-alustus epäonnistui.');}};
   (function(){const cfg=getEmailCfg();try{if(window.emailjs&&cfg.PUBLIC_KEY)window.emailjs.init({publicKey:cfg.PUBLIC_KEY});}catch(e){}document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='e'){e.preventDefault();window.configureEmailJS();}});})();
 
-  /* Esittelyteksti + taustat */
+  /* Esittelyteksti */
   function parasToHTML(s){return String(s||'').trim().split(/\n\s*\n/).map(p=>`<p>${p.trim()}</p>`).join('\n');}
   const defaultContent={pitch:`RUMAT STUDIO syntyi lapsuuden haaveesta ja vuosien aikana kypsyneestä intohimosta vaatesuunnitteluun. Vuonna 2023 visio alkoi muovautumaan nykyiseen muotoonsa: ajattomia ja kestäviä vaatteita, jotka syntyvät harkitusta rakkaudesta ja intohimosta luovaan tekemiseen.
 
@@ -400,42 +409,50 @@ Tulevaisuuden suunnitelmissa on oman studiollisen avaaminen pääkaupunkiseudull
 Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkityksellisyydestä käyttömukavuuteen asti. Tavoitteena ei ole täydellisyys, vaan rohkeus ja kehitys. Nimi RUMAT STUDIO viittaa juuri tähän: lapsen sallittuun keskeneräisyyteen, mutta tähdätä silti johonkin merkitykselliseen.`};
   (function(){
     const intro=$('#intro-text'); if(intro) intro.innerHTML=parasToHTML(defaultContent.pitch);
+    // Lataa intro-kuvat taustaan; jos puuttuu -> placeholder
     function setBg(el,url){ if(!el) return; const t=new Image(); t.onload=()=>el.style.backgroundImage=`url('${url}')`; t.onerror=()=>el.style.backgroundImage=`url('assets/placeholder.jpg')`; t.src=url; }
     setBg(document.querySelector('.intro-left'),'assets/intro-left.jpg');
     setBg(document.querySelector('.intro-right'),'assets/intro-right.jpg');
   })();
 
-  /* Dynaaminen pudotus: oikean kuvan ALAREUNA ≈ tekstin viimeinen rivi; vasen pysyy ylhäällä */
-  const FULL_SYNC_BREAKPOINT = 1280; // px – tällä ja yli kuvat samassa tasossa
+  /* Dynaaminen pudotus: oikean kuvan ALAREUNA ≈ tekstin loppu.
+     – Vasemman kuvan top on aina 0 (ei liiku).
+     – Oikean marginTop = max(0, copyHeight - imageHeight).
+     – Kun kuva siirtyy pois rivin kohdalta, float ei enää varaa tilaa → teksti jatkuu täyteen leveyteen automaattisesti. */
+  const FULL_SYNC_BREAKPOINT=1280; // tällä ja yli kuvat samassa tasossa (0 offset)
   function positionRightIntroImage(){
-    const right=document.querySelector('.intro-right');
-    const left =document.querySelector('.intro-left');
-    const copy =document.querySelector('.intro-copy');
+    const right=$('.intro-right'), left=$('.intro-left'), copy=$('.intro-copy');
     if(!right||!left||!copy) return;
 
     left.style.marginTop='0px'; // vasen aina ylhäällä
 
+    // Kiinteät mitat luetaan käytössä olevista CSS-var: width/height
+    const cs=getComputedStyle(right);
+    const imgH=parseFloat(cs.height)||0;
+
     if (window.innerWidth >= FULL_SYNC_BREAKPOINT){
-      right.style.marginTop = '0px'; // täysleveydellä kuvat tasan
-      return;
+      right.style.marginTop='0px'; return;
     }
-
-    const imgH  = right.getBoundingClientRect().height;
-    const copyH = copy.getBoundingClientRect().height;
-    const offset = Math.max(0, Math.round(copyH - imgH));
-    right.style.marginTop = offset + 'px';
+    // Tekstin todellinen korkeus (sisältö + rivittyminen)
+    const copyH=copy.getBoundingClientRect().height;
+    const offset=Math.max(0, Math.round(copyH - imgH));
+    right.style.marginTop=offset+'px';
   }
+  function scheduleIntro(){ clearTimeout(window.__introR); window.__introR=setTimeout(positionRightIntroImage, 60); }
   window.addEventListener('load', positionRightIntroImage);
-  window.addEventListener('resize', ()=>{ clearTimeout(window.__introR); window.__introR=setTimeout(positionRightIntroImage, 80); }, {passive:true});
+  window.addEventListener('resize', scheduleIntro, {passive:true});
   if ('fonts' in document){ document.fonts.ready.then(positionRightIntroImage); }
+  // Reagoi sisältömuutoksiin (jos tekstiä muokataan)
+  const mo=new MutationObserver(scheduleIntro);
+  mo.observe(document.getElementById('introFlow'), {subtree:true, childList:true, characterData:true});
 
-  /* Tuotedata */
+  /* Tuotedata (deliverable = “Lisää ostoskoriin”, muuten “Tulossa”) */
   const IMG=(id,n=1)=>`assets/patterns/${id}-${n}.jpg`;
   window.KAAVIOT=[
     { id:'dummy-kaava',   name:'Dummy kaava',   price:0.01, sizes:'PDF',      blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla kaavoilla. Ostettaessa saat linkin dummy-PDF:ään.', images:[IMG('dummy-kaava',1),IMG('dummy-kaava',2)], isDummy:true, deliverable:true, file:'auto-dummy' },
     { id:'ilmainen-ohje', name:'Ilmainen ohje', price:0.00, sizes:'One size', blurb:'Täysin ilmainen kokeiltava ohje (toistaiseksi dummy-PDF).', images:[IMG('ilmainen-ohje',1)], deliverable:true, file:'auto-dummy' },
 
-    /* Tulossa → ei “Lisää ostoskoriin” */
+    /* Tulossa → ei ostettavissa vielä */
     { id:'takki',      name:'Takki',      price:0.01, sizes:'XS–XL',    blurb:'Työn alla – pian saatavilla.', images:[IMG('takki',1)],        deliverable:false },
     { id:'laukku',     name:'Laukku',     price:0.01, sizes:'One size', blurb:'Sling-laukku kaava (PDF).',    images:[IMG('laukku',1),IMG('laukku',2)], deliverable:false },
     { id:'usva-paita', name:'Usva paita', price:0.01, sizes:'XS–XL',    blurb:'Rento paita raglan-hihoilla.', images:[IMG('usva-paita',1),IMG('usva-paita',2)], deliverable:false },
@@ -544,7 +561,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
 
   function sendConfirmationEmails(order){const anneEmail='aaltonen96@outlook.com';const cfg=getEmailCfg();const c=order?.customer||{};const itemsList=(order.items||[]).map(x=>`${x.name} x ${x.qty}`).join(', ');const totalStr=(order.items||[]).reduce((s,x)=>s+(x.price||0)*x.qty,0).toFixed(2)+' €';const addressBlock=`${(c.firstName||'')} ${(c.lastName||'')}\n${c.address||''}\n${(c.zip||'')} ${(c.city||'')}\n${c.country||''}\n${c.email||''}${c.phone?('\n'+c.phone):''}${c.notes?('\n'+c.notes):''}`;const dummyDataUrl=localStorage.getItem('lastDummyDataUrl')||'';const base={order_json:JSON.stringify(order,null,2),items:itemsList,total:totalStr,dummy_link:dummyDataUrl||(location.origin+'/assets/dummy-kaava.pdf'),customer_block:addressBlock};if(!window.emailjs||!cfg.PUBLIC_KEY||!cfg.SERVICE_ID||!cfg.TEMPLATE_ID){const warn=$('#paypalWarn');if(warn)warn.textContent='Huom: automaattinen sähköpostivahvistus ei ole käytössä – paina Ctrl/Cmd+E lisätäksesi EmailJS-avaimet.';return;}window.emailjs.send(cfg.SERVICE_ID,cfg.TEMPLATE_ID,{to_email:order.email||c.email,subject:'RUMAT STUDIO – tilausvahvistus',message:`Kiitos ostoksesta!\n\nTuotteet: ${itemsList}\nYhteensä: ${totalStr}\n\nAsiakastiedot:\n${addressBlock}\n\nDummy-kaava: ${base.dummy_link}`,...base}).catch(()=>{});window.emailjs.send(cfg.SERVICE_ID,cfg.TEMPLATE_ID,{to_email:anneEmail,subject:'Uusi tilaus – RUMAT STUDIO',message:`Uusi tilaus vastaanotettu.\n\nTuotteet: ${itemsList}\nYhteensä: ${totalStr}\n\nAsiakastiedot:\n${addressBlock}\n\nDummy-kaava: ${base.dummy_link}`,...base}).catch(()=>{});}
 
-  /* Navi visibility */
+  /* Navi visibility (ikonit esiin ennen päällekkäisyyksiä) */
   (function(){const container=$('#hdrRow'),brand=$('#brandBlock'),nav=$('#mainNav'),right=$('#rightBlock'),menuBtn=$('#openMenu'),cartIcon=$('#openCartIcon'),cartText=$('#openCartText');let navVisible=true;const GAP=72;function measureNavWidth(){const wasHidden=nav.classList.contains('nav-hidden');if(wasHidden)nav.classList.remove('nav-hidden');nav.classList.add('nav-measure');const w=Math.ceil(nav.scrollWidth);nav.classList.remove('nav-measure');if(wasHidden)nav.classList.add('nav-hidden');return w;}function canShowNav(){const cw=container.clientWidth;const bw=Math.ceil(brand.getBoundingClientRect().width);const rbw=Math.ceil(right.getBoundingClientRect().width);const navW=measureNavWidth();return navW<=Math.max(0,cw-bw-rbw-GAP);}function applyState(show){navVisible=!!show;if(navVisible){nav.classList.remove('nav-hidden');menuBtn.classList.add('hidden');cartIcon.classList.add('hidden');cartText.classList.remove('hidden');}else{nav.classList.add('nav-hidden');menuBtn.classList.remove('hidden');cartIcon.classList.remove('hidden');cartText.classList.add('hidden');}}function compute(){if(navVisible){if(!canShowNav())applyState(false);}else{if(canShowNav())applyState(true);}}let t=null;const schedule=()=>{if(t)return;t=setTimeout(()=>{t=null;compute();},80);};window.addEventListener('resize',schedule,{passive:true});if('fonts'in document)document.fonts.ready.then(compute);compute();})();
 
   /* Kaaviot UI */
