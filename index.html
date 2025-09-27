@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- EmailJS selainkirjasto -->
+  <!-- EmailJS selainkirjasto (asetukset: paina Ctrl/Cmd + E) -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
     function getEmailCfg(){ return {
@@ -54,23 +54,25 @@
       --ink:#202020; --olive:#A1A266; --deep-blue:#345563; --ivory:#F6F6F4; --light-blue:#DEEEEE;
       --header-h:64px; --band-radius:16px;
 
-      /* Esittely: muuttujat – toimivat myös mobiilissa */
-      --site-pad: 1rem;                   /* turvallinen sivumarginaali tekstille */
-      --intro-gap: 16px;                  /* tekstin ja kuvien väli */
-      --intro-left-w: min(34vw, 420px);
+      /* Sivupadding (samat kaikille sisältöalueille) */
+      --site-pad: 1rem;
+
+      /* Esittely – kuvat + teksti leveyden ja sijainnin kontrollit */
+      --intro-gap: 16px;
+      --intro-left-w:  min(34vw, 420px);
       --intro-right-w: min(34vw, 420px);
-      --intro-img-h: min(66vh, 640px);   /* hieman alle koko näkymän */
-      --intro-right-offset: 140px;       /* oikean kuvan aloitus-pudotus */
+      --intro-img-h:   min(66vh, 640px);  /* hieman alle koko näkymän */
+      --intro-right-offset: 280px;        /* OIKEA kuva alkaa alempaa (enemmän kuin ennen) */
       --intro-radius: 18px;
     }
     @media (max-width:900px){
       :root{
         --site-pad: 1rem;
         --intro-gap: 12px;
-        --intro-left-w: clamp(44vw, 48vw, 52vw);
+        --intro-left-w:  clamp(44vw, 48vw, 52vw);
         --intro-right-w: clamp(44vw, 48vw, 52vw);
-        --intro-img-h: min(50vh, 420px);
-        --intro-right-offset: 80px; /* putoaa aikaisemmin mobiilissa */
+        --intro-img-h:   min(50vh, 420px);
+        --intro-right-offset: 160px;      /* mobiilissa laskeutuu aiemmin */
         --intro-radius: 12px;
       }
     }
@@ -80,7 +82,7 @@
     h1,h2,h3,h4,h5,h6{ font-weight:900!important; text-transform:uppercase; color:var(--deep-blue); letter-spacing:.02em; margin:0 0 .6rem; }
     .normalcase{ text-transform:none!important; }
 
-    /* Header */
+    /* HEADER */
     header{ background:var(--ivory); border-bottom:1px solid rgba(0,0,0,.08); }
     #hdrRow{ position:relative; display:grid; grid-template-columns:auto 1fr auto; align-items:center; }
     #brandText{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:min(42vw,460px); color:var(--ink); }
@@ -109,18 +111,18 @@
     .logo-ink{ --logo-color:var(--ink); } .logo-white{ --logo-color:#fff; } .logo-light{ --logo-color:var(--light-blue); }
     .svg-logo--header{ width:2.8rem; height:2.8rem; } @media (min-width:640px){ .svg-logo--header{ width:3rem; height:3rem; } } @media (min-width:1024px){ .svg-logo--header{ width:3.2rem; height:3.2rem; } }
 
-    /* Hero */
+    /* HERO */
     .hero{ position:relative; height:calc(100svh - var(--header-h)); display:grid; place-items:center; overflow:hidden; text-align:center; background:#000; }
     .hero-img{ position:absolute; inset:0; width:100vw; height:100%; object-fit:cover; object-position:center; transform:none; }
     .hero .svg-logo{ width:11rem; height:11rem; } @media (min-width:640px){ .hero .svg-logo{ width:12rem; height:12rem; } } @media (min-width:1024px){ .hero .svg-logo{ width:13rem; height:13rem; } }
 
-    /* Bandit */
+    /* Bandit (sama leveys kaikille sisältölohkoille) */
     .band{ background:var(--ivory); border-radius:var(--band-radius); overflow:hidden; }
     .band-inner{ max-width:72rem; margin:0 auto; padding:3rem var(--site-pad); }
 
-    /* ===== Esittely: float + shape-outside (myös mobiilissa) ===== */
+    /* ===== Esittely: float + shape-outside ===== */
     .intro-wide{ margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw); }
-    .intro-flow{ max-width:72rem; margin:0 auto; padding:20px 0; }
+    .intro-flow{ max-width:72rem; margin:0 auto; padding:20px var(--site-pad); } /* sama leveys & sisennys kuin muilla */
     .intro-copy p{ margin:0 0 .9rem; line-height:1.6; }
 
     .intro-img{ background-size:cover; background-position:center; background-repeat:no-repeat; height:var(--intro-img-h); border:1px solid rgba(0,0,0,.12); }
@@ -140,7 +142,7 @@
       shape-margin:0; -webkit-shape-margin:0;
     }
 
-    /* Kaaviot */
+    /* KAAVIOT */
     .card{ background:var(--ivory); border-radius:16px; border:1px solid rgba(0,0,0,.12); overflow:hidden; }
     .pattern-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; align-items:start; }
     @media (min-width:768px){ .pattern-grid{ grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; } }
@@ -160,7 +162,7 @@
     .ex-prev{ left:10px; } .ex-next{ right:10px; }
     .ex-top{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.6rem .9rem; border-bottom:1px solid rgba(0,0,0,.1); }
 
-    /* Footer */
+    /* FOOTER (sama sisältöleveys) */
     .footer-bar{ position:relative; z-index:2; background:var(--olive); color:var(--ink); }
     .footer-grid{ max-width:72rem; margin:0 auto; padding:1.5rem var(--site-pad); display:grid; gap:1rem 2rem; align-items:start; grid-template-columns:1fr 1fr 1fr; grid-template-areas:"social contact logo"; }
     .footer-col h6{ font-size:.8rem; font-weight:900; text-transform:uppercase; letter-spacing:.12em; margin:0 0 .35rem; color:var(--ink); }
@@ -173,6 +175,7 @@
     .footer-copy{ text-align:center; font-size:.85rem; opacity:.85; padding:10px var(--site-pad) 16px; }
     @media (max-width:860px){ .footer-grid{ grid-template-columns:1fr 1fr; grid-template-areas:"contact logo" "social logo"; } .footer-logoBox{ justify-content:center; } }
 
+    /* Toast */
     .toast{ position:fixed; top:76px; left:0; right:0; display:flex; justify-content:center; z-index:70; pointer-events:none; }
     .toast>div{ pointer-events:auto; }
   </style>
@@ -354,10 +357,10 @@
   </div>
 
   <script>
+  /* ===== Apurit ===== */
   const fmtEUR = x => new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
   const $ = s => document.querySelector(s);
   const el=(t,a={},...k)=>{const n=document.createElement(t);Object.entries(a).forEach(([k2,v])=>{if(k2==='class')n.className=v;else if(k2==='html')n.innerHTML=v;else if(k2.startsWith('on'))n.addEventListener(k2.slice(2),v);else n.setAttribute(k2,v)});k.forEach(c=>{if(c==null)return; if(typeof c==='string') n.appendChild(document.createTextNode(c)); else n.appendChild(c)});return n};
-
   (function(){ const y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear(); })();
 
   function parasToHTML(s){ return String(s||'').trim().split(/\n\s*\n/).map(p=>`<p>${p.trim()}</p>`).join('\n'); }
@@ -375,15 +378,15 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
 
     function setBg(el,url){ if(!el) return; const t=new Image(); t.onload=()=>el.style.backgroundImage=`url('${url}')`; t.onerror=()=>el.style.backgroundImage=`url('assets/placeholder.jpg')`; t.src=url; }
 
-    // vasen kuva
+    // Vasen kuva (kiinni vasempaan reunaan)
     setBg(document.querySelector('.intro-left'),'assets/intro-left.jpg');
 
-    // oikea kuva DOMISSA ENNEN TEKSTIÄ → teksti yltää oikeaan reunaan, kunnes kuva osuu kohdalle
+    // Oikea kuva DOMISSA ENNEN TEKSTIÄ → teksti yltää oikeaan reunaan, kunnes kuva osuu kohdalle
     const right=document.createElement('div'); right.className='intro-img intro-right'; right.setAttribute('aria-hidden','true'); setBg(right,'assets/intro-right.jpg');
     const flow=document.getElementById('introFlow'); const copy=flow.querySelector('.intro-copy'); flow.insertBefore(right, copy);
   })();
 
-  /* ============= Tuotedata & ostoskori (lyhennetty toimiva) ============= */
+  /* ===== Tuotedata & ostoskori ===== */
   const IMG=(id,n=1)=>`assets/patterns/${id}-${n}.jpg`;
   window.KAAVIOT=[
     {id:'dummy-kaava',name:'Dummy kaava',price:0.01,sizes:'PDF',blurb:'Väliaikainen testikaava – korvataan myöhemmin.',images:[IMG('dummy-kaava',1),IMG('dummy-kaava',2)],isDummy:true,deliverable:true,file:'auto-dummy'},
@@ -400,7 +403,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   function renderCart(){ const root=$('#cartItems'); root.innerHTML=''; let sub=0;
     Object.entries(CART).forEach(([id,q])=>{ const p=window.KAAVIOT.find(x=>x.id===id); if(!p) return; sub+=(p.price||0)*q;
       root.appendChild(el('div',{class:'py-3 flex items-center justify-between gap-3'},
-        el('div',{}, el('div',{class:'font-semibold'},p.name), el('div',{class:'text-sm opacity-70'}, new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(p.price||0))),
+        el('div',{}, el('div',{class:'font-semibold'},p.name), el('div',{class:'text-sm opacity-70'}, fmtEUR(p.price||0))),
         el('div',{class:'flex items-center gap-2'},
           el('button',{'data-dec':id,class:'px-2 border border-[rgba(0,0,0,.15)] rounded'},'−'),
           el('span',{},String(q)),
@@ -409,7 +412,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
         )
       ));
     });
-    $('#subTotal').textContent=new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(sub);
+    $('#subTotal').textContent=fmtEUR(sub);
     root.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{ const id=b.dataset.remove; delete CART[id]; saveCart(); renderCart(); });
     root.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{ const id=b.dataset.inc; CART[id]=(CART[id]||0)+1; saveCart(); renderCart(); });
     root.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{ const id=b.dataset.dec; CART[id]=Math.max(0,(CART[id]||0)-1); if(CART[id]===0) delete CART[id]; saveCart(); renderCart(); });
@@ -418,7 +421,16 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   function addToCart(id){ const p=window.KAAVIOT.find(x=>x.id===id); if(!p) return; if(!canDeliver(p)){ alert('Tuote on tulossa – ei vielä myynnissä.'); return; } CART[id]=(CART[id]||0)+1; saveCart(); openCart(); }
   window.addToCart=addToCart; updateBadge();
 
-  // Nav & menu
+  /* ===== Kassa: avaus/sulku (UI) ===== */
+  const checkoutDrawer=$('#checkoutDrawer');
+  function openCheckout(){ checkoutDrawer.classList.add('open'); }
+  function closeCheckout(){ checkoutDrawer.classList.remove('open'); }
+  $('#checkout')?.addEventListener('click', ()=>{ if(Object.keys(CART).length===0) return alert('Ostoskori on tyhjä.'); closeCart(); openCheckout(); });
+  $('#closeCheckout')?.addEventListener('click', closeCheckout);
+  $('#closeCheckoutX')?.addEventListener('click', closeCheckout);
+  $('#checkoutBack')?.addEventListener('click', (e)=>{ e.preventDefault(); closeCheckout(); openCart(); });
+
+  /* ===== Nav & menu ===== */
   (function(){
     const container=$('#hdrRow'), brand=$('#brandBlock'), nav=$('#mainNav'), right=$('#rightBlock'), menuBtn=$('#openMenu'), cartIcon=$('#openCartIcon'), cartText=$('#openCartText');
     let navVisible=true; const GAP=72;
@@ -439,7 +451,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     })();
   })();
 
-  // Kaaviot – yksinkertainen ruudukko + laajennus (painike "Lisää ostoskoriin")
+  /* ===== Kaaviot UI ===== */
   (function(){
     const grid=$('#patternsGrid'); let selectedId=null; let expander=null; let current=null; let imgIdx=0; const DATA=window.KAAVIOT;
     const createImg=(src,alt)=>{ const im=document.createElement('img'); im.src=src||'assets/placeholder.jpg'; im.alt=alt||''; im.onerror=()=>{im.src='assets/placeholder.jpg'}; return im; };
