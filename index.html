@@ -68,7 +68,7 @@
 
       /* Intro-kuvien mitoitus & marginaalit */
       --site-pad: 1rem;                /* band-innerin sivupehmuste */
-      --intro-gutter: clamp(14px,3vw,26px); /* tekstiturvamarginaali reunoihin */
+      --intro-gutter: clamp(14px,3vw,26px); /* turvamarginaali reunoihin */
       --intro-gap: 16px;               /* tekstin ja kuvien väliin */
       --intro-left-w: min(32vw, 420px);
       --intro-right-w: min(32vw, 420px);
@@ -138,7 +138,7 @@
     .band{ background:var(--ivory); border-radius:var(--band-radius); overflow:hidden; }
     .band-inner{ max-width:72rem; margin:0 auto; padding:3rem var(--site-pad); }
 
-    /* ===== INTRO: float + shape-outside, oikea kuva lisätään 1. kappaleen jälkeen ===== */
+    /* ===== INTRO: float + shape-outside ===== */
     .intro-wide{ margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw); }
     .intro-flow{ max-width:72rem; margin:0 auto; padding: 20px 0; }
     .intro-copy{ min-width:0; }
@@ -188,7 +188,7 @@
     .ex-prev{ left:10px; } .ex-next{ right:10px; }
     .ex-top{ display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.6rem .9rem; border-bottom:1px solid rgba(0,0,0,.1); }
 
-    /* Footer (logo vaaleansininen, paljon isompi) */
+    /* Footer (iso vaaleansininen logo) */
     .footer-bar{ position:relative; z-index:2; background:var(--olive); color:var(--ink); }
     .footer-grid{ max-width:72rem; margin:0 auto; padding:1.5rem var(--site-pad); display:grid; gap:1rem 2rem; align-items:start; grid-template-columns:1fr 1fr 1fr; grid-template-areas:"social contact logo"; }
     .footer-col h6{ font-size:.8rem; font-weight:900; text-transform:uppercase; letter-spacing:.12em; margin:0 0 .35rem; color:var(--ink); }
@@ -197,7 +197,6 @@
     .footer-social{ grid-area:social; display:flex; flex-direction:column; gap:.9rem; }
     .footer-contact{ grid-area:contact; display:flex; flex-direction:column; gap:.9rem; }
     .footer-logoBox{ grid-area:logo; display:flex; justify-content:flex-end; align-items:stretch; }
-    /* logo skaalautuu koko footer-kolumnin korkeuteen */
     .svg-logo--footer{ width:auto; height:100%; min-height:72px; aspect-ratio:1/1; align-self:stretch; }
     .footer-copy{ text-align:center; font-size:.85rem; opacity:.85; padding:10px var(--site-pad) 16px; }
     @media (max-width:860px){ .footer-grid{ grid-template-columns:1fr 1fr; grid-template-areas:"contact logo" "social logo"; } .footer-logoBox{ justify-content:center; } }
@@ -252,7 +251,7 @@
 
   <!-- CONTENT -->
   <main class="pt-[64px]">
-    <!-- HERO (kuva + vaaleansininen logo keskellä) -->
+    <!-- HERO -->
     <section id="etusivu" class="hero px-4">
       <img src="assets/hero.jpg" alt="RUMAT STUDIO hero" class="hero-img"
            onerror="this.onerror=null;this.src='assets/placeholder.jpg';">
@@ -268,7 +267,6 @@
         <div class="band-inner">
           <h2 class="mb-4">Liian rumat ollakseen totta</h2>
 
-          <!-- Täysleveä, kuvat kiinni reunoissa. Oikea kuva lisätään JS:llä 1. kappaleen jälkeen. -->
           <div class="intro-wide">
             <div class="intro-flow" id="introFlow">
               <div class="intro-img intro-left" aria-hidden="true"></div>
@@ -277,7 +275,6 @@
                      onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
                 <div id="intro-text" class="text-[15px] sm:text-base normalcase"></div>
               </div>
-              <!-- ei oikeaa kuvaa täällä; lisätään JS:llä -->
             </div>
           </div>
 
@@ -318,7 +315,6 @@
     <!-- FOOTER -->
     <footer id="yhteys" class="footer-bar">
       <div class="footer-grid">
-        <!-- Vasen: Instagram + TikTok -->
         <div class="footer-social">
           <div class="footer-col">
             <h6>Instagram</h6>
@@ -330,7 +326,6 @@
           </div>
         </div>
 
-        <!-- Keskellä: Ota yhteyttä + Y-tunnus + legal-linkit -->
         <div class="footer-contact">
           <div class="footer-col">
             <h6>Ota yhteyttä</h6>
@@ -346,7 +341,6 @@
           </div>
         </div>
 
-        <!-- Oikea: iso vaaleansininen logo täyttämään koko footer-kolumnin korkeuden -->
         <div class="footer-logoBox">
           <span class="svg-logo svg-logo--footer logo-light" role="img" aria-label="RUMAT STUDIO"></span>
         </div>
@@ -474,7 +468,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   };
 
   (function(){
-    const intro=$('#intro-text'); if(intro) intro.innerHTML=parasToHTML(defaultContent.pitch);
+    const introText=$('#intro-text'); if(introText) introText.innerHTML=parasToHTML(defaultContent.pitch);
 
     function setBg(el,url){
       if(!el) return;
@@ -487,18 +481,16 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     // vasen kuva (pysyy ylhäällä)
     setBg(document.querySelector('.intro-left'),'assets/intro-left.jpg');
 
-    // oikea kuva lisätään ENSIMMÄISEN kappaleen jälkeen
+    // oikea kuva LISÄTÄÄN ennen tekstiä, jotta se vaikuttaa kaikkiin kappaleisiin,
+    // mutta sen top-offset hoituu CSS:llä (margin-top: var(--intro-right-offset))
     const right = document.createElement('div');
     right.className = 'intro-img intro-right';
     right.setAttribute('aria-hidden','true');
     setBg(right,'assets/intro-right.jpg');
 
-    const firstP = intro.querySelector('p');
-    if (firstP && firstP.parentNode){
-      firstP.parentNode.insertBefore(right, firstP.nextSibling);
-    } else {
-      intro.prepend(right);
-    }
+    const flow = document.getElementById('introFlow');
+    const copy = flow.querySelector('.intro-copy');
+    flow.insertBefore(right, copy); // <-- tärkeä muutos
   })();
 
   /* ================== Tuotedata ================== */
@@ -507,7 +499,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     { id:'dummy-kaava',   name:'Dummy kaava',    price:0.01, sizes:'PDF',      blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla kaavoilla.', images:[IMG('dummy-kaava',1),IMG('dummy-kaava',2)], isDummy:true, deliverable:true, file:'auto-dummy' },
     { id:'ilmainen-ohje', name:'Ilmainen ohje',  price:0.00, sizes:'One size', blurb:'Täysin ilmainen kokeiltava ohje (dummy-PDF).', images:[IMG('ilmainen-ohje',1)], deliverable:true, file:'auto-dummy' },
 
-    /* Alla olevat eivät vielä lähde asiakkaalle → Tulossa */
+    /* Tulossa-artikkelit (ei vielä toimiteta) */
     { id:'takki',        name:'Takki',        price:0.01, sizes:'XS–XL',    blurb:'Työn alla – pian saatavilla.', images:[IMG('takki',1)],        deliverable:false },
     { id:'laukku',       name:'Laukku',       price:0.01, sizes:'One size', blurb:'Sling-laukku kaava (PDF).',    images:[IMG('laukku',1),IMG('laukku',2)], deliverable:false },
     { id:'usva-paita',   name:'Usva paita',   price:0.01, sizes:'XS–XL',    blurb:'Rento paita raglan-hihoilla.', images:[IMG('usva-paita',1),IMG('usva-paita',2)], deliverable:false },
@@ -550,7 +542,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     root.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{ const id=b.dataset.dec; CART[id]=Math.max(0,(CART[id]||0)-1); if(CART[id]===0) delete CART[id]; saveCart(); renderCart(); });
   }
 
-  /* Toimitettavuuslogiikka */
   function canDeliver(p){ return !!(p && (p.deliverable || p.isDummy || p.file)); }
 
   function addToCart(id){
@@ -745,7 +736,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   /* ================== NAV & drawerit ================== */
   (function(){
     const container=$('#hdrRow'), brand=$('#brandBlock'), nav=$('#mainNav'), right=$('#rightBlock'), menuBtn=$('#openMenu'), cartIcon=$('#openCartIcon'), cartText=$('#openCartText');
-    let navVisible=true; const GAP=72; // puskuri, jotta ikonit tulevat ajoissa
+    let navVisible=true; const GAP=72;
 
     function measureNavWidth(){ const wasHidden=nav.classList.contains('nav-hidden'); if(wasHidden) nav.classList.remove('nav-hidden'); nav.classList.add('nav-measure'); const w=Math.ceil(nav.scrollWidth); nav.classList.remove('nav-measure'); if(wasHidden) nav.classList.add('nav-hidden'); return w;}
     function canShowNav(){ const cw=container.clientWidth; const bw=Math.ceil(brand.getBoundingClientRect().width); const rbw=Math.ceil(right.getBoundingClientRect().width); const navW=measureNavWidth(); return navW<=Math.max(0,cw-bw-rbw-GAP); }
@@ -754,7 +745,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     let t=null; const schedule=()=>{ if(t) return; t=setTimeout(()=>{ t=null; compute(); },80); };
     window.addEventListener('resize', schedule, {passive:true}); if('fonts' in document) document.fonts.ready.then(compute); compute();
 
-    // Menu drawer
     (function(){ const drawer=$('#menuDrawer'), openBtn=$('#openMenu'), closeA=$('#closeMenu'), closeX=$('#closeMenuX');
       function open(){ drawer.classList.add('open'); openBtn.setAttribute('aria-expanded','true'); }
       function close(){ drawer.classList.remove('open'); openBtn.setAttribute('aria-expanded','false'); }
