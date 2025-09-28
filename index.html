@@ -110,14 +110,13 @@
       background-repeat:no-repeat;
       height:var(--intro-img-h);
       border:1px solid rgba(0,0,0,.12);
-      border-radius:12px;
+      border-radius:18px;            /* <-- kaikki kulmat pyöreiksi */
       box-sizing:border-box;
       will-change:transform;
-      background-color:#ddd; /* näkyy vaikka kuva ei heti lataisi */
+      background-color:#ddd;
     }
-    .intro-img.left{border-radius:0 18px 18px 0;align-self:start}
+    .intro-img.left{align-self:start}
     .intro-img.right{
-      border-radius:18px 0 0 18px;
       align-self:start;
       transform:translateY(0);
       transition:transform .25s ease;
@@ -249,11 +248,19 @@
     .panelCentered{display:grid;place-items:center}
 
     /* Koira → Intro */
-    #scene-intro .dog{font-size:clamp(64px,16vw,160px);line-height:1;will-change:transform,opacity;transform:translateZ(0)}
     #scene-intro .panel-intro{display:flex;align-items:stretch;justify-content:center;will-change:transform,opacity;transform:translateZ(0)}
     #scene-intro .panel-dog{will-change:transform,opacity;transform:translateZ(0)}
     #scene-intro .panel-dog{transform:translateX(0%);opacity:1}
     #scene-intro .panel-intro{transform:translateX(100%);opacity:0}
+
+    /* Tarrakuva */
+    .panel-dog img.dog-sticker{
+      width: clamp(220px, 42vw, 520px);
+      height: auto;
+      pointer-events: none;
+      filter: drop-shadow(0 10px 28px rgba(0,0,0,.35));
+      will-change: transform;
+    }
 
     /* Kun animaatio valmis TAI sisältö liian korkea → irrota sticky-efektistä */
     #scene-intro.scene-done{height:auto}
@@ -339,9 +346,9 @@
     <!-- ===== SCENE 1: KOIRA → MIKAONRUMAT (scroll stopper) ===== -->
     <section id="scene-intro" class="scene">
       <div class="scene-sticky">
-        <!-- KOIRA -->
-        <div class="panel panel-dog panelCentered">
-          <div class="dog" role="img" aria-label="Koira">🐕</div>
+        <!-- KOIRA tarra -->
+        <div class="panel panel-dog panelCentered" aria-label="Koira tarra">
+          <img class="dog-sticker" src="assets/dog-sticker.png" alt="Koira tarra">
         </div>
 
         <!-- MIKAONRUMAT sisällön panel -->
@@ -770,7 +777,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     const dogPanel   = sceneIntro?.querySelector('.panel-dog');
     const introPanel = sceneIntro?.querySelector('#mikaonrumat');
     const bandCurtain= introPanel?.querySelector('.curtain');
-    // varmistetaan heti, ettei curtain peitä sisältöä tässä kohtauksessa
     bandCurtain?.classList.add('in');
 
     const smoother = t => t*t*t*(t*(6*t - 15) + 10);
@@ -785,7 +791,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       const alpha = 1 - Math.exp(-dt/110);
       ps += (e - ps) * alpha;
 
-      // Jos sisältö korkeampi kuin sticky -> vaihda flow-tilaan (ei leikkautumista)
       const needFlow = introPanel && (introPanel.scrollHeight > (meta.stickyH - 8));
       if(needFlow || ps > 0.995){
         sceneIntro.classList.add('scene-done');
@@ -813,7 +818,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       const r = document.querySelector('#scene-designer .door.right');
       const ph = document.querySelector('#designerPhoto');
       if(l && r){
-        // -35% -> -100% ja 35% -> 100%
         const L = -35 - (65*e);
         const R =  35 + (65*e);
         l.style.transform = `translateX(${L}%)`;
