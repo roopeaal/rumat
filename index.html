@@ -101,7 +101,7 @@
       display:grid;
       grid-template-columns: var(--intro-img-w) minmax(300px, 64rem) var(--intro-img-w);
       gap:14px;
-      align-items:stretch;
+      align-items:start;
       padding:18px 0;
     }
     .intro-img{
@@ -113,6 +113,7 @@
       border-radius:12px;
       box-sizing:border-box;
       will-change:transform;
+      background-color:#ddd; /* näkyy vaikka kuva ei heti lataisi */
     }
     .intro-img.left{border-radius:0 18px 18px 0;align-self:start}
     .intro-img.right{
@@ -135,7 +136,6 @@
     .pattern-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
     @media (min-width:768px){.pattern-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}}
     .tile{position:relative;cursor:pointer;aspect-ratio:1/1;display:block;transition:transform .18s ease,box-shadow .18s ease}
-    /* hillitty hover: 1px nosto ja kevyt varjo */
     .tile:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.06)}
     .tile:active{transform:translateY(0)}
     .tile img{width:100%;height:100%;object-fit:cover;display:block}
@@ -153,7 +153,7 @@
     .ex-prev{left:10px}.ex-next{right:10px}
     .ex-top{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.6rem .9rem;border-bottom:1px solid rgba(0,0,0,.1)}
 
-    /* Footer */
+    /* Footer – logo isoksi */
     .footer-bar{position:relative;z-index:2;background:var(--olive);color:var(--ink)}
     .footer-grid{max-width:72rem;margin:0 auto;padding:1.5rem 1rem;display:grid;gap:1rem 2rem;align-items:start;grid-template-columns:1fr 1fr 1fr;grid-template-areas:"social contact logo"}
     .footer-col h6{font-size:.8rem;font-weight:900;text-transform:uppercase;letter-spacing:.12em;margin:0 0 .35rem;color:var(--ink)}
@@ -161,10 +161,10 @@
     .footer-handle:hover,.footer-link:hover{text-decoration:underline}
     .footer-social{grid-area:social;display:flex;flex-direction:column;gap:.9rem}
     .footer-contact{grid-area:contact;display:flex;flex-direction:column;gap:.9rem}
-    .footer-logoBox{grid-area:logo;display:flex;justify-content:flex-end;align-items:flex-start;font-size:3.6rem;line-height:1}
+    .footer-logoBox{grid-area:logo;display:flex;justify-content:flex-end;align-items:flex-start;font-size:5.6rem;line-height:1}
     .svg-logo--footer{width:1em;height:1em;aspect-ratio:1/1;vertical-align:-0.125em}
     .footer-copy{text-align:center;font-size:.85rem;opacity:.85;padding:10px 1rem 16px}
-    @media (max-width:860px){.footer-grid{grid-template-columns:1fr 1fr;grid-template-areas:"contact logo" "social logo"}.footer-logoBox{justify-content:center;font-size:2.8rem}}
+    @media (max-width:860px){.footer-grid{grid-template-columns:1fr 1fr;grid-template-areas:"contact logo" "social logo"}.footer-logoBox{justify-content:center;font-size:4rem}}
 
     /* Toast */
     .toast{position:fixed;top:76px;left:0;right:0;display:flex;justify-content:center;z-index:70;pointer-events:none}.toast>div{pointer-events:auto}
@@ -221,7 +221,7 @@
     }
     .intro-giant .tagline.show{opacity:1;transform:translateY(0)}
 
-    /* WOW-efektit (käytetään vain siellä missä kuuluu) */
+    /* WOW-efektit (vain sallittuihin osiin) */
     .curtain{position:relative;overflow:hidden}
     .curtain::before,.curtain::after{content:"";position:absolute;top:0;bottom:0;width:52vw;background:var(--ivory);transform:scaleX(1);transition:transform 1.05s cubic-bezier(.65,0,.35,1);pointer-events:none;z-index:10}
     .curtain::before{left:0;transform-origin:left}.curtain::after{right:0;transform-origin:right}
@@ -255,11 +255,17 @@
     #scene-intro .panel-dog{transform:translateX(0%);opacity:1}
     #scene-intro .panel-intro{transform:translateX(100%);opacity:0}
 
-    /* Suunnittelija – ovet */
+    /* Kun animaatio valmis TAI sisältö liian korkea → irrota sticky-efektistä */
+    #scene-intro.scene-done{height:auto}
+    #scene-intro.scene-done .scene-sticky{position:static;height:auto;overflow:visible}
+    #scene-intro.scene-done .panel{position:static;inset:auto;transform:none!important;opacity:1!important}
+    #scene-intro.scene-done .panel-dog{display:none}
+
+    /* Suunnittelija – ovet: aloitus raollaan (näkyy sisältö heti) */
     #scene-designer .doors{position:absolute;inset:0;pointer-events:none}
     #scene-designer .door{position:absolute;top:0;bottom:0;width:52vw;background:var(--ivory)}
-    #scene-designer .door.left{left:0;transform:translateX(0)}
-    #scene-designer .door.right{right:0;transform:translateX(0)}
+    #scene-designer .door.left{left:0;transform:translateX(-35%)}  /* raollaan alussa */
+    #scene-designer .door.right{right:0;transform:translateX(35%)} /* raollaan alussa */
     #scene-designer .onstage{position:absolute;inset:0;overflow:auto}
 
     @media (prefers-reduced-motion:reduce){
@@ -339,8 +345,8 @@
         </div>
 
         <!-- MIKAONRUMAT sisällön panel -->
-        <section id="mikaonrumat" class="panel">
-          <div class="band full-bleed curtain" style="display:flex;align-items:stretch;justify-content:center">
+        <section id="mikaonrumat" class="panel panel-intro">
+          <div class="band full-bleed curtain in" style="display:flex;align-items:stretch;justify-content:center">
             <div class="band-inner">
               <h2 class="mb-4">Liian rumat ollakseen totta</h2>
               <div class="intro-wide">
@@ -369,7 +375,7 @@
       </div>
     </section>
 
-    <!-- ===== SCENE 2: SUUNNITTELIJA (ovet aukeavat) ===== -->
+    <!-- ===== SCENE 2: SUUNNITTELIJA (ovet raollaan → aukeavat) ===== -->
     <section id="scene-designer" class="scene">
       <div class="scene-sticky">
         <section id="suunnittelija" class="onstage">
@@ -397,7 +403,7 @@
       </div>
     </section>
 
-    <!-- FOOTER (ei efektejä) -->
+    <!-- FOOTER -->
     <footer id="yhteys" class="footer-bar">
       <div class="footer-grid">
         <div class="footer-social">
@@ -579,7 +585,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   })()
 
   ;(()=>{const grid=$('#patternsGrid');let selectedId=null;let expander=null;let current=null;let imgIdx=0;const DATA=window.KAAVIOT
-    // minimalistiset kortit (ei edgeCard-luokkaa)
     DATA.forEach(p=>{const tile=document.createElement('article');tile.className='tile card';tile.setAttribute('data-id',p.id);const img=createImg((p.images||[])[0],p.name);const cap=document.createElement('div');cap.className='tile-caption';const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));const labelSuffix=!deliver?' · Tulossa':(p.price===0?' · Ilmainen':'');cap.textContent=p.name+labelSuffix;tile.appendChild(img);tile.appendChild(cap);grid.appendChild(tile)})
     function columns(){const cs=getComputedStyle(grid).gridTemplateColumns;return Math.max(1,cs.split(' ').length)}
     function insertAfterRow(tileEl){const tiles=Array.from(grid.querySelectorAll('.tile, .expander'));const only=tiles.filter(n=>n.classList.contains('tile'));const idx=only.indexOf(tileEl);const cols=columns();const rowEnd=Math.min(only.length-1,Math.floor(idx/cols)*cols+(cols-1));const after=only[rowEnd];grid.insertBefore(expander,after.nextSibling)}
@@ -651,7 +656,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       document.querySelectorAll('#mikaonrumat .curtain, #scene-designer .curtain').forEach(el=>el.classList.add('in'));
     }
 
-    // Edge-otsikot: EI kaaviot-otsikkoa
     function edgeify(sel){
       const nodes=document.querySelectorAll(sel);
       nodes.forEach((n,i)=>{
@@ -668,7 +672,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     }
     edgeify('#mikaonrumat h2, #suunnittelija h2');
 
-    // Sisääntulo-fade: jätetään pois footerista; kaavioiden tileille ok (minimaalinen)
     const revealTargets=document.querySelectorAll('#mikaonrumat .band-inner, #patternsGrid .tile, .ex-info, #scene-designer .band-inner');
     revealTargets.forEach(el=>el.classList.add('sr'));
 
@@ -733,12 +736,13 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     function makeSceneDriver(sceneSel, apply){
       const scene = document.querySelector(sceneSel);
       if(!scene) return ()=>{};
-      let total = 1, start = 0;
+      const sticky = scene.querySelector('.scene-sticky');
+
+      let total = 1, start = 0, stickyH = 0;
 
       function measure(){
         const vh = window.innerHeight;
-        const sticky = scene.querySelector('.scene-sticky');
-        const stickyH = Math.max(1, vh - HEADER);
+        stickyH = Math.max(1, vh - HEADER);
         total = Math.max(1, scene.offsetHeight - stickyH);
         start = scene.offsetTop;
       }
@@ -751,7 +755,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
           ticking = false;
           const y = window.scrollY || window.pageYOffset || 0;
           const p = clamp01((y - start)/total);
-          apply(p);
+          apply(p, {stickyH});
         });
       }
       window.addEventListener('scroll',onScroll,{passive:true});
@@ -761,16 +765,19 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       return ()=>{window.removeEventListener('scroll',onScroll)}
     }
 
-    /* Scene 1: Koira → Intro – smooth */
+    /* Scene 1: Koira → Intro – smooth + “flow”-tila jos sisältö liian korkea */
     const sceneIntro = document.querySelector('#scene-intro');
     const dogPanel   = sceneIntro?.querySelector('.panel-dog');
     const introPanel = sceneIntro?.querySelector('#mikaonrumat');
+    const bandCurtain= introPanel?.querySelector('.curtain');
+    // varmistetaan heti, ettei curtain peitä sisältöä tässä kohtauksessa
+    bandCurtain?.classList.add('in');
 
     const smoother = t => t*t*t*(t*(6*t - 15) + 10);
     let lastTs = performance.now();
     let ps = 0;
 
-    makeSceneDriver('#scene-intro', p=>{
+    makeSceneDriver('#scene-intro', (p, meta)=>{
       const e = smoother(p);
       const now = performance.now();
       const dt = Math.min(50, now - lastTs);
@@ -778,17 +785,27 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       const alpha = 1 - Math.exp(-dt/110);
       ps += (e - ps) * alpha;
 
-      if(dogPanel){
-        dogPanel.style.transform = `translate3d(${(-120*ps)}vw, 0, 0)`;
-        dogPanel.style.opacity   = String(1 - ps);
+      // Jos sisältö korkeampi kuin sticky -> vaihda flow-tilaan (ei leikkautumista)
+      const needFlow = introPanel && (introPanel.scrollHeight > (meta.stickyH - 8));
+      if(needFlow || ps > 0.995){
+        sceneIntro.classList.add('scene-done');
+      }else if(ps < 0.02 && !needFlow){
+        sceneIntro.classList.remove('scene-done');
       }
-      if(introPanel){
-        introPanel.style.transform = `translate3d(${(100*(1-ps))}vw, 0, 0)`;
-        introPanel.style.opacity   = String(Math.min(1, ps*1.15));
+
+      if(!sceneIntro.classList.contains('scene-done')){
+        if(dogPanel){
+          dogPanel.style.transform = `translate3d(${(-120*ps)}vw, 0, 0)`;
+          dogPanel.style.opacity   = String(1 - ps);
+        }
+        if(introPanel){
+          introPanel.style.transform = `translate3d(${(100*(1-ps))}vw, 0, 0)`;
+          introPanel.style.opacity   = String(Math.min(1, ps*1.15));
+        }
       }
     });
 
-    /* Scene 2: Suunnittelija – ovet auki + kuva elää */
+    /* Scene 2: Suunnittelija – ovet raollaan alussa → aukeavat lisää */
     makeSceneDriver('#scene-designer', p=>{
       const ease = t=>t*(2-t);
       const e = ease(p);
@@ -796,8 +813,11 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       const r = document.querySelector('#scene-designer .door.right');
       const ph = document.querySelector('#designerPhoto');
       if(l && r){
-        l.style.transform = `translateX(${(-100*e)}%)`;
-        r.style.transform = `translateX(${(100*e)}%)`;
+        // -35% -> -100% ja 35% -> 100%
+        const L = -35 - (65*e);
+        const R =  35 + (65*e);
+        l.style.transform = `translateX(${L}%)`;
+        r.style.transform = `translateX(${R}%)`;
       }
       if(ph){
         const s = 0.96 + 0.08*e;
