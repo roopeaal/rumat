@@ -75,17 +75,75 @@
     .band{background:var(--ivory);border-radius:var(--band-radius);overflow:hidden}
     .band-inner{max-width:72rem;margin:0 auto;padding:3rem 1rem}
 
-    /* Intro layout */
+    /* ===== Intro layout – UUSI TOTEUTUS ===== */
     .intro-wide{margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
-    .intro-grid{display:grid;grid-template-columns:1fr minmax(300px,64rem) 1fr;gap:14px;align-items:stretch;padding:18px 0}
-    .intro-img{background-size:cover;background-position:center;background-repeat:no-repeat;min-height:360px;border:1px solid rgba(0,0,0,.12)}
-    @media (min-width:1200px){.intro-img{min-height:420px}}
-    .intro-img.left{background-image:url('assets/intro-left.jpg');border-radius:0 18px 18px 0}
-    .intro-img.right{background-image:url('assets/intro-right.jpg');border-radius:18px 0 0 18px}
-    .intro-copy{padding:6px 12px;min-width:0}
+    .intro-grid{display:block;padding:18px 0} /* ei enää 3-palstainen grid */
+
+    .intro-copy{
+      /* yhteiset mitat: kuvat samankokoisiksi */
+      --intro-img-w: min(22vw, 220px);
+      --intro-img-h: 360px;       /* oletuskorkeus */
+      position: relative;         /* oikean kuvan ankkurointi */
+      padding: 6px 12px;
+      min-width: 0;
+    }
+    @media (min-width:1200px){
+      .intro-copy{ --intro-img-h: 420px; }
+    }
+
+    /* Yhteiset kuvalaatikolle */
+    .intro-img{
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      width: var(--intro-img-w);
+      height: var(--intro-img-h);
+      border:1px solid rgba(0,0,0,.12);
+      box-sizing: border-box;
+    }
+
+    /* Vasen kuva: kelluu vasemmalle */
+    .intro-img.left{
+      float: left;
+      margin: 0 14px 10px 0;
+      border-radius: 0 18px 18px 0;
+    }
+
+    /* Näkymätön oikean kuvan “muoto”, jonka ympäri teksti kiertää.
+       Sitä siirretään JS:llä margin-topilla alaspäin. */
+    .intro-shape-right{
+      float: right;
+      width: var(--intro-img-w);
+      height: var(--intro-img-h);
+      margin: 0 0 10px 14px;
+    }
+
+    /* Varsinainen oikea kuva: näkyvä, ankkuroituu .intro-copy:n alareunaan. */
+    .intro-img.right{
+      position: absolute;
+      right: 0;
+      bottom: 0; /* alareuna samaan tasoon kuin viimeinen tekstirivi */
+      margin: 0 0 0 14px;
+      border-radius: 18px 0 0 18px;
+      background-position: center bottom; /* visuaalisesti alas */
+      pointer-events: none; /* ei peitä tekstin valintaa */
+    }
+
     .intro-copy .logo{width:56px;height:56px;display:block;margin:0 auto 12px;object-fit:contain}
     .intro-copy p{margin:0 0 .8rem;line-height:1.6}
-    @media (max-width:900px){.intro-grid{grid-template-columns:1fr;padding:12px 0}.intro-img{border-radius:12px}}
+
+    @media (max-width:900px){
+      .intro-grid{padding:12px 0}
+      .intro-shape-right{display:none}
+      .intro-img.left,.intro-img.right{
+        position: static; float:none;
+        width: 100%;
+        height: var(--intro-img-h);
+        margin: 0 0 12px 0;
+        border-radius: 12px;
+        background-position: center center;
+      }
+    }
 
     /* Kaaviot */
     .card{background:var(--ivory);border-radius:16px;border:1px solid rgba(0,0,0,.12);overflow:hidden}
@@ -252,16 +310,28 @@
       <div class="band full-bleed curtain">
         <div class="band-inner">
           <h2 class="mb-4">Liian rumat ollakseen totta</h2>
+
+          <!-- ===== Intro: UUSI RAKENNE ===== -->
           <div class="intro-wide">
             <div class="intro-grid">
-              <div class="intro-img left" aria-hidden="true"></div>
               <div class="intro-copy">
+                <!-- Kelluva vasen kuva -->
+                <div class="intro-img left" aria-hidden="true"></div>
+
+                <!-- Oikean kuvan näkymätön muoto (float), jota siirretään JS:llä -->
+                <div class="intro-shape-right" aria-hidden="true"></div>
+
+                <!-- Logo + teksti -->
                 <img class="logo" src="assets/logo.svg" alt="RUMAT STUDIO" onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
                 <div id="intro-text" class="text-[15px] sm:text-base normalcase"></div>
+
+                <!-- Varsinainen oikea kuva (absolute; alareunaan) -->
+                <div class="intro-img right" aria-hidden="true"></div>
               </div>
-              <div class="intro-img right" aria-hidden="true"></div>
             </div>
           </div>
+          <!-- ===== /Intro ===== -->
+
         </div>
       </div>
     </section>
@@ -524,6 +594,39 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     const revealTargets=document.querySelectorAll('.band-inner,#patternsGrid .tile,.ex-info,.footer-grid');revealTargets.forEach(el=>el.classList.add('sr'));if(!reduce&&'IntersectionObserver'in window){const sr=new IntersectionObserver((es,ob)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ob.unobserve(e.target)}})},{threshold:0.08});revealTargets.forEach(el=>sr.observe(el))}else{revealTargets.forEach(el=>el.classList.add('in'))}
     const heroImg=document.querySelector('.hero-img');const heroL=document.querySelector('.hero .svg-logo');if(heroImg&&!reduce){let tick=false;const onScroll=()=>{if(tick)return;tick=true;requestAnimationFrame(()=>{const y=window.scrollY||0;const t=y*0.12;heroImg.style.transform=`translateY(${t}px)`;if(heroL)heroL.style.transform=`translateY(${t*0.4}px)`;tick=false})};window.addEventListener('scroll',onScroll,{passive:true})}
     document.querySelectorAll('#checkout,#checkoutPay,.btn-primary,.btn').forEach(b=>{b.classList.add('btn-anim');b.addEventListener('pointerdown',()=>b.classList.add('press'));['pointerup','pointerleave','blur'].forEach(ev=>b.addEventListener(ev,()=>b.classList.remove('press')))})
+  })()
+
+  /* ====== Esittelyosion oikean kuvan “smooth” lasku ====== */
+  ;(()=> {
+    function syncIntroRight(){
+      const wrap = document.querySelector('#mikaonrumat .intro-copy');
+      if(!wrap) return;
+      const shape = wrap.querySelector('.intro-shape-right');
+      const right = wrap.querySelector('.intro-img.right');
+      if(!shape || !right) return;
+
+      // Pois päältä mobiilissa
+      if (window.matchMedia('(max-width: 900px)').matches){
+        shape.style.marginTop = '';
+        return;
+      }
+
+      // .intro-copy:n korkeus (teksti + vasen kuva + shape-floatin vaikutus)
+      const copyH = wrap.getBoundingClientRect().height;
+
+      // oikean kuvan laskennallinen korkeus (CSS: --intro-img-h)
+      const rightH = parseFloat(getComputedStyle(right).height) || 0;
+
+      // siirrä kelluvaa "shapea" niin, että sen ala-reuna = copyH
+      const mt = Math.max(0, copyH - rightH);
+      shape.style.marginTop = mt + 'px';
+    }
+
+    const schedule = (()=>{let req=null; return ()=>{ if(req) return; req=requestAnimationFrame(()=>{ req=null; syncIntroRight(); }); };})();
+    window.addEventListener('resize', schedule, {passive:true});
+    if ('fonts' in document) document.fonts.ready.then(syncIntroRight);
+    // Kun esittelyteksti on injektoitu, pieni viive varmistaa layoutin
+    setTimeout(syncIntroRight, 0);
   })()
   </script>
 </body>
