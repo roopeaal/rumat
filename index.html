@@ -64,7 +64,7 @@
     .drawer>.panel{position:absolute;top:0;bottom:0;width:min(640px,94vw);background:var(--ivory);box-shadow:0 10px 30px rgba(0,0,0,.2);overflow:auto}
     #menuDrawer .panel{left:0}#cartDrawer .panel{right:0}#checkoutDrawer .panel{right:0}#cookieDrawer .panel{right:0}
 
-    /* Hero */
+    /* Hero (ei efektiverhoja) */
     .hero{position:relative;height:calc(100svh - var(--header-h));display:grid;place-items:center;overflow:hidden;text-align:center;background:#000}
     .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0}
 
@@ -105,22 +105,16 @@
       padding:18px 0;
     }
     .intro-img{
-      background-size:cover;
-      background-position:center;
-      background-repeat:no-repeat;
+      background-size:cover;background-position:center;background-repeat:no-repeat;
       height:var(--intro-img-h);
       border:1px solid rgba(0,0,0,.12);
-      border-radius:18px;            /* <-- kaikki kulmat pyöreiksi */
+      border-radius:18px;            /* kaikki kulmat pyöreiksi */
       box-sizing:border-box;
       will-change:transform;
       background-color:#ddd;
     }
     .intro-img.left{align-self:start}
-    .intro-img.right{
-      align-self:start;
-      transform:translateY(0);
-      transition:transform .25s ease;
-    }
+    .intro-img.right{align-self:start;transform:translateY(0);transition:transform .25s ease}
     .intro-copy{padding:6px 12px;min-width:0}
     .intro-copy .logo{width:56px;height:56px;display:block;margin:0 auto 12px;object-fit:contain}
     .intro-copy p{margin:0 0 .8rem;line-height:1.6}
@@ -152,7 +146,7 @@
     .ex-prev{left:10px}.ex-next{right:10px}
     .ex-top{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.6rem .9rem;border-bottom:1px solid rgba(0,0,0,.1)}
 
-    /* Footer – logo isoksi */
+    /* Footer – logo isoksi (ei efektejä) */
     .footer-bar{position:relative;z-index:2;background:var(--olive);color:var(--ink)}
     .footer-grid{max-width:72rem;margin:0 auto;padding:1.5rem 1rem;display:grid;gap:1rem 2rem;align-items:start;grid-template-columns:1fr 1fr 1fr;grid-template-areas:"social contact logo"}
     .footer-col h6{font-size:.8rem;font-weight:900;text-transform:uppercase;letter-spacing:.12em;margin:0 0 .35rem;color:var(--ink)}
@@ -247,11 +241,9 @@
     .panel{position:absolute;inset:0;will-change:transform,opacity;transform:translateZ(0);backface-visibility:hidden;contain:paint}
     .panelCentered{display:grid;place-items:center}
 
-    /* Koira → Intro */
-    #scene-intro .panel-intro{display:flex;align-items:stretch;justify-content:center;will-change:transform,opacity;transform:translateZ(0)}
-    #scene-intro .panel-dog{will-change:transform,opacity;transform:translateZ(0)}
-    #scene-intro .panel-dog{transform:translateX(0%);opacity:1}
-    #scene-intro .panel-intro{transform:translateX(100%);opacity:0}
+    /* Koira → Intro: kerrosjärjestys ja lähtötilat */
+    #scene-intro .panel-dog{z-index:2;transform:translateX(0%);opacity:1}
+    #scene-intro .panel-intro{z-index:1;transform:translateX(100%);opacity:0}
 
     /* Tarrakuva */
     .panel-dog img.dog-sticker{
@@ -267,6 +259,7 @@
     #scene-intro.scene-done .scene-sticky{position:static;height:auto;overflow:visible}
     #scene-intro.scene-done .panel{position:static;inset:auto;transform:none!important;opacity:1!important}
     #scene-intro.scene-done .panel-dog{display:none}
+    #scene-intro.scene-done .panel-intro{position:static!important;inset:auto!important;transform:none!important;opacity:1!important}
 
     /* Suunnittelija – ovet: aloitus raollaan (näkyy sisältö heti) */
     #scene-designer .doors{position:absolute;inset:0;pointer-events:none}
@@ -353,7 +346,7 @@
 
         <!-- MIKAONRUMAT sisällön panel -->
         <section id="mikaonrumat" class="panel panel-intro">
-          <div class="band full-bleed curtain in" style="display:flex;align-items:stretch;justify-content:center">
+          <div class="band full-bleed">
             <div class="band-inner">
               <h2 class="mb-4">Liian rumat ollakseen totta</h2>
               <div class="intro-wide">
@@ -386,7 +379,7 @@
     <section id="scene-designer" class="scene">
       <div class="scene-sticky">
         <section id="suunnittelija" class="onstage">
-          <div class="band full-bleed curtain" style="height:100%;display:flex;align-items:center">
+          <div class="band full-bleed" style="height:100%;display:flex;align-items:center">
             <div class="band-inner" style="width:100%">
               <h2 class="text-3xl mb-4">Suunnittelija</h2>
               <div class="grid md:grid-cols-[320px_1fr] gap-6 items-start">
@@ -605,6 +598,24 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     grid.addEventListener('click',e=>{const tile=e.target.closest('.tile');if(!tile||!grid.contains(tile))return;selectTile(tile)})
   })()
 
+  /* ==== Esittelypalkki: vapauta pin-efekti heti jos sisältö on liian korkea ==== */
+  ;(function(){
+    const scene = document.querySelector('#scene-intro');
+    const sticky = scene?.querySelector('.scene-sticky');
+    const intro = scene?.querySelector('#mikaonrumat');
+    if(!scene || !sticky || !intro) return;
+    const HEADER = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64;
+    function forceFlowIfTall(){
+      const stickyH = Math.max(1, window.innerHeight - HEADER);
+      if(intro.scrollHeight > stickyH - 8){ scene.classList.add('scene-done'); }
+      else{ scene.classList.remove('scene-done'); }
+    }
+    if('fonts' in document) document.fonts.ready.then(forceFlowIfTall);
+    window.addEventListener('load', forceFlowIfTall, {once:true});
+    window.addEventListener('resize', ()=>requestAnimationFrame(forceFlowIfTall), {passive:true});
+    setTimeout(forceFlowIfTall, 0);
+  })();
+
   function openCookiePrefs(){const d=$('#cookieDrawer');const c=getConsent();$('#consentAnalytics').checked=!!c.analytics;d.classList.add('open')}
   function closeCookiePrefs(){$('#cookieDrawer').classList.remove('open')}
   ;(()=>{$('#openCookiePrefs')?.addEventListener('click',e=>{e.preventDefault();openCookiePrefs()});const d=$('#cookieDrawer');d.querySelectorAll('[data-close-cookie]')?.forEach(b=>b.addEventListener('click',closeCookiePrefs));$('#cookieSavePrefs')?.addEventListener('click',()=>{const c={necessary:true,analytics:!!$('#consentAnalytics').checked};setConsent(c);closeCookiePrefs();postConsentApply();showToast('Evästeasetukset tallennettu.','success')});$('#cookieAcceptAll2')?.addEventListener('click',()=>{const c={necessary:true,analytics:true};setConsent(c);closeCookiePrefs();postConsentApply();showToast('Kaikki ei-välttämättömät evästeet hyväksytty.','success')})
@@ -615,42 +626,25 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   /* ====== JÄTTI-INTRO: pidennetty + verho-finaali ====== */
   ;(()=>{const KEY='rumat.introShown.session';const seen=sessionStorage.getItem(KEY)==='1';const overlay=$('#introOverlay');const out=$('#introText')
     if(seen||!overlay||!out){return}
-
     const L1='RUMAT'; const L2='STUDIO'; const TAG='LIIAN RUMAT OLLAKSEEN TOTTA'
     const rot1=[-1,+2,-2,+1,0]; const rot2=[-1,0,+1,+1,0,-2]
-
     function buildLine(text,rots,cls){const line=document.createElement('span');line.className='line '+cls;Array.from(text).forEach((ch,i)=>{const s=document.createElement('span');s.className='ch';s.textContent=ch;const base=(rots&&i<rots.length)?rots[i]:0;const jitter=(Math.random()*1.2-0.6);s.style.setProperty('--rot',(base+jitter)+'deg');if(ch==='O')s.style.transform+=' scaleX(0.98)';line.appendChild(s)});return line}
-
     overlay.style.display='flex';
     out.innerHTML='';
-    const line1=buildLine(L1,rot1,'line1');
-    const br=document.createElement('br');
-    const line2=buildLine(L2,rot2,'line2');
+    const line1=buildLine(L1,rot1,'line1'); const br=document.createElement('br'); const line2=buildLine(L2,rot2,'line2');
     const tag=document.createElement('div'); tag.className='tagline'; tag.textContent=TAG;
     out.appendChild(line1); out.appendChild(br); out.appendChild(line2); out.appendChild(tag);
-
     function fitLine(line){const avail=Math.min(window.innerWidth*0.96, 2600); line.style.setProperty('--fit','1'); const w=line.getBoundingClientRect().width||1; const scale=Math.max(0.6, Math.min(1.6, (avail/w)*0.995)); line.style.setProperty('--fit', String(scale)) }
     const doFit=()=>{fitLine(line1);fitLine(line2)}
     doFit(); window.addEventListener('resize',()=>{requestAnimationFrame(doFit)},{passive:true})
-
-    const chars=out.querySelectorAll('.ch');let t=0;chars.forEach(el=>{setTimeout(()=>el.classList.add('show'),t);t+=65});
-    setTimeout(()=>tag.classList.add('show'),t+180);
-
-    function openCurtains(){
-      overlay.classList.add('open');
-      out.style.opacity='0';
-      setTimeout(()=>{overlay.style.display='none'; sessionStorage.setItem(KEY,'1')}, 1000);
-    }
-
-    setTimeout(openCurtains, t + 3400);
-    overlay.addEventListener('click', openCurtains, {once:true});
+    const chars=out.querySelectorAll('.ch');let t=0;chars.forEach(el=>{setTimeout(()=>el.classList.add('show'),t);t+=65});setTimeout(()=>tag.classList.add('show'),t+180);
+    function openCurtains(){overlay.classList.add('open');out.style.opacity='0';setTimeout(()=>{overlay.style.display='none'; sessionStorage.setItem(KEY,'1')}, 1000)}
+    setTimeout(openCurtains, t + 3400); overlay.addEventListener('click', openCurtains, {once:true});
   })()
 
   /* ====== Efektit toistuviksi: vain sallituille alueille ====== */
   ;(()=>{ 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // curtain: EI hero/kaaviot/footer – vain mikaonrumat ja suunnittelija
     if(!reduce && 'IntersectionObserver' in window){
       const curtainObs = new IntersectionObserver((entries)=>{
         entries.forEach(e=>{
@@ -658,11 +652,10 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
           else{ e.target.classList.remove('in'); }
         });
       },{threshold:.18});
-      document.querySelectorAll('#mikaonrumat .curtain, #scene-designer .curtain').forEach(el=>curtainObs.observe(el));
+      document.querySelectorAll('#scene-designer .curtain').forEach(el=>curtainObs.observe(el));
     }else{
-      document.querySelectorAll('#mikaonrumat .curtain, #scene-designer .curtain').forEach(el=>el.classList.add('in'));
+      document.querySelectorAll('#scene-designer .curtain').forEach(el=>el.classList.add('in'));
     }
-
     function edgeify(sel){
       const nodes=document.querySelectorAll(sel);
       nodes.forEach((n,i)=>{
@@ -678,10 +671,8 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       });
     }
     edgeify('#mikaonrumat h2, #suunnittelija h2');
-
     const revealTargets=document.querySelectorAll('#mikaonrumat .band-inner, #patternsGrid .tile, .ex-info, #scene-designer .band-inner');
     revealTargets.forEach(el=>el.classList.add('sr'));
-
     if(!reduce && 'IntersectionObserver' in window){
       const srObs = new IntersectionObserver((entries)=>{
         entries.forEach(e=>{
@@ -693,7 +684,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     }else{
       revealTargets.forEach(el=>el.classList.add('in'));
     }
-
     document.querySelectorAll('#checkout,#checkoutPay,.btn-primary,.btn').forEach(b=>{
       b.classList.add('btn-anim');
       b.addEventListener('pointerdown',()=>b.classList.add('press'));
@@ -706,9 +696,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     const grid = document.querySelector('.intro-grid');
     const copy = document.querySelector('.intro-copy');
     const right = document.querySelector('.intro-img.right');
-
     if(!grid || !copy || !right) return;
-
     function sync(){
       if (window.matchMedia('(max-width: 900px)').matches){
         right.style.transform = 'translateY(0)';
@@ -719,13 +707,19 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       const dy = Math.max(0, textH - imgH);
       right.style.transform = `translateY(${dy}px)`;
     }
-
     const schedule = (()=>{let raf=0; return ()=>{ if(raf) return; raf=requestAnimationFrame(()=>{raf=0; sync();}); };})();
     window.addEventListener('resize', schedule, {passive:true});
     if ('fonts' in document) document.fonts.ready.then(sync);
     const ro = new ResizeObserver(schedule);
     ro.observe(copy); ro.observe(right);
     setTimeout(sync, 0);
+
+    // jos pinnaus vapautetaan → tee vielä yksi synkronointi
+    const sceneIntroNode = document.querySelector('#scene-intro');
+    const mo = new MutationObserver(()=>{
+      if(sceneIntroNode.classList.contains('scene-done')) setTimeout(sync, 0);
+    });
+    mo.observe(sceneIntroNode, {attributes:true, attributeFilter:['class']});
   })()
 
   /* ===================== SCENE DRIVERS (progress) ===================== */
@@ -744,9 +738,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       const scene = document.querySelector(sceneSel);
       if(!scene) return ()=>{};
       const sticky = scene.querySelector('.scene-sticky');
-
       let total = 1, start = 0, stickyH = 0;
-
       function measure(){
         const vh = window.innerHeight;
         stickyH = Math.max(1, vh - HEADER);
@@ -776,14 +768,12 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     const sceneIntro = document.querySelector('#scene-intro');
     const dogPanel   = sceneIntro?.querySelector('.panel-dog');
     const introPanel = sceneIntro?.querySelector('#mikaonrumat');
-    const bandCurtain= introPanel?.querySelector('.curtain');
-    bandCurtain?.classList.add('in');
-
     const smoother = t => t*t*t*(t*(6*t - 15) + 10);
     let lastTs = performance.now();
     let ps = 0;
 
     makeSceneDriver('#scene-intro', (p, meta)=>{
+      if(sceneIntro.classList.contains('scene-done')) return;
       const e = smoother(p);
       const now = performance.now();
       const dt = Math.min(50, now - lastTs);
@@ -792,21 +782,15 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       ps += (e - ps) * alpha;
 
       const needFlow = introPanel && (introPanel.scrollHeight > (meta.stickyH - 8));
-      if(needFlow || ps > 0.995){
-        sceneIntro.classList.add('scene-done');
-      }else if(ps < 0.02 && !needFlow){
-        sceneIntro.classList.remove('scene-done');
-      }
+      if(needFlow || ps > 0.995){ sceneIntro.classList.add('scene-done'); return; }
 
-      if(!sceneIntro.classList.contains('scene-done')){
-        if(dogPanel){
-          dogPanel.style.transform = `translate3d(${(-120*ps)}vw, 0, 0)`;
-          dogPanel.style.opacity   = String(1 - ps);
-        }
-        if(introPanel){
-          introPanel.style.transform = `translate3d(${(100*(1-ps))}vw, 0, 0)`;
-          introPanel.style.opacity   = String(Math.min(1, ps*1.15));
-        }
+      if(dogPanel){
+        dogPanel.style.transform = `translate3d(${(-120*ps)}vw, 0, 0)`;
+        dogPanel.style.opacity   = String(1 - ps);
+      }
+      if(introPanel){
+        introPanel.style.transform = `translate3d(${(100*(1-ps))}vw, 0, 0)`;
+        introPanel.style.opacity   = String(Math.min(1, ps*1.15));
       }
     });
 
