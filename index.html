@@ -66,7 +66,7 @@
 
     /* Hero */
     .hero{position:relative;height:calc(100svh - var(--header-h));display:grid;place-items:center;overflow:hidden;text-align:center;background:#000}
-    .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0;will-change:transform}
+    .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0}
 
     /* SVG-mask logo (väritettävä) */
     .svg-logo{--logo-color:var(--ink);display:inline-block;width:9rem;height:9rem;background-color:var(--logo-color);-webkit-mask:url('assets/logo.svg') no-repeat center/contain;mask:url('assets/logo.svg') no-repeat center/contain;will-change:transform}
@@ -85,7 +85,7 @@
       display:grid;
       grid-template-columns: var(--intro-img-w) minmax(300px, 64rem) var(--intro-img-w);
       gap:14px;
-      align-items:stretch; /* rivi korkeus = pisin (yleensä teksti) */
+      align-items:stretch;
       padding:18px 0;
     }
     .intro-img{
@@ -98,30 +98,20 @@
       box-sizing:border-box;
       will-change:transform;
     }
-    .intro-img.left{
-      border-radius:0 18px 18px 0;
-      align-self:start;      /* pysyy ylälaitaan */
-    }
+    .intro-img.left{border-radius:0 18px 18px 0;align-self:start}
     .intro-img.right{
       border-radius:18px 0 0 18px;
-      align-self:start;      /* siirretään alas JS:llä translateY:llä */
+      align-self:start;
       transform:translateY(0);
-      transition:transform .25s ease; /* smooth “lasku” */
+      transition:transform .25s ease;
     }
     .intro-copy{padding:6px 12px;min-width:0}
     .intro-copy .logo{width:56px;height:56px;display:block;margin:0 auto 12px;object-fit:contain}
     .intro-copy p{margin:0 0 .8rem;line-height:1.6}
 
     @media (max-width:900px){
-      .intro-grid{
-        grid-template-columns:1fr;
-        padding:12px 0;
-      }
-      .intro-img{
-        height: clamp(240px, 50vw, 360px);
-        border-radius:12px!important;
-        transform:none!important; /* ei alaspäin työntöä mobiilissa */
-      }
+      .intro-grid{grid-template-columns:1fr;padding:12px 0}
+      .intro-img{height: clamp(240px, 50vw, 360px);border-radius:12px!important;transform:none!important}
     }
 
     /* Kaaviot */
@@ -228,10 +218,7 @@
       animation: glintSweep 1.8s ease forwards;
       mix-blend-mode: screen;
     }
-    @keyframes breathe {
-      0%,100%{ transform: scale(1) }
-      50%{ transform: scale(1.015) }
-    }
+    @keyframes breathe { 0%,100%{ transform: scale(1) } 50%{ transform: scale(1.015) } }
     .logo-breathe { animation: breathe 6s ease-in-out infinite; }
 
     /* WOW-efektit */
@@ -567,7 +554,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   })()
   function postConsentApply(){const c=getConsent();if(c.analytics)enableAnalytics()}
 
-  /* ====== JÄTTI-INTRO: RUMAT STUDIO täyttää leveyden (pidennetty) ====== */
+  /* ====== JÄTTI-INTRO: pidennetty ====== */
   ;(()=>{const KEY='rumat.introShown.session';const seen=sessionStorage.getItem(KEY)==='1';const overlay=$('#introOverlay');const out=$('#introText');const heroLogo=$('#heroLogo')
     function startHeroMotion(){if(heroLogo){heroLogo.classList.remove('logo-float');heroLogo.classList.add('logo-bounce');setTimeout(()=>heroLogo.classList.add('logo-float'),1100)}}
     function hideOverlay(){if(!overlay)return;overlay.style.opacity='0';setTimeout(()=>{overlay.style.display='none'},500);startHeroMotion();sessionStorage.setItem(KEY,'1')}
@@ -584,13 +571,13 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     const doFit=()=>{fitLine(line1);fitLine(line2)}
     doFit(); window.addEventListener('resize',()=>{requestAnimationFrame(doFit)},{passive:true})
 
-    const chars=out.querySelectorAll('.ch');let t=0;chars.forEach(el=>{setTimeout(()=>el.classList.add('show'),t);t+=65}); /* hitusen rauhallisempi */
+    const chars=out.querySelectorAll('.ch');let t=0;chars.forEach(el=>{setTimeout(()=>el.classList.add('show'),t);t+=65});
     setTimeout(()=>tag.classList.add('show'),t+150);
-    setTimeout(hideOverlay, t + 3200); /* ~+2s pidempi */
+    setTimeout(hideOverlay, t + 3200);
     overlay.addEventListener('click',hideOverlay)
   })()
 
-  /* ====== Efektit toistuviksi: curtain/edge/sr ====== */
+  /* ====== Efektit toistuviksi: curtain/edge/sr (EI hero-parallaxia) ====== */
   ;(()=>{ 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -653,21 +640,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       revealTargets.forEach(el=>el.classList.add('in'));
     }
 
-    // Hero-parallax
-    const heroImg=document.querySelector('.hero-img');
-    const heroL=document.querySelector('.hero .svg-logo');
-    if(heroImg && !reduce){
-      let tick=false;
-      const onScroll=()=>{ if(tick) return; tick=true; requestAnimationFrame(()=>{
-        const y=window.scrollY||0;
-        const t=y*0.12;
-        heroImg.style.transform=`translateY(${t}px)`;
-        if(heroL) heroL.style.transform=`translateY(${t*0.4}px)`;
-        tick=false;
-      })};
-      window.addEventListener('scroll',onScroll,{passive:true});
-    }
-
     // nappien pikku painallus
     document.querySelectorAll('#checkout,#checkoutPay,.btn-primary,.btn').forEach(b=>{
       b.classList.add('btn-anim');
@@ -711,9 +683,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     scheduleGlint();
   })()
 
-  /* ====== Intro: oikean kuvan smooth “lasku” tekstiä vasten ======
-     Lasketaan tekstikolumnin (keskipalsta) ja oikean kuvan korkeusero,
-     ja siirretään oikeaa kuvaa translateY:llä (ei muuta rivilaskentaa). */
+  /* ====== Intro: oikean kuvan smooth “lasku” tekstiä vasten ====== */
   ;(()=> {
     const grid = document.querySelector('.intro-grid');
     const copy = document.querySelector('.intro-copy');
@@ -722,7 +692,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     if(!grid || !copy || !right) return;
 
     function sync(){
-      // mobiilissa (1-palsta) ei työntöä
       if (window.matchMedia('(max-width: 900px)').matches){
         right.style.transform = 'translateY(0)';
         return;
@@ -733,17 +702,11 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       right.style.transform = `translateY(${dy}px)`;
     }
 
-    // Päivitä kun ikkunaa muutetaan, fontit valmiit, tai teksti muuttuu
     const schedule = (()=>{let raf=0; return ()=>{ if(raf) return; raf=requestAnimationFrame(()=>{raf=0; sync();}); };})();
     window.addEventListener('resize', schedule, {passive:true});
     if ('fonts' in document) document.fonts.ready.then(sync);
-
-    // Muutosten seuranta (jos sisältöä vaihdetaan myöhemmin)
     const ro = new ResizeObserver(schedule);
-    ro.observe(copy);
-    ro.observe(right);
-
-    // Ensimmäinen ajo
+    ro.observe(copy); ro.observe(right);
     setTimeout(sync, 0);
   })()
   </script>
