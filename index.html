@@ -337,17 +337,17 @@
                 </div>
                 <!-- Tekstipalsta, jossa maski päällä -->
                 <div class="designer-text-wrap space-y-4 normalcase">
-                  <!-- SVG-maskioverlay: vain silmät + suu reikiä -->
+                  <!-- ✅ Päivitetty =)-maski: keskitetty equals "silmät" + kaariviiva "suu" -->
                   <svg id="designerMaskText" class="designer-mask-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
                     <defs>
                       <mask id="smileyMaskText">
-                        <!-- valkoinen = peittävä, musta = reikä -->
+                        <!-- Valkoinen = peittävä, musta = reikä -->
                         <rect x="0" y="0" width="100" height="100" fill="white"/>
-                        <!-- silmät -->
-                        <circle cx="30" cy="38" r="8" fill="black"/>
-                        <circle cx="70" cy="38" r="8" fill="black"/>
-                        <!-- suu: ellipsi -->
-                        <ellipse cx="50" cy="68" rx="22" ry="12" fill="black"/>
+                        <!-- Eyes as '=' (two horizontal bars) -->
+                        <rect x="35" y="34" width="30" height="4" rx="2" fill="black"/>
+                        <rect x="35" y="41" width="30" height="4" rx="2" fill="black"/>
+                        <!-- Mouth as a curved stroke resembling ')' -->
+                        <path d="M30 66 A 20 16 0 0 0 70 66" fill="none" stroke="black" stroke-width="8" stroke-linecap="round"/>
                       </mask>
                     </defs>
                     <rect x="0" y="0" width="100" height="100" fill="var(--ivory)" mask="url(#smileyMaskText)"/>
@@ -699,7 +699,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       const alpha = 1 - Math.exp(-dt/110);
       ps += (e - ps) * alpha;
 
-      // Ei lukituksia -> toimii myös ylöspäin
       if(dogPanel){
         dogPanel.style.transform = `translate3d(${(-120*ps)}vw, 0, 0)`;
         dogPanel.style.opacity   = String(1 - ps);
@@ -717,8 +716,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       const ease = t => t*(2-t);
       const e = ease(p);
       if(maskSvg){
-        // 0 -> näkyy koko tekstin päällä, 1 -> liukunut kokonaan alas
-        const ty = 120 * e;
+        const ty = 120 * e; // 0% -> näkyy, 100%+ -> poissa
         maskSvg.style.transform = `translate3d(0, ${ty}%, 0)`;
       }
       if(photo){
