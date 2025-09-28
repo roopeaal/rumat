@@ -68,13 +68,53 @@
     .hero{position:relative;height:calc(100svh - var(--header-h));display:grid;place-items:center;overflow:hidden;text-align:center;background:#000}
     .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0}
 
-    /* SVG-mask logo (väritettävä) */
+    /* SVG-mask logo (aiempi). Jätetään yleiseksi, mutta hero käyttää sydän-variaatiota. */
     .svg-logo{--logo-color:var(--ink);display:inline-block;width:9rem;height:9rem;background-color:var(--logo-color);-webkit-mask:url('assets/logo.svg') no-repeat center/contain;mask:url('assets/logo.svg') no-repeat center/contain;will-change:transform}
     @media (min-width:640px){.svg-logo{width:11rem;height:11rem}}
     @media (min-width:1024px){.svg-logo{width:12rem;height:12rem}}
     .logo-ink{--logo-color:var(--ink)}.logo-white{--logo-color:#fff}.logo-light{--logo-color:var(--light-blue)}
     .svg-logo--header{width:3.1rem;height:3.1rem}
     @media (min-width:1024px){.svg-logo--header{width:3.4rem;height:3.4rem}}
+
+    /* ===== Hero-sydän ===== */
+    .svg-logo.logo-heart{
+      --heart-size: clamp(84px, 22vw, 200px);
+      --heart-color: #ff5a7a;
+      width: var(--heart-size);
+      height: var(--heart-size);
+      color: var(--heart-color);
+      background: currentColor;             /* neliö, josta tulee sydämen kärki */
+      border-radius: 12%;
+      -webkit-mask: none!important; mask: none!important; /* poista brändilogon maski */
+      transform: rotate(-45deg);            /* käännetty neliö muodostaa alapään */
+      position: relative;
+      filter: drop-shadow(0 6px 24px rgba(255,90,122,.25));
+      animation: heartBeat 1.25s ease-in-out infinite; /* selkeä syke */
+    }
+    .svg-logo.logo-heart::before,
+    .svg-logo.logo-heart::after{
+      content:"";
+      position:absolute;
+      width: var(--heart-size);
+      height: var(--heart-size);
+      background: currentColor;
+      border-radius: 50%;
+    }
+    .svg-logo.logo-heart::before{ top:-50%; left:0 }   /* vasen “lohko” */
+    .svg-logo.logo-heart::after { top:0; left:50% }    /* oikea “lohko” */
+
+    @keyframes heartBeat{
+      0%   { transform: rotate(-45deg) scale(1);   filter: drop-shadow(0 6px 18px rgba(255,90,122,.24)); }
+      10%  { transform: rotate(-45deg) scale(1.18); filter: drop-shadow(0 10px 30px rgba(255,90,122,.34)); }
+      20%  { transform: rotate(-45deg) scale(1.02); }
+      30%  { transform: rotate(-45deg) scale(1.16); }
+      40%  { transform: rotate(-45deg) scale(1.00); }
+      100% { transform: rotate(-45deg) scale(1); }
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      .svg-logo.logo-heart{animation:none}
+    }
 
     .band{background:var(--ivory);border-radius:var(--band-radius);overflow:hidden}
     .band-inner{max-width:72rem;margin:0 auto;padding:3rem 1rem}
@@ -185,42 +225,6 @@
     }
     .intro-giant .tagline.show{opacity:1;transform:translateY(0)}
 
-    /* Hero-logo elot */
-    .logo-float{animation:floatY 6s ease-in-out infinite}
-    .logo-bounce{animation:bounceIn .8s cubic-bezier(.22,1,.36,1) both}
-    @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-    @keyframes bounceIn{0%{transform:scale(.8);opacity:0}60%{transform:scale(1.05);opacity:1}100%{transform:scale(1)}}
-
-    /* --- Hero-logo SUPER elävä --- */
-    .svg-logo{ position:relative; overflow:visible; }
-    @keyframes logoGlow {
-      0%,100% { filter: drop-shadow(0 0 0px rgba(255,255,255,.0)) drop-shadow(0 0 0px rgba(52,85,99,.0)) }
-      50%     { filter: drop-shadow(0 0 10px rgba(255,255,255,.25)) drop-shadow(0 0 12px rgba(52,85,99,.25)) }
-    }
-    .logo-glow { animation: logoGlow 4.6s ease-in-out infinite; will-change: filter; }
-    @keyframes logoFlicker {
-      0%{opacity:1} 8%{opacity:.6} 12%{opacity:1} 20%{opacity:.75}
-      28%{opacity:1} 36%{opacity:.5} 44%{opacity:1} 100%{opacity:1}
-    }
-    .logo-flicker { animation: logoFlicker .9s linear 1; }
-    @keyframes glintSweep {
-      0%   { transform: translateX(-130%) rotate(15deg); opacity:0 }
-      10%  { opacity:.8 }
-      50%  { opacity:.9 }
-      100% { transform: translateX(130%) rotate(15deg); opacity:0 }
-    }
-    .svg-logo.glint::after{
-      content:"";
-      position:absolute; inset:-6% -6%;
-      background: linear-gradient(130deg, transparent 40%, rgba(255,255,255,.9) 50%, transparent 60%);
-      pointer-events:none;
-      -webkit-mask: inherit; mask: inherit;
-      animation: glintSweep 1.8s ease forwards;
-      mix-blend-mode: screen;
-    }
-    @keyframes breathe { 0%,100%{ transform: scale(1) } 50%{ transform: scale(1.015) } }
-    .logo-breathe { animation: breathe 6s ease-in-out infinite; }
-
     /* WOW-efektit */
     .curtain{position:relative;overflow:hidden}
     .curtain::before,.curtain::after{content:"";position:absolute;top:0;bottom:0;width:52vw;background:var(--ivory);transform:scaleX(1);transition:transform 1.05s cubic-bezier(.65,0,.35,1);pointer-events:none;z-index:10}
@@ -298,7 +302,8 @@
   <main class="pt-[64px]">
     <section id="etusivu" class="hero px-4 curtain">
       <img src="assets/hero.jpg" alt="RUMAT STUDIO hero" class="hero-img" onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
-      <span id="heroLogo" class="svg-logo logo-light" role="img" aria-label="RUMAT STUDIO"></span>
+      <!-- Pulssittava sydän -->
+      <span id="heroLogo" class="svg-logo logo-heart" role="img" aria-label="Sykkivä sydän"></span>
     </section>
 
     <section id="orderMsg" class="max-w-3xl mx-auto my-4 px-4 hidden"></section>
@@ -308,7 +313,7 @@
         <div class="band-inner">
           <h2 class="mb-4">Liian rumat ollakseen totta</h2>
 
-          <!-- ===== Intro: 3 kolumnia (vasen kuva – teksti – oikea kuva) ===== -->
+          <!-- Intro: 3 kolumnia (vasen kuva – teksti – oikea kuva) -->
           <div class="intro-wide">
             <div class="intro-grid">
               <div class="intro-img left" aria-hidden="true"></div>
@@ -319,7 +324,6 @@
               <div class="intro-img right" aria-hidden="true"></div>
             </div>
           </div>
-          <!-- ===== /Intro ===== -->
 
         </div>
       </div>
@@ -533,7 +537,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     DATA.forEach(p=>{const tile=document.createElement('article');tile.className='tile card edgeCard';tile.setAttribute('data-id',p.id);const img=createImg((p.images||[])[0],p.name);const cap=document.createElement('div');cap.className='tile-caption';const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));const labelSuffix=!deliver?' · Tulossa':(p.price===0?' · Ilmainen':'');cap.textContent=p.name+labelSuffix;tile.appendChild(img);tile.appendChild(cap);grid.appendChild(tile)})
     function columns(){const cs=getComputedStyle(grid).gridTemplateColumns;return Math.max(1,cs.split(' ').length)}
     function insertAfterRow(tileEl){const tiles=Array.from(grid.querySelectorAll('.tile, .expander'));const only=tiles.filter(n=>n.classList.contains('tile'));const idx=only.indexOf(tileEl);const cols=columns();const rowEnd=Math.min(only.length-1,Math.floor(idx/cols)*cols+(cols-1));const after=only[rowEnd];grid.insertBefore(expander,after.nextSibling)}
-    function buildExpander(){expander=el('div',{class:'expander'});const top=el('div',{class:'ex-top'},el('div',{id:'exTitle',class:'font-semibold'},''),el('button',{id:'exClose',class:'px-3 py-1 rounded border border-[rgba(0,0,0,.15)]'},'pienennä'));const row=el('div',{class:'ex-row'},el('div',{class:'ex-view'},createImg('assets/placeholder.jpg','Kaava'),el('button',{id:'exPrev',class:'ex-prev'},'◀'),el('button',{id:'exNext',class:'ex-next'},'▶')),el('div',{class:'ex-info'},el('h3',{id:'exName',class:'text-2xl mb-2'},''),el('div',{style:'height:8px'}),el('p',{id:'exBlurb',class:'opacity-80 mb-2 normalcase'},''),el('div',{class:'mb-2'},el('span',{class:'font-semibold'},'Koot: '),el('span',{id:'exSizes'},'')),el('div',{id:'exPrice',class:'text-xl font-bold mb-4'},''),el('div',{id:'exActions'})));expander.appendChild(top);expander.appendChild(row);expander.querySelector('#exPrev').addEventListener('click',()=>nav(-1));expander.querySelector('#exNext').addEventListener('click',()=>nav(+1));expander.querySelector('#exClose').addEventListener('click',()=>clearSelection())}
+    function buildExpander(){expander=el('div',{class:'expander'});const top=el('div',{class:'ex-top'},el('div',{id:'exTitle',class:'font-semibold'},''),el('button',{id:'exClose',class:'px-3 py-1 rounded border border-[rgba(0,0,0,.15)]'},'pienennä'));const row=el('div',{class:'ex-row'},el('div',{class:'ex-view'},createImg('assets/placeholder.jpg','Kaava'),el('button',{id:'exPrev',class:'ex-prev'},'◀'),el('button',{id:'exNext',class:'ex-next'},'▶')),el('div',{class:'ex-info'},el('h3',{id:'exName',class:'text-2xl mb-2'},''),el('div',{style:'height:8px'}),el('p',{id:'exBlurb',class:'opacity-80 mb-2'},''),el('div',{class:'mb-2'},el('span',{class:'font-semibold'},'Koot: '),el('span',{id:'exSizes'},'')),el('div',{id:'exPrice',class:'text-xl font-bold mb-4'},''),el('div',{id:'exActions'})));expander.appendChild(top);expander.appendChild(row);expander.querySelector('#exPrev').addEventListener('click',()=>nav(-1));expander.querySelector('#exNext').addEventListener('click',()=>nav(+1));expander.querySelector('#exClose').addEventListener('click',()=>clearSelection())}
     buildExpander()
     function openFor(p,tileEl){current=p;imgIdx=0;expander.querySelector('#exTitle').textContent=p.name;expander.querySelector('#exName').textContent=p.name;expander.querySelector('#exBlurb').textContent=p.blurb||'';expander.querySelector('#exSizes').textContent=p.sizes||'';expander.querySelector('#exPrice').textContent=p.price===0?'ILMAINEN':fmtEUR(p.price||0);const exImg=expander.querySelector('.ex-view img');setSafeImgSrc(exImg,(p.images||[])[0]);const actions=expander.querySelector('#exActions');actions.innerHTML='';const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));if(!deliver){actions.appendChild(el('span',{class:'inline-block px-4 py-2 rounded-full border border-[rgba(0,0,0,.15)]'},'Tulossa'))}else{const label='Lisää ostoskoriin'+(p.price===0?' (0,00 €)':'');const buyBtn=el('button',{id:'exBuy',class:'btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2'},label);buyBtn.onclick=()=>window.addToCart?window.addToCart(p.id):null;actions.appendChild(buyBtn)}insertAfterRow(tileEl)}
     function nav(dir){if(!current)return;const imgs=current.images||[];imgIdx=imgs.length?(imgIdx+dir+imgs.length)%imgs.length:0;const exImg=expander.querySelector('.ex-view img');setSafeImgSrc(exImg,imgs[imgIdx])}
@@ -556,7 +560,8 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
 
   /* ====== JÄTTI-INTRO: pidennetty ====== */
   ;(()=>{const KEY='rumat.introShown.session';const seen=sessionStorage.getItem(KEY)==='1';const overlay=$('#introOverlay');const out=$('#introText');const heroLogo=$('#heroLogo')
-    function startHeroMotion(){if(heroLogo){heroLogo.classList.remove('logo-float');heroLogo.classList.add('logo-bounce');setTimeout(()=>heroLogo.classList.add('logo-float'),1100)}}
+    // Älä anna introlta tulevan “bounce/floatin” häiritä sydämen sykettä
+    function startHeroMotion(){/* ei mitään */} 
     function hideOverlay(){if(!overlay)return;overlay.style.opacity='0';setTimeout(()=>{overlay.style.display='none'},500);startHeroMotion();sessionStorage.setItem(KEY,'1')}
     if(seen||!overlay||!out){startHeroMotion();return}
 
@@ -646,41 +651,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       b.addEventListener('pointerdown',()=>b.classList.add('press'));
       ['pointerup','pointerleave','blur'].forEach(ev=>b.addEventListener(ev,()=>b.classList.remove('press')));
     });
-  })()
-
-  /* ====== Hero-logo: glow + hengitys + satunnaiset välähdykset ====== */
-  ;(()=> {
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const logo = document.getElementById('heroLogo');
-    if(!logo) return;
-
-    // Jatkuva elo
-    logo.classList.add('logo-glow','logo-breathe');
-
-    if(reduce) return;
-
-    function randomBetween(min,max){ return Math.random()*(max-min)+min; }
-
-    function scheduleFlicker(){
-      const wait = randomBetween(6000,11000);
-      setTimeout(()=>{
-        logo.classList.add('logo-flicker');
-        setTimeout(()=>logo.classList.remove('logo-flicker'), 950);
-        scheduleFlicker();
-      }, wait);
-    }
-
-    function scheduleGlint(){
-      const wait = randomBetween(9000,15000);
-      setTimeout(()=>{
-        logo.classList.add('glint');
-        setTimeout(()=>logo.classList.remove('glint'), 1900);
-        scheduleGlint();
-      }, wait);
-    }
-
-    scheduleFlicker();
-    scheduleGlint();
   })()
 
   /* ====== Intro: oikean kuvan smooth “lasku” tekstiä vasten ====== */
