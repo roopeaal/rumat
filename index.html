@@ -33,7 +33,6 @@
       --ink:#202020; --olive:#A1A266; --deep-blue:#345563; --ivory:#F6F6F4; --light-blue:#DEEEEE;
       --header-h:64px; --band-radius:16px;
 
-      /* Intro-kuvien “vakio” */
       --intro-img-w: clamp(180px, 22vw, 260px);
       --intro-img-h: clamp(320px, 36vw, 420px);
     }
@@ -75,7 +74,7 @@
     .svg-logo--header{width:3.1rem;height:3.1rem}
     @media (min-width:1024px){.svg-logo--header{width:3.4rem;height:3.4rem}}
 
-    /* Sydämen syke */
+    /* Sydämen syke hero-logolle */
     .logo-beat{ animation: logoBeat 1.2s ease-in-out infinite; filter: drop-shadow(0 6px 22px rgba(52,85,99,.25)); }
     @keyframes logoBeat{
       0%{transform:scale(1)} 12%{transform:scale(1.12)} 24%{transform:scale(1.02)}
@@ -206,19 +205,8 @@
       will-change: transform;
     }
 
-    #scene-intro.scene-done{height:auto}
-    #scene-intro.scene-done .scene-sticky{position:static;height:auto;overflow:visible}
-    #scene-intro.scene-done .panel{position:static;inset:auto;transform:none!important;opacity:1!important}
-    #scene-intro.scene-done .panel-dog{display:none}
-    #scene-intro.scene-done .panel-intro{position:static!important;inset:auto!important;transform:none!important;opacity:1!important}
-
-    /* Skip-tila: ohita efekti siististi (mobiili tai liian korkea sisältö) */
-    #scene-intro.scene-skip{height:auto}
-    #scene-intro.scene-skip .scene-sticky{position:static;height:auto;overflow:visible}
-    #scene-intro.scene-skip .panel{position:static;inset:auto;transform:none!important;opacity:1!important}
-    #scene-intro.scene-skip .panel-dog{display:none}
-
-    /* Suunnittelija – SVG-maskioverlay (silmät+suun reiät) */
+    /* Suunnittelija – MASKI vain tekstipalstan päällä */
+    .designer-text-wrap{position:relative}
     .designer-mask-svg{
       position:absolute; inset:0; pointer-events:none; z-index:5;
       display:block; width:100%; height:100%;
@@ -333,7 +321,7 @@
       </div>
     </section>
 
-    <!-- ===== SCENE 2: SUUNNITTELIJA – HYMYSILMÄ MASKI ===== -->
+    <!-- ===== SCENE 2: SUUNNITTELIJA – HYMYSILMÄ MASKI VAIN TEKSTIN PÄÄLLÄ ===== -->
     <section id="scene-designer" class="scene">
       <div class="scene-sticky">
         <section id="suunnittelija" class="onstage">
@@ -347,29 +335,30 @@
                        alt="Suunnittelija"
                        class="rounded-xl border border-[rgba(0,0,0,.12)] object-cover w-full h-[300px] md:h-[420px]">
                 </div>
-                <div class="space-y-4 normalcase">
+                <!-- Tekstipalsta, jossa maski päällä -->
+                <div class="designer-text-wrap space-y-4 normalcase">
+                  <!-- SVG-maskioverlay: vain silmät + suu reikiä -->
+                  <svg id="designerMaskText" class="designer-mask-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <defs>
+                      <mask id="smileyMaskText">
+                        <!-- valkoinen = peittävä, musta = reikä -->
+                        <rect x="0" y="0" width="100" height="100" fill="white"/>
+                        <!-- silmät -->
+                        <circle cx="30" cy="38" r="8" fill="black"/>
+                        <circle cx="70" cy="38" r="8" fill="black"/>
+                        <!-- suu: ellipsi -->
+                        <ellipse cx="50" cy="68" rx="22" ry="12" fill="black"/>
+                      </mask>
+                    </defs>
+                    <rect x="0" y="0" width="100" height="100" fill="var(--ivory)" mask="url(#smileyMaskText)"/>
+                  </svg>
+
                   <p>Aaltonen on itsevarma neuloja, joka ei rajoita luovuuttaan vain yhteen tekemisen tapaan. Neulomisen rinnalla myös asusteiden ompelu on tärkeä osa ilmaisua – ja ennen kaikkea intohimo. Lapsuuden kiinnostus vaatteiden suunnitteluun johti muodin ja tekstiilisuunnittelun opintoihin vuonna 2021.</p>
                   <p>Pian Aaltonen valmistuu taiteen maisteriksi, mukanaan vankka osaaminen ja omat suosikkitekniikat, joita hän on hionut opintojen aikana. Neulomisen ja asusteiden lisäksi Aaltonen on syventynyt erityisesti vaatteiden kierrätykseen, korjaamiseen liittyviin asenteisiin sekä kriittiseen tarkasteluun siitä, miten kuluttamista ohjataan – ja millaisia seurauksia sillä on ympäristölle.</p>
                 </div>
               </div>
             </div>
           </div>
-
-          <!-- SVG-maskioverlay: vain silmät + suu reikiä -->
-          <svg id="designerMask" class="designer-mask-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-            <defs>
-              <mask id="smileyMask">
-                <!-- valkoinen = peittävä, musta = reikä -->
-                <rect x="0" y="0" width="100" height="100" fill="white"/>
-                <!-- silmät -->
-                <circle cx="30" cy="38" r="8" fill="black"/>
-                <circle cx="70" cy="38" r="8" fill="black"/>
-                <!-- suu: ellipsi -->
-                <ellipse cx="50" cy="68" rx="22" ry="12" fill="black"/>
-              </mask>
-            </defs>
-            <rect x="0" y="0" width="100" height="100" fill="var(--ivory)" mask="url(#smileyMask)"/>
-          </svg>
         </section>
       </div>
     </section>
@@ -540,7 +529,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   function makeDummyPDF({title='Dummy-kaava',lines=[]}={}){const header='%PDF-1.4\n%âãÏÓ\n';const obj5='5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n';let y=800;const leading=18;let content='BT\n/F1 20 Tf 50 820 Td ('+pdfEscape(title)+') Tj\nET\n';content+='BT\n/F1 12 Tf\n';lines.forEach((L,i)=>{y-=(i===0?30:leading);content+=`1 0 0 1 50 ${y} Tm (${pdfEscape(L)}) Tj\n`});content+='ET\n';const stream=`4 0 obj\n<< /Length ${content.length} >>\nstream\n${content}endstream\nendobj\n`;const obj3='3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n';const obj2='2 0 obj\n<< /Type /Pages /Count 1 /Kids [3 0 R] >>\nendobj\n';const obj1='1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n';const order=[obj1,obj2,obj3,stream,obj5];let acc=header.length;const offs=[];for(let s of order){offs.push(acc);acc+=s.length}const xrefStart=acc;let xref='xref\n0 6\n';xref+='0000000000 65535 f \n';offs.forEach(off=>{xref+=`${String(off).padStart(10,'0')} 00000 n \n`});const trailer=`trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xrefStart}\n%%EOF`;return header+order.join('')+xref+trailer}
   function generateDummyPDF(order){const items=(order?.items||[]).map(x=>`${x.name} × ${x.qty} — ${(x.price||0).toFixed(2)} €`);const c=order?.customer||{};const lines=['Tämä on väliaikainen DUMMY-KAAVA.','Korvataan myöhemmin oikealla kaavalla.','', 'Tilaus:',...items,'','Asiakas:',`${(c.firstName||'')} ${(c.lastName||'')}`,`${c.address||''}`,`${(c.zip||'')} ${(c.city||'')}, ${c.country||''}`,`${c.email||''}${c.phone?(' / '+c.phone):''}`,'',`Päiväys: ${new Date().toLocaleString('fi-FI')}`];const pdfStr=makeDummyPDF({title:'RUMAT STUDIO – Dummy-kaava',lines});const enc=new TextEncoder();const bytes=enc.encode(pdfStr);const blob=new Blob([bytes],{type:'application/pdf'});const url=URL.createObjectURL(blob);let binary='';const chunk=0x8000;for(let i=0;i<bytes.length;i+=chunk){binary+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk))}const base64=btoa(binary);const dataUrl=`data:application/pdf;base64,${base64}`;return{blob,url,dataUrl}}
   function offerDummyDownload(order){const {url,dataUrl}=generateDummyPDF(order||{});try{localStorage.setItem('lastDummyDataUrl',dataUrl)}catch(e){}const msgBox=$('#orderMsg');const a=document.createElement('a');a.href=url;a.download='dummy-kaava.pdf';a.className='underline text-emerald-800';a.textContent='Lataa dummy-kaava (PDF)';const wrap=document.createElement('div');wrap.className='mt-3';wrap.appendChild(a);msgBox.appendChild(wrap)}
-  async function showSuccess(order){const msgBox=$('#orderMsg');const items=(order?.items||[]);const total=items.reduce((s,x)=>s+(x.price||0)*x.qty,0);const c=order?.customer||{};msgBox.classList.remove('hidden');msgBox.innerHTML=`<div class="border border-emerald-200 bg-emerald-50 rounded-2xl p-4"><h3 class="text-xl font-extrabold text-emerald-900 uppercase tracking-wide mb-2">Tilaus vastaanotettu</h3><p class="text-emerald-900/80">Kiitos, <strong>${(c.firstName||'')+' '+(c.lastName||'')}</strong>! Vahvistus on (yritetty) lähettää osoitteeseen <strong>${order?.email||c.email||''}</strong>.</p><div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4"><div><div class="font-semibold mb-1">Tilaus:</div><ul class="list-disc pl-5 text-sm">${items.map(x=>`<li>${x.name} × ${x.qty} — ${fmtEUR((x.price||0)*x.qty)}</li>`).join('')}</ul><div class="mt-2 font-bold">Yhteensä: ${fmtEUR(total)}</div></div><div><div class="font-semibold mb-1">Asiakastiedot:</div><div class="text-sm">${(c.firstName||'')+' '+(c.lastName||'')}<br/>${c.address||''}<br/>${(c.zip||'')+' '+(c.city||'')}<br/>${c.country||''}<br/>${c.email||''}${c.phone?('<br/>'+c.phone):''}${c.notes?('<br/><em>'+String(c.notes).replace(/</g,'&lt;')+'</em>'):''}</div></div></div></div>`;showToast('Tilaus vahvistettu. Kiitos!','success');CART={};saveCart();renderCart();offerDummyDownload(order);sendConfirmationEmails(order)}
+  async function showSuccess(order){const msgBox=$('#orderMsg');const items=(order?.items||[]);const total=items.reduce((s,x)=>s+(x.price||0)*x.qty,0);const c=order?.customer||{};msgBox.classList.remove('hidden');msgBox.innerHTML=`<div class="border border-emerald-200 bg-emerald-50 rounded-2xl p-4"><h3 class="text-xl font-extrabold text-emerald-900 uppercase tracking-wide mb-2">Tilaus vastaanotettu</h3><p class="text-emerald-900/80">Kiitos, <strong>${(c.firstName||'')+' '+(c.lastName||'')}</strong>! Vahvistus on (yritetty) lähettää osoitteeseen <strong>${order?.email||c.email||''}</strong>.</p><div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4"><div><div class="font-semibold mb-1">Tilaus:</div><ul class="list-disc pl-5 text-sm">${items.map(x=>`<li>${x.name} × ${x.qty} — ${fmtEUR((x.price||0)*x.qty)}</li>`).join('')}</ul><div class="mt-2 font-bold">Yhteensä: ${fmtEUR(total)}</div></div><div><div class="font-semibold mb-1">Asiakastiedot:</div><div class="text-sm">${(c.firstName||'')+' '+(c.lastName||'')}<br/>${c.address||''}<br/>${(c.zip||'')+' '+(c.city||'')}`+`<br/>${c.country||''}<br/>${c.email||''}${c.phone?('<br/>'+c.phone):''}${c.notes?('<br/><em>'+String(c.notes).replace(/</g,'&lt;')+'</em>'):''}</div></div></div></div>`;showToast('Tilaus vahvistettu. Kiitos!','success');CART={};saveCart();renderCart();offerDummyDownload(order);sendConfirmationEmails(order)}
   function handleReturn(){const h=location.hash||'';if(h.indexOf('#success')===0){const order=JSON.parse(localStorage.getItem('lastOrder')||'null');showSuccess(order)}if(h.indexOf('#cancel')===0){showToast('Maksu keskeytettiin tai epäonnistui.','error');const msgBox=$('#orderMsg');msgBox.classList.remove('hidden');msgBox.innerHTML=`<div class="border border-red-200 bg-red-50 rounded-2xl p-4"><h3 class="text-xl font-extrabold text-red-900 uppercase tracking-wide mb-2">Maksu epäonnistui</h3><p class="text-red-900/80">Yritä uudelleen. Jos ongelma jatkuu, ota yhteyttä: <a class="underline" href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>.</p></div>`}}
   window.addEventListener('hashchange',handleReturn);handleReturn()
   function sendConfirmationEmails(order){const anneEmail='aaltonen96@outlook.com';const cfg=(typeof getEmailCfg==='function')?getEmailCfg():{PUBLIC_KEY:'',SERVICE_ID:'',TEMPLATE_ID:''};const c=order?.customer||{};const itemsList=(order.items||[]).map(x=>`${x.name} x ${x.qty}`).join(', ');const totalStr=(order.items||[]).reduce((s,x)=>s+(x.price||0)*x.qty,0).toFixed(2)+' €';const addressBlock=`${(c.firstName||'')} ${(c.lastName||'')}\n${c.address||''}\n${(c.zip||'')} ${(c.city||'')}\n${c.country||''}\n${c.email||''}${c.phone?('\n'+c.phone):''}${c.notes?('\n'+c.notes):''}`;const dummyDataUrl=localStorage.getItem('lastDummyDataUrl')||'';const base={order_json:JSON.stringify(order,null,2),items:itemsList,total:totalStr,dummy_link:dummyDataUrl||(location.origin+'/assets/dummy-kaava.pdf'),customer_block:addressBlock};if(!window.emailjs||!cfg.PUBLIC_KEY||!cfg.SERVICE_ID||!cfg.TEMPLATE_ID){const warn=$('#paypalWarn');if(warn)warn.textContent='Huom: automaattinen sähköpostivahvistus ei ole käytössä – paina Ctrl/Cmd+E lisätäksesi EmailJS-avaimet.';console.info('EmailJS ei konffattu. Tilauksen tiedot:',order);return}
@@ -572,23 +561,19 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     grid.addEventListener('click',e=>{const tile=e.target.closest('.tile');if(!tile||!grid.contains(tile))return;selectTile(tile)})
   })()
 
-  /* ==== Esittelypalkki: päätä ohitetaanko siirtymä alkuunsa ==== */
+  /* Esittelypalkki: ohitetaanko siirtymä mobiilissa/liian pitkä sisältö */
   ;(function(){
     const scene = document.querySelector('#scene-intro');
     const intro = scene?.querySelector('#mikaonrumat');
     if(!scene || !intro) return;
-
     const HEADER = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64;
     const MOBILE_Q = window.matchMedia('(max-width: 900px)');
-
     function shouldSkip(){
       const stickyH = Math.max(1, window.innerHeight - HEADER);
-      // sallitaan reilummin ylipituutta ennen ohitusta
       const tooTall = intro.scrollHeight > (stickyH + 360);
       return MOBILE_Q.matches || tooTall;
     }
     function reevaluate(){ scene.classList.toggle('scene-skip', shouldSkip()); }
-
     if('fonts' in document) document.fonts.ready.then(reevaluate);
     window.addEventListener('load', reevaluate, {once:true});
     window.addEventListener('resize', ()=>requestAnimationFrame(reevaluate), {passive:true});
@@ -697,7 +682,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       return ()=>{window.removeEventListener('scroll',onScroll)}
     }
 
-    /* Scene 1: Koira → Intro – pehmeä liike, vapautus lopussa */
+    /* Scene 1: Koira → Intro – pehmeä liike, REVERSIBLE */
     const sceneIntro = document.querySelector('#scene-intro');
     const dogPanel   = sceneIntro?.querySelector('.panel-dog');
     const introPanel = sceneIntro?.querySelector('#mikaonrumat');
@@ -714,10 +699,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       const alpha = 1 - Math.exp(-dt/110);
       ps += (e - ps) * alpha;
 
-      if(ps > 0.995){
-        sceneIntro.classList.add('scene-done');
-        return;
-      }
+      // Ei lukituksia -> toimii myös ylöspäin
       if(dogPanel){
         dogPanel.style.transform = `translate3d(${(-120*ps)}vw, 0, 0)`;
         dogPanel.style.opacity   = String(1 - ps);
@@ -728,14 +710,15 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       }
     });
 
-    /* Scene 2: Suunnittelija – maskioverlay liukuu alas (reveal) */
-    const maskSvg = document.getElementById('designerMask');
+    /* Scene 2: Suunnittelija – maski vain tekstipalstan päällä, reversible */
+    const maskSvg = document.getElementById('designerMaskText');
     const photo   = document.getElementById('designerPhoto');
     makeSceneDriver('#scene-designer', (p)=>{
       const ease = t => t*(2-t);
       const e = ease(p);
       if(maskSvg){
-        const ty = 120 * e; // siirrä pois ruudusta alaspäin
+        // 0 -> näkyy koko tekstin päällä, 1 -> liukunut kokonaan alas
+        const ty = 120 * e;
         maskSvg.style.transform = `translate3d(0, ${ty}%, 0)`;
       }
       if(photo){
@@ -746,7 +729,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     });
   })()
 
-  // Aseta koiratarran lähde turvallisesti (vaihda polku tarvittaessa)
+  // Aseta koiratarran lähde (päivitä polku tarvittaessa)
   ;(()=>{ const dog = document.getElementById('dogSticker'); if(dog) setSafeImgSrc(dog,'assets/dog-sticker.png'); })();
   </script>
 </body>
