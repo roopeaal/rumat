@@ -33,7 +33,7 @@
       --ink:#202020; --olive:#A1A266; --deep-blue:#345563; --ivory:#F6F6F4; --light-blue:#DEEEEE;
       --header-h:64px; --band-radius:16px;
 
-      /* Intro-kuvien vakiokoko (sama molemmille) */
+      /* Intro-kuvien “vakio” */
       --intro-img-w: clamp(180px, 22vw, 260px);
       --intro-img-h: clamp(320px, 36vw, 420px);
     }
@@ -64,11 +64,10 @@
     .drawer>.panel{position:absolute;top:0;bottom:0;width:min(640px,94vw);background:var(--ivory);box-shadow:0 10px 30px rgba(0,0,0,.2);overflow:auto}
     #menuDrawer .panel{left:0}#cartDrawer .panel{right:0}#checkoutDrawer .panel{right:0}#cookieDrawer .panel{right:0}
 
-    /* Hero (ei efektiverhoja) */
+    /* Hero (vain logo elää) */
     .hero{position:relative;height:calc(100svh - var(--header-h));display:grid;place-items:center;overflow:hidden;text-align:center;background:#000}
     .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0}
 
-    /* RUMAT-logo + sydänsyke (hero-kuvan päällä) */
     .svg-logo{--logo-color:var(--light-blue);display:inline-block;width:9rem;height:9rem;background-color:var(--logo-color);-webkit-mask:url('assets/logo.svg') no-repeat center/contain;mask:url('assets/logo.svg') no-repeat center/contain;will-change:transform,filter}
     @media (min-width:640px){.svg-logo{width:11rem;height:11rem}}
     @media (min-width:1024px){.svg-logo{width:12rem;height:12rem}}
@@ -76,45 +75,33 @@
     .svg-logo--header{width:3.1rem;height:3.1rem}
     @media (min-width:1024px){.svg-logo--header{width:3.4rem;height:3.4rem}}
 
-    .logo-beat{
-      animation: logoBeat 1.2s ease-in-out infinite;
-      filter: drop-shadow(0 6px 22px rgba(52,85,99,.25));
-    }
+    /* Sydämen syke */
+    .logo-beat{ animation: logoBeat 1.2s ease-in-out infinite; filter: drop-shadow(0 6px 22px rgba(52,85,99,.25)); }
     @keyframes logoBeat{
-      0%{   transform: scale(1);   filter: drop-shadow(0 6px 20px rgba(52,85,99,.22)); }
-      12%{  transform: scale(1.12); filter: drop-shadow(0 10px 34px rgba(52,85,99,.32)); }
-      24%{  transform: scale(1.02); }
-      36%{  transform: scale(1.10); }
-      48%{  transform: scale(1.00); }
-      100%{ transform: scale(1); }
+      0%{transform:scale(1)} 12%{transform:scale(1.12)} 24%{transform:scale(1.02)}
+      36%{transform:scale(1.10)} 48%{transform:scale(1.00)} 100%{transform:scale(1)}
     }
-    @media (prefers-reduced-motion:reduce){
-      .logo-beat{animation:none}
-    }
+    @media (prefers-reduced-motion:reduce){ .logo-beat{animation:none} }
 
     .band{background:var(--ivory);border-radius:var(--band-radius);overflow:hidden}
     .band-inner{max-width:72rem;margin:0 auto;padding:3rem 1rem}
 
-    /* ===== Intro layout – 3-palstainen, kuvat sama koko ===== */
+    /* ===== Intro layout ===== */
     .intro-wide{margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
     .intro-grid{
       display:grid;
       grid-template-columns: var(--intro-img-w) minmax(300px, 64rem) var(--intro-img-w);
-      gap:14px;
-      align-items:start;
-      padding:18px 0;
+      gap:14px; align-items:start; padding:18px 0;
     }
     .intro-img{
       background-size:cover;background-position:center;background-repeat:no-repeat;
       height:var(--intro-img-h);
       border:1px solid rgba(0,0,0,.12);
-      border-radius:18px;            /* kaikki kulmat pyöreiksi */
-      box-sizing:border-box;
+      border-radius:18px; background-color:#ddd; box-sizing:border-box;
       will-change:transform;
-      background-color:#ddd;
     }
     .intro-img.left{align-self:start}
-    .intro-img.right{align-self:start;transform:translateY(0);transition:transform .25s ease}
+    .intro-img.right{align-self:start; transform:translateY(0)}
     .intro-copy{padding:6px 12px;min-width:0}
     .intro-copy .logo{width:56px;height:56px;display:block;margin:0 auto 12px;object-fit:contain}
     .intro-copy p{margin:0 0 .8rem;line-height:1.6}
@@ -124,29 +111,16 @@
       .intro-img{height: clamp(240px, 50vw, 360px);border-radius:12px!important;transform:none!important}
     }
 
-    /* Kaaviot – minimalistiset efektit */
+    /* Kaaviot – minimalistinen */
     .card{background:var(--ivory);border-radius:16px;border:1px solid rgba(0,0,0,.12);overflow:hidden}
     .pattern-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
     @media (min-width:768px){.pattern-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}}
     .tile{position:relative;cursor:pointer;aspect-ratio:1/1;display:block;transition:transform .18s ease,box-shadow .18s ease}
     .tile:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.06)}
-    .tile:active{transform:translateY(0)}
     .tile img{width:100%;height:100%;object-fit:cover;display:block}
     .tile-caption{position:absolute;left:0;right:0;bottom:0;padding:.45rem .65rem;background:linear-gradient(to top,rgba(0,0,0,.55),rgba(0,0,0,0));color:#fff;font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem}
-    .tile--selected{outline:2px solid var(--deep-blue)}
-    .min-full{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.04);color:var(--deep-blue);font-weight:800;text-decoration:underline}
-    .min-full:hover{background:rgba(0,0,0,.08)}
-    .expander{grid-column:1/-1;background:var(--ivory);border-radius:16px;border:1px solid rgba(0,0,0,.12);overflow:hidden}
-    .ex-row{display:grid;grid-template-columns:1fr;min-height:260px}
-    @media (min-width:1024px){.ex-row{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
-    .ex-view{position:relative;background:#000;min-height:min(80vh,1600px);min-width:0}
-    .ex-info{padding:1rem 1.1rem;overflow:auto;min-width:0;overflow-wrap:anywhere}
-    .ex-view img{width:100%;height:100%;object-fit:contain;background:#000}
-    .ex-prev,.ex-next{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;display:grid;place-items:center;border-radius:9999px;background:var(--ivory);border:1px solid rgba(0,0,0,.15);font-weight:800}
-    .ex-prev{left:10px}.ex-next{right:10px}
-    .ex-top{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.6rem .9rem;border-bottom:1px solid rgba(0,0,0,.1)}
 
-    /* Footer – logo isoksi (ei efektejä) */
+    /* Footer – iso logo */
     .footer-bar{position:relative;z-index:2;background:var(--olive);color:var(--ink)}
     .footer-grid{max-width:72rem;margin:0 auto;padding:1.5rem 1rem;display:grid;gap:1rem 2rem;align-items:start;grid-template-columns:1fr 1fr 1fr;grid-template-areas:"social contact logo"}
     .footer-col h6{font-size:.8rem;font-weight:900;text-transform:uppercase;letter-spacing:.12em;margin:0 0 .35rem;color:var(--ink)}
@@ -165,7 +139,7 @@
     /* Cookie banner */
     #cookieBanner{position:fixed;z-index:80;left:0;right:0;bottom:0;display:none}
 
-    /* ================= GIANT INTRO (verho-finaali) ================= */
+    /* ================= GIANT INTRO (verhot) ================= */
     #introOverlay{
       position:fixed;inset:0;z-index:9999;display:none;
       align-items:center;justify-content:center;
@@ -214,78 +188,45 @@
     }
     .intro-giant .tagline.show{opacity:1;transform:translateY(0)}
 
-    /* WOW-efektit – sallittu vain valituissa osissa */
-    .curtain{position:relative;overflow:hidden}
-    .curtain::before,.curtain::after{content:"";position:absolute;top:0;bottom:0;width:52vw;background:var(--ivory);transform:scaleX(1);transition:transform 1.05s cubic-bezier(.65,0,.35,1);pointer-events:none;z-index:10}
-    .curtain::before{left:0;transform-origin:left}.curtain::after{right:0;transform-origin:right}
-    .curtain.in::before,.curtain.in::after{transform:scaleX(0)}
-    .edge-wrap{overflow:visible}
-    .edge-wrap .edge-inner{display:inline-block;clip-path:inset(0 100% 0 0);transform:translateX(-2.2rem);transition:clip-path .9s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1)}
-    .edge-wrap.right .edge-inner{clip-path:inset(0 0 0 100%);transform:translateX(2.2rem)}
-    .edge-wrap.in .edge-inner{clip-path:inset(0 0 0 0);transform:none}
-    h2.edge-wrap .edge-inner,h3.edge-wrap .edge-inner{transform:translateX(-2.8rem)}
-    h2.edge-wrap.right .edge-inner,h3.edge-wrap.right .edge-inner{transform:translateX(2.8rem)}
-    .sr{opacity:0;transform:translateY(14px) scale(.985);transition:opacity .5s ease,transform .6s cubic-bezier(.22,1,.36,1)}
-    .sr.in{opacity:1;transform:none}
-    .btn-anim{transition:transform .15s ease}.btn-anim.press{transform:translateY(1px) scale(.985)}
-
-    @media (prefers-reduced-motion:reduce){
-      *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
-      .curtain::before,.curtain::after{transition-duration:.01ms!important}
-      .edge-wrap .edge-inner{transition-duration:.01ms!important}
-    }
-
     /* ==================== SCENES (PIN + PROGRESS) ==================== */
     .scene{position:relative;height:220svh}
     .scene-sticky{position:sticky;top:var(--header-h);height:calc(100svh - var(--header-h));overflow:hidden}
     .panel{position:absolute;inset:0;will-change:transform,opacity;transform:translateZ(0);backface-visibility:hidden;contain:paint}
     .panelCentered{display:grid;place-items:center}
 
-    /* Koira → Intro: kerrosjärjestys ja lähtötilat */
+    /* Koira → Intro */
     #scene-intro .panel-dog{z-index:2;transform:translateX(0%);opacity:1}
     #scene-intro .panel-intro{z-index:1;transform:translateX(100%);opacity:0}
+    /* sallitaan sisäinen overflow, jos effect päälläkin – varatoimi */
+    #scene-intro .panel-intro{overflow:auto;-webkit-overflow-scrolling:touch}
 
-    /* Tarrakuva */
     .panel-dog img.dog-sticker{
       width: clamp(220px, 42vw, 520px);
-      height: auto;
-      pointer-events: none;
+      height: auto; pointer-events: none;
       filter: drop-shadow(0 10px 28px rgba(0,0,0,.35));
       will-change: transform;
     }
 
-    /* Kun animaatio valmis → irrota sticky vasta lopussa */
     #scene-intro.scene-done{height:auto}
     #scene-intro.scene-done .scene-sticky{position:static;height:auto;overflow:visible}
     #scene-intro.scene-done .panel{position:static;inset:auto;transform:none!important;opacity:1!important}
     #scene-intro.scene-done .panel-dog{display:none}
     #scene-intro.scene-done .panel-intro{position:static!important;inset:auto!important;transform:none!important;opacity:1!important}
 
-    /* Jos siirtymä ohitetaan (mobiili / erittäin korkea sisältö) */
+    /* Skip-tila: ohita efekti siististi */
     #scene-intro.scene-skip{height:auto}
     #scene-intro.scene-skip .scene-sticky{position:static;height:auto;overflow:visible}
     #scene-intro.scene-skip .panel{position:static;inset:auto;transform:none!important;opacity:1!important}
     #scene-intro.scene-skip .panel-dog{display:none}
 
-    /* Suunnittelija – hymynaama-maskin peitto kerros */
-    #scene-designer .designer-mask{
-      position:absolute; inset:0; pointer-events:none; background:var(--ivory);
-      --mx: 50%;
-      --my: 30%;
-      --r: 120px;
-      -webkit-mask:
-        radial-gradient(circle at var(--mx) var(--my),
-          transparent 0 calc(var(--r) - 12px),
-          rgba(0,0,0,.25) calc(var(--r) - 12px) calc(var(--r) + 12px),
-          black calc(var(--r) + 12px));
-      mask:
-        radial-gradient(circle at var(--mx) var(--my),
-          transparent 0 calc(var(--r) - 12px),
-          rgba(0,0,0,.25) calc(var(--r) - 12px) calc(var(--r) + 12px),
-          black calc(var(--r) + 12px));
+    /* Suunnittelija – SVG-maskioverlay (silmät+suun reiät) */
+    .designer-mask-svg{
+      position:absolute; inset:0; pointer-events:none; z-index:5;
+      display:block; width:100%; height:100%;
+      will-change: transform;
     }
-    @media (max-width: 900px){ #scene-designer .designer-mask{ display:none } }
-    @media (prefers-reduced-motion: reduce){ #scene-designer .designer-mask{ display:none } }
+    @media (max-width: 900px){ .designer-mask-svg{ display:none } }
+    @media (prefers-reduced-motion: reduce){ .designer-mask-svg{ display:none } }
 
     @media (prefers-reduced-motion:reduce){
       .scene{height:auto}
@@ -347,14 +288,14 @@
 
   <!-- CONTENT -->
   <main class="pt-[64px]">
-    <!-- HERO (ei curtain-efektiä) -->
+    <!-- HERO -->
     <section id="etusivu" class="hero px-4">
       <img src="assets/hero.jpg" alt="RUMAT STUDIO hero" class="hero-img" onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
       <!-- Logo sykkii -->
       <span id="heroLogo" class="svg-logo logo-light logo-beat" role="img" aria-label="RUMAT STUDIO"></span>
     </section>
 
-    <!-- ===== SCENE 1: KOIRA → MIKAONRUMAT (scroll stopper) ===== -->
+    <!-- ===== SCENE 1: KOIRA → MIKAONRUMAT ===== -->
     <section id="scene-intro" class="scene">
       <div class="scene-sticky">
         <!-- KOIRA tarra -->
@@ -362,7 +303,7 @@
           <img class="dog-sticker" id="dogSticker" alt="Koira tarra">
         </div>
 
-        <!-- MIKAONRUMAT sisällön panel -->
+        <!-- ESITTELY -->
         <section id="mikaonrumat" class="panel panel-intro">
           <div class="band full-bleed">
             <div class="band-inner">
@@ -383,7 +324,7 @@
       </div>
     </section>
 
-    <!-- KAAVIOT (MINIMAL) -->
+    <!-- KAAVIOT -->
     <section id="kaaviot" class="py-0">
       <div class="band full-bleed">
         <div class="band-inner">
@@ -393,7 +334,7 @@
       </div>
     </section>
 
-    <!-- ===== SCENE 2: SUUNNITTELIJA – HYMYSUUN “REIKÄMASKI” ===== -->
+    <!-- ===== SCENE 2: SUUNNITTELIJA – HYMYSILMÄ MASKI ===== -->
     <section id="scene-designer" class="scene">
       <div class="scene-sticky">
         <section id="suunnittelija" class="onstage">
@@ -414,8 +355,23 @@
               </div>
             </div>
           </div>
-          <!-- Peittävä kerros, jossa hymynaaman kokoinen “reikä” -->
-          <div id="designerMask" class="designer-mask" aria-hidden="true"></div>
+
+          <!-- SVG-maskioverlay: vain silmät + suu reikiä -->
+          <svg id="designerMask" class="designer-mask-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <mask id="smileyMask">
+                <!-- valkoinen = peittävä, musta = reikä -->
+                <rect x="0" y="0" width="100" height="100" fill="white"/>
+                <!-- silmät -->
+                <circle cx="30" cy="38" r="8" fill="black"/>
+                <circle cx="70" cy="38" r="8" fill="black"/>
+                <!-- suu: ellipsi -->
+                <ellipse cx="50" cy="68" rx="22" ry="12" fill="black"/>
+              </mask>
+            </defs>
+            <!-- varin pitää olla sama kuin tausta, jotta “verho” näyttää aidolta -->
+            <rect x="0" y="0" width="100" height="100" fill="var(--ivory)" mask="url(#smileyMask)"/>
+          </svg>
         </section>
       </div>
     </section>
@@ -532,6 +488,7 @@
   function showToast(msg,type='info',ms=4000){const t=$('#toast');if(!t)return alert(msg);const color=type==='error'?'bg-red-600':type==='success'?'bg-emerald-600':'bg-stone-800';const box=el('div',{class:`${color} text-white text-sm px-4 py-2 rounded-full shadow`},msg);t.appendChild(box);setTimeout(()=>box.remove(),ms)}
   ;(()=>{const y=$('#year');if(y)y.textContent=new Date().getFullYear()})()
 
+  /* Esittelyn tekstisisältö + kuvat */
   function parasToHTML(s){return String(s||'').trim().split(/\n\s*\n/).map(p=>`<p>${p.trim()}</p>`).join('\n')}
   const defaultContent={pitch:`RUMAT STUDIO syntyi lapsuuden haaveesta ja vuosien aikana kypsyneestä intohimosta vaatesuunnitteluun. Vuonna 2023 visio alkoi muovautumaan nykyiseen muotoonsa: ajattomia ja kestäviä vaatteita, jotka syntyvät harkitusta rakkaudesta ja intohimosta luovaan tekemiseen.
 
@@ -593,6 +550,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     window.emailjs.send(cfg.SERVICE_ID,cfg.TEMPLATE_ID,{to_email:anneEmail,subject:'Uusi tilaus – RUMAT STUDIO',message:`Uusi tilaus vastaanotettu.\n\nTuotteet: ${itemsList}\nYhteensä: ${totalStr}\n\nAsiakastiedot:\n${addressBlock}\n\nDummy-kaava: ${base.dummy_link}`,...base}).catch(err=>console.error(err))
   }
 
+  /* Navigaation tiivistys */
   ;(()=>{const container=$('#hdrRow'),brand=$('#brandBlock'),nav=$('#mainNav'),right=$('#rightBlock'),menuBtn=$('#openMenu'),cartIcon=$('#openCartIcon'),cartText=$('#openCartText');let navVisible=true;const GAP=72;function measureNavWidth(){const was=nav.classList.contains('nav-hidden');if(was)nav.classList.remove('nav-hidden');nav.classList.add('nav-measure');const w=Math.ceil(nav.scrollWidth);nav.classList.remove('nav-measure');if(was)nav.classList.add('nav-hidden');return w}
     function canShowNav(){const cw=container.clientWidth;const bw=Math.ceil(brand.getBoundingClientRect().width);const rbw=Math.ceil(right.getBoundingClientRect().width);const navW=measureNavWidth();return navW<=Math.max(0,cw-bw-rbw-GAP)}
     function applyState(show){navVisible=!!show;if(navVisible){nav.classList.remove('nav-hidden');menuBtn.classList.add('hidden');cartIcon.classList.add('hidden');cartText.classList.remove('hidden')}else{nav.classList.add('nav-hidden');menuBtn.classList.remove('hidden');cartIcon.classList.remove('hidden');cartText.classList.add('hidden')}}
@@ -601,6 +559,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     ;(()=>{const drawer=$('#menuDrawer'),openBtn=$('#openMenu'),closeA=$('#closeMenu'),closeX=$('#closeMenuX');function open(){drawer.classList.add('open');openBtn.setAttribute('aria-expanded','true')}function close(){drawer.classList.remove('open');openBtn.setAttribute('aria-expanded','false')}openBtn.addEventListener('click',open);closeA?.addEventListener('click',close);closeX?.addEventListener('click',close);drawer.addEventListener('click',e=>{if(e.target===drawer)close()});document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});drawer.querySelectorAll?.('[data-menu-close]')?.forEach(a=>a.addEventListener('click',close))})()
   })()
 
+  /* Kaaviot (minimal) */
   ;(()=>{const grid=$('#patternsGrid');let selectedId=null;let expander=null;let current=null;let imgIdx=0;const DATA=window.KAAVIOT
     DATA.forEach(p=>{const tile=document.createElement('article');tile.className='tile card';tile.setAttribute('data-id',p.id);const img=createImg((p.images||[])[0],p.name);const cap=document.createElement('div');cap.className='tile-caption';const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));const labelSuffix=!deliver?' · Tulossa':(p.price===0?' · Ilmainen':'');cap.textContent=p.name+labelSuffix;tile.appendChild(img);tile.appendChild(cap);grid.appendChild(tile)})
     function columns(){const cs=getComputedStyle(grid).gridTemplateColumns;return Math.max(1,cs.split(' ').length)}
@@ -626,13 +585,11 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
 
     function shouldSkip(){
       const stickyH = Math.max(1, window.innerHeight - HEADER);
-      // sallitaan ~200px ylipituus ennen ohitusta
-      const tooTall = intro.scrollHeight > (stickyH + 200);
+      // sallitaan reilummin ylipituutta ennen ohitusta
+      const tooTall = intro.scrollHeight > (stickyH + 360);
       return MOBILE_Q.matches || tooTall;
     }
-    function reevaluate(){
-      scene.classList.toggle('scene-skip', shouldSkip());
-    }
+    function reevaluate(){ scene.classList.toggle('scene-skip', shouldSkip()); }
 
     if('fonts' in document) document.fonts.ready.then(reevaluate);
     window.addEventListener('load', reevaluate, {once:true});
@@ -666,85 +623,38 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     setTimeout(openCurtains, t + 3400); overlay.addEventListener('click', openCurtains, {once:true});
   })()
 
-  /* ====== Efektit toistuviksi (vain sallitut osat) ====== */
-  ;(()=>{ 
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(!reduce && 'IntersectionObserver' in window){
-      const curtainObs = new IntersectionObserver((entries)=>{
-        entries.forEach(e=>{
-          if(e.isIntersecting){ e.target.classList.add('in'); }
-          else{ e.target.classList.remove('in'); }
-        });
-      },{threshold:.18});
-      // ei pakko olla elementtejä – ei haittaa
-      document.querySelectorAll('#scene-designer .curtain').forEach(el=>curtainObs.observe(el));
-    }else{
-      document.querySelectorAll('#scene-designer .curtain').forEach(el=>el.classList.add('in'));
-    }
-    function edgeify(sel){
-      const nodes=document.querySelectorAll(sel);
-      nodes.forEach((n,i)=>{
-        if(n.dataset.edgeified)return;
-        n.dataset.edgeified='1';
-        n.classList.add('edge-wrap');
-        if(i%2)n.classList.add('right');
-        const inner=document.createElement('span');
-        inner.className='edge-inner';
-        inner.innerHTML=n.innerHTML;
-        n.innerHTML='';
-        n.appendChild(inner);
-      });
-    }
-    edgeify('#mikaonrumat h2, #suunnittelija h2');
-    const revealTargets=document.querySelectorAll('#mikaonrumat .band-inner, #patternsGrid .tile, .ex-info, #scene-designer .band-inner');
-    revealTargets.forEach(el=>el.classList.add('sr'));
-    if(!reduce && 'IntersectionObserver' in window){
-      const srObs = new IntersectionObserver((entries)=>{
-        entries.forEach(e=>{
-          if(e.isIntersecting){ e.target.classList.add('in'); }
-          else{ e.target.classList.remove('in'); }
-        });
-      },{threshold:.10});
-      revealTargets.forEach(el=>srObs.observe(el));
-    }else{
-      revealTargets.forEach(el=>el.classList.add('in'));
-    }
-    document.querySelectorAll('#checkout,#checkoutPay,.btn-primary,.btn').forEach(b=>{
-      b.classList.add('btn-anim');
-      b.addEventListener('pointerdown',()=>b.classList.add('press'));
-      ['pointerup','pointerleave','blur'].forEach(ev=>b.addEventListener(ev,()=>b.classList.remove('press')));
-    });
-  })()
-
-  /* Intro: oikean kuvan smooth “lasku” tekstiä vasten */
+  /* Intro: oikean kuvan smooth “lasku” tekstiä vasten (ei nykimistä) */
   ;(()=> {
-    const grid = document.querySelector('.intro-grid');
     const copy = document.querySelector('.intro-copy');
     const right = document.querySelector('.intro-img.right');
-    if(!grid || !copy || !right) return;
-    function sync(){
+    if(!copy || !right) return;
+
+    let targetDy = 0, curDy = 0, anim=0, last=performance.now();
+
+    function measureTarget(){
       if (window.matchMedia('(max-width: 900px)').matches){
-        right.style.transform = 'translateY(0)';
-        return;
+        targetDy = 0; startAnim(); return;
       }
       const textH = copy.getBoundingClientRect().height;
       const imgH  = right.getBoundingClientRect().height;
-      const dy = Math.max(0, textH - imgH);
-      right.style.transform = `translateY(${dy}px)`;
+      targetDy = Math.max(0, textH - imgH);
+      startAnim();
     }
-    const schedule = (()=>{let raf=0; return ()=>{ if(raf) return; raf=requestAnimationFrame(()=>{raf=0; sync();}); };})();
+    function tick(){
+      const now=performance.now(); const dt=Math.min(50, now-last); last=now;
+      const alpha = 1 - Math.exp(-dt/110);
+      curDy += (targetDy - curDy) * alpha;
+      right.style.transform = `translateY(${curDy}px)`;
+      if(Math.abs(targetDy - curDy) > 0.5) anim=requestAnimationFrame(tick); else anim=0;
+    }
+    function startAnim(){ if(!anim) anim=requestAnimationFrame(tick); }
+
+    const schedule = (()=>{let raf=0; return ()=>{ if(raf) return; raf=requestAnimationFrame(()=>{raf=0; measureTarget();}); };})();
     window.addEventListener('resize', schedule, {passive:true});
-    if ('fonts' in document) document.fonts.ready.then(sync);
+    if ('fonts' in document) document.fonts.ready.then(measureTarget);
     const ro = new ResizeObserver(schedule);
     ro.observe(copy); ro.observe(right);
-    setTimeout(sync, 0);
-
-    // jos pinnaus vapautetaan → tee vielä yksi synkronointi
-    const sceneIntroNode = document.querySelector('#scene-intro');
-    const mo = new MutationObserver(()=>{
-      if(sceneIntroNode.classList.contains('scene-done')) setTimeout(sync, 0);
-    });
-    mo.observe(sceneIntroNode, {attributes:true, attributeFilter:['class']});
+    setTimeout(measureTarget, 0);
   })()
 
   /* ===================== SCENE DRIVERS (progress) ===================== */
@@ -789,7 +699,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       return ()=>{window.removeEventListener('scroll',onScroll)}
     }
 
-    /* Scene 1: Koira → Intro – smooth, ohituslogiikalla */
+    /* Scene 1: Koira → Intro – pehmeä liike, vapautus lopussa */
     const sceneIntro = document.querySelector('#scene-intro');
     const dogPanel   = sceneIntro?.querySelector('.panel-dog');
     const introPanel = sceneIntro?.querySelector('#mikaonrumat');
@@ -798,7 +708,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     let ps = 0;
 
     makeSceneDriver('#scene-intro', (p)=>{
-      if(sceneIntro.classList.contains('scene-skip')) return;   // ohitetaan koko siirtymä
+      if(sceneIntro.classList.contains('scene-skip')) return;
       const e = smoother(p);
       const now = performance.now();
       const dt = Math.min(50, now - lastTs);
@@ -806,7 +716,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       const alpha = 1 - Math.exp(-dt/110);
       ps += (e - ps) * alpha;
 
-      if(ps > 0.995){                       // valmis → vapauta sticky vasta nyt
+      if(ps > 0.995){
         sceneIntro.classList.add('scene-done');
         return;
       }
@@ -820,28 +730,20 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       }
     });
 
-    /* Scene 2: Suunnittelija – hymynaama-maskin reikä liukuu alas */
+    /* Scene 2: Suunnittelija – maskioverlay liukuu alas (reveal) */
+    const maskSvg = document.getElementById('designerMask');
+    const photo   = document.getElementById('designerPhoto');
     makeSceneDriver('#scene-designer', (p)=>{
-      const mask = document.getElementById('designerMask');
-      if(!mask) return;
-
       const ease = t => t*(2-t);
       const e = ease(p);
-
-      // Reiän pystysijainti: alussa hieman ylhäällä, lopussa ulos ruudusta
-      const my = -20 + 140*e; // prosenttia korkeudesta
-      mask.style.setProperty('--my', my + '%');
-
-      // Reiän koko skaalautuu näkymän mukaan
-      const r = Math.max(90, Math.min(220, Math.min(window.innerWidth, window.innerHeight) * 0.18));
-      mask.style.setProperty('--r', r + 'px');
-
-      // Hento zoom-kuiskaus kuvaan
-      const ph = document.querySelector('#designerPhoto');
-      if(ph){
+      if(maskSvg){
+        const ty = 120 * e; // siirrä pois ruudusta alaspäin
+        maskSvg.style.transform = `translate3d(0, ${ty}%, 0)`;
+      }
+      if(photo){
         const s = 0.98 + 0.04*e;
-        ph.style.transform = `scale(${s})`;
-        ph.style.transition = 'transform .06s linear';
+        photo.style.transform = `scale(${s})`;
+        photo.style.transition = 'transform .06s linear';
       }
     });
   })()
