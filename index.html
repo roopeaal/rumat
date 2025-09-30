@@ -110,7 +110,7 @@
       .intro-img{height: clamp(240px, 50vw, 360px);border-radius:12px!important;transform:none!important}
     }
 
-    /* Kaaviot – minimalistinen + expander-paluu */
+    /* Kaaviot – minimalistinen + expander */
     .card{background:var(--ivory);border-radius:16px;border:1px solid rgba(0,0,0,.12);overflow:hidden}
     .pattern-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
     @media (min-width:768px){.pattern-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}}
@@ -207,11 +207,9 @@
     #scene-intro .panel-dog{z-index:2;transform:translateX(0%);opacity:1}
     #scene-intro .panel-intro{z-index:1;transform:translateX(100%);opacity:0}
     #scene-intro .panel-intro{overflow:auto;-webkit-overflow-scrolling:touch}
-
     .panel-dog img.dog-sticker{
-      width: clamp(180px, 34vw, 420px); /* pienempi */
+      width: clamp(180px, 34vw, 420px);
       height: auto; pointer-events: none;
-      /* poistettu raskas drop-shadow animoitavalta elementiltä */
       will-change: transform, opacity;
     }
 
@@ -224,6 +222,11 @@
     }
     @media (max-width: 900px){ .designer-mask-svg{ display:none } }
     @media (prefers-reduced-motion: reduce){ .designer-mask-svg{ display:none } }
+
+    /* ===== Scene skip (mobiili / erittäin pitkä teksti) ===== */
+    .scene.scene-skip{height:auto}
+    .scene.scene-skip .scene-sticky{position:relative;height:auto;overflow:visible}
+    .scene.scene-skip .panel{position:relative;transform:none!important;opacity:1!important}
 
     @media (prefers-reduced-motion:reduce){
       .scene{height:auto}
@@ -347,16 +350,16 @@
                 </div>
                 <!-- Tekstipalsta, jossa maski päällä -->
                 <div class="designer-text-wrap space-y-4 normalcase">
-                  <!-- Päivitetty hymiö: pystysilmät (kapeat pystyrectit) + kaarisuu -->
+                  <!-- Pidemmät silmät ja korkeammat suupielet -->
                   <svg id="designerMaskText" class="designer-mask-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
                     <defs>
                       <mask id="smileyMaskText">
                         <rect x="0" y="0" width="100" height="100" fill="white"/>
-                        <!-- Eyes vertical bars -->
-                        <rect x="40" y="30" width="4" height="18" rx="2" fill="black"/>
-                        <rect x="56" y="30" width="4" height="18" rx="2" fill="black"/>
-                        <!-- Mouth curved like ')' -->
-                        <path d="M32 68 A 20 16 0 0 0 68 68" fill="none" stroke="black" stroke-width="8" stroke-linecap="round"/>
+                        <!-- Eyes: tall vertical bars -->
+                        <rect x="40" y="20" width="5" height="34" rx="2" fill="black"/>
+                        <rect x="55" y="20" width="5" height="34" rx="2" fill="black"/>
+                        <!-- Mouth: corners higher (y=56), deep arc -->
+                        <path d="M30 56 C 44 90, 56 90, 70 56" fill="none" stroke="black" stroke-width="8" stroke-linecap="round"/>
                       </mask>
                     </defs>
                     <rect x="0" y="0" width="100" height="100" fill="var(--ivory)" mask="url(#smileyMaskText)"/>
@@ -632,7 +635,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     }
     function tick(){
       const now=performance.now(); const dt=Math.min(50, now-last); last=now;
-      const alpha = 1 - Math.exp(-dt/120); // hitusen pehmeämpi
+      const alpha = 1 - Math.exp(-dt/120);
       curDy += (targetDy - curDy) * alpha;
       right.style.transform = `translate3d(0, ${curDy}px, 0)`;
       if(Math.abs(targetDy - curDy) > 0.4) anim=requestAnimationFrame(tick); else anim=0;
@@ -679,7 +682,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
           ticking = false;
           const y = window.scrollY || window.pageYOffset || 0;
           const p = clamp01((y - start)/total);
-          // smoother (Perlin-like ease)
+          // smoother
           const ease = p*p*p*(p*(6*p-15)+10);
           const now = performance.now(); const dt=Math.min(50, now-last); last=now;
           const alpha = 1 - Math.exp(-dt/120);
@@ -694,7 +697,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       return ()=>{window.removeEventListener('scroll',onScroll)}
     }
 
-    /* Scene 1: Koira → Intro – pehmeä liike, REVERSIBLE */
+    /* Scene 1: Koira → Intro – reversible */
     const sceneIntro = document.querySelector('#scene-intro');
     const dogPanel   = sceneIntro?.querySelector('.panel-dog');
     const introPanel = sceneIntro?.querySelector('#mikaonrumat');
@@ -727,6 +730,83 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       }
     });
   })()
+
+  /* ====== NAVIGAATION ANKKURIT: ohjaa sticky-scenet oikeaan kohtaan ====== */
+  ;(()=> {
+    const HEADER = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64;
+    const nav = document.getElementById('mainNav');
+    const menuDrawer = document.getElementById('menuDrawer');
+
+    function stickyHeight(){ return Math.max(1, window.innerHeight - HEADER); }
+
+    function scrollToY(y){ window.scrollTo({top:y, behavior:'smooth'}); }
+
+    function sceneProgressTop(sceneEl, progress){
+      const stickyH = stickyHeight();
+      const start   = sceneEl.offsetTop;
+      const total   = Math.max(1, sceneEl.offsetHeight - stickyH);
+      return start + progress * total;
+    }
+
+    function handleAnchor(hash){
+      if(!hash || hash==='#' || hash==='#etusivu'){ scrollToY(0); return true; }
+
+      if(hash==='#mikaonrumat'){
+        const scene = document.getElementById('scene-intro');
+        if(!scene) return false;
+        if(scene.classList.contains('scene-skip')){
+          // Virtaus-tila: elementti on normaalissa flow'ssa
+          const target = document.querySelector('#mikaonrumat');
+          if(target){ target.scrollIntoView({behavior:'smooth', block:'start'}); }
+          return true;
+        }
+        // Sticky-tila: hyppää progressiin 1 (esittely täysin näkyvissä)
+        const y = sceneProgressTop(scene, 1);
+        scrollToY(y);
+        return true;
+      }
+
+      if(hash==='#suunnittelija'){
+        const scene = document.getElementById('scene-designer');
+        if(!scene) return false;
+        if(scene.classList.contains('scene-skip')){
+          document.querySelector('#suunnittelija')?.scrollIntoView({behavior:'smooth', block:'start'});
+          return true;
+        }
+        // Aloita kohtauksesta (progress 0), jolloin efekti näkyy rullatessa alas
+        const y = sceneProgressTop(scene, 0);
+        scrollToY(y);
+        return true;
+      }
+
+      if(hash==='#kaaviot' || hash==='#yhteys'){
+        const el = document.querySelector(hash);
+        if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); return true; }
+      }
+      return false;
+    }
+
+    function closeMenu(){ menuDrawer?.classList.remove('open'); document.getElementById('openMenu')?.setAttribute('aria-expanded','false') }
+
+    // Yläpalkin linkit
+    nav?.addEventListener('click', (e)=>{
+      const a = e.target.closest('a[href^="#"]'); if(!a) return;
+      const hash = a.getAttribute('href');
+      if(handleAnchor(hash)){ e.preventDefault(); history.pushState(null,'',hash); }
+    });
+
+    // Sivupalkin (menu) linkit
+    menuDrawer?.addEventListener('click', (e)=>{
+      const a = e.target.closest('a[href^="#"]'); if(!a) return;
+      const hash = a.getAttribute('href');
+      if(handleAnchor(hash)){ e.preventDefault(); closeMenu(); history.pushState(null,'',hash); }
+    });
+
+    // Jos sivu avataan hashilla suoraan tai hash vaihtuu
+    function onHashLoad(){ if(handleAnchor(location.hash)) return; }
+    window.addEventListener('load', onHashLoad, {once:true});
+    window.addEventListener('hashchange', ()=>{ handleAnchor(location.hash) });
+  })();
 
   // Aseta koiratarran lähde (päivitä polku tarvittaessa)
   ;(()=>{ const dog = document.getElementById('dogSticker'); if(dog) setSafeImgSrc(dog,'assets/dog-sticker.png'); })();
