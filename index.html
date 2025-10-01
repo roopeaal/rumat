@@ -8,6 +8,7 @@
   <meta name="description" content="RUMAT STUDIO – ajattomia ja kestäviä kaavoja ja digiohjeita.">
   <link rel="icon" href="assets/favicon.ico">
   <link rel="preload" as="image" href="assets/hero.jpg">
+  <link rel="preload" as="image" href="assets/logo.svg">
 
   <!-- Montserrat & Tailwind -->
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,8 +37,9 @@
       --intro-img-w: clamp(180px, 22vw, 260px);
       --intro-img-h: clamp(320px, 36vw, 420px);
     }
-    html{scroll-padding-top:var(--header-h)}
-    body{font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial;color:var(--ink);background:var(--ivory);margin:0;overflow-x:hidden}
+    html{scroll-padding-top:var(--header-h);scroll-behavior:smooth}
+    body{font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial;color:var(--ink);background:var(--ivory);margin:0;overflow-x:hidden;touch-action:pan-y pinch-zoom}
+    section[id]{scroll-margin-top:var(--header-h)} /* varmistaa ankkurit kaikissa selaimissa */
     h1,h2,h3,h4,h5,h6{font-weight:900!important;text-transform:uppercase;color:var(--deep-blue);letter-spacing:.02em;margin:0 0 .6rem}
     .normalcase{text-transform:none!important}
 
@@ -63,7 +65,7 @@
     .drawer>.panel{position:absolute;top:0;bottom:0;width:min(640px,94vw);background:var(--ivory);box-shadow:0 10px 30px rgba(0,0,0,.2);overflow:auto}
     #menuDrawer .panel{left:0}#cartDrawer .panel{right:0}#checkoutDrawer .panel{right:0}#cookieDrawer .panel{right:0}
 
-    /* Hero (vain logo elää) */
+    /* Hero */
     .hero{position:relative;height:calc(100svh - var(--header-h));display:grid;place-items:center;overflow:hidden;text-align:center;background:#000}
     .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0}
 
@@ -92,15 +94,9 @@
       grid-template-columns: var(--intro-img-w) minmax(300px, 64rem) var(--intro-img-w);
       gap:14px; align-items:start; padding:18px 0;
     }
-    .intro-img{
-      background-size:cover;background-position:center;background-repeat:no-repeat;
-      height:var(--intro-img-h);
-      border:1px solid rgba(0,0,0,.12);
-      border-radius:18px; background-color:#ddd; box-sizing:border-box;
-      will-change:transform;
-    }
+    .intro-img{background-size:cover;background-position:center;background-repeat:no-repeat;height:var(--intro-img-h);border:1px solid rgba(0,0,0,.12);border-radius:18px;background-color:#ddd;box-sizing:border-box}
     .intro-img.left{align-self:start}
-    .intro-img.right{align-self:start; transform:translateY(0)}
+    .intro-img.right{align-self:start;}
     .intro-copy{padding:6px 12px;min-width:0}
     .intro-copy .logo{width:56px;height:56px;display:block;margin:0 auto 12px;object-fit:contain}
     .intro-copy p{margin:0 0 .8rem;line-height:1.6}
@@ -149,80 +145,40 @@
     #cookieBanner{position:fixed;z-index:80;left:0;right:0;bottom:0;display:none}
 
     /* ================= GIANT INTRO (verhot) ================= */
-    #introOverlay{
-      position:fixed;inset:0;z-index:9999;display:none;
-      align-items:center;justify-content:center;
-      background:rgba(246,246,244,.78);backdrop-filter:blur(10px);
-      overflow:hidden;
-      transition: background .6s ease, opacity .5s ease;
-    }
-    #introOverlay .intro-curtain{
-      position:absolute;top:0;bottom:0;width:52vw;background:var(--ivory);
-      box-shadow:0 0 30px rgba(0,0,0,.08);
-      transform:translateX(0);
-      transition:transform 1s cubic-bezier(.65,0,.35,1);
-      z-index:2;
-    }
+    #introOverlay{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(246,246,244,.78);backdrop-filter:blur(10px);overflow:hidden;transition: background .6s ease, opacity .5s ease}
+    #introOverlay .intro-curtain{position:absolute;top:0;bottom:0;width:52vw;background:var(--ivory);box-shadow:0 0 30px rgba(0,0,0,.08);transform:translateX(0);transition:transform 1s cubic-bezier(.65,0,.35,1);z-index:2}
     #introOverlay .intro-curtain.left{left:0;border-right:1px solid rgba(0,0,0,.08)}
     #introOverlay .intro-curtain.right{right:0;border-left:1px solid rgba(0,0,0,.08)}
     #introOverlay.open{background:transparent;backdrop-filter:none}
     #introOverlay.open .intro-curtain.left{transform:translateX(-100%)}
     #introOverlay.open .intro-curtain.right{transform:translateX(100%)}
 
-    .intro-giant{
-      position:relative; z-index:3;
-      width:96vw; max-width:96vw; text-transform:uppercase; user-select:none; text-align:center;
-      font-family:Impact,"Arial Black","Segoe UI Black","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
-      color:#111; line-height:.88; padding:0;
-      filter:url(#roughPaint);
-      text-shadow: 0.5px 0.5px 0 rgba(0,0,0,.35), -0.5px -0.5px 0 rgba(0,0,0,.25);
-      transition: opacity .45s ease, transform .6s cubic-bezier(.22,1,.36,1);
-    }
+    .intro-giant{position:relative; z-index:3;width:96vw; max-width:96vw; text-transform:uppercase; user-select:none; text-align:center;font-family:Impact,"Arial Black","Segoe UI Black","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;color:#111; line-height:.88; padding:0;filter:url(#roughPaint);text-shadow: 0.5px 0.5px 0 rgba(0,0,0,.35), -0.5px -0.5px 0 rgba(0,0,0,.25);transition: opacity .45s ease, transform .6s cubic-bezier(.22,1,.36,1)}
     #introOverlay.open .intro-giant{opacity:0; transform:scale(.98)}
-    .intro-giant .line{display:block;white-space:nowrap; font-weight:900;
-      font-size: clamp(64px, 22vw, 30rem);
-      letter-spacing:.03em; transform: scaleX(var(--fit,1)) scaleY(1.03);
-    }
+    .intro-giant .line{display:block;white-space:nowrap; font-weight:900;font-size: clamp(64px, 22vw, 30rem);letter-spacing:.03em; transform: scaleX(var(--fit,1)) scaleY(1.03)}
     .intro-giant .line1{letter-spacing:.035em}
     .intro-giant .line2{letter-spacing:.025em}
     .intro-giant .ch{display:inline-block;opacity:0;transform:translateY(10px) rotate(var(--rot,0deg));transition:opacity .24s ease,transform .55s cubic-bezier(.22,1,.36,1)}
     .intro-giant .ch.show{opacity:1;transform:translateY(0) rotate(var(--rot,0deg))}
-    .intro-giant .tagline{
-      position:relative; display:inline-block; margin-top: min(2.2vh, 18px);
-      font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      font-weight:900; letter-spacing:.06em;
-      font-size: clamp(18px, 2.6vw, 44px);
-      opacity:0; transform:translateY(10px); transition:opacity .4s ease,transform .5s ease;
-      color:#111; filter: none; text-shadow:none;
-    }
+    .intro-giant .tagline{position:relative; display:inline-block; margin-top: min(2.2vh, 18px);font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-weight:900; letter-spacing:.06em;font-size: clamp(18px, 2.6vw, 44px);opacity:0; transform:translateY(10px); transition:opacity .4s ease,transform .5s ease;color:#111; filter: none; text-shadow:none}
     .intro-giant .tagline.show{opacity:1;transform:translateY(0)}
 
     /* ==================== SCENES (PIN + PROGRESS) ==================== */
     .scene{position:relative;height:220svh}
     .scene-sticky{position:sticky;top:var(--header-h);height:calc(100svh - var(--header-h));overflow:hidden}
-    .panel{position:absolute;inset:0;will-change:transform,opacity;transform:translateZ(0);backface-visibility:hidden;contain:paint}
+    .panel{position:absolute;inset:0;transform:translateZ(0);backface-visibility:hidden}
     .panelCentered{display:grid;place-items:center}
 
     /* Koira → Intro */
     #scene-intro .panel-dog{z-index:2;transform:translateX(0%);opacity:1}
-    #scene-intro .panel-intro{z-index:1;transform:translateX(100%);opacity:0}
-    #scene-intro .panel-intro{overflow:auto;-webkit-overflow-scrolling:touch}
-    .panel-dog img.dog-sticker{
-      width: clamp(120px, 18vw, 240px); /* hieman pienempi */
-      height: auto; pointer-events: none;
-      will-change: transform, opacity;
-    }
-    .panel-dog .dog-emoji{
-      display:none; font-size: clamp(120px, 18vw, 240px); line-height:1; user-select:none;
-    }
+    #scene-intro .panel-intro{z-index:1;transform:translateX(100%);opacity:0;overflow:clip} /* tärkeä: ei omaa scrollia kun animoi */
+
+    .panel-dog img.dog-sticker{width: clamp(120px, 18vw, 240px);height: auto; pointer-events: none}
+    .panel-dog .dog-emoji{display:none; font-size: clamp(120px, 18vw, 240px); line-height:1; user-select:none}
 
     /* Suunnittelija – MASKI vain tekstipalstan päällä */
     .designer-text-wrap{position:relative}
-    .designer-mask-svg{
-      position:absolute; inset:0; pointer-events:none; z-index:5;
-      display:block; width:100%; height:100%;
-      will-change: transform;
-    }
+    .designer-mask-svg{position:absolute; inset:0; pointer-events:none; z-index:5;display:block; width:100%; height:100%}
     @media (max-width: 900px){ .designer-mask-svg{ display:none } }
     @media (prefers-reduced-motion: reduce){ .designer-mask-svg{ display:none } }
 
@@ -241,11 +197,8 @@
     .scene + #kaaviot .band,
     #scene-designer .band,
     #patternsGrid,
-    .footer-bar {
-      content-visibility: auto;
-      contain-intrinsic-size: 1200px 800px;
-    }
-    .willchange{ will-change: transform, opacity; }
+    .footer-bar { content-visibility: auto; contain-intrinsic-size: 1200px 800px }
+    .willchange{ will-change: transform, opacity }
   </style>
 </head>
 
@@ -303,7 +256,7 @@
   <main class="pt-[64px]">
     <!-- HERO -->
     <section id="etusivu" class="hero px-4">
-      <img src="assets/hero.jpg" alt="RUMAT STUDIO hero" class="hero-img" onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
+      <img src="assets/hero.jpg" alt="RUMAT STUDIO hero" class="hero-img" loading="eager" decoding="async" onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
       <!-- Logo sykkii -->
       <span id="heroLogo" class="svg-logo logo-light logo-beat" role="img" aria-label="RUMAT STUDIO"></span>
     </section>
@@ -368,10 +321,8 @@
                     <defs>
                       <mask id="smileyMaskText">
                         <rect x="0" y="0" width="100" height="100" fill="white"/>
-                        <!-- Pystysilmät ylempänä -->
                         <rect x="40" y="8"  width="5" height="34" rx="2" fill="black"/>
                         <rect x="55" y="8"  width="5" height="34" rx="2" fill="black"/>
-                        <!-- Hymy: kulmat korkealla / paksumpi -->
                         <path d="M30 56 C 44 90, 56 90, 70 56" fill="none" stroke="black" stroke-width="8" stroke-linecap="round"/>
                       </mask>
                     </defs>
@@ -496,14 +447,7 @@
   const $=s=>document.querySelector(s)
   const el=(t,a={},...k)=>{const n=document.createElement(t);Object.entries(a).forEach(([k,v])=>{if(k==='class')n.className=v;else if(k==='html')n.innerHTML=v;else if(k.startsWith('on'))n.addEventListener(k.slice(2),v);else n.setAttribute(k,v)});k.forEach(x=>{if(x==null)return; if(typeof x==='string')n.appendChild(document.createTextNode(x));else n.appendChild(x)});return n}
   function setSafeImgSrc(img,src){img.src=src||'assets/placeholder.jpg';img.onerror=function(){this.onerror=null;this.src='assets/placeholder.jpg'}}
-  function createImg(src,alt){
-    const im=document.createElement('img');
-    im.alt=alt||'';
-    im.loading='lazy';
-    im.decoding='async';
-    setSafeImgSrc(im,src);
-    return im;
-  }
+  function createImg(src,alt){const im=document.createElement('img');im.alt=alt||'';im.loading='lazy';im.decoding='async';setSafeImgSrc(im,src);return im}
   function showToast(msg,type='info',ms=4000){const t=$('#toast');if(!t)return alert(msg);const color=type==='error'?'bg-red-600':type==='success'?'bg-emerald-600':'bg-stone-800';const box=el('div',{class:`${color} text-white text-sm px-4 py-2 rounded-full shadow`},msg);t.appendChild(box);setTimeout(()=>box.remove(),ms)}
   ;(()=>{const y=$('#year');if(y)y.textContent=new Date().getFullYear()})()
 
@@ -564,7 +508,11 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   async function showSuccess(order){const msgBox=$('#orderMsg');const items=(order?.items||[]);const total=items.reduce((s,x)=>s+(x.price||0)*x.qty,0);const c=order?.customer||{};msgBox.classList.remove('hidden');msgBox.innerHTML=`<div class="border border-emerald-200 bg-emerald-50 rounded-2xl p-4"><h3 class="text-xl font-extrabold text-emerald-900 uppercase tracking-wide mb-2">Tilaus vastaanotettu</h3><p class="text-emerald-900/80">Kiitos, <strong>${(c.firstName||'')+' '+(c.lastName||'')}</strong>! Vahvistus on (yritetty) lähettää osoitteeseen <strong>${order?.email||c.email||''}</strong>.</p><div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4"><div><div class="font-semibold mb-1">Tilaus:</div><ul class="list-disc pl-5 text-sm">${items.map(x=>`<li>${x.name} × ${x.qty} — ${fmtEUR((x.price||0)*x.qty)}</li>`).join('')}</ul><div class="mt-2 font-bold">Yhteensä: ${fmtEUR(total)}</div></div><div><div class="font-semibold mb-1">Asiakastiedot:</div><div class="text-sm">${(c.firstName||'')+' '+(c.lastName||'')}<br/>${c.address||''}<br/>${(c.zip||'')+' '+(c.city||'')}<br/>${c.country||''}<br/>${c.email||''}${c.phone?('<br/>'+c.phone):''}${c.notes?('<br/><em>'+String(c.notes).replace(/</g,'&lt;')+'</em>'):''}</div></div></div></div>`;showToast('Tilaus vahvistettu. Kiitos!','success');CART={};saveCart();renderCart();offerDummyDownload(order);sendConfirmationEmails(order)}
   function handleReturn(){const h=location.hash||'';if(h.indexOf('#success')===0){const order=JSON.parse(localStorage.getItem('lastOrder')||'null');showSuccess(order)}if(h.indexOf('#cancel')===0){showToast('Maksu keskeytettiin tai epäonnistui.','error');const msgBox=$('#orderMsg');msgBox.classList.remove('hidden');msgBox.innerHTML=`<div class="border border-red-200 bg-red-50 rounded-2xl p-4"><h3 class="text-xl font-extrabold text-red-900 uppercase tracking-wide mb-2">Maksu epäonnistui</h3><p class="text-red-900/80">Yritä uudelleen. Jos ongelma jatkuu, ota yhteyttä: <a class="underline" href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>.</p></div>`}}
   window.addEventListener('hashchange',handleReturn);handleReturn()
-  function sendConfirmationEmails(order){const anneEmail='aaltonen96@outlook.com';const cfg=(typeof getEmailCfg==='function')?getEmailCfg():{PUBLIC_KEY:'',SERVICE_ID:'',TEMPLATE_ID:''};const c=order?.customer||{};const itemsList=(order.items||[]).map(x=>`${x.name} x ${x.qty}`).join(', ');const totalStr=(order.items||[]).reduce((s,x)=>s+(x.price||0)*x.qty,0).toFixed(2)+' €';const addressBlock=`${(c.firstName||'')} ${(c.lastName||'')}\n${c.address||''}\n${(c.zip||'')} ${(c.city||'')}\n${c.country||''}\n${c.email||''}${c.phone?('\n'+c.phone):''}${c.notes?('\n'+c.notes):''}`;const dummyDataUrl=localStorage.getItem('lastDummyDataUrl')||'';const base={order_json:JSON.stringify(order,null,2),items:itemsList,total:totalStr,dummy_link:dummyDataUrl||(location.origin+'/assets/dummy-kaava.pdf'),customer_block:addressBlock};if(!window.emailjs||!cfg.PUBLIC_KEY||!cfg.SERVICE_ID||!cfg.TEMPLATE_ID){const warn=$('#paypalWarn');if(warn)warn.textContent='Huom: automaattinen sähköpostivahvistus ei ole käytössä – paina Ctrl/Cmd+E lisätäksesi EmailJS-avaimet.';console.info('EmailJS ei konffattu. Tilauksen tiedot:',order);return}
+  function sendConfirmationEmails(order){const anneEmail='aaltonen96@outlook.com';const cfg=(typeof getEmailCfg==='function')?getEmailCfg():{PUBLIC_KEY:'',SERVICE_ID:'',TEMPLATE_ID:''};const c=order?.customer||{};const itemsList=(order.items||[]).map(x=>`${x.name} x ${x.qty}`).join(', ');const totalStr=(order.items||[]).reduce((s,x)=>s+(x.price||0)*x.qty,0).toFixed(2)+' €';const addressBlock=`${(c.firstName||'')} ${(c.lastName||'')}
+${c.address||''}
+${(c.zip||'')} ${(c.city||'')}
+${c.country||''}
+${c.email||''}${c.phone?('\n'+c.phone):''}${c.notes?('\n'+c.notes):''}`;const dummyDataUrl=localStorage.getItem('lastDummyDataUrl')||'';const base={order_json:JSON.stringify(order,null,2),items:itemsList,total:totalStr,dummy_link:dummyDataUrl||(location.origin+'/assets/dummy-kaava.pdf'),customer_block:addressBlock};if(!window.emailjs||!cfg.PUBLIC_KEY||!cfg.SERVICE_ID||!cfg.TEMPLATE_ID){const warn=$('#paypalWarn');if(warn)warn.textContent='Huom: automaattinen sähköpostivahvistus ei ole käytössä – paina Ctrl/Cmd+E lisätäksesi EmailJS-avaimet.';console.info('EmailJS ei konffattu. Tilauksen tiedot:',order);return}
     window.emailjs.send(cfg.SERVICE_ID,cfg.TEMPLATE_ID,{to_email:order.email||c.email,subject:'RUMAT STUDIO – tilausvahvistus',message:`Kiitos ostoksesta!\n\nTuotteet: ${itemsList}\nYhteensä: ${totalStr}\n\nAsiakastiedot:\n${addressBlock}\n\nDummy-kaava: ${base.dummy_link}`,...base}).then(()=>showToast('Tilausvahvistus lähetetty.','success')).catch(err=>{console.error(err);showToast('Sähköpostin lähetys epäonnistui (asiakas).','error')})
     window.emailjs.send(cfg.SERVICE_ID,cfg.TEMPLATE_ID,{to_email:anneEmail,subject:'Uusi tilaus – RUMAT STUDIO',message:`Uusi tilaus vastaanotettu.\n\nTuotteet: ${itemsList}\nYhteensä: ${totalStr}\n\nAsiakastiedot:\n${addressBlock}\n\nDummy-kaava: ${base.dummy_link}`,...base}).catch(err=>console.error(err))
   }
@@ -638,16 +586,14 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     setTimeout(openCurtains, t + 3400); overlay.addEventListener('click', openCurtains, {once:true});
   })()
 
-  /* Intro: oikean kuvan smooth “lasku” tekstiä vasten */
+  /* Intro: oikean kuvan smooth “lasku” tekstiä vasten (päivitetty: käynnistyy vain kun tarvitaan) */
   ;(()=> {
     const copy = document.querySelector('.intro-copy');
     const right = document.querySelector('.intro-img.right');
     if(!copy || !right) return;
     let targetDy = 0, curDy = 0, anim=0, last=performance.now();
     function measureTarget(){
-      if (window.matchMedia('(max-width: 900px)').matches){
-        targetDy = 0; startAnim(); return;
-      }
+      if (window.matchMedia('(max-width: 900px)').matches){ targetDy = 0; startAnim(); return; }
       const textH = copy.getBoundingClientRect().height;
       const imgH  = right.getBoundingClientRect().height;
       targetDy = Math.max(0, textH - imgH);
@@ -657,13 +603,9 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       const now=performance.now(); const dt=Math.min(50, now-last); last=now;
       const alpha = 1 - Math.exp(-dt/90);
       curDy += (targetDy - curDy) * alpha;
-      right.style.transform = `translate3d(0, ${curDy}px, 0)`;
-      if(Math.abs(targetDy - curDy) > 0.4){
-        anim=requestAnimationFrame(tick);
-      } else {
-        anim=0;
-        right.style.transform = `translate3d(0, ${Math.round(curDy)}px, 0)`;
-      }
+      const rounded = Math.round(curDy*100)/100;
+      right.style.transform = `translate3d(0, ${rounded}px, 0)`;
+      if(Math.abs(targetDy - curDy) > 0.6){ anim=requestAnimationFrame(tick); } else { anim=0; }
     }
     function startAnim(){ if(!anim){ anim=requestAnimationFrame(tick); } }
     const schedule = (()=>{let raf=0; return ()=>{ if(raf) return; raf=requestAnimationFrame(()=>{raf=0; measureTarget();}); };})();
@@ -674,12 +616,11 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     setTimeout(measureTarget, 0);
   })()
 
-  /* ===================== SCENE DRIVERS ===================== */
+  /* ===================== SCENE DRIVERS (kevyempi) ===================== */
   ;(()=>{
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const HEADER = parseFloat(getComputedStyle(document.documentElement)
-                     .getPropertyValue('--header-h')) || 64;
+    const HEADER = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64;
 
     const sceneIntro   = document.querySelector('#scene-intro');
     const dogPanel     = sceneIntro?.querySelector('.panel-dog');
@@ -706,11 +647,16 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     function clamp01(x){ return x<0?0:x>1?1:x }
     function easeSmooth(p){ return p*p*p*(p*(6*p-15)+10) }
 
+    const prev = {dogTx:null,dogOp:null,introTx:null,introOp:null,maskTy:null,photoS:null};
+
     const io = new IntersectionObserver((ents)=>{
       ents.forEach(e=>{
         const s = scenes.find(x=>x.el===e.target);
         if(!s) return;
         s.active = e.isIntersecting;
+        // Togglaa will-change vain kun kohtaus on aktiivinen → säästää muistia ja GPU-layereita
+        if(s.el===sceneIntro){ dogPanel?.classList.toggle('willchange', s.active); introPanel?.classList.toggle('willchange', s.active); }
+        if(s.el===sceneDes){ maskSvg?.classList.toggle('willchange', s.active); photo?.classList.toggle('willchange', s.active); }
         if(s.active) request();
       });
     }, {root:null, rootMargin:'200% 0px', threshold:0});
@@ -729,26 +675,28 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
 
         if (s.el === sceneIntro && !sceneIntro.classList.contains('scene-skip')){
           if (dogPanel){
-            const tx = -vwCache * 1.2 * p;
-            dogPanel.style.transform = `translate3d(${tx}px,0,0)`;
-            dogPanel.style.opacity   = String(1 - p);
+            const tx = Math.round((-vwCache * 1.2 * p)*100)/100;
+            const op = +(1 - p).toFixed(3);
+            if(prev.dogTx!==tx){ dogPanel.style.transform = `translate3d(${tx}px,0,0)`; prev.dogTx=tx; }
+            if(prev.dogOp!==op){ dogPanel.style.opacity = String(op); prev.dogOp=op; }
           }
           if (introPanel){
-            const tx =  vwCache * (1-p);
-            introPanel.style.transform = `translate3d(${tx}px,0,0)`;
-            introPanel.style.opacity   = String(Math.min(1, p*1.15));
+            const tx2 = Math.round((vwCache * (1-p))*100)/100;
+            const op2 = +Math.min(1, p*1.15).toFixed(3);
+            if(prev.introTx!==tx2){ introPanel.style.transform = `translate3d(${tx2}px,0,0)`; prev.introTx=tx2; }
+            if(prev.introOp!==op2){ introPanel.style.opacity   = String(op2); prev.introOp=op2; }
           }
         }
 
         if (s.el === sceneDes && !sceneDes.classList.contains('scene-skip')){
           const e = p*(2-p);
           if(maskSvg){
-            const ty = s.stickyH * 0.6 * e;
-            maskSvg.style.transform = `translate3d(0, ${ty}px, 0)`;
+            const ty = Math.round((s.stickyH * 0.6 * e)*100)/100;
+            if(prev.maskTy!==ty){ maskSvg.style.transform = `translate3d(0, ${ty}px, 0)`; prev.maskTy=ty; }
           }
           if(photo){
-            const sscale = 0.98 + 0.04*e;
-            photo.style.transform = `scale(${sscale})`;
+            const sc = +(0.98 + 0.04*e).toFixed(4);
+            if(prev.photoS!==sc){ photo.style.transform = `scale(${sc})`; prev.photoS=sc; }
           }
         }
       }
@@ -822,19 +770,13 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       const hash = a.getAttribute('href');
       if(handleAnchor(hash)){ e.preventDefault(); closeMenu(); history.pushState(null,'',hash); }
     });
-    function onHashLoad(){ if(handleAnchor(location.hash)) return; }
+    function onHashLoad(){ handleAnchor(location.hash); }
     window.addEventListener('load', onHashLoad, {once:true});
     window.addEventListener('hashchange', ()=>{ handleAnchor(location.hash) });
   })();
 
   /* Koira-tarra: aseta lähde + emoji-fallback jos kuva puuttuu */
-  ;(()=> {
-    const dog = document.getElementById('dogSticker');
-    const emoji = document.getElementById('dogEmoji');
-    if(!dog) return;
-    dog.src = 'assets/dog-sticker.png'; // Vaihda tähän tarran polku
-    dog.onerror = () => { if(emoji){ dog.style.display='none'; emoji.style.display='block'; } };
-  })();
+  ;(()=> { const dog = document.getElementById('dogSticker'); const emoji = document.getElementById('dogEmoji'); if(!dog) return; dog.src = 'assets/dog-sticker.png'; dog.onerror = () => { if(emoji){ dog.style.display='none'; emoji.style.display='block'; } }; })();
   </script>
 </body>
 </html>
