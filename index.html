@@ -19,7 +19,7 @@
   <script>
     function getEmailCfg(){return{PUBLIC_KEY:localStorage.getItem('emailjs_public')||'',SERVICE_ID:localStorage.getItem('emailjs_service')||'',TEMPLATE_ID:localStorage.getItem('emailjs_template')||''}}
     function setEmailCfg(pub,svc,tpl){if(pub)localStorage.setItem('emailjs_public',pub);if(svc)localStorage.setItem('emailjs_service',svc);if(tpl)localStorage.setItem('emailjs_template',tpl)}
-    window.configureEmailJS=function(){const c=getEmailCfg();const p=prompt('EmailJS Public Key',c.PUBLIC_KEY||'')||'';const s=prompt('EmailJS Service ID',c.SERVICE_ID||'')||'';const t=prompt('EmailJS Template ID',c.TEMPLATE_ID||'')||'';setEmailCfg(p.trim(),s.trim(),t.trim());const cfg=getEmailCfg();if(window.emailjs&&cfg.PUBLIC_KEY){try{window.emailjs.init({publicKey:cfg.PUBLIC_KEY});alert('EmailJS alustettu.')}catch(e){console.error(e);alert('EmailJS-alustus epäonnistui.')}}}
+    window.configureEmailJS=function(){const c=getEmailCfg();const p=prompt('EmailJS Public Key',c.PUBLIC_KEY||'')||'';const s=prompt('EmailJS Service ID',c.Service_ID||'')||'';const t=prompt('EmailJS Template ID',c.TEMPLATE_ID||'')||'';setEmailCfg(p.trim(),s.trim(),t.trim());const cfg=getEmailCfg();if(window.emailjs&&cfg.PUBLIC_KEY){try{window.emailjs.init({publicKey:cfg.PUBLIC_KEY});alert('EmailJS alustettu.')}catch(e){console.error(e);alert('EmailJS-alustus epäonnistui.')}}}
     ;(function(){const c=getEmailCfg();if(window.emailjs&&c.PUBLIC_KEY){try{window.emailjs.init({publicKey:c.PUBLIC_KEY})}catch(e){}}window.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='e'){e.preventDefault();window.configureEmailJS()}})})()
 
     const CONSENT_KEY='cookieConsent.v1'
@@ -114,7 +114,7 @@
     .card{background:var(--ivory);border-radius:16px;border:1px solid rgba(0,0,0,.12);overflow:hidden}
     .pattern-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
     @media (min-width:768px){.pattern-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}}
-    .tile{position:relative;cursor:pointer;aspect-ratio:1/1;display:block;transition:transform .12s linear,box-shadow .12s linear;will-change:auto}
+    .tile{position:relative;cursor:pointer;aspect-ratio:1/1;display:block;transition:transform .12s linear,box-shadow .12s linear}
     .tile:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.05)}
     .tile img{width:100%;height:100%;object-fit:cover;display:block}
     .tile-caption{position:absolute;left:0;right:0;bottom:0;padding:.45rem .65rem;background:linear-gradient(to top,rgba(0,0,0,.55),rgba(0,0,0,0));color:#fff;font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem}
@@ -208,7 +208,7 @@
     #scene-intro .panel-intro{z-index:1;transform:translateX(100%);opacity:0}
     #scene-intro .panel-intro{overflow:auto;-webkit-overflow-scrolling:touch}
     .panel-dog img.dog-sticker{
-      width: clamp(180px, 28vw, 360px);
+      width: clamp(140px, 22vw, 280px); /* pienempi = vähemmän pikseleitä */
       height: auto; pointer-events: none;
       will-change: transform, opacity;
     }
@@ -310,7 +310,7 @@
       <div class="scene-sticky">
         <!-- KOIRA tarra -->
         <div class="panel panel-dog panelCentered" aria-label="Koira tarra">
-          <img class="dog-sticker willchange" id="dogSticker" alt="Koira tarra" loading="eager" decoding="async">
+          <img class="dog-sticker" id="dogSticker" alt="Koira tarra" loading="eager" decoding="async">
         </div>
 
         <!-- ESITTELY -->
@@ -360,15 +360,14 @@
                 </div>
                 <!-- Tekstipalsta, jossa maski päällä -->
                 <div class="designer-text-wrap space-y-4 normalcase">
-                  <!-- Silmät nostettu ylemmäs (y=8), suu entisellään -->
                   <svg id="designerMaskText" class="designer-mask-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
                     <defs>
                       <mask id="smileyMaskText">
                         <rect x="0" y="0" width="100" height="100" fill="white"/>
-                        <!-- Eyes: tall vertical bars, y=8 -->
+                        <!-- Pystysilmät: y=8 -->
                         <rect x="40" y="8"  width="5" height="34" rx="2" fill="black"/>
                         <rect x="55" y="8"  width="5" height="34" rx="2" fill="black"/>
-                        <!-- Mouth: corners higher (y=56), deep arc -->
+                        <!-- Hymy: kulmat korkealla -->
                         <path d="M30 56 C 44 90, 56 90, 70 56" fill="none" stroke="black" stroke-width="8" stroke-linecap="round"/>
                       </mask>
                     </defs>
@@ -497,7 +496,7 @@
     const im=document.createElement('img');
     im.alt=alt||'';
     im.loading='lazy';
-    im.decoding='async';              // parempi skrollisuorituskyky
+    im.decoding='async';
     setSafeImgSrc(im,src);
     return im;
   }
@@ -541,7 +540,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   function updateBadge(){const n=Object.values(CART).reduce((a,b)=>a+b,0);const ic=$('#cartCount');const tx=$('#cartCountText');if(ic)ic.textContent=String(n);if(tx)tx.textContent=n?`(${n})`:''}
   const $drawer=$('#cartDrawer');function openCart(){$drawer.classList.add('open');renderCart()}function closeCart(){$drawer.classList.remove('open')}
   $('#openCartText')?.addEventListener('click',openCart);$('#openCartIcon')?.addEventListener('click',openCart);$('#closeCart')?.addEventListener('click',closeCart);$('#closeCartX')?.addEventListener('click',closeCart)
-  function renderCart(){const root=$('#cartItems');root.innerHTML='';let sub=0;Object.entries(CART).forEach(([id,q])=>{const p=window.KAAVIOT.find(x=>x.id===id);if(!p)return;sub+=(p.price||0)*q;root.appendChild(el('div',{class:'py-3 flex items-center justify-between gap-3'},el('div',{},el('div',{class:'font-semibold'},p.name),el('div',{class:'text-sm opacity-70'},fmtEUR(p.price||0))),el('div',{class:'flex items-center gap-2'},el('button',{'data-dec':id,class:'px-2 border border-[rgba(0,0,0,.15)] rounded'},'−'),el('span',{},String(q)),el('button',{'data-inc':id,class:'px-2 border border-[rgba(0,0,0,.15)] rounded'},'+'),el('button',{'data-remove':id,class:'px-2 border border-[rgba(0,0,0,.15)] rounded'},'Poista'))))});$('#subTotal').textContent=fmtEUR(sub);root.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{const id=b.dataset.remove;delete CART[id];saveCart();renderCart()});root.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{const id=b.dataset.inc;CART[id]=(CART[id]||0)+1;saveCart();renderCart()});root.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{const id=b.dataset.dec;CART[id]=Math.max(0,(CART[id]||0)-1);if(CART[id]===0)delete CART[id];saveCart();renderCart()})}
+  function renderCart(){const root=$('#cartItems');root.innerHTML='';let sub=0;Object.entries(CART).forEach(([id,q])=>{const p=window.KAAVIOT.find(x=>x.id===id);if(!p)return;sub+=(p.price||0)*q;root.appendChild(el('div',{class:'py-3 flex items-center justify-between gap-3'},el('div',{},el('div',{class:'font-semibold'},p.name),el('div',{class:'text-sm opacity-70'},fmtEUR(p.price||0))),el('div',{class:'flex items-center gap-2'},el('button',{'data-dec':id,class:'px-2 border border-[rgba(0,0,0,.15)] rounded'},'−'),el('span',{},String(q)),el('button',{'data-inc':id,class:'px-2 border border-[rgba(0,0,0,.15)] rounded'},'+'),el('button',{'data-remove':id,class:'px-2 border border-[rgba(0,0,0,.15)] rounded'},'Poista'))))});$('#subTotal').textContent=fmtEUR(sub);root.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{const id=b.dataset.remove;delete CART[id];saveCart();renderCart()});root.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{const id=b.dataset.inc;CART[id]=(CART[id]||0)+1);saveCart();renderCart()});root.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{const id=b.dataset.dec;CART[id]=Math.max(0,(CART[id]||0)-1);if(CART[id]===0)delete CART[id];saveCart();renderCart()})}
   function canDeliver(p){return!!(p&&(p.deliverable||p.isDummy||p.file))}
   function addToCart(id){const p=window.KAAVIOT.find(x=>x.id===id);if(!p)return;if(!canDeliver(p)){showToast('Tuote on tulossa – ei vielä myynnissä.','info');return}CART[id]=(CART[id]||0)+1;saveCart();openCart()}
   window.addToCart=addToCart;updateBadge()
@@ -635,7 +634,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     setTimeout(openCurtains, t + 3400); overlay.addEventListener('click', openCurtains, {once:true});
   })()
 
-  /* Intro: oikean kuvan smooth “lasku” tekstiä vasten (nopeampi, freesaa GPU:n kun valmis) */
+  /* Intro: oikean kuvan smooth “lasku” tekstiä vasten (kevyempi) */
   ;(()=> {
     const copy = document.querySelector('.intro-copy');
     const right = document.querySelector('.intro-img.right');
@@ -652,22 +651,17 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     }
     function tick(){
       const now=performance.now(); const dt=Math.min(50, now-last); last=now;
-      const alpha = 1 - Math.exp(-dt/90); // nopeampi konvergenssi
+      const alpha = 1 - Math.exp(-dt/90);
       curDy += (targetDy - curDy) * alpha;
       right.style.transform = `translate3d(0, ${curDy}px, 0)`;
       if(Math.abs(targetDy - curDy) > 0.4){
         anim=requestAnimationFrame(tick);
       } else {
         anim=0;
-        right.classList.remove('willchange'); // vapauta GPU
+        right.style.transform = `translate3d(0, ${Math.round(curDy)}px, 0)`;
       }
     }
-    function startAnim(){
-      if(!anim){
-        right.classList.add('willchange');
-        anim=requestAnimationFrame(tick);
-      }
-    }
+    function startAnim(){ if(!anim){ anim=requestAnimationFrame(tick); } }
     const schedule = (()=>{let raf=0; return ()=>{ if(raf) return; raf=requestAnimationFrame(()=>{raf=0; measureTarget();}); };})();
     window.addEventListener('resize', schedule, {passive:true});
     if ('fonts' in document) document.fonts.ready.then(measureTarget);
@@ -676,7 +670,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     setTimeout(measureTarget, 0);
   })()
 
-  /* ===================== SCENE DRIVERS – YKSI KEVYT AJURI ===================== */
+  /* ===================== SCENE DRIVERS – YKSI KEVYT AJURI + AKTIVOINTI ===================== */
   ;(()=>{
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -691,13 +685,17 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     const maskSvg      = document.getElementById('designerMaskText');
     const photo        = document.getElementById('designerPhoto');
 
+    // Välimuistissa mitat, päivittyvät vain resize:ssa
+    let vwCache = window.innerWidth;
+
     const scenes = [];
     function measureScene(sceneEl){
       if(!sceneEl) return null;
       const stickyH = Math.max(1, window.innerHeight - HEADER);
-      return { el: sceneEl, start: sceneEl.offsetTop, stickyH, total: Math.max(1, sceneEl.offsetHeight - stickyH) };
+      return { el: sceneEl, start: sceneEl.offsetTop, stickyH, total: Math.max(1, sceneEl.offsetHeight - stickyH), active:false };
     }
     function measureAll(){
+      vwCache = window.innerWidth;
       scenes.length = 0;
       const a = measureScene(sceneIntro); if(a) scenes.push(a);
       const b = measureScene(sceneDes);   if(b) scenes.push(b);
@@ -706,28 +704,40 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     function clamp01(x){ return x<0?0:x>1?1:x }
     function easeSmooth(p){ return p*p*p*(p*(6*p-15)+10) }
 
-    let last = performance.now();
+    // Scene-aktivointi: ajuri pyörii vain kun lähellä viewportia
+    const io = new IntersectionObserver((ents)=>{
+      ents.forEach(e=>{
+        const s = scenes.find(x=>x.el===e.target);
+        if(!s) return;
+        s.active = e.isIntersecting;
+        // heti pieni päivitys kun aktivoituu
+        if(s.active) request();
+      });
+    }, {root:null, rootMargin:'200% 0px', threshold:0});
+
+    function observeAll(){
+      scenes.forEach(s=>io.observe(s.el));
+    }
+
     let raf  = 0;
     function frame(){
       raf = 0;
-      const now=performance.now(); const dt=Math.min(50, now-last); last=now;
       const y = window.scrollY || window.pageYOffset || 0;
 
       for (const s of scenes){
+        if(!s.active) continue; // vain näkyvät scenet
         const raw = clamp01((y - s.start) / s.total);
         const p   = easeSmooth(raw);
 
         // Scene 1
         if (s.el === sceneIntro && !sceneIntro.classList.contains('scene-skip')){
           if (dogPanel){
-            dogPanel.classList.add('willchange');
-            const tx = -window.innerWidth * 1.2 * p;   // -120vw
+            const tx = -vwCache * 1.2 * p;   // -120vw välimuistista
             dogPanel.style.transform = `translate3d(${tx}px,0,0)`;
             dogPanel.style.opacity   = String(1 - p);
           }
           if (introPanel){
-            introPanel.classList.add('willchange');
-            const tx =  window.innerWidth * (1-p);     // 100vw -> 0
+            const tx =  vwCache * (1-p);     // 100vw -> 0
             introPanel.style.transform = `translate3d(${tx}px,0,0)`;
             introPanel.style.opacity   = String(Math.min(1, p*1.15));
           }
@@ -738,13 +748,11 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
           const e = p*(2-p);
           if(maskSvg){
             const ty = s.stickyH * 0.6 * e;
-            maskSvg.classList.add('willchange');
             maskSvg.style.transform = `translate3d(0, ${ty}px, 0)`;
           }
           if(photo){
             const sscale = 0.98 + 0.04*e;
             photo.style.transform = `scale(${sscale})`;
-            photo.style.transition = 'transform .06s linear';
           }
         }
       }
@@ -754,9 +762,9 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     window.addEventListener('scroll', request, {passive:true});
     window.addEventListener('resize', ()=>{ measureAll(); request(); }, {passive:true});
 
-    if('fonts' in document) document.fonts.ready.then(()=>{ measureAll(); request(); });
-    window.addEventListener('load', ()=>{ measureAll(); request(); }, {once:true});
-    setTimeout(()=>{ measureAll(); request(); }, 0);
+    if('fonts' in document) document.fonts.ready.then(()=>{ measureAll(); observeAll(); request(); });
+    window.addEventListener('load', ()=>{ measureAll(); observeAll(); request(); }, {once:true});
+    setTimeout(()=>{ measureAll(); observeAll(); request(); }, 0);
   })()
 
   /* ====== NAVIGAATION ANKKURIT: ohjaa sticky-scenet oikeaan kohtaan ====== */
