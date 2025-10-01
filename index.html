@@ -19,7 +19,7 @@
   <script>
     function getEmailCfg(){return{PUBLIC_KEY:localStorage.getItem('emailjs_public')||'',SERVICE_ID:localStorage.getItem('emailjs_service')||'',TEMPLATE_ID:localStorage.getItem('emailjs_template')||''}}
     function setEmailCfg(pub,svc,tpl){if(pub)localStorage.setItem('emailjs_public',pub);if(svc)localStorage.setItem('emailjs_service',svc);if(tpl)localStorage.setItem('emailjs_template',tpl)}
-    window.configureEmailJS=function(){const c=getEmailCfg();const p=prompt('EmailJS Public Key',c.PUBLIC_KEY||'')||'';const s=prompt('EmailJS Service ID',c.Service_ID||'')||'';const t=prompt('EmailJS Template ID',c.TEMPLATE_ID||'')||'';setEmailCfg(p.trim(),s.trim(),t.trim());const cfg=getEmailCfg();if(window.emailjs&&cfg.PUBLIC_KEY){try{window.emailjs.init({publicKey:cfg.PUBLIC_KEY});alert('EmailJS alustettu.')}catch(e){console.error(e);alert('EmailJS-alustus epäonnistui.')}}}
+    window.configureEmailJS=function(){const c=getEmailCfg();const p=prompt('EmailJS Public Key',c.PUBLIC_KEY||'')||'';const s=prompt('EmailJS Service ID',c.SERVICE_ID||'')||'';const t=prompt('EmailJS Template ID',c.TEMPLATE_ID||'')||'';setEmailCfg(p.trim(),s.trim(),t.trim());const cfg=getEmailCfg();if(window.emailjs&&cfg.PUBLIC_KEY){try{window.emailjs.init({publicKey:cfg.PUBLIC_KEY});alert('EmailJS alustettu.')}catch(e){console.error(e);alert('EmailJS-alustus epäonnistui.')}}}
     ;(function(){const c=getEmailCfg();if(window.emailjs&&c.PUBLIC_KEY){try{window.emailjs.init({publicKey:c.PUBLIC_KEY})}catch(e){}}window.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='e'){e.preventDefault();window.configureEmailJS()}})})()
 
     const CONSENT_KEY='cookieConsent.v1'
@@ -208,9 +208,12 @@
     #scene-intro .panel-intro{z-index:1;transform:translateX(100%);opacity:0}
     #scene-intro .panel-intro{overflow:auto;-webkit-overflow-scrolling:touch}
     .panel-dog img.dog-sticker{
-      width: clamp(140px, 22vw, 280px); /* pienempi = vähemmän pikseleitä */
+      width: clamp(120px, 18vw, 240px); /* hieman pienempi */
       height: auto; pointer-events: none;
       will-change: transform, opacity;
+    }
+    .panel-dog .dog-emoji{
+      display:none; font-size: clamp(120px, 18vw, 240px); line-height:1; user-select:none;
     }
 
     /* Suunnittelija – MASKI vain tekstipalstan päällä */
@@ -308,9 +311,10 @@
     <!-- ===== SCENE 1: KOIRA → MIKAONRUMAT ===== -->
     <section id="scene-intro" class="scene">
       <div class="scene-sticky">
-        <!-- KOIRA tarra -->
+        <!-- KOIRA tarra (kuva + emoji-fallback) -->
         <div class="panel panel-dog panelCentered" aria-label="Koira tarra">
           <img class="dog-sticker" id="dogSticker" alt="Koira tarra" loading="eager" decoding="async">
+          <div id="dogEmoji" class="dog-emoji" aria-hidden="true">🐶</div>
         </div>
 
         <!-- ESITTELY -->
@@ -364,10 +368,10 @@
                     <defs>
                       <mask id="smileyMaskText">
                         <rect x="0" y="0" width="100" height="100" fill="white"/>
-                        <!-- Pystysilmät: y=8 -->
+                        <!-- Pystysilmät ylempänä -->
                         <rect x="40" y="8"  width="5" height="34" rx="2" fill="black"/>
                         <rect x="55" y="8"  width="5" height="34" rx="2" fill="black"/>
-                        <!-- Hymy: kulmat korkealla -->
+                        <!-- Hymy: kulmat korkealla / paksumpi -->
                         <path d="M30 56 C 44 90, 56 90, 70 56" fill="none" stroke="black" stroke-width="8" stroke-linecap="round"/>
                       </mask>
                     </defs>
@@ -540,7 +544,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   function updateBadge(){const n=Object.values(CART).reduce((a,b)=>a+b,0);const ic=$('#cartCount');const tx=$('#cartCountText');if(ic)ic.textContent=String(n);if(tx)tx.textContent=n?`(${n})`:''}
   const $drawer=$('#cartDrawer');function openCart(){$drawer.classList.add('open');renderCart()}function closeCart(){$drawer.classList.remove('open')}
   $('#openCartText')?.addEventListener('click',openCart);$('#openCartIcon')?.addEventListener('click',openCart);$('#closeCart')?.addEventListener('click',closeCart);$('#closeCartX')?.addEventListener('click',closeCart)
-  function renderCart(){const root=$('#cartItems');root.innerHTML='';let sub=0;Object.entries(CART).forEach(([id,q])=>{const p=window.KAAVIOT.find(x=>x.id===id);if(!p)return;sub+=(p.price||0)*q;root.appendChild(el('div',{class:'py-3 flex items-center justify-between gap-3'},el('div',{},el('div',{class:'font-semibold'},p.name),el('div',{class:'text-sm opacity-70'},fmtEUR(p.price||0))),el('div',{class:'flex items-center gap-2'},el('button',{'data-dec':id,class:'px-2 border border-[rgba(0,0,0,.15)] rounded'},'−'),el('span',{},String(q)),el('button',{'data-inc':id,class:'px-2 border border-[rgba(0,0,0,.15)] rounded'},'+'),el('button',{'data-remove':id,class:'px-2 border border-[rgba(0,0,0,.15)] rounded'},'Poista'))))});$('#subTotal').textContent=fmtEUR(sub);root.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{const id=b.dataset.remove;delete CART[id];saveCart();renderCart()});root.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{const id=b.dataset.inc;CART[id]=(CART[id]||0)+1);saveCart();renderCart()});root.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{const id=b.dataset.dec;CART[id]=Math.max(0,(CART[id]||0)-1);if(CART[id]===0)delete CART[id];saveCart();renderCart()})}
+  function renderCart(){const root=$('#cartItems');root.innerHTML='';let sub=0;Object.entries(CART).forEach(([id,q])=>{const p=window.KAAVIOT.find(x=>x.id===id);if(!p)return;sub+=(p.price||0)*q;root.appendChild(el('div',{class:'py-3 flex items-center justify-between gap-3'},el('div',{},el('div',{class:'font-semibold'},p.name),el('div',{class:'text-sm opacity-70'},fmtEUR(p.price||0))),el('div',{class:'flex items-center gap-2'},el('button',{'data-dec':id,class:'px-2 border border-[rgba(0,0,0,.15)] rounded'},'−'),el('span',{},String(q)),el('button',{'data-inc':id,class:'px-2 border border-[rgba(0,0,0,.15)] rounded'},'+'),el('button',{'data-remove':id,class:'px-2 border border-[rgba(0,0,0,.15)] rounded'},'Poista'))))});$('#subTotal').textContent=fmtEUR(sub);root.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{const id=b.dataset.remove;delete CART[id];saveCart();renderCart()});root.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{const id=b.dataset.inc;CART[id]=(CART[id]||0)+1;saveCart();renderCart()});root.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{const id=b.dataset.dec;CART[id]=Math.max(0,(CART[id]||0)-1);if(CART[id]===0)delete CART[id];saveCart();renderCart()})}
   function canDeliver(p){return!!(p&&(p.deliverable||p.isDummy||p.file))}
   function addToCart(id){const p=window.KAAVIOT.find(x=>x.id===id);if(!p)return;if(!canDeliver(p)){showToast('Tuote on tulossa – ei vielä myynnissä.','info');return}CART[id]=(CART[id]||0)+1;saveCart();openCart()}
   window.addToCart=addToCart;updateBadge()
@@ -557,7 +561,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   function makeDummyPDF({title='Dummy-kaava',lines=[]}={}){const header='%PDF-1.4\n%âãÏÓ\n';const obj5='5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n';let y=800;const leading=18;let content='BT\n/F1 20 Tf 50 820 Td ('+pdfEscape(title)+') Tj\nET\n';content+='BT\n/F1 12 Tf\n';lines.forEach((L,i)=>{y-=(i===0?30:leading);content+=`1 0 0 1 50 ${y} Tm (${pdfEscape(L)}) Tj\n`});content+='ET\n';const stream=`4 0 obj\n<< /Length ${content.length} >>\nstream\n${content}endstream\nendobj\n`;const obj3='3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n';const obj2='2 0 obj\n<< /Type /Pages /Count 1 /Kids [3 0 R] >>\nendobj\n';const obj1='1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n';const order=[obj1,obj2,obj3,stream,obj5];let acc=header.length;const offs=[];for(let s of order){offs.push(acc);acc+=s.length}const xrefStart=acc;let xref='xref\n0 6\n';xref+='0000000000 65535 f \n';offs.forEach(off=>{xref+=`${String(off).padStart(10,'0')} 00000 n \n`});const trailer=`trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xrefStart}\n%%EOF`;return header+order.join('')+xref+trailer}
   function generateDummyPDF(order){const items=(order?.items||[]).map(x=>`${x.name} × ${x.qty} — ${(x.price||0).toFixed(2)} €`);const c=order?.customer||{};const lines=['Tämä on väliaikainen DUMMY-KAAVA.','Korvataan myöhemmin oikealla kaavalla.','', 'Tilaus:',...items,'','Asiakas:',`${(c.firstName||'')} ${(c.lastName||'')}`,`${c.address||''}`,`${(c.zip||'')} ${(c.city||'')}, ${c.country||''}`,`${c.email||''}${c.phone?(' / '+c.phone):''}`,'',`Päiväys: ${new Date().toLocaleString('fi-FI')}`];const pdfStr=makeDummyPDF({title:'RUMAT STUDIO – Dummy-kaava',lines});const enc=new TextEncoder();const bytes=enc.encode(pdfStr);const blob=new Blob([bytes],{type:'application/pdf'});const url=URL.createObjectURL(blob);let binary='';const chunk=0x8000;for(let i=0;i<bytes.length;i+=chunk){binary+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk))}const base64=btoa(binary);const dataUrl=`data:application/pdf;base64,${base64}`;return{blob,url,dataUrl}}
   function offerDummyDownload(order){const {url,dataUrl}=generateDummyPDF(order||{});try{localStorage.setItem('lastDummyDataUrl',dataUrl)}catch(e){}const msgBox=$('#orderMsg');const a=document.createElement('a');a.href=url;a.download='dummy-kaava.pdf';a.className='underline text-emerald-800';a.textContent='Lataa dummy-kaava (PDF)';const wrap=document.createElement('div');wrap.className='mt-3';wrap.appendChild(a);msgBox.appendChild(wrap)}
-  async function showSuccess(order){const msgBox=$('#orderMsg');const items=(order?.items||[]);const total=items.reduce((s,x)=>s+(x.price||0)*x.qty,0);const c=order?.customer||{};msgBox.classList.remove('hidden');msgBox.innerHTML=`<div class="border border-emerald-200 bg-emerald-50 rounded-2xl p-4"><h3 class="text-xl font-extrabold text-emerald-900 uppercase tracking-wide mb-2">Tilaus vastaanotettu</h3><p class="text-emerald-900/80">Kiitos, <strong>${(c.firstName||'')+' '+(c.lastName||'')}</strong>! Vahvistus on (yritetty) lähettää osoitteeseen <strong>${order?.email||c.email||''}</strong>.</p><div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4"><div><div class="font-semibold mb-1">Tilaus:</div><ul class="list-disc pl-5 text-sm">${items.map(x=>`<li>${x.name} × ${x.qty} — ${fmtEUR((x.price||0)*x.qty)}</li>`).join('')}</ul><div class="mt-2 font-bold">Yhteensä: ${fmtEUR(total)}</div></div><div><div class="font-semibold mb-1">Asiakastiedot:</div><div class="text-sm">${(c.firstName||'')+' '+(c.lastName||'')}<br/>${c.address||''}<br/>${(c.zip||'')+' '+(c.city||'')}`+`<br/>${c.country||''}<br/>${c.email||''}${c.phone?('<br/>'+c.phone):''}${c.notes?('<br/><em>'+String(c.notes).replace(/</g,'&lt;')+'</em>'):''}</div></div></div></div>`;showToast('Tilaus vahvistettu. Kiitos!','success');CART={};saveCart();renderCart();offerDummyDownload(order);sendConfirmationEmails(order)}
+  async function showSuccess(order){const msgBox=$('#orderMsg');const items=(order?.items||[]);const total=items.reduce((s,x)=>s+(x.price||0)*x.qty,0);const c=order?.customer||{};msgBox.classList.remove('hidden');msgBox.innerHTML=`<div class="border border-emerald-200 bg-emerald-50 rounded-2xl p-4"><h3 class="text-xl font-extrabold text-emerald-900 uppercase tracking-wide mb-2">Tilaus vastaanotettu</h3><p class="text-emerald-900/80">Kiitos, <strong>${(c.firstName||'')+' '+(c.lastName||'')}</strong>! Vahvistus on (yritetty) lähettää osoitteeseen <strong>${order?.email||c.email||''}</strong>.</p><div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4"><div><div class="font-semibold mb-1">Tilaus:</div><ul class="list-disc pl-5 text-sm">${items.map(x=>`<li>${x.name} × ${x.qty} — ${fmtEUR((x.price||0)*x.qty)}</li>`).join('')}</ul><div class="mt-2 font-bold">Yhteensä: ${fmtEUR(total)}</div></div><div><div class="font-semibold mb-1">Asiakastiedot:</div><div class="text-sm">${(c.firstName||'')+' '+(c.lastName||'')}<br/>${c.address||''}<br/>${(c.zip||'')+' '+(c.city||'')}<br/>${c.country||''}<br/>${c.email||''}${c.phone?('<br/>'+c.phone):''}${c.notes?('<br/><em>'+String(c.notes).replace(/</g,'&lt;')+'</em>'):''}</div></div></div></div>`;showToast('Tilaus vahvistettu. Kiitos!','success');CART={};saveCart();renderCart();offerDummyDownload(order);sendConfirmationEmails(order)}
   function handleReturn(){const h=location.hash||'';if(h.indexOf('#success')===0){const order=JSON.parse(localStorage.getItem('lastOrder')||'null');showSuccess(order)}if(h.indexOf('#cancel')===0){showToast('Maksu keskeytettiin tai epäonnistui.','error');const msgBox=$('#orderMsg');msgBox.classList.remove('hidden');msgBox.innerHTML=`<div class="border border-red-200 bg-red-50 rounded-2xl p-4"><h3 class="text-xl font-extrabold text-red-900 uppercase tracking-wide mb-2">Maksu epäonnistui</h3><p class="text-red-900/80">Yritä uudelleen. Jos ongelma jatkuu, ota yhteyttä: <a class="underline" href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>.</p></div>`}}
   window.addEventListener('hashchange',handleReturn);handleReturn()
   function sendConfirmationEmails(order){const anneEmail='aaltonen96@outlook.com';const cfg=(typeof getEmailCfg==='function')?getEmailCfg():{PUBLIC_KEY:'',SERVICE_ID:'',TEMPLATE_ID:''};const c=order?.customer||{};const itemsList=(order.items||[]).map(x=>`${x.name} x ${x.qty}`).join(', ');const totalStr=(order.items||[]).reduce((s,x)=>s+(x.price||0)*x.qty,0).toFixed(2)+' €';const addressBlock=`${(c.firstName||'')} ${(c.lastName||'')}\n${c.address||''}\n${(c.zip||'')} ${(c.city||'')}\n${c.country||''}\n${c.email||''}${c.phone?('\n'+c.phone):''}${c.notes?('\n'+c.notes):''}`;const dummyDataUrl=localStorage.getItem('lastDummyDataUrl')||'';const base={order_json:JSON.stringify(order,null,2),items:itemsList,total:totalStr,dummy_link:dummyDataUrl||(location.origin+'/assets/dummy-kaava.pdf'),customer_block:addressBlock};if(!window.emailjs||!cfg.PUBLIC_KEY||!cfg.SERVICE_ID||!cfg.TEMPLATE_ID){const warn=$('#paypalWarn');if(warn)warn.textContent='Huom: automaattinen sähköpostivahvistus ei ole käytössä – paina Ctrl/Cmd+E lisätäksesi EmailJS-avaimet.';console.info('EmailJS ei konffattu. Tilauksen tiedot:',order);return}
@@ -634,7 +638,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     setTimeout(openCurtains, t + 3400); overlay.addEventListener('click', openCurtains, {once:true});
   })()
 
-  /* Intro: oikean kuvan smooth “lasku” tekstiä vasten (kevyempi) */
+  /* Intro: oikean kuvan smooth “lasku” tekstiä vasten */
   ;(()=> {
     const copy = document.querySelector('.intro-copy');
     const right = document.querySelector('.intro-img.right');
@@ -670,7 +674,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     setTimeout(measureTarget, 0);
   })()
 
-  /* ===================== SCENE DRIVERS – YKSI KEVYT AJURI + AKTIVOINTI ===================== */
+  /* ===================== SCENE DRIVERS ===================== */
   ;(()=>{
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -685,7 +689,6 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     const maskSvg      = document.getElementById('designerMaskText');
     const photo        = document.getElementById('designerPhoto');
 
-    // Välimuistissa mitat, päivittyvät vain resize:ssa
     let vwCache = window.innerWidth;
 
     const scenes = [];
@@ -700,24 +703,19 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       const a = measureScene(sceneIntro); if(a) scenes.push(a);
       const b = measureScene(sceneDes);   if(b) scenes.push(b);
     }
-
     function clamp01(x){ return x<0?0:x>1?1:x }
     function easeSmooth(p){ return p*p*p*(p*(6*p-15)+10) }
 
-    // Scene-aktivointi: ajuri pyörii vain kun lähellä viewportia
     const io = new IntersectionObserver((ents)=>{
       ents.forEach(e=>{
         const s = scenes.find(x=>x.el===e.target);
         if(!s) return;
         s.active = e.isIntersecting;
-        // heti pieni päivitys kun aktivoituu
         if(s.active) request();
       });
     }, {root:null, rootMargin:'200% 0px', threshold:0});
 
-    function observeAll(){
-      scenes.forEach(s=>io.observe(s.el));
-    }
+    function observeAll(){ scenes.forEach(s=>io.observe(s.el)); }
 
     let raf  = 0;
     function frame(){
@@ -725,25 +723,23 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       const y = window.scrollY || window.pageYOffset || 0;
 
       for (const s of scenes){
-        if(!s.active) continue; // vain näkyvät scenet
+        if(!s.active) continue;
         const raw = clamp01((y - s.start) / s.total);
         const p   = easeSmooth(raw);
 
-        // Scene 1
         if (s.el === sceneIntro && !sceneIntro.classList.contains('scene-skip')){
           if (dogPanel){
-            const tx = -vwCache * 1.2 * p;   // -120vw välimuistista
+            const tx = -vwCache * 1.2 * p;
             dogPanel.style.transform = `translate3d(${tx}px,0,0)`;
             dogPanel.style.opacity   = String(1 - p);
           }
           if (introPanel){
-            const tx =  vwCache * (1-p);     // 100vw -> 0
+            const tx =  vwCache * (1-p);
             introPanel.style.transform = `translate3d(${tx}px,0,0)`;
             introPanel.style.opacity   = String(Math.min(1, p*1.15));
           }
         }
 
-        // Scene 2
         if (s.el === sceneDes && !sceneDes.classList.contains('scene-skip')){
           const e = p*(2-p);
           if(maskSvg){
@@ -767,7 +763,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     setTimeout(()=>{ measureAll(); observeAll(); request(); }, 0);
   })()
 
-  /* ====== NAVIGAATION ANKKURIT: ohjaa sticky-scenet oikeaan kohtaan ====== */
+  /* ====== ANKKURIT (nav-linkit huomioivat sticky-scenet) ====== */
   ;(()=> {
     const HEADER = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64;
     const nav = document.getElementById('mainNav');
@@ -831,8 +827,14 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     window.addEventListener('hashchange', ()=>{ handleAnchor(location.hash) });
   })();
 
-  // Aseta koiratarran lähde (päivitä polku tarvittaessa)
-  ;(()=>{ const dog = document.getElementById('dogSticker'); if(dog) setSafeImgSrc(dog,'assets/dog-sticker.png'); })();
+  /* Koira-tarra: aseta lähde + emoji-fallback jos kuva puuttuu */
+  ;(()=> {
+    const dog = document.getElementById('dogSticker');
+    const emoji = document.getElementById('dogEmoji');
+    if(!dog) return;
+    dog.src = 'assets/dog-sticker.png'; // Vaihda tähän tarran polku
+    dog.onerror = () => { if(emoji){ dog.style.display='none'; emoji.style.display='block'; } };
+  })();
   </script>
 </body>
 </html>
