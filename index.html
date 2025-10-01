@@ -601,9 +601,60 @@ ${c.email||''}${c.phone?('\n'+c.phone):''}${c.notes?('\n'+c.notes):''}`;const du
   })()
   function postConsentApply(){const c=getConsent();if(c.analytics)enableAnalytics()}
 
-  /* ====== JÄTTI-INTRO: pidennetty + verho-finaali ====== */
-  ;(()=>{const KEY='rumat.introShown.session';const seen=sessionStorage.getItem(KEY)==='1';const overlay=$('#introOverlay');const out=$('#introText')
+  /* ====== JÄTTI-INTRO: pidennetty + verho-finaali + PRELOAD ====== */
+  ;(()=>{
+    const KEY='rumat.introShown.session';
+    const seen=sessionStorage.getItem(KEY)==='1';
+    const overlay=document.getElementById('introOverlay');
+    const out=document.getElementById('introText');
     if(seen||!overlay||!out){return}
+
+    // ---- Kevyt esilataaja intro-efektin ajaksi ----
+    const conn = navigator.connection||{};
+    const saveData = !!conn.saveData;
+    const isSlow = ['slow-2g','2g'].includes(conn.effectiveType);
+    const MAX_CONCURRENCY = (saveData||isSlow)? 2 : 4;
+
+    const PRE = (()=>{
+      const q=[];let inflight=0;let req=0, done=0;const cache=new Map();
+      function pump(){
+        while(inflight<MAX_CONCURRENCY && q.length){
+          const {url,required,priority} = q.shift();
+          inflight++;
+          const img = new Image();
+          try{ img.fetchPriority = priority||'low'; }catch{}
+          img.loading='eager'; img.decoding='async'; img.src=url;
+          const finish=()=>{ if(required) done++; inflight--; pump(); };
+          if(img.decode) img.decode().then(finish).catch(finish); else { img.onload=finish; img.onerror=finish; }
+          cache.set(url,img);
+        }
+      }
+      function add(url,{required=false,priority='low'}={}){
+        if(!url||cache.has(url)) return; q.push({url,required,priority}); if(required) req++; pump();
+      }
+      function progress(){ return req? done/req : 1 }
+      return {add,progress};
+    })();
+
+    // Kerää tärkeimmät assetit (ensisijaisesti 1. rivin kaaviokuvat, intro/hero, designer)
+    const must = [];
+    const nice = [];
+    const hero = 'assets/hero.jpg';
+    must.push(hero);
+    must.push('assets/intro-left.jpg','assets/intro-right.jpg','assets/dog-sticker.png','assets/designer.jpg');
+    try{
+      (window.KAAVIOT||[]).forEach((p,i)=>{
+        (p.images||[]).forEach((u,j)=>{
+          // Ensimmäinen kuva jokaisesta tuotteesta → tärkeämpi
+          (j===0? (i<6?must:nice) : nice).push(u);
+        });
+      });
+    }catch{}
+    // Lisää jonoon
+    must.forEach(u=>PRE.add(u,{required:true,priority:'high'}));
+    nice.forEach(u=>PRE.add(u,{required:false,priority:'low'}));
+
+    // ---- Intro-typo-efekti ----
     const L1='RUMAT'; const L2='STUDIO'; const TAG='LIIAN RUMAT OLLAKSEEN TOTTA'
     const rot1=[-1,+2,-2,+1,0]; const rot2=[-1,0,+1,+1,0,-2]
     function buildLine(text,rots,cls){const line=document.createElement('span');line.className='line '+cls;Array.from(text).forEach((ch,i)=>{const s=document.createElement('span');s.className='ch';s.textContent=ch;const base=(rots&&i<rots.length)?rots[i]:0;const jitter=(Math.random()*1.2-0.6);s.style.setProperty('--rot',(base+jitter)+'deg');if(ch==='O')s.style.transform+=' scaleX(0.98)';line.appendChild(s)});return line}
@@ -616,33 +667,24 @@ ${c.email||''}${c.phone?('\n'+c.phone):''}${c.notes?('\n'+c.notes):''}`;const du
     const doFit=()=>{fitLine(line1);fitLine(line2)}
     doFit(); window.addEventListener('resize',()=>{requestAnimationFrame(doFit)},{passive:true})
     const chars=out.querySelectorAll('.ch');let t=0;chars.forEach(el=>{setTimeout(()=>el.classList.add('show'),t);t+=65});setTimeout(()=>tag.classList.add('show'),t+180);
-    function openCurtains(){overlay.classList.add('open');out.style.opacity='0';setTimeout(()=>{overlay.style.display='none'; sessionStorage.setItem(KEY,'1')}, 1000)}
-    setTimeout(openCurtains, t + 3400); overlay.addEventListener('click', openCurtains, {once:true});
-  })()
 
-  /* Intro: oikean kuvan smooth “lasku” tekstiä vasten (päivitetty: käynnistyy vain kun tarvitaan) */
-  ;(()=> {
-    const copy = document.querySelector('.intro-copy');
-    const right = document.querySelector('.intro-img.right');
-    if(!copy || !right) return;
-    let targetDy = 0, curDy = 0, anim=0, last=performance.now();
-    function measureTarget(){
-      if (window.matchMedia('(max-width: 900px)').matches){ targetDy = 0; startAnim(); return; }
-      const textH = copy.getBoundingClientRect().height;
-      const imgH  = right.getBoundingClientRect().height;
-      targetDy = Math.max(0, textH - imgH);
-      startAnim();
+    // ---- Verhot auki, kun minimi-aika + riittävä esilataus tai viimeistään takarajassa ----
+    const start = performance.now();
+    const MIN_SHOW = t + 1600;         // minimiaika (ms) typografialle
+    const MAX_SHOW = t + 5500;         // takaraja, ettei odoteta liikaa
+    const NEED = (saveData||isSlow) ? 0.4 : 0.7;  // vaadittu osuus "must"-assetien dekoodauksesta
+
+    function reallyOpen(){ overlay.classList.add('open'); out.style.opacity='0'; setTimeout(()=>{overlay.style.display='none'; sessionStorage.setItem(KEY,'1')}, 1000) }
+    function tryOpen(){
+      const elapsed = performance.now() - start;
+      if((PRE.progress()>=NEED && elapsed>=MIN_SHOW) || elapsed>=MAX_SHOW){ reallyOpen(); }
+      else { setTimeout(tryOpen, 120); }
     }
-    function tick(){
-      const now=performance.now(); const dt=Math.min(50, now-last); last=now;
-      const alpha = 1 - Math.exp(-dt/90);
-      curDy += (targetDy - curDy) * alpha;
-      const rounded = Math.round(curDy*100)/100;
-      right.style.transform = `translate3d(0, ${rounded}px, 0)`;
-      if(Math.abs(targetDy - curDy) > 0.6){ anim=requestAnimationFrame(tick); } else { anim=0; }
-    }
-    function startAnim(){ if(!anim){ anim=requestAnimationFrame(tick); } }
-    const schedule = (()=>{let raf=0; return ()=>{ if(raf) return; raf=requestAnimationFrame(()=>{raf=0; measureTarget();}); };})();
+    setTimeout(tryOpen, 160);
+
+    // Käyttäjän klikkaus ohittaa odotuksen heti
+    overlay.addEventListener('click', reallyOpen, {once:true});
+  })();
     window.addEventListener('resize', schedule, {passive:true});
     if ('fonts' in document) document.fonts.ready.then(measureTarget);
     const ro = new ResizeObserver(schedule);
