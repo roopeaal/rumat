@@ -274,16 +274,16 @@
 
               <div class="designer-text-wrap space-y-4 normalcase">
 
-                <!-- DESKTOP-MASKI (palautettu “oikein näkyvään” versioon) -->
+                <!-- DESKTOP-MASKI -->
                 <svg id="designerMaskDesktop" class="designer-mask-svg desktop" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
                   <defs>
                     <mask id="smileyMaskDesktop">
                       <rect x="-10" y="-10" width="120" height="120" fill="white"/>
-                      <!-- pystysilmät, maltillinen pituus -->
-                      <rect x="40" y="8"  width="5" height="36" rx="2" fill="black"/>
-                      <rect x="55" y="8"  width="5" height="36" rx="2" fill="black"/>
-                      <!-- leveä selkeä hymy -->
-                      <path d="M26 58 C 42 90, 58 90, 74 58" fill="none" stroke="black" stroke-width="8" stroke-linecap="round"/>
+                      <!-- pystysilmät, pitkähköt (desktop) -->
+                      <rect x="40" y="6" width="5" height="44" rx="2" fill="black"/>
+                      <rect x="55" y="6" width="5" height="44" rx="2" fill="black"/>
+                      <!-- paksumpi hymy -->
+                      <path d="M28 56 C 44 92, 56 92, 72 56" fill="none" stroke="black" stroke-width="9" stroke-linecap="round"/>
                     </mask>
                   </defs>
                   <rect x="-10" y="-10" width="120" height="120" fill="var(--ivory)" mask="url(#smileyMaskDesktop)"/>
@@ -297,7 +297,7 @@
                       <!-- lyhyemmät pystysilmät -->
                       <rect x="40" y="10" width="5" height="26" rx="2" fill="black"/>
                       <rect x="55" y="10" width="5" height="26" rx="2" fill="black"/>
-                      <!-- hymy ylempänä ja paksu -->
+                      <!-- hymy ylempänä ja melko paksu -->
                       <path d="M28 48 C 44 78, 56 78, 72 48" fill="none" stroke="black" stroke-width="9" stroke-linecap="round"/>
                     </mask>
                   </defs>
@@ -423,7 +423,7 @@ function setSafeImgSrc(img, src) {
 /* Brändi/valikko – ikonit ja responsiivisuus */
 (()=>{
   const container=$('#hdrRow'),brand=$('#brandBlock'),nav=$('#mainNav'),
-        right=$('#rightBlock'),menuBtn=$('#openMenu'),cartIcon=$('#openCartIcon'),cartText=$('#openCartText']);
+        right=$('#rightBlock'),menuBtn=$('#openMenu'),cartIcon=$('#openCartIcon'),cartText=$('#openCartText');
 
   function measureNavWidth(){
     const was=nav.classList.contains('nav-hidden');
@@ -926,9 +926,9 @@ function sendConfirmationEmails(order){
     const active = isMobile ? maskMob : maskDesk;
     if(!active) return 0;
     const wrapH = maskWrap.scrollHeight;
-    const maskH = active.getBoundingClientRect().height;
+    const maskH = active.getBoundingClientRect().height; // jo skaalattu
     return Math.max(0, (wrapH - maskH) - 12);
-    }
+  }
   function measureDesignerScene(){
     if(!sceneDes || !desPanel) return null;
     const prev = desPanel.style.transform; desPanel.style.transform='none';
@@ -938,15 +938,17 @@ function sendConfirmationEmails(order){
     const stick = stickyH();
     const isMobile = window.innerWidth <= 900;
 
+    // transPx = juuri sen verran, että maski ehtii kokonaan pois
     const transPx = maskMaxTravel(isMobile) + 24;
     const extra = Math.max(0, contentH - stick + 24);
     const totalH = Math.ceil(stick + transPx + extra + 1);
     sceneDes.style.height = totalH + 'px';
 
+    // Alkuasento: maski näkyy
     const act = isMobile ? maskMob : maskDesk;
     if (act){
       act.style.transform = `translate3d(0,0,0)`;
-      act.style.opacity   = '1';
+      act.style.opacity   = '1'; // ei fadea
     }
 
     return { el: sceneDes, start: sceneDes.offsetTop, stick, total: Math.max(1,totalH - stick),
@@ -997,11 +999,11 @@ function sendConfirmationEmails(order){
 
         if(raw <= tt){
           const f = smoother(raw / Math.max(tt,1e-6));
-          let ty = maskMaxTravel(isMobile) * f;
+          let ty = maskMaxTravel(isMobile) * f; // liu'uta täsmälleen max-matka
 
           if (act){
             act.style.transform = `translate3d(0,${Math.round(ty)}px,0)`;
-            act.style.opacity = '1';
+            act.style.opacity = '1'; // ei fadea
           }
           if (photo){
             const parY = Math.round(-12 * f);
@@ -1009,6 +1011,7 @@ function sendConfirmationEmails(order){
           }
           desPanel.style.transform = 'translate3d(0,0,0)';
         } else {
+          // maski on jo kokonaan poissa — pidä se pois näkyvistä ilman häivytystä
           if (act){
             const off = maskMaxTravel(isMobile) + 24;
             act.style.transform = `translate3d(0,${Math.round(off)}px,0)`;
@@ -1054,6 +1057,7 @@ function sendConfirmationEmails(order){
     }
   });
 
+  // varmistus myös pienen viiveen jälkeen
   setTimeout(()=>{ measureAll(); renderNow(); }, 350);
 })();
 
