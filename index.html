@@ -126,7 +126,7 @@
     /* ✨ Iso kuva – ei mustia palkkeja + mobiilissa neliö */
     .ex-view{
       position:relative;
-      background:transparent; /* pois musta tausta */
+      background:transparent;
       min-height:min(80vh,1600px);
       min-width:0;
     }
@@ -174,7 +174,7 @@
     #scene-intro .panel-intro{z-index:1;transform:translate3d(100%,0,0);opacity:0}
     .panel-dog img.dog-sticker{width:clamp(72px,11vw,120px);height:auto;pointer-events:none}
 
-    /* Suunnittelija – maski tekstipalstalle */
+    /* Suunnittelija – FULLSCREEN DESKTOP + maski vain tekstipalstalla */
     .designer-text-wrap{position:relative;overflow:hidden;background:var(--ivory);min-height:min(76vh,900px)}
     .designer-mask-svg{
       position:absolute;inset:-10% -10% -10% -10%;
@@ -184,6 +184,15 @@
       transform-box:fill-box;transform-origin:center top;
       opacity:1;
     }
+    /* Desktop: koko osio levitetään näkymään → fullscreen-fiilis */
+    @media (min-width:901px){
+      #scene-designer .band{border-radius:0}
+      #scene-designer .band-inner{max-width:none;padding:4rem clamp(2rem,6vw,5rem)}
+      #scene-designer .grid{grid-template-columns:minmax(420px, 36vw) 1fr}
+      .designer-text-wrap{min-height:calc(100dvh - var(--header-h) - 8rem)} /* täytä sticky-näkymä */
+      .designer-mask-svg{transform:translate3d(0,0,0) scaleX(1) scaleY(1)}
+    }
+    /* Mobiilin muokattu versio säilyy */
     @media (max-width:900px){
       .designer-mask-svg{ transform: scaleX(1.32) scaleY(0.78); transform-origin:center top; }
     }
@@ -271,7 +280,7 @@
     </div>
   </section>
 
-  <!-- SCENE 2: SUUNNITTELIJA -->
+  <!-- SCENE 2: SUUNNITTELIJA (fullscreen desktop, mobiili säilyy) -->
   <section id="scene-designer" class="scene">
     <div class="scene-sticky">
       <section id="suunnittelija" class="onstage">
@@ -285,8 +294,10 @@
                   <defs>
                     <mask id="smileyMaskText">
                       <rect x="-10" y="-10" width="120" height="120" fill="white"/>
+                      <!-- pystysilmät -->
                       <rect x="40" y="6" width="5" height="44" rx="2" fill="black"/>
                       <rect x="55" y="6" width="5" height="44" rx="2" fill="black"/>
+                      <!-- suupielet paksummat kaarella -->
                       <path d="M28 56 C 44 92, 56 92, 72 56" fill="none" stroke="black" stroke-width="9" stroke-linecap="round"/>
                     </mask>
                   </defs>
@@ -653,7 +664,6 @@ window.KAAVIOT=[
     tile.innerHTML='';
     const p=DATA.find(x=>x.id===tile.dataset.id);
     const img=document.createElement('img'); img.alt=p.name; img.loading='lazy';
-    // Ruudukossa käytetään cover, fallback toimii
     setSafeImgSrc(img,(p.images||[])[0]);
     const cap=document.createElement('div'); cap.className='tile-caption';
     const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));
