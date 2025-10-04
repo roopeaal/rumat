@@ -18,7 +18,6 @@
   <!-- EmailJS selainkirjasto -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
-    /* EmailJS asetukset – avaa Ctrl/Cmd + E */
     function getEmailCfg(){return{PUBLIC_KEY:localStorage.getItem('emailjs_public')||'',SERVICE_ID:localStorage.getItem('emailjs_service')||'',TEMPLATE_ID:localStorage.getItem('emailjs_template')||''}}
     function setEmailCfg(pub,svc,tpl){if(pub)localStorage.setItem('emailjs_public',pub);if(svc)localStorage.setItem('emailjs_service',svc);if(tpl)localStorage.setItem('emailjs_template',tpl)}
     window.configureEmailJS=function(){
@@ -72,7 +71,7 @@
     .drawer.open{display:block}
     .drawer>.panel{position:absolute;top:0;bottom:0;width:min(640px,94vw);background:var(--ivory);box-shadow:0 10px 30px rgba(0,0,0,.2);overflow:auto}
 
-    /* HERO – ei zoomausta mobiilissa */
+    /* HERO */
     .hero{
       position:relative;
       height: calc(var(--vhpx, 100dvh) - var(--header-h));
@@ -82,7 +81,7 @@
       .hero{ height: calc(100svh - var(--header-h)); }
     }
     .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-    .svg-logo{--logo-color:var(--light-blue);display:inline-block;width:9rem;height:9rem;background-color:var(--logo-color);-webkit-mask:url('assets/logo.svg') no-repeat center/contain;mask:url('assets/logo.svg') no-repeat center/contain}
+    .svg-logo{position:relative;--logo-color:var(--light-blue);display:inline-block;width:9rem;height:9rem;background-color:var(--logo-color);-webkit-mask:url('assets/logo.svg') no-repeat center/contain;mask:url('assets/logo.svg') no-repeat center/contain}
     @media (min-width:640px){.svg-logo{width:11rem;height:11rem}}
     @media (min-width:1024px){.svg-logo{width:12rem;height:12rem}}
     .logo-light{--logo-color:var(--light-blue)}
@@ -123,33 +122,13 @@
     .ex-row{display:grid;grid-template-columns:1fr;min-height:260px}
     @media (min-width:1024px){.ex-row{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
 
-    /* ✨ Iso kuva – ei mustia palkkeja + mobiilissa neliö */
-    .ex-view{
-      position:relative;
-      background:transparent;
-      min-height:min(80vh,1600px);
-      min-width:0;
-    }
-    .ex-view img{
-      width:100%;
-      height:100%;
-      object-fit:contain;   /* desktop: contain */
-      background:transparent;
-      display:block;
-    }
+    /* Iso kuva – mobiilissa neliö ilman mustia palkkeja */
+    .ex-view{position:relative;background:transparent;min-height:min(80vh,1600px);min-width:0}
+    .ex-view img{width:100%;height:100%;object-fit:contain;background:transparent;display:block}
     @media (max-width:900px){
       .ex-row{ grid-template-columns:1fr; }
-      .ex-view{
-        aspect-ratio: 1 / 1;  /* neliökehys */
-        min-height: 0;
-        height: auto;
-        background: transparent;
-      }
-      .ex-view img{
-        width:100%;
-        height:100%;
-        object-fit: cover;    /* täyttää neliön – ei palkkeja */
-      }
+      .ex-view{ aspect-ratio:1/1; min-height:0; height:auto; background:transparent; }
+      .ex-view img{ object-fit:cover; }
     }
 
     .ex-prev,.ex-next{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;display:grid;place-items:center;border-radius:9999px;background:var(--ivory);border:1px solid rgba(0,0,0,.15);font-weight:800}
@@ -164,7 +143,7 @@
     .footer-copy{text-align:center;font-size:.85rem;opacity:.85;padding:10px 1rem 16px}
     @media (max-width:860px){.footer-grid{grid-template-columns:1fr 1fr;grid-template-areas:"contact logo" "social logo"}.footer-logoBox{justify-content:center;font-size:4rem}}
 
-    /* Scenes */
+    /* Scenes (sticky) */
     .scene{position:relative;height:200dvh}
     @media (max-width:900px){ .scene{height:180dvh} }
     .scene-sticky{position:sticky;top:var(--header-h);height:calc(100dvh - var(--header-h));overflow:hidden;contain:layout paint;backface-visibility:hidden}
@@ -172,29 +151,26 @@
     .panelCentered{display:grid;place-items:center}
     #scene-intro .panel-dog{z-index:2;transform:translate3d(0,0,0);opacity:1}
     #scene-intro .panel-intro{z-index:1;transform:translate3d(100%,0,0);opacity:0}
-    .panel-dog img.dog-sticker{width:clamp(72px,11vw,120px);height:auto;pointer-events:none}
+    .panel-dog img.dog-sticker{width:clamp(72px,9vw,100px);height:auto;pointer-events:none}
 
-    /* Suunnittelija – FULLSCREEN DESKTOP + maski vain tekstipalstalla */
-    .designer-text-wrap{position:relative;overflow:hidden;background:var(--ivory);min-height:min(76vh,900px)}
-    .designer-mask-svg{
-      position:absolute;inset:-10% -10% -10% -10%;
-      pointer-events:none;z-index:5;
-      width:120%;height:120%;
-      will-change:transform,opacity;transform:translateZ(0);
-      transform-box:fill-box;transform-origin:center top;
-      opacity:1;
-    }
-    /* Desktop: koko osio levitetään näkymään → fullscreen-fiilis */
+    /* SUUNNITTELIJA */
+    #scene-designer .scene-sticky{display:block}
+    .designer-band{height:100%;display:flex;align-items:center}
     @media (min-width:901px){
       #scene-designer .band{border-radius:0}
-      #scene-designer .band-inner{max-width:none;padding:4rem clamp(2rem,6vw,5rem)}
-      #scene-designer .grid{grid-template-columns:minmax(420px, 36vw) 1fr}
-      .designer-text-wrap{min-height:calc(100dvh - var(--header-h) - 8rem)} /* täytä sticky-näkymä */
-      .designer-mask-svg{transform:translate3d(0,0,0) scaleX(1) scaleY(1)}
+      #scene-designer .band-inner{max-width:none;padding:4rem clamp(2rem,6vw,5rem);width:100%}
+      .designer-grid{display:grid;grid-template-columns:minmax(420px, 36vw) 1fr;gap:24px;align-items:start}
+      .designer-text-wrap{position:relative;overflow:hidden;background:var(--ivory);min-height:calc(100dvh - var(--header-h) - 8rem)}
+      .designer-mask-svg{position:absolute;pointer-events:none;z-index:5;will-change:transform;transform:translate3d(0,0,0)}
+      .designer-mask-svg.desktop{inset:-10% -10% -10% -10%;width:120%;height:120%}
+      .designer-mask-svg.mobile{display:none}
     }
-    /* Mobiilin muokattu versio säilyy */
     @media (max-width:900px){
-      .designer-mask-svg{ transform: scaleX(1.32) scaleY(0.78); transform-origin:center top; }
+      .designer-grid{display:grid;grid-template-columns:1fr;gap:16px}
+      .designer-text-wrap{position:relative;overflow:hidden;background:var(--ivory)}
+      .designer-mask-svg{position:absolute;pointer-events:none;z-index:5;transform-origin:center top;will-change:transform}
+      .designer-mask-svg.desktop{display:none}
+      .designer-mask-svg.mobile{display:block;inset:0;width:100%;height:120%}
     }
 
     @media (prefers-reduced-motion:reduce){
@@ -280,29 +256,54 @@
     </div>
   </section>
 
-  <!-- SCENE 2: SUUNNITTELIJA (fullscreen desktop, mobiili säilyy) -->
+  <!-- SCENE 2: SUUNNITTELIJA -->
   <section id="scene-designer" class="scene">
     <div class="scene-sticky">
       <section id="suunnittelija" class="onstage">
-        <div class="band full-bleed" style="height:100%;display:flex;align-items:center">
+        <div class="band full-bleed designer-band">
           <div class="band-inner" style="width:100%">
             <h2 class="text-3xl mb-4">Suunnittelija</h2>
-            <div class="grid md:grid-cols-[320px_1fr] gap-6 items-start">
-              <div><img id="designerPhoto" src="assets/designer.jpg" onerror="this.onerror=null;this.src='assets/placeholder.jpg';" alt="Suunnittelija" class="rounded-xl border border-[rgba(0,0,0,.12)] object-cover w-full h-[300px] md:h-[420px]"></div>
+
+            <div class="designer-grid">
+              <div>
+                <img id="designerPhoto" src="assets/designer.jpg"
+                     onerror="this.onerror=null;this.src='assets/placeholder.jpg';"
+                     alt="Suunnittelija"
+                     class="rounded-xl border border-[rgba(0,0,0,.12)] object-cover w-full h-[300px] md:h-[420px]">
+              </div>
+
               <div class="designer-text-wrap space-y-4 normalcase">
-                <svg id="designerMaskText" class="designer-mask-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+
+                <!-- DESKTOP-MASKI -->
+                <svg id="designerMaskDesktop" class="designer-mask-svg desktop" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
                   <defs>
-                    <mask id="smileyMaskText">
+                    <mask id="smileyMaskDesktop">
                       <rect x="-10" y="-10" width="120" height="120" fill="white"/>
-                      <!-- pystysilmät -->
+                      <!-- pystysilmät, pitkähköt (desktop) -->
                       <rect x="40" y="6" width="5" height="44" rx="2" fill="black"/>
                       <rect x="55" y="6" width="5" height="44" rx="2" fill="black"/>
-                      <!-- suupielet paksummat kaarella -->
+                      <!-- paksumpi hymy -->
                       <path d="M28 56 C 44 92, 56 92, 72 56" fill="none" stroke="black" stroke-width="9" stroke-linecap="round"/>
                     </mask>
                   </defs>
-                  <rect x="-10" y="-10" width="120" height="120" fill="var(--ivory)" mask="url(#smileyMaskText)"/>
+                  <rect x="-10" y="-10" width="120" height="120" fill="var(--ivory)" mask="url(#smileyMaskDesktop)"/>
                 </svg>
+
+                <!-- MOBIILI-MASKI (lyhyet silmät, suu ylempänä) -->
+                <svg id="designerMaskMobile" class="designer-mask-svg mobile" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                  <defs>
+                    <mask id="smileyMaskMobile">
+                      <rect x="-10" y="-10" width="120" height="120" fill="white"/>
+                      <!-- lyhyemmät pystysilmät -->
+                      <rect x="40" y="10" width="5" height="26" rx="2" fill="black"/>
+                      <rect x="55" y="10" width="5" height="26" rx="2" fill="black"/>
+                      <!-- hymy ylempänä ja melko paksu -->
+                      <path d="M28 48 C 44 78, 56 78, 72 48" fill="none" stroke="black" stroke-width="9" stroke-linecap="round"/>
+                    </mask>
+                  </defs>
+                  <rect x="-10" y="-10" width="120" height="120" fill="var(--ivory)" mask="url(#smileyMaskMobile)"/>
+                </svg>
+
                 <p>Aaltonen on itsevarma neuloja, joka ei rajoita luovuuttaan vain yhteen tekemisen tapaan. Neulomisen rinnalla myös asusteiden ompelu on tärkeä osa ilmaisua – ja ennen kaikkea intohimo. Lapsuuden kiinnostus vaatteiden suunnitteluun johti muodin ja tekstiilisuunnittelun opintoihin vuonna 2021.</p>
                 <p>Pian Aaltonen valmistuu taiteen maisteriksi, mukanaan vankka osaaminen ja omat suosikkitekniikat, joita hän on hionut opintojen aikana. Neulomisen ja asusteiden lisäksi Aaltonen on syventynyt erityisesti vaatteiden kierrätykseen, korjaamiseen liittyviin asenteisiin sekä kriittiseen tarkasteluun siitä, miten kuluttamista ohjataan – ja millaisia seurauksia sillä on ympäristölle.</p>
               </div>
@@ -334,11 +335,10 @@
     <div class="footer-copy">© <span id="year"></span> RUMAT STUDIO</div>
   </footer>
 
-  <!-- Tilauksen viesti + latauslinkki -->
   <section id="orderMsg" class="max-w-3xl mx-auto my-4 px-4 hidden"></section>
 </main>
 
-<!-- DRAWERIT: valikko + ostoskori + kassa -->
+<!-- DRAWERIT -->
 <div id="menuDrawer" class="drawer" aria-hidden="true">
   <div class="absolute inset-0 bg-black/40" id="closeMenu" aria-label="Sulje valikko"></div>
   <div class="panel p-6 flex flex-col gap-4">
@@ -355,15 +355,10 @@
 <div id="cartDrawer" class="drawer" aria-hidden="true">
   <div class="absolute inset-0 bg-black/40" id="closeCart" aria-label="Sulje ostoskori"></div>
   <div class="panel p-5 flex flex-col">
-    <div class="flex items-center justify-between mb-4">
-      <h3 class="text-xl">Ostoskori</h3>
-      <button id="closeCartX" class="text-stone-500 hover:text-stone-800">✕</button>
-    </div>
+    <div class="flex items-center justify-between mb-4"><h3 class="text-xl">Ostoskori</h3><button id="closeCartX" class="text-stone-500 hover:text-stone-800">✕</button></div>
     <div id="cartItems" class="flex-1 overflow-auto divide-y"></div>
     <div class="mt-4 space-y-3">
-      <div class="text-sm grid grid-cols-2 gap-y-1">
-        <div class="text-[color:#202020]/70">Välisumma</div><div class="text-right" id="subTotal">€0,00</div>
-      </div>
+      <div class="text-sm grid grid-cols-2 gap-y-1"><div class="text-[color:#202020]/70">Välisumma</div><div class="text-right" id="subTotal">€0,00</div></div>
       <button id="checkout" class="btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2">Kassalle</button>
       <div id="paypalWarn" class="text-xs text-[color:#202020]/70"></div>
     </div>
@@ -392,16 +387,13 @@
       <div><label class="text-sm font-semibold">Lisätiedot (valinn.)</label><textarea name="notes" rows="3" class="w-full mt-1 border rounded px-3 py-2"></textarea></div>
       <label class="flex gap-2 items-start text-sm"><input type="checkbox" id="acceptDigitalWaiver" required><span>Hyväksyn, että digitaalisen sisällön toimittaminen alkaa heti, enkä voi peruuttaa ostosta (KSL 6:16).<br><a class="underline" href="legal/terms.html" target="_blank" rel="noopener">Lue Toimitus- ja sopimusehdot (PDF)</a></span></label>
     </form>
-    <div class="mt-4 flex items-center justify-between gap-3">
-      <button id="checkoutBack" class="btn">Takaisin</button>
-      <button id="checkoutPay" class="btn bg-[color:var(--deep-blue)] text-white">Jatka maksamaan</button>
-    </div>
+    <div class="mt-4 flex items-center justify-between gap-3"><button id="checkoutBack" class="btn">Takaisin</button><button id="checkoutPay" class="btn bg-[color:var(--deep-blue)] text-white">Jatka maksamaan</button></div>
     <p class="text-xs text-stone-500 mt-2">Huom: Maksulliset tuotteet maksetaan PayPalissa (myyjä: <strong>aaltonen96@outlook.com</strong>). Ilmaiset tilaukset vahvistetaan heti.</p>
   </div>
 </div>
 
 <script>
-/* ===== Hero-korkeuden lukitus mobiilissa – ei zoomausta ===== */
+/* ===== Hero-korkeuden lukitus mobiilissa ===== */
 (function(){
   const apply = ()=>{
     const h = (window.visualViewport?.height || window.innerHeight);
@@ -530,14 +522,14 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   measure(); kick();
 })();
 
-/* ====== Ostoskori + Kassa (täysi polku) ====== */
+/* ===== Ostoskori + Kassa ===== */
 function showToast(msg){alert(msg)}
 let CART=JSON.parse(localStorage.getItem('cart')||'{}');
 function saveCart(){localStorage.setItem('cart',JSON.stringify(CART));updateBadge()}
 function updateBadge(){
   const n=Object.values(CART).reduce((a,b)=>a+b,0);
-  const tx=$('#cartCountText'); if(tx) tx.textContent=n?`(${n})`:'';
-  const ic=$('#cartCount'); if(ic) ic.textContent=String(n);
+  $('#cartCountText').textContent=n?`(${n})`:'';
+  $('#cartCount').textContent=String(n);
 }
 function openCart(){const d=$('#cartDrawer');d.classList.add('open');renderCart()}
 function closeCart(){const d=$('#cartDrawer');d.classList.remove('open')}
@@ -545,7 +537,6 @@ function openCheckout(){const d=$('#checkoutDrawer');d.classList.add('open');fil
 function closeCheckout(){const d=$('#checkoutDrawer');d.classList.remove('open')}
 updateBadge();
 
-/* Tuotedata (demo) */
 const IMG=(id,n=1)=>`assets/patterns/${id}-${n}.jpg`;
 window.KAAVIOT=[
   {id:'dummy-kaava',name:'Dummy kaava',price:0.01,sizes:'PDF',blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla.',images:[IMG('dummy-kaava',1),IMG('dummy-kaava',2)],isDummy:true,deliverable:true,file:'auto-dummy'},
@@ -561,7 +552,6 @@ window.KAAVIOT=[
   {id:'villapaita',name:'Villapaita',price:0.01,sizes:'XS–XXL',blurb:'Klassinen pyöröneule.',images:[IMG('villapaita',1),IMG('villapaita',2)],deliverable:false},
 ];
 
-/* Kaavaruudukko + expander + placeholder-fallback */
 (()=>{
   const grid=$('#patternsGrid'); if(!grid) return;
   let selectedId=null, expander=null, current=null, imgIdx=0;
@@ -708,7 +698,7 @@ window.KAAVIOT=[
   },{passive:true});
 })();
 
-/* CART drawer */
+/* CART drawer controls */
 (()=>{
   const drawer=$('#cartDrawer');
   $('#openCartText')?.addEventListener('click',openCart);
@@ -744,7 +734,7 @@ function renderCart(){
 }
 $('#checkout')?.addEventListener('click',()=>{ if(Object.keys(CART).length===0){alert('Ostoskori on tyhjä.');return;} closeCart(); openCheckout(); });
 
-/* Kassa */
+/* Kassa + PayPal */
 function fillCheckoutFromStorage(){
   const f=$('#checkoutForm'); if(!f) return;
   const s=JSON.parse(localStorage.getItem('customer')||'{}');
@@ -761,7 +751,6 @@ function collectCustomer(){
   localStorage.setItem('customer',JSON.stringify(d));
   return d;
 }
-
 $('#checkoutBack')?.addEventListener('click',e=>{e.preventDefault();closeCheckout();openCart()});
 $('#closeCheckout')?.addEventListener('click',closeCheckout);
 $('#closeCheckoutX')?.addEventListener('click',closeCheckout);
@@ -782,7 +771,6 @@ $('#checkoutPay')?.addEventListener('click',e=>{
 
   if(totalPaid<=0){ closeCheckout(); showSuccess(order); return; }
 
-  // PayPal "Cart upload" -post
   const email="aaltonen96@outlook.com";
   const form=ca('form',{method:'POST',action:'https://www.paypal.com/cgi-bin/webscr',target:'_blank'});
   form.append(
@@ -807,7 +795,7 @@ $('#checkoutPay')?.addEventListener('click',e=>{
   showToast('Siirryt PayPaliin maksamaan…');
 });
 
-/* Dummy-PDF tilausvahvistukseen */
+/* Dummy-PDF + emailit */
 function pdfEscape(s){return String(s).replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)')}
 function makeDummyPDF({title='Dummy-kaava',lines=[]}={}){
   const header='%PDF-1.4\n%âãÏÓ\n';
@@ -834,24 +822,16 @@ function generateDummyPDF(order){
   const items=(order?.items||[]).map(x=>`${x.name} × ${x.qty} — ${(x.price||0).toFixed(2)} €`);
   const c=order?.customer||{};
   const lines=[
-    'Tämä on väliaikainen DUMMY-KAAVA.',
-    'Korvataan myöhemmin oikealla kaavalla.',
-    '',
-    'Tilaus:',
-    ...items,
-    '',
-    'Asiakas:',
-    `${(c.firstName||'')} ${(c.lastName||'')}`,
-    `${c.address||''}`,
+    'Tämä on väliaikainen DUMMY-KAAVA.','Korvataan myöhemmin oikealla kaavalla.','',
+    'Tilaus:',...items,'',
+    'Asiakas:',`${(c.firstName||'')} ${(c.lastName||'')}`,`${c.address||''}`,
     `${(c.zip||'')} ${(c.city||'')}, ${c.country||''}`,
-    `${c.email||''}${c.phone?(' / '+c.phone):''}`,
-    '',
+    `${c.email||''}${c.phone?(' / '+c.phone):''}`,'',
     `Päiväys: ${new Date().toLocaleString('fi-FI')}`
   ];
   const pdfStr=makeDummyPDF({title:'RUMAT STUDIO – Dummy-kaava',lines});
   const enc=new TextEncoder(); const bytes=enc.encode(pdfStr);
-  const blob=new Blob([bytes],{type:'application/pdf'});
-  const url=URL.createObjectURL(blob);
+  const blob=new Blob([bytes],{type:'application/pdf'}); const url=URL.createObjectURL(blob);
   let binary=''; const chunk=0x8000;
   for(let i=0;i<bytes.length;i+=chunk){binary+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk))}
   const base64=btoa(binary);
@@ -862,39 +842,17 @@ function offerDummyDownload(order){
   const {url,dataUrl}=generateDummyPDF(order||{});
   try{localStorage.setItem('lastDummyDataUrl',dataUrl)}catch(e){}
   const msgBox=$('#orderMsg');
-  const a=document.createElement('a');
-  a.href=url; a.download='dummy-kaava.pdf';
-  a.className='underline text-emerald-800';
-  a.textContent='Lataa dummy-kaava (PDF)';
+  const a=document.createElement('a'); a.href=url; a.download='dummy-kaava.pdf';
+  a.className='underline text-emerald-800'; a.textContent='Lataa dummy-kaava (PDF)';
   const wrap=document.createElement('div'); wrap.className='mt-3'; wrap.appendChild(a);
   msgBox.appendChild(wrap);
 }
-
-/* PayPal return handler + onnistumisnäkymä + emailit */
 async function showSuccess(order){
-  const msgBox=$('#orderMsg');
-  const items=(order?.items||[]);
-  const total=items.reduce((s,x)=>s+(x.price||0)*x.qty,0);
-  const c=order?.customer||{};
+  const msgBox=$('#orderMsg'); const items=(order?.items||[]);
+  const total=items.reduce((s,x)=>s+(x.price||0)*x.qty,0); const c=order?.customer||{};
   msgBox.classList.remove('hidden');
-  msgBox.innerHTML=`<div class="border border-emerald-200 bg-emerald-50 rounded-2xl p-4">
-    <h3 class="text-xl font-extrabold text-emerald-900 uppercase tracking-wide mb-2">Tilaus vastaanotettu</h3>
-    <p class="text-emerald-900/80">Kiitos, <strong>${(c.firstName||'')+' '+(c.lastName||'')}</strong>! Vahvistus on (yritetty) lähettää osoitteeseen <strong>${order?.email||c.email||''}</strong>.</p>
-    <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
-        <div class="font-semibold mb-1">Tilaus:</div>
-        <ul class="list-disc pl-5 text-sm">${items.map(x=>`<li>${x.name} × ${x.qty} — ${fmtEUR((x.price||0)*x.qty)}</li>`).join('')}</ul>
-        <div class="mt-2 font-bold">Yhteensä: ${fmtEUR(total)}</div>
-      </div>
-      <div>
-        <div class="font-semibold mb-1">Asiakastiedot:</div>
-        <div class="text-sm">${(c.firstName||'')+' '+(c.lastName||'')}<br/>${c.address||''}<br/>${(c.zip||'')+' '+(c.city||'')}<br/>${c.country||''}<br/>${c.email||''}${c.phone?('<br/>'+c.phone):''}${c.notes?('<br/><em>'+String(c.notes).replace(/</g,'&lt;')+'</em>'):''}</div>
-      </div>
-    </div>
-  </div>`;
-  CART={}; saveCart(); renderCart();
-  offerDummyDownload(order);
-  sendConfirmationEmails(order);
+  msgBox.innerHTML=`<div class="border border-emerald-200 bg-emerald-50 rounded-2xl p-4"><h3 class="text-xl font-extrabold text-emerald-900 uppercase tracking-wide mb-2">Tilaus vastaanotettu</h3><p class="text-emerald-900/80">Kiitos, <strong>${(c.firstName||'')+' '+(c.lastName||'')}</strong>! Vahvistus on (yritetty) lähettää osoitteeseen <strong>${order?.email||c.email||''}</strong>.</p><div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4"><div><div class="font-semibold mb-1">Tilaus:</div><ul class="list-disc pl-5 text-sm">${items.map(x=>`<li>${x.name} × ${x.qty} — ${fmtEUR((x.price||0)*x.qty)}</li>`).join('')}</ul><div class="mt-2 font-bold">Yhteensä: ${fmtEUR(total)}</div></div><div><div class="font-semibold mb-1">Asiakastiedot:</div><div class="text-sm">${(c.firstName||'')+' '+(c.lastName||'')}<br/>${c.address||''}<br/>${(c.zip||'')+' '+(c.city||'')}<br/>${c.country||''}<br/>${c.email||''}${c.phone?('<br/>'+c.phone):''}${c.notes?('<br/><em>'+String(c.notes).replace(/</g,'&lt;')+'</em>'):''}</div></div></div></div>`;
+  CART={}; saveCart(); renderCart(); offerDummyDownload(order); sendConfirmationEmails(order);
 }
 function handleReturn(){
   const h=location.hash||'';
@@ -905,14 +863,10 @@ function handleReturn(){
   if(h.indexOf('#cancel')===0){
     alert('Maksu keskeytettiin tai epäonnistui.');
     const msgBox=$('#orderMsg'); msgBox.classList.remove('hidden');
-    msgBox.innerHTML=`<div class="border border-red-200 bg-red-50 rounded-2xl p-4">
-      <h3 class="text-xl font-extrabold text-red-900 uppercase tracking-wide mb-2">Maksu epäonnistui</h3>
-      <p class="text-red-900/80">Yritä uudelleen. Jos ongelma jatkuu, ota yhteyttä: <a class="underline" href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>.</p>
-    </div>`;
+    msgBox.innerHTML=`<div class="border border-red-200 bg-red-50 rounded-2xl p-4"><h3 class="text-xl font-extrabold text-red-900 uppercase tracking-wide mb-2">Maksu epäonnistui</h3><p class="text-red-900/80">Yritä uudelleen. Jos ongelma jatkuu, ota yhteyttä: <a class="underline" href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>.</p></div>`;
   }
 }
 window.addEventListener('hashchange',handleReturn); handleReturn();
-
 function sendConfirmationEmails(order){
   const anneEmail='aaltonen96@outlook.com';
   const cfg=(typeof getEmailCfg==='function')?getEmailCfg():{PUBLIC_KEY:'',SERVICE_ID:'',TEMPLATE_ID:''};
@@ -922,26 +876,12 @@ function sendConfirmationEmails(order){
   const addressBlock=`${(c.firstName||'')} ${(c.lastName||'')}\n${c.address||''}\n${(c.zip||'')} ${(c.city||'')}\n${c.country||''}\n${c.email||''}${c.phone?('\n'+c.phone):''}${c.notes?('\n'+c.notes):''}`;
   const dummyDataUrl=localStorage.getItem('lastDummyDataUrl')||'';
   const base={order_json:JSON.stringify(order,null,2),items:itemsList,total:totalStr,dummy_link:dummyDataUrl||(location.origin+'/assets/dummy-kaava.pdf'),customer_block:addressBlock};
-
   if(!window.emailjs||!cfg.PUBLIC_KEY||!cfg.SERVICE_ID||!cfg.TEMPLATE_ID){
-    const warn=$('#paypalWarn');
-    if(warn)warn.textContent='Huom: automaattinen sähköpostivahvistus ei ole käytössä – paina Ctrl/Cmd+E lisätäksesi EmailJS-avaimet.';
-    console.info('EmailJS ei konffattu. Tilauksen tiedot:',order);
-    return;
+    const warn=$('#paypalWarn'); if(warn)warn.textContent='Huom: automaattinen sähköpostivahvistus ei ole käytössä – paina Ctrl/Cmd+E lisätäksesi EmailJS-avaimet.';
+    console.info('EmailJS ei konffattu. Tilauksen tiedot:',order); return;
   }
-  window.emailjs.send(cfg.SERVICE_ID,cfg.TEMPLATE_ID,{
-    to_email:order.email||c.email,
-    subject:'RUMAT STUDIO – tilausvahvistus',
-    message:`Kiitos ostoksesta!\n\nTuotteet: ${itemsList}\nYhteensä: ${totalStr}\n\nAsiakastiedot:\n${addressBlock}\n\nDummy-kaava: ${base.dummy_link}`,
-    ...base
-  }).catch(err=>{console.error(err);alert('Sähköpostin lähetys (asiakas) epäonnistui.')});
-
-  window.emailjs.send(cfg.SERVICE_ID,cfg.TEMPLATE_ID,{
-    to_email:anneEmail,
-    subject:'Uusi tilaus – RUMAT STUDIO',
-    message:`Uusi tilaus vastaanotettu.\n\nTuotteet: ${itemsList}\nYhteensä: ${totalStr}\n\nAsiakastiedot:\n${addressBlock}\n\nDummy-kaava: ${base.dummy_link}`,
-    ...base
-  }).catch(err=>console.error(err));
+  window.emailjs.send(cfg.SERVICE_ID,cfg.TEMPLATE_ID,{to_email:order.email||c.email,subject:'RUMAT STUDIO – tilausvahvistus',message:`Kiitos ostoksesta!\n\nTuotteet: ${itemsList}\nYhteensä: ${totalStr}\n\nAsiakastiedot:\n${addressBlock}\n\nDummy-kaava: ${base.dummy_link}`,...base}).catch(err=>{console.error(err);alert('Sähköpostin lähetys (asiakas) epäonnistui.')});
+  window.emailjs.send(cfg.SERVICE_ID,cfg.TEMPLATE_ID,{to_email:anneEmail,subject:'Uusi tilaus – RUMAT STUDIO',message:`Uusi tilaus vastaanotettu.\n\nTuotteet: ${itemsList}\nYhteensä: ${totalStr}\n\nAsiakastiedot:\n${addressBlock}\n\nDummy-kaava: ${base.dummy_link}`,...base}).catch(err=>console.error(err));
 }
 
 /* ===== Scenes (koira→intro & suunnittelija) ===== */
@@ -955,7 +895,8 @@ function sendConfirmationEmails(order){
 
   const sceneDes   = document.getElementById('scene-designer');
   const desPanel   = sceneDes?.querySelector('#suunnittelija');
-  const maskSvg    = document.getElementById('designerMaskText');
+  const maskDesk   = document.getElementById('designerMaskDesktop');
+  const maskMob    = document.getElementById('designerMaskMobile');
   const maskWrap   = document.querySelector('.designer-text-wrap');
   const photo      = document.getElementById('designerPhoto');
 
@@ -980,6 +921,14 @@ function sendConfirmationEmails(order){
     return { el: sceneIntro, start: sceneIntro.offsetTop, stick, total: Math.max(1,totalH - stick),
       intro: { transPx, extra, threshold: (totalH - stick) ? transPx / (totalH - stick) : 1 } };
   }
+  function maskMaxTravel(isMobile){
+    if(!maskWrap) return 0;
+    const active = isMobile ? maskMob : maskDesk;
+    if(!active) return 0;
+    const wrapH = maskWrap.scrollHeight;
+    const maskH = active.getBoundingClientRect().height; // jo skaalattu
+    return Math.max(0, (wrapH - maskH) - 12);
+  }
   function measureDesignerScene(){
     if(!sceneDes || !desPanel) return null;
     const prev = desPanel.style.transform; desPanel.style.transform='none';
@@ -987,17 +936,19 @@ function sendConfirmationEmails(order){
     desPanel.style.transform = prev;
 
     const stick = stickyH();
-    const transPx = Math.max(0.32*stick, 0.24*window.innerWidth);
+    const isMobile = window.innerWidth <= 900;
+
+    // transPx = juuri sen verran, että maski ehtii kokonaan pois
+    const transPx = maskMaxTravel(isMobile) + 24;
     const extra = Math.max(0, contentH - stick + 24);
     const totalH = Math.ceil(stick + transPx + extra + 1);
     sceneDes.style.height = totalH + 'px';
 
-    const isMobile = window.innerWidth <= 900;
-    const sx = isMobile ? 1.32 : 1.0;
-    const sy = isMobile ? 0.78 : 1.0;
-    if (maskSvg){
-      maskSvg.style.transform = `translate3d(0,0,0) scaleX(${sx}) scaleY(${sy})`;
-      maskSvg.style.opacity   = '1';
+    // Alkuasento: maski näkyy
+    const act = isMobile ? maskMob : maskDesk;
+    if (act){
+      act.style.transform = `translate3d(0,0,0)`;
+      act.style.opacity   = '1'; // ei fadea
     }
 
     return { el: sceneDes, start: sceneDes.offsetTop, stick, total: Math.max(1,totalH - stick),
@@ -1040,42 +991,39 @@ function sendConfirmationEmails(order){
         }
       }
 
-      /* Scene: Designer (maski alas + release jotta koko teksti näkyy) */
+      /* Scene: Designer (maski alas + release) */
       if(s.el===sceneDes && desPanel && s.des){
         const tt = s.des.threshold, extra = s.des.extra;
         const isMobile = window.innerWidth <= 900;
-        const sx = isMobile ? 1.32 : 1.0;
-        const sy = isMobile ? 0.78 : 1.0;
+        const act = isMobile ? maskMob : maskDesk;
 
         if(raw <= tt){
           const f = smoother(raw / Math.max(tt,1e-6));
-          let ty = s.stick * (isMobile ? 0.85 : 0.6) * f;
+          let ty = maskMaxTravel(isMobile) * f; // liu'uta täsmälleen max-matka
 
-          if (maskSvg && maskWrap){
-            const wrapH = maskWrap.scrollHeight; // vakaa korkeus
-            const maskH = maskSvg.getBoundingClientRect().height * sy;
-            const maxTy = Math.max(0, (wrapH - maskH) - 12);
-            ty = Math.min(ty, maxTy);
-            maskSvg.style.transform = `translate3d(0,${Math.round(ty)}px,0) scaleX(${sx}) scaleY(${sy})`;
-            maskSvg.style.opacity = '1';
+          if (act){
+            act.style.transform = `translate3d(0,${Math.round(ty)}px,0)`;
+            act.style.opacity = '1'; // ei fadea
           }
-
-          if (photo){ const sc = 0.985 + 0.045*f; photo.style.transform = `scale(${sc})`; }
+          if (photo){
+            const parY = Math.round(-12 * f);
+            photo.style.transform = `translate3d(0,${parY}px,0) scale(${0.985 + 0.045*f})`;
+          }
           desPanel.style.transform = 'translate3d(0,0,0)';
         } else {
+          // maski on jo kokonaan poissa — pidä se pois näkyvistä ilman häivytystä
+          if (act){
+            const off = maskMaxTravel(isMobile) + 24;
+            act.style.transform = `translate3d(0,${Math.round(off)}px,0)`;
+            act.style.opacity = '1';
+          }
           const r = smoother((raw - tt) / Math.max(1 - tt, 1e-6));
           const tyPanel = Math.round(-extra * r);
           desPanel.style.transform = `translate3d(0,${tyPanel}px,0)`;
-
-          if (maskSvg && maskWrap){
-            const wrapH = maskWrap.scrollHeight;
-            const maskH = maskSvg.getBoundingClientRect().height * sy;
-            const maxTy = Math.max(0, (wrapH - maskH) - 12);
-            maskSvg.style.transform = `translate3d(0,${Math.round(maxTy+24)}px,0) scaleX(${sx}) scaleY(${sy})`;
-            maskSvg.style.opacity = String(1 - r);
+          if (photo){
+            const parY = -12;
+            photo.style.transform = `translate3d(0,${parY}px,0) scale(${0.985 + 0.045})`;
           }
-
-          if (photo){ const sc = 0.985 + 0.045; photo.style.transform = `scale(${sc})`; }
         }
       }
     }
@@ -1091,15 +1039,26 @@ function sendConfirmationEmails(order){
   window.visualViewport?.addEventListener('resize', onResize, {passive:true});
   window.addEventListener('orientationchange', onResize, {passive:true});
   window.addEventListener('scroll', req, {passive:true});
+
+  function bootMeasure(){
+    measureAll(); renderNow();
+  }
+
   document.addEventListener('DOMContentLoaded', ()=>{
-    const boot=()=>{ measureAll(); renderNow(); };
     const photo=document.getElementById('designerPhoto');
     if (photo){
-      if (photo.complete) boot();
-      else photo.addEventListener('load', boot, {once:true});
-    } else { boot(); }
-    if ('fonts' in document){ document.fonts.ready.then(()=>{ measureAll(); renderNow(); }); }
+      if (photo.complete) bootMeasure();
+      else photo.addEventListener('load', bootMeasure, {once:true});
+    } else {
+      bootMeasure();
+    }
+    if ('fonts' in document){
+      document.fonts.ready.then(()=>{ measureAll(); renderNow(); });
+    }
   });
+
+  // varmistus myös pienen viiveen jälkeen
+  setTimeout(()=>{ measureAll(); renderNow(); }, 350);
 })();
 
 /* Ankkurit: ohita efektien alku + mittaus */
