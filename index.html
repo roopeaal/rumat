@@ -14,7 +14,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
 
   <style>
     :root{
@@ -24,7 +23,7 @@
       --intro-img-h: clamp(300px, 36vw, 420px);
     }
     html{scroll-padding-top:var(--header-h)}
-    body{font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial;color:var(--ink);background:var(--ivory);margin:0;overflow-x:hidden;touch-action:pan-y}
+    body{font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial;color:var(--ink);background:var(--ivory);margin:0;overflow-x:hidden;touch-action:pan-y;overscroll-behavior-y:contain}
     h1,h2,h3,h4,h5,h6{font-weight:900!important;text-transform:uppercase;color:var(--deep-blue);letter-spacing:.02em;margin:0 0 .6rem}
     .normalcase{text-transform:none!important}
 
@@ -35,7 +34,6 @@
     #mainNav{justify-self:center;display:flex;gap:1.2rem;white-space:nowrap;font-size:13px;text-transform:uppercase;letter-spacing:.2em}
     #mainNav a{color:var(--ink);text-decoration:none}
     #rightBlock{justify-self:end;display:flex;align-items:center;gap:.5rem}
-    .icon-btn{width:38px;height:38px;display:grid;place-items:center;border-radius:9999px;background:rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.16)}
     .cart-text-btn{border:1px solid rgba(0,0,0,.16);padding:.45rem .8rem;border-radius:9999px;background:rgba(0,0,0,.04)}
     .btn{border-radius:9999px;padding:.6rem 1rem;border:1px solid rgba(0,0,0,.16);background:rgba(0,0,0,.04)}
 
@@ -54,7 +52,7 @@
     .band{background:var(--ivory);border-radius:var(--band-radius);overflow:hidden}
     .band-inner{max-width:72rem;margin:0 auto;padding:3rem 1rem}
 
-    /* Intro */
+    /* Intro palkki */
     .intro-wide{margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
     .intro-grid{display:grid;grid-template-columns:var(--intro-img-w) minmax(300px,64rem) var(--intro-img-w);gap:14px;align-items:start;padding:18px 0}
     .intro-img{background-size:cover;background-position:center;background-repeat:no-repeat;min-height:320px;height:var(--intro-img-h);border:1px solid rgba(0,0,0,.12);border-radius:18px;background-color:#ddd;will-change:transform;transform:translateZ(0)}
@@ -65,13 +63,22 @@
     .intro-copy p{margin:0 0 .8rem;line-height:1.6}
     @media (max-width:900px){.intro-grid{grid-template-columns:1fr}.intro-img{height:clamp(240px,52vw,360px);border-radius:14px;transform:none}}
 
-    /* Kaaviot */
+    /* Kaaviot + expander */
     .pattern-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
     @media (min-width:768px){.pattern-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}}
-    .tile{position:relative;cursor:pointer;aspect-ratio:1/1;display:block;transition:transform .12s linear,box-shadow .12s linear}
+    .tile{position:relative;cursor:pointer;aspect-ratio:1/1;display:block;transition:transform .12s linear,box-shadow .12s linear;will-change:transform}
     .tile:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.05)}
     .tile img{width:100%;height:100%;object-fit:cover;display:block}
     .tile-caption{position:absolute;left:0;right:0;bottom:0;padding:.45rem .65rem;background:linear-gradient(to top,rgba(0,0,0,.55),rgba(0,0,0,0));color:#fff;font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem}
+    .expander{grid-column:1/-1;background:var(--ivory);border-radius:16px;border:1px solid rgba(0,0,0,.12);overflow:hidden}
+    .ex-row{display:grid;grid-template-columns:1fr;min-height:260px}
+    @media (min-width:1024px){.ex-row{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
+    .ex-view{position:relative;background:#000;min-height:min(70vh,1200px)}
+    .ex-info{padding:1rem 1.1rem;overflow:auto}
+    .ex-view img{width:100%;height:100%;object-fit:contain;background:#000}
+    .ex-prev,.ex-next{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;display:grid;place-items:center;border-radius:9999px;background:var(--ivory);border:1px solid rgba(0,0,0,.15);font-weight:800}
+    .ex-prev{left:10px}.ex-next{right:10px}
+    .ex-top{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.6rem .9rem;border-bottom:1px solid rgba(0,0,0,.1)}
 
     /* Footer */
     .footer-bar{background:var(--olive);color:var(--ink)}
@@ -81,27 +88,20 @@
     .footer-copy{text-align:center;font-size:.85rem;opacity:.85;padding:10px 1rem 16px}
     @media (max-width:860px){.footer-grid{grid-template-columns:1fr 1fr;grid-template-areas:"contact logo" "social logo"}.footer-logoBox{justify-content:center;font-size:4rem}}
 
-    /* Scenes (desktop) */
+    /* Scenes (tehosteet myös mobiilissa) */
     .scene{position:relative;height:200dvh}
-    .scene-sticky{position:sticky;top:var(--header-h);height:calc(100dvh - var(--header-h));overflow:hidden}
-    .panel{position:absolute;inset:0;will-change:transform,opacity;transform:translateZ(0);backface-visibility:hidden;contain:paint}
+    @media (max-width:900px){ .scene{height:180dvh} }
+    .scene-sticky{position:sticky;top:var(--header-h);height:calc(100dvh - var(--header-h));overflow:hidden;contain:layout paint;backface-visibility:hidden}
+    .panel{position:absolute;inset:0;will-change:transform,opacity;transform:translateZ(0)}
     .panelCentered{display:grid;place-items:center}
     #scene-intro .panel-dog{z-index:2;transform:translate3d(0,0,0);opacity:1}
     #scene-intro .panel-intro{z-index:1;transform:translate3d(100%,0,0);opacity:0}
-    .panel-dog img.dog-sticker{width:clamp(80px,12vw,140px);height:auto;pointer-events:none}
+    .panel-dog img.dog-sticker{width:clamp(72px,11vw,120px);height:auto;pointer-events:none}
 
     /* Suunnittelija – maski tekstipalstalle */
     .designer-text-wrap{position:relative}
     .designer-mask-svg{position:absolute;inset:0;pointer-events:none;z-index:5;width:100%;height:100%;will-change:transform;transform:translateZ(0);transform-box:fill-box;transform-origin:center top}
-    @media (max-width:900px){.designer-mask-svg{transform:scaleX(1.18)}}
-
-    /* --- MOBILE SAFE MODE --- */
-    @media (max-width:768px){
-      .scene.mobile-free{height:auto}
-      .scene.mobile-free .scene-sticky{position:relative;height:auto;overflow:visible}
-      .scene.mobile-free .panel{position:static;transform:none!important;opacity:1!important}
-      #scene-intro.mobile-free .panel-dog{display:none} /* koira pois, suora tekstinäkymä */
-    }
+    @media (max-width:900px){.designer-mask-svg{transform:scaleX(1.14)}}
 
     @media (prefers-reduced-motion:reduce){
       .scene{height:auto}.scene-sticky{position:relative;height:auto}
@@ -136,7 +136,7 @@
   <!-- HERO -->
   <section id="etusivu" class="hero px-4">
     <img src="assets/hero.jpg" alt="RUMAT STUDIO hero" class="hero-img" onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
-    <span id="heroLogo" class="svg-logo logo-light logo-beat" role="img" aria-label="RUMAT STUDIO"></span>
+    <span class="svg-logo logo-light logo-beat" role="img" aria-label="RUMAT STUDIO"></span>
   </section>
 
   <!-- SCENE 1: KOIRA → ESITTELY -->
@@ -190,8 +190,10 @@
                   <defs>
                     <mask id="smileyMaskText">
                       <rect x="0" y="0" width="100" height="100" fill="white"/>
-                      <rect x="40" y="6" width="5" height="40" rx="2" fill="black"/>
-                      <rect x="55" y="6" width="5" height="40" rx="2" fill="black"/>
+                      <!-- pystysilmät ylempänä ja korkeammat -->
+                      <rect x="40" y="6" width="5" height="44" rx="2" fill="black"/>
+                      <rect x="55" y="6" width="5" height="44" rx="2" fill="black"/>
+                      <!-- leveä hymy, kulmat korkealla -->
                       <path d="M28 56 C 44 92, 56 92, 72 56" fill="none" stroke="black" stroke-width="9" stroke-linecap="round"/>
                     </mask>
                   </defs>
@@ -231,7 +233,7 @@
 </main>
 
 <script>
-/* tiny helpers */
+/* ===== Helpers ===== */
 const $=s=>document.querySelector(s);
 const ca=(t,attrs={})=>Object.assign(document.createElement(t),attrs);
 (()=>{const y=$('#year');if(y)y.textContent=new Date().getFullYear()})();
@@ -250,34 +252,43 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   const intro=$('#intro-text'); if(intro) intro.innerHTML=s.trim().split(/\n\s*\n/).map(p=>`<p>${p}</p>`).join('');
 })();
 
-/* Koira tarra */
+/* Koira tarra (pienempi) */
 (()=>{
   const img=$('#dogSticker'); if(!img) return;
   img.src='assets/dog-sticker.png';
-  img.onerror=()=>{const e=ca('div',{textContent:'🐶'}); e.style.cssText='font-size:14vw;line-height:1'; img.replaceWith(e);}
+  img.onerror=()=>{const e=ca('div',{textContent:'🐶'}); e.style.cssText='font-size:12vw;line-height:1'; img.replaceWith(e);}
 })();
 
-/* Oikean intro-kuvan pehmeä lasku */
+/* Intro: oikea kuva laskee pehmeästi tekstin mukaan */
 (()=>{
   const copy=document.querySelector('.intro-copy');
   const right=document.querySelector('.intro-img.right');
   if(!copy||!right) return;
   let target=0, val=0, raf=0;
   function measure(){
-    if (window.innerWidth<=900){ target=0; right.style.transform='none'; return; }
+    if (window.innerWidth<=900){ target=0; right.style.transform='translate3d(0,0,0)'; return; }
     const th=copy.offsetHeight, ih=right.offsetHeight;
     target=Math.max(0, th-ih);
   }
-  function step(){ raf=0; val+=(target-val)*0.18; right.style.transform=`translate3d(0,${val}px,0)`; if(Math.abs(target-val)>0.35) raf=requestAnimationFrame(step); }
+  function step(){
+    raf=0;
+    val += (target-val)*0.18;
+    const y = Math.round(val);                 // ⟵ pikselipyöristys = vähemmän tärinää
+    right.style.transform=`translate3d(0,${y}px,0)`;
+    if(Math.abs(target-val)>0.35) raf=requestAnimationFrame(step);
+  }
   function kick(){ if(!raf) raf=requestAnimationFrame(step); }
   new ResizeObserver(()=>{measure();kick();}).observe(copy);
   new ResizeObserver(()=>{measure();kick();}).observe(right);
-  window.addEventListener('resize',()=>{measure();kick()},{passive:true});
+  addEventListener('resize',()=>{measure();kick()},{passive:true});
   measure(); kick();
 })();
 
-/* Scenes (desktop), mobiilissa vapaa virtaus */
+/* Scenes (koira→intro & suunnittelija maski) – toimii myös mobiilissa */
 (()=>{
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const HEADER = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'))||64;
   const sceneIntro = document.getElementById('scene-intro');
   const dogPanel   = sceneIntro?.querySelector('.panel-dog');
   const introPanel = sceneIntro?.querySelector('#mikaonrumat');
@@ -285,86 +296,90 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   const maskSvg    = document.getElementById('designerMaskText');
   const photo      = document.getElementById('designerPhoto');
 
-  const prefersReduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const smoother=(p)=>p*p*p*(p*(6*p-15)+10);
+  const clamp=(x)=>x<0?0:x>1?1:x;
+  function vvh(){ return (window.visualViewport?.height || window.innerHeight || 800); }
+  function stickyH(){ return Math.max(1, vvh() - HEADER); }
 
-  function setMobileFreeMode(on){
-    [sceneIntro,sceneDes].forEach(el=>{
-      if(!el) return;
-      el.classList.toggle('mobile-free', !!on);
-    });
+  const scenes=[];
+  function measureScene(el){
+    if(!el) return null;
+    return { el, start: el.offsetTop, stick: stickyH(), total: Math.max(1, el.offsetHeight - stickyH()) };
   }
-  function isMobile(){ return window.innerWidth<=768; }
+  function measureAll(){
+    scenes.length=0;
+    const a=measureScene(sceneIntro); if(a) scenes.push(a);
+    const b=measureScene(sceneDes);   if(b) scenes.push(b);
+  }
 
-  if(!prefersReduce){
-    let raf=0, navSkip=null;
-    const smoother=p=>p*p*p*(p*(6*p-15)+10);
-    const HEADER = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'))||64;
-    const scenes=[];
-    function vvh(){return (visualViewport?.height||innerHeight||800)}
-    function stickyH(){return Math.max(1, vvh()-HEADER)}
-    function measureScene(el){ if(!el) return null; return {el,start:el.offsetTop,stick:stickyH(),total:Math.max(1,el.offsetHeight-stickyH())}; }
-    function measureAll(){ scenes.length=0; const a=measureScene(sceneIntro); if(a) scenes.push(a); const b=measureScene(sceneDes); if(b) scenes.push(b); }
-    const clamp=x=>x<0?0:x>1?1:x;
+  let raf=0, navSkip=null;
+  function render(){
+    raf=0;
+    const y=window.scrollY||0;
+    const W=window.innerWidth;
 
-    function render(){
-      raf=0;
-      if(isMobile()){ return; } // mobiilissa ei ajeta efektisilmukkaa
-      const y=scrollY||0;
-      for(const s of scenes){
-        const raw=clamp((y-s.start)/s.total);
-        const p = (navSkip==='intro' && s.el===sceneIntro)?1:(navSkip==='designer' && s.el===sceneDes)?1:smoother(raw);
+    for(const s of scenes){
+      const raw=clamp((y - s.start)/s.total);
+      const p = (navSkip==='intro' && s.el===sceneIntro) ? 1 :
+                (navSkip==='designer' && s.el===sceneDes) ? 1 : smoother(raw);
 
-        if(s.el===sceneIntro && dogPanel && introPanel){
-          const txDog=-innerWidth*1.05*p, txIntro=innerWidth*(1-p);
-          dogPanel.style.transform=`translate3d(${txDog}px,0,0)`; dogPanel.style.opacity=(1-p*1.1).toFixed(3);
-          introPanel.style.transform=`translate3d(${txIntro}px,0,0)`; introPanel.style.opacity=Math.min(1,p*1.15).toFixed(3);
-        }
-        if(s.el===sceneDes){
-          const e=(navSkip==='designer')?1:p*(2-p);
-          if(maskSvg){ const ty=s.stick*0.6*e; maskSvg.style.transform=`translate3d(0,${ty}px,0)`; }
-          if(photo){ const sc=0.985+0.045*e; photo.style.transform=`scale(${sc})`; }
-        }
+      if(s.el===sceneIntro && dogPanel && introPanel){
+        const txDog   = Math.round(-W*1.05*p);
+        const txIntro = Math.round(W*(1-p));
+        dogPanel.style.transform   = `translate3d(${txDog}px,0,0)`;
+        dogPanel.style.opacity     = (1 - p*1.1).toFixed(3);
+        introPanel.style.transform = `translate3d(${txIntro}px,0,0)`;
+        introPanel.style.opacity   = Math.min(1,p*1.15).toFixed(3);
+      }
+
+      if(s.el===sceneDes){
+        const e = (navSkip==='designer') ? 1 : p*(2-p);
+        const ty = Math.round(s.stick*(window.innerWidth<=900?0.85:0.6)*e);
+        if(maskSvg) { maskSvg.style.transform=`translate3d(0,${ty}px,0) ${window.innerWidth<=900 ? 'scaleX(1.14)' : ''}`; }
+        if(photo)   { const sc=0.985+0.045*e; photo.style.transform=`scale(${sc})`; }
       }
     }
-    function req(){ if(!raf) raf=requestAnimationFrame(render); }
-    function renderNow(){ cancelAnimationFrame(raf); raf=0; render(); }
-    window.__sceneNavSkip = w=>{ navSkip=w; renderNow(); };
-    window.__sceneMeasure = ()=>{ measureAll(); renderNow(); };
-
-    const onResize=()=>{ setMobileFreeMode(isMobile()); measureAll(); req(); };
-    addEventListener('resize',onResize,{passive:true});
-    visualViewport?.addEventListener('resize',onResize,{passive:true});
-    addEventListener('orientationchange',onResize,{passive:true});
-    addEventListener('scroll',req,{passive:true});
-    document.addEventListener('DOMContentLoaded',()=>{ setMobileFreeMode(isMobile()); measureAll(); renderNow(); });
-  }else{
-    // Reduced motion: aina free mode
-    setMobileFreeMode(true);
   }
+  function req(){ if(!raf) raf=requestAnimationFrame(render); }
+  function renderNow(){ cancelAnimationFrame(raf); raf=0; render(); }
+
+  window.__sceneNavSkip = (which)=>{ navSkip=which; renderNow(); };
+  window.__sceneMeasure = ()=>{ measureAll(); renderNow(); };
+
+  const onResize=()=>{ measureAll(); req(); };
+  window.addEventListener('resize', onResize, {passive:true});
+  window.visualViewport?.addEventListener('resize', onResize, {passive:true});
+  window.addEventListener('orientationchange', onResize, {passive:true});
+  window.addEventListener('scroll', req, {passive:true});
+  document.addEventListener('DOMContentLoaded', ()=>{ measureAll(); renderNow(); });
 })();
 
-/* Älykäs kuvien lataus kaavioille */
+/* ===== Kaaviot: älykäs kuvien lataus + EXPANDER ===== */
 function setSmartImage(img,bases){
   const exts=['.webp','.jpg','.jpeg','.png','.JPG','.JPEG','.PNG'];
   const c=[];(Array.isArray(bases)?bases:[bases]).forEach(b=>exts.forEach(e=>c.push(b+e)));
   let i=0;const next=()=>{ if(i>=c.length){img.src='assets/placeholder.jpg';return;}
     const url=c[i++]; const p=new Image(); p.onload=()=>img.src=url; p.onerror=next; p.src=url; }; next();
 }
+
 (()=>{
   const grid=$('#patternsGrid'); if(!grid) return;
+
   const DATA=[
-    {id:'dummy-kaava',name:'Dummy kaava',price:0.01,sizes:'PDF',blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla.',imgBase:'assets/patterns/dummy-kaava-1',deliverable:true},
-    {id:'ilmainen-ohje',name:'Ilmainen ohje',price:0.00,sizes:'One size',blurb:'Täysin ilmainen kokeiltava ohje (dummy-PDF).',imgBase:'assets/patterns/ilmainen-ohje-1',deliverable:true},
-    {id:'takki',name:'Takki',price:0.01,sizes:'XS–XL',blurb:'Tulossa pian.',imgBase:'assets/patterns/takki-1',deliverable:false},
-    {id:'laukku',name:'Laukku',price:0.01,sizes:'One size',blurb:'Sling-laukku kaava (PDF).',imgBase:'assets/patterns/laukku-1',deliverable:false},
-    {id:'usva-paita',name:'Usva paita',price:0.01,sizes:'XS–XL',blurb:'Rento paita.',imgBase:'assets/patterns/usva-paita-1',deliverable:false},
-    {id:'neule-panta',name:'Neule panta',price:0.01,sizes:'S–L',blurb:'Helppo aloittelijalle.',imgBase:'assets/patterns/neule-panta-1',deliverable:false},
-    {id:'kauluri',name:'Kauluri',price:0.01,sizes:'One size',blurb:'Nopea viikonloppu.',imgBase:'assets/patterns/kauluri-1',deliverable:false},
-    {id:'pipo',name:'Pipo',price:0.01,sizes:'S–L',blurb:'Peruspipo.',imgBase:'assets/patterns/pipo-1',deliverable:false},
-    {id:'lapaset',name:'Lapaset',price:0.01,sizes:'S–XL',blurb:'Tiivis peruslapanen.',imgBase:'assets/patterns/lapaset-1',deliverable:false},
-    {id:'sukat',name:'Sukat',price:0.01,sizes:'36–46',blurb:'Vahvistettu kantapää.',imgBase:'assets/patterns/sukat-1',deliverable:false},
-    {id:'villapaita',name:'Villapaita',price:0.01,sizes:'XS–XXL',blurb:'Klassikko.',imgBase:'assets/patterns/villapaita-1',deliverable:false},
+    {id:'dummy-kaava',name:'Dummy kaava',price:0.01,sizes:'PDF',blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla.',imgBase:'assets/patterns/dummy-kaava-1',images:['assets/patterns/dummy-kaava-1','assets/patterns/dummy-kaava-2'],deliverable:true},
+    {id:'ilmainen-ohje',name:'Ilmainen ohje',price:0.00,sizes:'One size',blurb:'Täysin ilmainen kokeiltava ohje (dummy-PDF).',imgBase:'assets/patterns/ilmainen-ohje-1',images:['assets/patterns/ilmainen-ohje-1'],deliverable:true},
+    {id:'takki',name:'Takki',price:0.01,sizes:'XS–XL',blurb:'Tulossa pian.',imgBase:'assets/patterns/takki-1',images:['assets/patterns/takki-1'],deliverable:false},
+    {id:'laukku',name:'Laukku',price:0.01,sizes:'One size',blurb:'Sling-laukku kaava (PDF).',imgBase:'assets/patterns/laukku-1',images:['assets/patterns/laukku-1','assets/patterns/laukku-2'],deliverable:false},
+    {id:'usva-paita',name:'Usva paita',price:0.01,sizes:'XS–XL',blurb:'Rento paita.',imgBase:'assets/patterns/usva-paita-1',images:['assets/patterns/usva-paita-1','assets/patterns/usva-paita-2'],deliverable:false},
+    {id:'neule-panta',name:'Neule panta',price:0.01,sizes:'S–L',blurb:'Helppo aloittelijalle.',imgBase:'assets/patterns/neule-panta-1',images:['assets/patterns/neule-panta-1'],deliverable:false},
+    {id:'kauluri',name:'Kauluri',price:0.01,sizes:'One size',blurb:'Nopea viikonloppu.',imgBase:'assets/patterns/kauluri-1',images:['assets/patterns/kauluri-1'],deliverable:false},
+    {id:'pipo',name:'Pipo',price:0.01,sizes:'S–L',blurb:'Peruspipo.',imgBase:'assets/patterns/pipo-1',images:['assets/patterns/pipo-1'],deliverable:false},
+    {id:'lapaset',name:'Lapaset',price:0.01,sizes:'S–XL',blurb:'Tiivis peruslapanen.',imgBase:'assets/patterns/lapaset-1',images:['assets/patterns/lapaset-1'],deliverable:false},
+    {id:'sukat',name:'Sukat',price:0.01,sizes:'36–46',blurb:'Vahvistettu kantapää.',imgBase:'assets/patterns/sukat-1',images:['assets/patterns/sukat-1'],deliverable:false},
+    {id:'villapaita',name:'Villapaita',price:0.01,sizes:'XS–XXL',blurb:'Klassikko.',imgBase:'assets/patterns/villapaita-1',images:['assets/patterns/villapaita-1'],deliverable:false},
   ];
+
+  // Render tiles
   DATA.forEach(p=>{
     const tile=ca('article',{className:'tile card','data-id':p.id});
     const img=ca('img',{alt:p.name,loading:'lazy',decoding:'async'}); setSmartImage(img,p.imgBase);
@@ -372,9 +387,83 @@ function setSmartImage(img,bases){
     const suffix=!p.deliverable?' · Tulossa':(p.price===0?' · Ilmainen':''); cap.textContent=p.name+suffix;
     tile.append(img,cap); grid.appendChild(tile);
   });
+
+  // Expander
+  let expander=null, current=null, imgIdx=0, selectedTile=null;
+  const fmtEUR=x=>new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
+
+  function buildExpander(){
+    expander=ca('div',{className:'expander'});
+    const top=ca('div',{className:'ex-top'});
+    top.append(ca('div',{id:'exTitle',className:'font-semibold'}), ca('button',{id:'exClose',className:'px-3 py-1 rounded border border-[rgba(0,0,0,.15)]',textContent:'Sulje'}));
+    const row=ca('div',{className:'ex-row'});
+    const view=ca('div',{className:'ex-view'});
+    view.append(ca('img',{alt:'Kaava',loading:'eager',decoding:'async'}), ca('button',{id:'exPrev',className:'ex-prev',textContent:'◀'}), ca('button',{id:'exNext',className:'ex-next',textContent:'▶'}));
+    const info=ca('div',{className:'ex-info'});
+    info.innerHTML=`<h3 id="exName" class="text-2xl mb-2"></h3>
+      <div style="height:8px"></div>
+      <p id="exBlurb" class="opacity-80 mb-2 normalcase"></p>
+      <div class="mb-2"><span class="font-semibold">Koot: </span><span id="exSizes"></span></div>
+      <div id="exPrice" class="text-xl font-bold mb-4"></div>
+      <div id="exActions"></div>`;
+    row.append(view,info); expander.append(top,row);
+
+    expander.querySelector('#exPrev').addEventListener('click',()=>nav(-1));
+    expander.querySelector('#exNext').addEventListener('click',()=>nav(+1));
+    expander.querySelector('#exClose').addEventListener('click',clearSelection);
+  }
+  buildExpander();
+
+  function setAfterRow(tileEl){
+    const tiles=[...grid.querySelectorAll('.tile')];
+    const idx=tiles.indexOf(tileEl);
+    const cols = getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+    const rowEnd = tiles[Math.min(tiles.length-1, Math.floor(idx/cols)*cols + (cols-1))];
+    grid.insertBefore(expander, rowEnd.nextSibling);
+  }
+
+  function openFor(p,tileEl){
+    current=p; imgIdx=0;
+    expander.querySelector('#exTitle').textContent=p.name;
+    expander.querySelector('#exName').textContent=p.name;
+    expander.querySelector('#exBlurb').textContent=p.blurb||'';
+    expander.querySelector('#exSizes').textContent=p.sizes||'';
+    expander.querySelector('#exPrice').textContent=p.price===0?'ILMAINEN':fmtEUR(p.price||0);
+    const exImg=expander.querySelector('.ex-view img'); setSmartImage(exImg, (p.images||[])[0]);
+    const actions=expander.querySelector('#exActions'); actions.innerHTML='';
+    const deliver=!!p.deliverable;
+    if(!deliver){ actions.append(ca('span',{className:'inline-block px-4 py-2 rounded-full border border-[rgba(0,0,0,.15)]',textContent:'Tulossa'})); }
+    else{ actions.append(ca('button',{className:'btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2',textContent:'Lisää ostoskoriin'})); }
+    setAfterRow(tileEl);
+  }
+
+  function nav(dir){
+    if(!current) return;
+    const imgs=current.images||[]; if(!imgs.length) return;
+    imgIdx=(imgIdx+dir+imgs.length)%imgs.length;
+    const exImg=expander.querySelector('.ex-view img'); setSmartImage(exImg, imgs[imgIdx]);
+  }
+
+  function clearSelection(){
+    if(!selectedTile) return;
+    selectedTile.classList.remove('tile--selected');
+    if(expander.parentNode===grid) grid.removeChild(expander);
+    selectedTile=null; current=null; imgIdx=0;
+  }
+
+  grid.addEventListener('click',e=>{
+    const tile=e.target.closest('.tile'); if(!tile||!grid.contains(tile)) return;
+    if(tile===selectedTile){ clearSelection(); return; }
+    clearSelection(); selectedTile=tile; tile.classList.add('tile--selected');
+    const p=DATA.find(x=>x.id===tile.dataset.id); if(p) openFor(p,tile);
+  });
+
+  // Reflow expander oikein myös ruudukon murtuessa
+  let ro=null;
+  addEventListener('resize',()=>{ if(!selectedTile) return; clearTimeout(ro); ro=setTimeout(()=>setAfterRow(selectedTile),120) },{passive:true});
 })();
 
-/* Ankkurinapit – effektien ohitus */
+/* ===== Ankkuri-linkit: ohita efektien alku/puoliväli ===== */
 (()=>{
   const HEADER=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'))||64;
   const vh=()=> (visualViewport?.height||innerHeight||800);
@@ -387,7 +476,7 @@ function setSmartImage(img,bases){
     const el=document.querySelector(hash);if(el){window.__sceneNavSkip?.(null);el.scrollIntoView({behavior:'smooth'});return true;}
     return false;
   }
-  $('#mainNav')?.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const h=a.getAttribute('href');if(go(h)){e.preventDefault();history.pushState(null,'',h);}},{passive:true});
+  $('#mainNav')?.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const h=a.getAttribute('href');if(go(h)){e.preventDefault();history.pushState(null,'',h);}}, {passive:true});
   addEventListener('hashchange',()=>{go(location.hash)},{passive:true});
   document.addEventListener('DOMContentLoaded',()=>{go(location.hash)});
 })();
