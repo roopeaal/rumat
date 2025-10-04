@@ -63,22 +63,27 @@
     .intro-copy p{margin:0 0 .8rem;line-height:1.6}
     @media (max-width:900px){.intro-grid{grid-template-columns:1fr}.intro-img{height:clamp(240px,52vw,360px);border-radius:14px;transform:none}}
 
-    /* Kaaviot + expander */
+    /* Kaaviot + expander (mobiilissa 1 sarake) */
     .pattern-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    @media (max-width:640px){.pattern-grid{grid-template-columns:1fr;gap:10px}}
     @media (min-width:768px){.pattern-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}}
     .tile{position:relative;cursor:pointer;aspect-ratio:1/1;display:block;transition:transform .12s linear,box-shadow .12s linear;will-change:transform}
     .tile:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.05)}
     .tile img{width:100%;height:100%;object-fit:cover;display:block}
     .tile-caption{position:absolute;left:0;right:0;bottom:0;padding:.45rem .65rem;background:linear-gradient(to top,rgba(0,0,0,.55),rgba(0,0,0,0));color:#fff;font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem}
+
     .expander{grid-column:1/-1;background:var(--ivory);border-radius:16px;border:1px solid rgba(0,0,0,.12);overflow:hidden}
+    .ex-top{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.6rem .9rem;border-bottom:1px solid rgba(0,0,0,.1)}
     .ex-row{display:grid;grid-template-columns:1fr;min-height:260px}
     @media (min-width:1024px){.ex-row{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
-    .ex-view{position:relative;background:#000;min-height:min(70vh,1200px)}
-    .ex-info{padding:1rem 1.1rem;overflow:auto}
-    .ex-view img{width:100%;height:100%;object-fit:contain;background:#000}
+    .ex-view{position:relative;background:#000}
+    /* Mobiilissa kompakti ja joustava korkeus */
+    .ex-view{min-height:clamp(50vh, 66vw, 70vh)}
+    @media (min-width:640px){.ex-view{min-height:min(70vh,1200px)}}
+    .ex-view img{width:100%;height:100%;object-fit:contain;background:#000;display:block}
     .ex-prev,.ex-next{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;display:grid;place-items:center;border-radius:9999px;background:var(--ivory);border:1px solid rgba(0,0,0,.15);font-weight:800}
     .ex-prev{left:10px}.ex-next{right:10px}
-    .ex-top{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.6rem .9rem;border-bottom:1px solid rgba(0,0,0,.1)}
+    .ex-info{padding:1rem 1.1rem;overflow:auto}
 
     /* Footer */
     .footer-bar{background:var(--olive);color:var(--ink)}
@@ -88,7 +93,7 @@
     .footer-copy{text-align:center;font-size:.85rem;opacity:.85;padding:10px 1rem 16px}
     @media (max-width:860px){.footer-grid{grid-template-columns:1fr 1fr;grid-template-areas:"contact logo" "social logo"}.footer-logoBox{justify-content:center;font-size:4rem}}
 
-    /* Scenes (tehosteet myös mobiilissa) */
+    /* Scenes */
     .scene{position:relative;height:200dvh}
     @media (max-width:900px){ .scene{height:180dvh} }
     .scene-sticky{position:sticky;top:var(--header-h);height:calc(100dvh - var(--header-h));overflow:hidden;contain:layout paint;backface-visibility:hidden}
@@ -190,10 +195,8 @@
                   <defs>
                     <mask id="smileyMaskText">
                       <rect x="0" y="0" width="100" height="100" fill="white"/>
-                      <!-- pystysilmät ylempänä ja korkeammat -->
                       <rect x="40" y="6" width="5" height="44" rx="2" fill="black"/>
                       <rect x="55" y="6" width="5" height="44" rx="2" fill="black"/>
-                      <!-- leveä hymy, kulmat korkealla -->
                       <path d="M28 56 C 44 92, 56 92, 72 56" fill="none" stroke="black" stroke-width="9" stroke-linecap="round"/>
                     </mask>
                   </defs>
@@ -273,7 +276,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   function step(){
     raf=0;
     val += (target-val)*0.18;
-    const y = Math.round(val);                 // ⟵ pikselipyöristys = vähemmän tärinää
+    const y = Math.round(val);
     right.style.transform=`translate3d(0,${y}px,0)`;
     if(Math.abs(target-val)>0.35) raf=requestAnimationFrame(step);
   }
@@ -284,7 +287,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   measure(); kick();
 })();
 
-/* Scenes (koira→intro & suunnittelija maski) – toimii myös mobiilissa */
+/* Scenes (koira→intro & suunnittelija maski) */
 (()=>{
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -388,6 +391,16 @@ function setSmartImage(img,bases){
     tile.append(img,cap); grid.appendChild(tile);
   });
 
+  // Luotettava sarakemäärä: lasketaan ensimmäisen rivin kortit offsetTopin avulla
+  function getCols(){
+    const tiles=[...grid.querySelectorAll('.tile')];
+    if(!tiles.length) return 1;
+    const top0=tiles[0].offsetTop;
+    let count=0;
+    for(const t of tiles){ if(t.offsetTop!==top0) break; count++; }
+    return Math.max(1,count);
+  }
+
   // Expander
   let expander=null, current=null, imgIdx=0, selectedTile=null;
   const fmtEUR=x=>new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
@@ -417,7 +430,7 @@ function setSmartImage(img,bases){
   function setAfterRow(tileEl){
     const tiles=[...grid.querySelectorAll('.tile')];
     const idx=tiles.indexOf(tileEl);
-    const cols = getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+    const cols=getCols();                 // ← luotettava sarakeluku
     const rowEnd = tiles[Math.min(tiles.length-1, Math.floor(idx/cols)*cols + (cols-1))];
     grid.insertBefore(expander, rowEnd.nextSibling);
   }
@@ -458,9 +471,12 @@ function setSmartImage(img,bases){
     const p=DATA.find(x=>x.id===tile.dataset.id); if(p) openFor(p,tile);
   });
 
-  // Reflow expander oikein myös ruudukon murtuessa
-  let ro=null;
-  addEventListener('resize',()=>{ if(!selectedTile) return; clearTimeout(ro); ro=setTimeout(()=>setAfterRow(selectedTile),120) },{passive:true});
+  // Reflow expander oikein myös ruudukon murtuessa / rotaatiossa
+  let roTimer=null;
+  const onResize=()=>{ if(!selectedTile) return; clearTimeout(roTimer); roTimer=setTimeout(()=>setAfterRow(selectedTile),80); };
+  addEventListener('resize',onResize,{passive:true});
+  window.visualViewport?.addEventListener('resize',onResize,{passive:true});
+  addEventListener('orientationchange',onResize,{passive:true});
 })();
 
 /* ===== Ankkuri-linkit: ohita efektien alku/puoliväli ===== */
@@ -471,12 +487,16 @@ function setSmartImage(img,bases){
   const scenePos=(sceneEl,progress)=>{const start=sceneEl.offsetTop,total=Math.max(1,sceneEl.offsetHeight-stickyH());return start+progress*total};
   function go(hash){
     if(!hash||hash==='#'||hash==='#etusivu'){window.__sceneNavSkip?.(null);scrollTo({top:0,behavior:'smooth'});return true;}
-    if(hash==='#mikaonrumat'){const s=$('#scene-intro');if(!s)return false;window.__sceneNavSkip?.('intro');scrollTo({top:scenePos(s,1),behavior:'smooth'});setTimeout(()=>window.__sceneMeasure?.(),10);return true;}
-    if(hash==='#suunnittelija'){const s=$('#scene-designer');if(!s)return false;window.__sceneNavSkip?.('designer');scrollTo({top:scenePos(s,0.08),behavior:'smooth'});setTimeout(()=>window.__sceneMeasure?.(),10);return true;}
+    if(hash==='#mikaonrumat'){const s=document.querySelector('#scene-intro');if(!s)return false;window.__sceneNavSkip?.('intro');scrollTo({top:scenePos(s,1),behavior:'smooth'});setTimeout(()=>window.__sceneMeasure?.(),10);return true;}
+    if(hash==='#suunnittelija'){const s=document.querySelector('#scene-designer');if(!s)return false;window.__sceneNavSkip?.('designer');scrollTo({top:scenePos(s,0.08),behavior:'smooth'});setTimeout(()=>window.__sceneMeasure?.(),10);return true;}
     const el=document.querySelector(hash);if(el){window.__sceneNavSkip?.(null);el.scrollIntoView({behavior:'smooth'});return true;}
     return false;
   }
-  $('#mainNav')?.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const h=a.getAttribute('href');if(go(h)){e.preventDefault();history.pushState(null,'',h);}}, {passive:true});
+  document.getElementById('mainNav')?.addEventListener('click',e=>{
+    const a=e.target.closest('a[href^="#"]');if(!a)return;
+    const h=a.getAttribute('href');
+    if(go(h)){e.preventDefault();history.pushState(null,'',h);}
+  }, {passive:true});
   addEventListener('hashchange',()=>{go(location.hash)},{passive:true});
   document.addEventListener('DOMContentLoaded',()=>{go(location.hash)});
 })();
