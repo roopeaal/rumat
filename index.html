@@ -11,12 +11,9 @@
   <link rel="preload" as="image" href="assets/intro-right.jpg">
   <link rel="preload" as="image" href="assets/dog-sticker.png">
 
-  <!-- Montserrat & Tailwind -->
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- EmailJS selainkirjasto -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
 
   <style>
@@ -31,33 +28,27 @@
     h1,h2,h3,h4,h5,h6{font-weight:900!important;text-transform:uppercase;color:var(--deep-blue);letter-spacing:.02em;margin:0 0 .6rem}
     .normalcase{text-transform:none!important}
 
-    /* Header */
     header{background:var(--ivory);border-bottom:1px solid rgba(0,0,0,.08)}
     #hdrRow{position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center}
     #brandText{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:min(42vw,460px);color:var(--ink)}
     #brandText .strong{font-weight:900}#brandText .light{font-weight:600}
-    #mainNav{justify-self:center;display:flex;gap:1.2rem;white-space:nowrap;font-size:13px;text-transform:uppercase;letter-spacing:.2em;min-width:0}
+    #mainNav{justify-self:center;display:flex;gap:1.2rem;white-space:nowrap;font-size:13px;text-transform:uppercase;letter-spacing:.2em}
     #mainNav a{color:var(--ink);text-decoration:none}
-    .nav-hidden{display:none!important}.nav-measure{position:absolute!important;visibility:hidden!important;display:flex!important;white-space:nowrap!important}
-    #rightBlock{position:static;justify-self:end;display:flex;align-items:center;gap:.5rem;white-space:nowrap}
-    .icon-btn{position:relative;width:38px;height:38px;display:grid;place-items:center;border-radius:9999px;background:rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.16);color:var(--ink)}
-    .icon-btn:hover{background:rgba(0,0,0,.1)}
-    .cart-text-btn{border:1px solid rgba(0,0,0,.16);padding:.45rem .8rem;border-radius:9999px;color:var(--ink);background:rgba(0,0,0,.04)}
-    .cart-text-btn:hover{background:rgba(0,0,0,.08)}
+    #rightBlock{justify-self:end;display:flex;align-items:center;gap:.5rem}
+    .icon-btn{width:38px;height:38px;display:grid;place-items:center;border-radius:9999px;background:rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.16)}
+    .cart-text-btn{border:1px solid rgba(0,0,0,.16);padding:.45rem .8rem;border-radius:9999px;background:rgba(0,0,0,.04)}
     .badge{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 4px;display:grid;place-items:center;border-radius:9999px;background:var(--ink);color:#fff;font-size:11px;font-weight:700;border:1px solid rgba(0,0,0,.15)}
 
     .btn{border-radius:9999px;padding:.6rem 1rem;border:1px solid rgba(0,0,0,.16);background:rgba(0,0,0,.04)}
-    .btn:hover{background:rgba(0,0,0,.08)}
 
-    /* HERO (vain logo elää) */
-    .hero{position:relative;height:calc(100dvh - var(--header-h));display:grid;place-items:center;overflow:hidden;text-align:center;background:#000}
-    .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0}
-    .svg-logo{--logo-color:var(--light-blue);display:inline-block;width:9rem;height:9rem;background-color:var(--logo-color);-webkit-mask:url('assets/logo.svg') no-repeat center/contain;mask:url('assets/logo.svg') no-repeat center/contain;will-change:transform,filter}
+    /* HERO */
+    .hero{position:relative;height:calc(100dvh - var(--header-h));display:grid;place-items:center;overflow:hidden;background:#000}
+    .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    .svg-logo{--logo-color:var(--light-blue);display:inline-block;width:9rem;height:9rem;background-color:var(--logo-color);-webkit-mask:url('assets/logo.svg') no-repeat center/contain;mask:url('assets/logo.svg') no-repeat center/contain}
     @media (min-width:640px){.svg-logo{width:11rem;height:11rem}}
     @media (min-width:1024px){.svg-logo{width:12rem;height:12rem}}
-    .logo-ink{--logo-color:var(--ink)}.logo-white{--logo-color:#fff}.logo-light{--logo-color:var(--light-blue)}
+    .logo-ink{--logo-color:var(--ink)} .logo-light{--logo-color:var(--light-blue)}
     .svg-logo--header{width:3.1rem;height:3.1rem}
-    @media (min-width:1024px){.svg-logo--header{width:3.4rem;height:3.4rem}}
     .logo-beat{ animation: logoBeat 1.2s ease-in-out infinite; filter: drop-shadow(0 6px 22px rgba(52,85,99,.25)); }
     @keyframes logoBeat{
       0%{transform:scale(1)} 12%{transform:scale(1.12)} 24%{transform:scale(1.02)}
@@ -70,98 +61,55 @@
 
     /* Intro layout */
     .intro-wide{margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
-    .intro-grid{
-      display:grid;
-      grid-template-columns: var(--intro-img-w) minmax(300px, 64rem) var(--intro-img-w);
-      gap:14px; align-items:start; padding:18px 0;
-    }
-    .intro-img{
-      display:block; background-size:cover;background-position:center;background-repeat:no-repeat;
-      min-height:320px; height:var(--intro-img-h);
-      border:1px solid rgba(0,0,0,.12); border-radius:18px;
-      background-color:#ddd; box-sizing:border-box;
-      will-change:transform; transform:translateZ(0);
-    }
+    .intro-grid{display:grid;grid-template-columns: var(--intro-img-w) minmax(300px, 64rem) var(--intro-img-w);gap:14px;align-items:start;padding:18px 0}
+    .intro-img{background-size:cover;background-position:center;background-repeat:no-repeat;min-height:320px;height:var(--intro-img-h);border:1px solid rgba(0,0,0,.12);border-radius:18px;background-color:#ddd;will-change:transform;transform:translateZ(0)}
     .intro-img.left{background-image:url('assets/intro-left.jpg')}
     .intro-img.right{background-image:url('assets/intro-right.jpg')}
     .intro-copy{padding:6px 12px;min-width:0}
     .intro-copy .logo{width:56px;height:56px;display:block;margin:0 auto 12px;object-fit:contain}
     .intro-copy p{margin:0 0 .8rem;line-height:1.6}
+    @media (max-width:900px){.intro-grid{grid-template-columns:1fr}.intro-img{height: clamp(240px, 52vw, 360px);border-radius:14px;transform:none}}
 
-    @media (max-width:900px){
-      .intro-grid{grid-template-columns:1fr;padding:12px 0}
-      .intro-img{height: clamp(240px, 52vw, 360px);border-radius:14px!important;transform:none!important}
-    }
-
-    /* Kaaviot – minimalistinen + expander */
+    /* Kaaviot */
     .card{background:var(--ivory);border-radius:16px;border:1px solid rgba(0,0,0,.12);overflow:hidden}
-    .pattern-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
+    .pattern-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
     @media (min-width:768px){.pattern-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}}
-    .tile{position:relative;cursor:pointer;aspect-ratio:1/1;display:block;transition:transform .12s linear,box-shadow .12s linear;will-change:transform,box-shadow}
+    .tile{position:relative;cursor:pointer;aspect-ratio:1/1;display:block;transition:transform .12s linear,box-shadow .12s linear}
     .tile:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.05)}
     .tile img{width:100%;height:100%;object-fit:cover;display:block}
     .tile-caption{position:absolute;left:0;right:0;bottom:0;padding:.45rem .65rem;background:linear-gradient(to top,rgba(0,0,0,.55),rgba(0,0,0,0));color:#fff;font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem}
     .expander{grid-column:1/-1;background:var(--ivory);border-radius:16px;border:1px solid rgba(0,0,0,.12);overflow:hidden}
     .ex-row{display:grid;grid-template-columns:1fr;min-height:260px}
     @media (min-width:1024px){.ex-row{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
-    .ex-view{position:relative;background:#000;min-height:min(70vh,1200px);min-width:0}
-    .ex-info{padding:1rem 1.1rem;overflow:auto;min-width:0;overflow-wrap:anywhere}
+    .ex-view{position:relative;background:#000;min-height:min(70vh,1200px)}
+    .ex-info{padding:1rem 1.1rem;overflow:auto}
     .ex-view img{width:100%;height:100%;object-fit:contain;background:#000}
     .ex-prev,.ex-next{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;display:grid;place-items:center;border-radius:9999px;background:var(--ivory);border:1px solid rgba(0,0,0,.15);font-weight:800}
     .ex-prev{left:10px}.ex-next{right:10px}
     .ex-top{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.6rem .9rem;border-bottom:1px solid rgba(0,0,0,.1)}
 
-    /* Footer – iso logo */
-    .footer-bar{position:relative;z-index:2;background:var(--olive);color:var(--ink)}
+    /* Footer */
+    .footer-bar{position:relative;background:var(--olive);color:var(--ink)}
     .footer-grid{max-width:72rem;margin:0 auto;padding:1.5rem 1rem;display:grid;gap:1rem 2rem;align-items:start;grid-template-columns:1fr 1fr 1fr;grid-template-areas:"social contact logo"}
-    .footer-col h6{font-size:.8rem;font-weight:900;text-transform:uppercase;letter-spacing:.12em;margin:0 0 .35rem;color:var(--ink)}
-    .footer-handle,.footer-link{color:var(--ink);opacity:.9;text-decoration:none}
-    .footer-handle:hover,.footer-link:hover{text-decoration:underline}
-    .footer-social{grid-area:social;display:flex;flex-direction:column;gap:.9rem}
-    .footer-contact{grid-area:contact;display:flex;flex-direction:column;gap:.9rem}
     .footer-logoBox{grid-area:logo;display:flex;justify-content:flex-end;align-items:flex-start;font-size:5.6rem;line-height:1}
-    .svg-logo--footer{width:1em;height:1em;aspect-ratio:1/1;vertical-align:-0.125em}
+    .svg-logo--footer{width:1em;height:1em;aspect-ratio:1/1}
     .footer-copy{text-align:center;font-size:.85rem;opacity:.85;padding:10px 1rem 16px}
     @media (max-width:860px){.footer-grid{grid-template-columns:1fr 1fr;grid-template-areas:"contact logo" "social logo"}.footer-logoBox{justify-content:center;font-size:4rem}}
 
-    /* Toast */
-    .toast{position:fixed;top:76px;left:0;right:0;display:flex;justify-content:center;z-index:70;pointer-events:none}.toast>div{pointer-events:auto}
-
-    /* Cookie banner */
-    #cookieBanner{position:fixed;z-index:80;left:0;right:0;bottom:0;display:none}
-
-    /* ================= GIANT INTRO (verhot) ================= */
-    #introOverlay{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(246,246,244,.78);backdrop-filter:blur(10px);overflow:hidden;transition:background .6s ease,opacity .5s ease}
-    #introOverlay .intro-curtain{position:absolute;top:0;bottom:0;width:52vw;background:var(--ivory);box-shadow:0 0 30px rgba(0,0,0,.08);transform:translateX(0);transition:transform 1s cubic-bezier(.65,0,.35,1);z-index:2;will-change:transform}
-    #introOverlay .intro-curtain.left{left:0;border-right:1px solid rgba(0,0,0,.08)}
-    #introOverlay .intro-curtain.right{right:0;border-left:1px solid rgba(0,0,0,.08)}
-    #introOverlay.open{background:transparent;backdrop-filter:none}
-    #introOverlay.open .intro-curtain.left{transform:translateX(-100%)}
-    #introOverlay.open .intro-curtain.right{transform:translateX(100%)}
-
-    .intro-giant{position:relative;z-index:3;width:96vw;max-width:96vw;text-transform:uppercase;user-select:none;text-align:center;font-family:Impact,"Arial Black","Segoe UI Black","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;color:#111;line-height:.88;padding:0;filter:url(#roughPaint);text-shadow:.5px .5px 0 rgba(0,0,0,.35), -.5px -.5px 0 rgba(0,0,0,.25);transition:opacity .45s ease,transform .6s cubic-bezier(.22,1,.36,1)}
-    #introOverlay.open .intro-giant{opacity:0;transform:scale(.98)}
-    .intro-giant .line{display:block;white-space:nowrap;font-weight:900;font-size:clamp(64px,22vw,30rem);letter-spacing:.03em;transform:scaleX(var(--fit,1)) scaleY(1.03)}
-    .intro-giant .line1{letter-spacing:.035em}.intro-giant .line2{letter-spacing:.025em}
-    .intro-giant .ch{display:inline-block;opacity:0;transform:translateY(10px) rotate(var(--rot,0deg));transition:opacity .24s ease,transform .55s cubic-bezier(.22,1,.36,1)}
-    .intro-giant .ch.show{opacity:1;transform:translateY(0) rotate(var(--rot,0deg))}
-    .intro-giant .tagline{position:relative;display:inline-block;margin-top:min(2.2vh,18px);font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-weight:900;letter-spacing:.06em;font-size:clamp(18px,2.6vw,44px);opacity:0;transform:translateY(10px);transition:opacity .4s ease,transform .5s ease;color:#111;filter:none;text-shadow:none}
-    .intro-giant .tagline.show{opacity:1;transform:translateY(0)}
-
-    /* SCENES */
+    /* Scenes */
     .scene{position:relative;height:200dvh}
     @media (max-width:900px){ .scene{height:170dvh} }
     .scene-sticky{position:sticky;top:var(--header-h);height:calc(100dvh - var(--header-h));overflow:hidden}
     .panel{position:absolute;inset:0;will-change:transform,opacity;transform:translateZ(0);backface-visibility:hidden;contain:paint}
     .panelCentered{display:grid;place-items:center}
-
-    /* Koira → Intro */
     #scene-intro .panel-dog{z-index:2;transform:translate3d(0,0,0);opacity:1}
     #scene-intro .panel-intro{z-index:1;transform:translate3d(100%,0,0);opacity:0}
-    .panel-dog img.dog-sticker{width: clamp(80px, 14vw, 150px); height:auto; pointer-events:none; will-change: transform, opacity;}
-    /* Suunnittelija – MASKI vain tekstipalstan päällä */
+    .panel-dog img.dog-sticker{width: clamp(80px, 14vw, 150px);height:auto;pointer-events:none}
+
+    /* Suunnittelija – maski vain tekstipalstalle */
     .designer-text-wrap{position:relative}
-    .designer-mask-svg{position:absolute; inset:0; pointer-events:none; z-index:5; display:block; width:100%; height:100%; will-change: transform; transform:translateZ(0);}
+    .designer-mask-svg{position:absolute;inset:0;pointer-events:none;z-index:5;display:block;width:100%;height:100%;will-change:transform;transform:translateZ(0)}
+
     @media (prefers-reduced-motion:reduce){
       .scene{height:auto}.scene-sticky{position:relative;height:auto}
       #scene-intro .panel-intro,#scene-intro .panel-dog{transform:none!important;opacity:1!important}
@@ -171,16 +119,6 @@
 </head>
 
 <body>
-  <!-- SVG-filtteri rosoiseen reunan fiilikseen -->
-  <svg width="0" height="0" style="position:absolute;left:-9999px;top:-9999px">
-    <filter id="roughPaint">
-      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" seed="3" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/>
-      <feGaussianBlur stdDeviation="0.15"/>
-    </filter>
-  </svg>
-
-  <!-- HEADER -->
   <header class="fixed top-0 left-0 right-0 z-50">
     <div id="hdrRow" class="mx-auto max-w-6xl px-4 py-4 grid gap-3">
       <a id="brandBlock" href="#etusivu" aria-label="Etusivu" class="flex items-center gap-3 min-w-0">
@@ -196,33 +134,13 @@
       </nav>
 
       <div id="rightBlock" class="flex items-center gap-2">
-        <button id="openMenu" class="icon-btn hidden" aria-controls="menuDrawer" aria-expanded="false" aria-label="Valikko">
-          <span aria-hidden="true" style="font-size:20px;line-height:1">☰</span><span class="sr-only">Valikko</span>
-        </button>
         <button id="openCartText" class="cart-text-btn">Ostoskori <span id="cartCountText" class="opacity-80"></span></button>
-        <button id="openCartIcon" class="icon-btn hidden" aria-label="Ostoskori">
-          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="9" cy="20" r="1.8"></circle><circle cx="17" cy="20" r="1.8"></circle><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 8H7.1"></path>
-          </svg>
-          <span class="badge" id="cartCount">0</span>
-        </button>
       </div>
     </div>
   </header>
 
-  <!-- GIANT INTRO OVERLAY (verhot) -->
-  <div id="introOverlay" aria-hidden="true">
-    <div class="intro-curtain left"></div>
-    <div class="intro-curtain right"></div>
-    <div id="introText" class="intro-giant"></div>
-  </div>
-
-  <!-- Toast -->
-  <div id="toast" class="toast"></div>
-
-  <!-- CONTENT -->
+  <!-- HERO -->
   <main class="pt-[64px]">
-    <!-- HERO -->
     <section id="etusivu" class="hero px-4">
       <img src="assets/hero.jpg" alt="RUMAT STUDIO hero" class="hero-img" onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
       <span id="heroLogo" class="svg-logo logo-light logo-beat" role="img" aria-label="RUMAT STUDIO"></span>
@@ -273,21 +191,14 @@
             <div class="band-inner" style="width:100%">
               <h2 class="text-3xl mb-4">Suunnittelija</h2>
               <div class="grid md:grid-cols-[320px_1fr] gap-6 items-start">
-                <div class="designer-photo-wrap">
-                  <img id="designerPhoto" src="assets/designer.jpg"
-                       onerror="this.onerror=null;this.src='assets/placeholder.jpg';"
-                       alt="Suunnittelija"
-                       class="rounded-xl border border-[rgba(0,0,0,.12)] object-cover w-full h-[300px] md:h-[420px]">
-                </div>
+                <div><img id="designerPhoto" src="assets/designer.jpg" onerror="this.onerror=null;this.src='assets/placeholder.jpg';" alt="Suunnittelija" class="rounded-xl border border-[rgba(0,0,0,.12)] object-cover w-full h-[300px] md:h-[420px]"></div>
                 <div class="designer-text-wrap space-y-4 normalcase">
                   <svg id="designerMaskText" class="designer-mask-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
                     <defs>
                       <mask id="smileyMaskText">
                         <rect x="0" y="0" width="100" height="100" fill="white"/>
-                        <!-- pystysilmät ylempänä ja korkeammat -->
-                        <rect x="40" y="6"  width="5" height="40" rx="2" fill="black"/>
-                        <rect x="55" y="6"  width="5" height="40" rx="2" fill="black"/>
-                        <!-- hymy paksumpi ja kulmat korkealla -->
+                        <rect x="40" y="6" width="5" height="40" rx="2" fill="black"/>
+                        <rect x="55" y="6" width="5" height="40" rx="2" fill="black"/>
                         <path d="M28 56 C 44 92, 56 92, 72 56" fill="none" stroke="black" stroke-width="9" stroke-linecap="round"/>
                       </mask>
                     </defs>
@@ -304,7 +215,6 @@
       </div>
     </section>
 
-    <!-- FOOTER -->
     <footer id="yhteys" class="footer-bar">
       <div class="footer-grid">
         <div class="footer-social">
@@ -318,7 +228,6 @@
             <div class="mt-2 flex flex-col gap-1 text-sm">
               <a class="footer-link" href="legal/privacy.html" target="_blank" rel="noopener">Tietosuojaseloste (PDF)</a>
               <a class="footer-link" href="legal/terms.html"   target="_blank" rel="noopener">Toimitus- ja sopimusehdot (PDF)</a>
-              <a class="footer-link" href="#" id="openCookiePrefs">Evästeasetukset</a>
             </div>
           </div>
         </div>
@@ -329,16 +238,14 @@
   </main>
 
   <script>
-  /* Perus-utilit */
-  const $=s=>document.querySelector(s)
-  const el=(t,a={},...k)=>{const n=document.createElement(t);Object.entries(a).forEach(([k,v])=>{if(k==='class')n.className=v;else if(k==='html')n.innerHTML=v;else if(k.startsWith('on'))n.addEventListener(k.slice(2),v,{passive:true});else n.setAttribute(k,v)});k.forEach(x=>{if(x==null)return; if(typeof x==='string')n.appendChild(document.createTextNode(x));else n.appendChild(x)});return n}
-  function setSafeImgSrc(img,src){img.src=src||'assets/placeholder.jpg';img.onerror=function(){this.onerror=null;this.src='assets/placeholder.jpg'}}
-  function createImg(src,alt){const im=document.createElement('img');im.alt=alt||'';im.loading='lazy';im.decoding='async';setSafeImgSrc(im,src);return im}
-  ;(()=>{const y=$('#year');if(y)y.textContent=new Date().getFullYear()})()
+  /* helpers */
+  const $=s=>document.querySelector(s);
+  const ca=(t,attrs={})=>Object.assign(document.createElement(t),attrs);
+  (function(){const y=$('#year');if(y)y.textContent=new Date().getFullYear()})();
 
-  /* Intro-teksti */
-  function parasToHTML(s){return String(s||'').trim().split(/\n\s*\n/).map(p=>`<p>${p.trim()}</p>`).join('\n')}
-  const defaultContent={pitch:`RUMAT STUDIO syntyi lapsuuden haaveesta ja vuosien aikana kypsyneestä intohimosta vaatesuunnitteluun. Vuonna 2023 visio alkoi muovautumaan nykyiseen muotoonsa: ajattomia ja kestäviä vaatteita, jotka syntyvät harkitusta rakkaudesta ja intohimosta luovaan tekemiseen.
+  /* Intro teksti sisään */
+  (function(){
+    const s=`RUMAT STUDIO syntyi lapsuuden haaveesta ja vuosien aikana kypsyneestä intohimosta vaatesuunnitteluun. Vuonna 2023 visio alkoi muovautumaan nykyiseen muotoonsa: ajattomia ja kestäviä vaatteita, jotka syntyvät harkitusta rakkaudesta ja intohimosta luovaan tekemiseen.
 
 RUMAT STUDIO pohjautuu vahvaan arvopohjaan. Se ei ole pelkkä tuotemerkki, vaan se rohkaisee pohtimaan omaa kulutuskäyttäytymistä ja inspiroi tekemään itse tai ainakin arvostamaan vaatteiden alkuperää ja tekijöitä niiden takana.
 
@@ -346,148 +253,129 @@ Taustalla on halu luoda ajattomia, kestäviä ja harkiten suunniteltuja vaatteit
 
 Tulevaisuuden suunnitelmissa on oman studiollisen avaaminen pääkaupunkiseudulle. Tila toimisi kohtaamispaikkana, jossa voi sovittaa mallikappaleita, osallistua työpajoihin ja verkostoitua muiden kestävästä arvosta kiinnostuneiden muotoilijoiden, ompelijoiden ja suunnittelijoiden kanssa.
 
-Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkityksellisyydestä käyttömukavuuteen asti. Tavoitteena ei ole täydellisyys, vaan rohkeus ja kehitys. Nimi RUMAT STUDIO viittaa juuri tähän: lapsen sallittuun keskeneräisyyteen, mutta tähdätä silti johonkin merkitykselliseen.`}
-  ;(()=>{const intro=$('#intro-text');if(intro)intro.innerHTML=parasToHTML(defaultContent.pitch)})()
+Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkityksellisyydestä käyttömukavuuteen asti. Tavoitteena ei ole täydellisyys, vaan rohkeus ja kehitys. Nimi RUMAT STUDIO viittaa juuri tähän: lapsen sallittuun keskeneräisyyteen, mutta tähdätä silti johonkin merkitykselliseen.`;
+    const intro=$('#intro-text'); if(!intro) return;
+    intro.innerHTML = s.trim().split(/\n\s*\n/).map(p=>`<p>${p}</p>`).join('');
+  })();
 
-  /* Koira-tarra lähde + fallback emoji */
-  ;(()=>{const dog=document.getElementById('dogSticker'); if(!dog) return; dog.src='assets/dog-sticker.png'; dog.onerror=()=>{dog.replaceWith(Object.assign(document.createElement('div'),{textContent:'🐶',style:'font-size:14vw;line-height:1'}));};})()
+  /* Koira tarran lähde (+emoji fallback) */
+  (function(){
+    const img=$('#dogSticker'); if(!img) return;
+    img.src='assets/dog-sticker.png';
+    img.onerror=()=>{const e=ca('div',{textContent:'🐶'}); e.style.cssText='font-size:14vw;line-height:1'; img.replaceWith(e);}
+  })();
 
-  /* Esittelypalkin oikean kuvan pehmeä laskeutuminen (ei sidota suoraan scrolliin) */
-  ;(()=> {
-    const copy = document.querySelector('.intro-copy');
-    const right = document.querySelector('.intro-img.right');
-    if(!copy || !right) return;
-    let targetDy = 0, curDy = 0, animId=0;
-
-    function computeTarget(){
-      const singleCol = matchMedia('(max-width: 900px)').matches;
-      if (singleCol){ targetDy = 0; return; }
-      const textH = copy.offsetHeight;
-      const imgH  = right.offsetHeight;
-      targetDy = Math.max(0, textH - imgH);
+  /* Esittelypalkin oikea kuva laskee pehmeästi tekstin mukaan */
+  (function(){
+    const copy=document.querySelector('.intro-copy');
+    const right=document.querySelector('.intro-img.right');
+    if(!copy||!right) return;
+    let target=0, val=0, raf=0;
+    function measure(){
+      if (matchMedia('(max-width:900px)').matches){ target=0; return; }
+      const th=copy.offsetHeight, ih=right.offsetHeight;
+      target=Math.max(0, th-ih);
     }
-    function loop(){
-      const alpha = 0.18;
-      curDy += (targetDy - curDy) * alpha;
-      right.style.transform = `translate3d(0, ${curDy}px, 0)`;
-      if (Math.abs(targetDy - curDy) > 0.35) animId=requestAnimationFrame(loop);
-      else animId=0;
+    function step(){
+      raf=0;
+      val += (target-val)*0.18;
+      right.style.transform=`translate3d(0,${val}px,0)`;
+      if(Math.abs(target-val)>0.35) raf=requestAnimationFrame(step);
     }
-    function kick(){ if(!animId) animId=requestAnimationFrame(loop) }
+    function kick(){ if(!raf) raf=requestAnimationFrame(step); }
+    new ResizeObserver(()=>{measure();kick();}).observe(copy);
+    new ResizeObserver(()=>{measure();kick();}).observe(right);
+    window.addEventListener('resize', ()=>{measure();kick();},{passive:true});
+    measure(); kick();
+  })();
 
-    const ro = new ResizeObserver(()=>{ computeTarget(); kick(); });
-    ro.observe(copy); ro.observe(right);
-    window.addEventListener('resize', ()=>{ computeTarget(); kick(); }, {passive:true});
-    computeTarget(); kick();
-  })()
-
-  /* Jätti-intro verhot – hieman pidempi ja sulkeutuu */
-  ;(()=>{const KEY='rumat.introShown.session';const seen=sessionStorage.getItem(KEY)==='1';const overlay=document.getElementById('introOverlay');const out=document.getElementById('introText')
-    if(seen||!overlay||!out){return}
-    const L1='RUMAT', L2='STUDIO', TAG='LIIAN RUMAT OLLAKSEEN TOTTA'
-    const rot1=[-1,+2,-2,+1,0], rot2=[-1,0,+1,+1,0,-2]
-    function buildLine(text,rots,cls){const line=document.createElement('span');line.className='line '+cls;Array.from(text).forEach((ch,i)=>{const s=document.createElement('span');s.className='ch';s.textContent=ch;const base=(rots&&i<rots.length)?rots[i]:0;const jitter=(Math.random()*1.2-0.6);s.style.setProperty('--rot',(base+jitter)+'deg');if(ch==='O')s.style.transform+=' scaleX(0.98)';line.appendChild(s)});return line}
-    overlay.style.display='flex';
-    out.innerHTML=''; const line1=buildLine(L1,rot1,'line1'); const br=document.createElement('br'); const line2=buildLine(L2,rot2,'line2'); const tag=document.createElement('div'); tag.className='tagline'; tag.textContent=TAG; out.appendChild(line1); out.appendChild(br); out.appendChild(line2); out.appendChild(tag)
-    function fitLine(line){const avail=Math.min(window.innerWidth*0.96, 2600); line.style.setProperty('--fit','1'); const w=line.getBoundingClientRect().width||1; const scale=Math.max(0.6, Math.min(1.6, (avail/w)*0.995)); line.style.setProperty('--fit', String(scale)) }
-    const doFit=()=>{fitLine(line1);fitLine(line2)}
-    doFit(); window.addEventListener('resize',()=>{requestAnimationFrame(doFit)},{passive:true})
-    const chars=out.querySelectorAll('.ch');let t=0;chars.forEach(el=>{setTimeout(()=>el.classList.add('show'),t);t+=65});setTimeout(()=>tag.classList.add('show'),t+180);
-    function openCurtains(){overlay.classList.add('open');out.style.opacity='0';setTimeout(()=>{overlay.style.display='none'; sessionStorage.setItem(KEY,'1')}, 1000)}
-    setTimeout(openCurtains, t + 3600); overlay.addEventListener('click', openCurtains, {once:true});
-  })()
-
-  /* === SCENE CONTROLLER – aina aktiivinen (ei IO:ta) + nav-skip === */
-  ;(()=>{
+  /* ===== SCENE CONTROLLER ===== */
+  (function(){
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const HEADER = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64;
+
+    const HEADER = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'))||64;
     const sceneIntro = document.getElementById('scene-intro');
     const dogPanel   = sceneIntro?.querySelector('.panel-dog');
     const introPanel = sceneIntro?.querySelector('#mikaonrumat');
-
     const sceneDes   = document.getElementById('scene-designer');
     const maskSvg    = document.getElementById('designerMaskText');
     const photo      = document.getElementById('designerPhoto');
 
-    function vh(){ return (window.visualViewport?.height || window.innerHeight || 800); }
-    function stickyHeight(){ return Math.max(1, vh() - HEADER); }
+    function vvh(){ return (window.visualViewport?.height || window.innerHeight || 800); }
+    function stickyH(){ return Math.max(1, vvh() - HEADER); }
 
     const scenes=[];
-    function measureScene(sceneEl){
-      if(!sceneEl) return null;
-      const rectTop = sceneEl.offsetTop; // layout luetaan vain mittauksessa
-      const stick   = stickyHeight();
-      return { el: sceneEl, start: rectTop, stickyH: stick, total: Math.max(1, sceneEl.offsetHeight - stick) };
+    function measureScene(el){
+      if(!el) return null;
+      return {
+        el,
+        start: el.offsetTop,
+        stick: stickyH(),
+        total: Math.max(1, el.offsetHeight - stickyH())
+      };
     }
     function measureAll(){
       scenes.length=0;
       const a=measureScene(sceneIntro); if(a) scenes.push(a);
       const b=measureScene(sceneDes);   if(b) scenes.push(b);
     }
-    function clamp01(x){ return x<0?0:x>1?1:x }
-    function ease(p){ return p*p*p*(p*(6*p-15)+10) }
+    const clamp=(x)=>x<0?0:x>1?1:x;
+    const smoother=(p)=>p*p*p*(p*(6*p-15)+10);
 
-    // NAV SKIP: kun mennään valikosta, ohitetaan koira/hymiö varsinaisessa renderissä
-    let navSkip = null; // 'intro' | 'designer' | null
-    let scrollIdleTimer = 0;
-    function armIdleClear(){ clearTimeout(scrollIdleTimer); scrollIdleTimer=setTimeout(()=>navSkip=null,180); }
-
+    let navSkip=null; // 'intro' | 'designer' | null
     let raf=0;
-    function frame(){
+    function render(){
       raf=0;
-      const y = window.scrollY || window.pageYOffset || 0;
-      for (const s of scenes){
-        const raw = clamp01((y - s.start) / s.total);
-        const p   = navSkip==='intro' && s.el===sceneIntro ? 1
-                   : navSkip==='designer' && s.el===sceneDes ? 1
-                   : ease(raw);
+      const y=window.scrollY||0;
+      for(const s of scenes){
+        const raw=clamp((y - s.start)/s.total);
+        const p = (navSkip==='intro' && s.el===sceneIntro) ? 1 :
+                  (navSkip==='designer' && s.el===sceneDes) ? 1 : smoother(raw);
 
-        if (s.el === sceneIntro){
-          if (dogPanel){
-            const tx = -window.innerWidth * 1.05 * p;
-            dogPanel.style.transform = `translate3d(${tx}px,0,0)`;
-            dogPanel.style.opacity   = (1 - p*1.1).toFixed(3);
-          }
-          if (introPanel){
-            const tx =  window.innerWidth * (1-p);
-            introPanel.style.transform = `translate3d(${tx}px,0,0)`;
-            introPanel.style.opacity   = Math.min(1, p*1.15).toFixed(3);
-          }
+        if(s.el===sceneIntro && dogPanel && introPanel){
+          const txDog = -window.innerWidth*1.05*p;
+          const txIntro = window.innerWidth*(1-p);
+          dogPanel.style.transform = `translate3d(${txDog}px,0,0)`;
+          dogPanel.style.opacity   = (1 - p*1.1).toFixed(3);
+          introPanel.style.transform=`translate3d(${txIntro}px,0,0)`;
+          introPanel.style.opacity = Math.min(1,p*1.15).toFixed(3);
         }
 
-        if (s.el === sceneDes){
-          const e = (navSkip==='designer') ? 1 : (p*(2-p));
+        if(s.el===sceneDes){
+          const e = (navSkip==='designer') ? 1 : p*(2-p);
           if(maskSvg){
-            const ty = s.stickyH * 0.6 * e; // liu'uta pois
-            maskSvg.style.transform = `translate3d(0, ${ty}px, 0)`;
+            const ty=s.stick*0.6*e;
+            maskSvg.style.transform=`translate3d(0,${ty}px,0)`;
           }
           if(photo){
-            const sscale = 0.985 + 0.045*e;
-            photo.style.transform = `scale(${sscale})`;
+            const sc=0.985+0.045*e;
+            photo.style.transform=`scale(${sc})`;
           }
         }
       }
     }
-    function request(){ if(!raf) raf = requestAnimationFrame(frame) }
+    function request(){ if(!raf) raf=requestAnimationFrame(render); }
+    function renderNow(){ cancelAnimationFrame(raf); raf=0; render(); }
 
-    window.addEventListener('scroll', ()=>{ request(); armIdleClear(); }, {passive:true});
-    window.visualViewport?.addEventListener('resize', ()=>{ measureAll(); request(); }, {passive:true});
-    window.addEventListener('resize', ()=>{ measureAll(); request(); }, {passive:true});
-    window.addEventListener('load', ()=>{ measureAll(); request(); }, {once:true});
-    setTimeout(()=>{ measureAll(); request(); }, 0);
+    window.__sceneNavSkip = (which)=>{ navSkip=which; renderNow(); };
+    window.__sceneMeasure = ()=>{ measureAll(); renderNow(); };
 
-    // Julkinen apu ankkurihyppyjä varten
-    window.__sceneNavSkip = (which)=>{ navSkip = which; request(); armIdleClear(); }
-    window.__sceneMeasure = ()=>{ measureAll(); request(); }
-  })()
+    function onResize(){ measureAll(); request(); }
+    window.addEventListener('resize', onResize, {passive:true});
+    window.visualViewport?.addEventListener('resize', onResize, {passive:true});
+    window.addEventListener('orientationchange', onResize, {passive:true});
+    window.addEventListener('scroll', request, {passive:true});
 
-  /* Kaaviot (expander) – pelkistetty */
-  ;(()=>{const grid=$('#patternsGrid');let selectedId=null;let expander=null;let current=null;let imgIdx=0;
-    const fmtEUR=x=>new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x)
-    const IMG=(id,n=1)=>`assets/patterns/${id}-${n}.jpg`
+    document.addEventListener('DOMContentLoaded', ()=>{ measureAll(); renderNow(); }); // ⟵ tärkeä: käynnistä heti
+  })();
+
+  /* Kaaviot (ytimekkäänä) */
+  (function(){
+    const grid=$('#patternsGrid'); if(!grid) return;
+    const IMG=(id,n=1)=>`assets/patterns/${id}-${n}.jpg`;
     const DATA=[
-      {id:'dummy-kaava',name:'Dummy kaava',price:0.01,sizes:'PDF',blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla.',images:[IMG('dummy-kaava',1),IMG('dummy-kaava',2)],isDummy:true,deliverable:true,file:'auto-dummy'},
-      {id:'ilmainen-ohje',name:'Ilmainen ohje',price:0.00,sizes:'One size',blurb:'Täysin ilmainen kokeiltava ohje (dummy-PDF).',images:[IMG('ilmainen-ohje',1)],deliverable:true,file:'auto-dummy'},
+      {id:'dummy-kaava',name:'Dummy kaava',price:0.01,sizes:'PDF',blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla.',images:[IMG('dummy-kaava',1),IMG('dummy-kaava',2)],isDummy:true,deliverable:true},
+      {id:'ilmainen-ohje',name:'Ilmainen ohje',price:0.00,sizes:'One size',blurb:'Täysin ilmainen kokeiltava ohje (dummy-PDF).',images:[IMG('ilmainen-ohje',1)],deliverable:true},
       {id:'takki',name:'Takki',price:0.01,sizes:'XS–XL',blurb:'Tulossa pian.',images:[IMG('takki',1)],deliverable:false},
       {id:'laukku',name:'Laukku',price:0.01,sizes:'One size',blurb:'Sling-laukku kaava (PDF).',images:[IMG('laukku',1),IMG('laukku',2)],deliverable:false},
       {id:'usva-paita',name:'Usva paita',price:0.01,sizes:'XS–XL',blurb:'Rento paita raglan-hihoilla.',images:[IMG('usva-paita',1),IMG('usva-paita',2)],deliverable:false},
@@ -498,62 +386,53 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       {id:'sukat',name:'Sukat',price:0.01,sizes:'36–46',blurb:'Vahvistettu kantapää.',images:[IMG('sukat',1),IMG('sukat',2)],deliverable:false},
       {id:'villapaita',name:'Villapaita',price:0.01,sizes:'XS–XXL',blurb:'Klassinen pyöröneule.',images:[IMG('villapaita',1),IMG('villapaita',2)],deliverable:false},
     ];
-    window.KAAVIOT = DATA.slice();
+    DATA.forEach(p=>{
+      const tile=ca('article',{className:'tile card','data-id':p.id});
+      const img=ca('img',{alt:p.name,loading:'lazy',decoding:'async'});
+      img.src=(p.images||[])[0]||'assets/placeholder.jpg';
+      img.onerror=()=>{img.src='assets/placeholder.jpg'};
+      const cap=ca('div',{className:'tile-caption'});
+      const deliver=!!(p.deliverable||p.isDummy);
+      cap.textContent=p.name + (!deliver?' · Tulossa':(p.price===0?' · Ilmainen':''));
+      tile.append(img,cap);
+      grid.appendChild(tile);
+    });
+  })();
 
-    DATA.forEach(p=>{const tile=document.createElement('article');tile.className='tile card';tile.setAttribute('data-id',p.id);const img=createImg((p.images||[])[0],p.name);const cap=document.createElement('div');cap.className='tile-caption';const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));const labelSuffix=!deliver?' · Tulossa':(p.price===0?' · Ilmainen':'');cap.textContent=p.name+labelSuffix;tile.appendChild(img);tile.appendChild(cap);grid.appendChild(tile)})
-
-    function columns(){const cs=getComputedStyle(grid).gridTemplateColumns;return Math.max(1,cs.split(' ').length)}
-    function insertAfterRow(tileEl){const tiles=Array.from(grid.querySelectorAll('.tile, .expander'));const only=tiles.filter(n=>n.classList.contains('tile'));const idx=only.indexOf(tileEl);const cols=columns();const rowEnd=Math.min(only.length-1,Math.floor(idx/cols)*cols+(cols-1));const after=only[rowEnd];grid.insertBefore(expander,after.nextSibling)}
-    function buildExpander(){expander=el('div',{class:'expander'});const top=el('div',{class:'ex-top'},el('div',{id:'exTitle',class:'font-semibold'},''),el('button',{id:'exClose',class:'px-3 py-1 rounded border border-[rgba(0,0,0,.15)]'},'pienennä'));const row=el('div',{class:'ex-row'},el('div',{class:'ex-view'},createImg('assets/placeholder.jpg','Kaava'),el('button',{id:'exPrev',class:'ex-prev'},'◀'),el('button',{id:'exNext',class:'ex-next'},'▶')),el('div',{class:'ex-info'},el('h3',{id:'exName',class:'text-2xl mb-2'},''),el('div',{style:'height:8px'}),el('p',{id:'exBlurb',class:'opacity-80 mb-2 normalcase'},''),el('div',{class:'mb-2'},el('span',{class:'font-semibold'},'Koot: '),el('span',{id:'exSizes'},'')),el('div',{id:'exPrice',class:'text-xl font-bold mb-4'},''),el('div',{id:'exActions'})));expander.appendChild(top);expander.appendChild(row);expander.querySelector('#exPrev').addEventListener('click',()=>nav(-1),{passive:true});expander.querySelector('#exNext').addEventListener('click',()=>nav(+1),{passive:true});expander.querySelector('#exClose').addEventListener('click',()=>clearSelection(),{passive:true})}
-    buildExpander()
-    function openFor(p,tileEl){current=p;imgIdx=0;expander.querySelector('#exTitle').textContent=p.name;expander.querySelector('#exName').textContent=p.name;expander.querySelector('#exBlurb').textContent=p.blurb||'';expander.querySelector('#exSizes').textContent=p.sizes||'';expander.querySelector('#exPrice').textContent=p.price===0?'ILMAINEN':fmtEUR(p.price||0);const exImg=expander.querySelector('.ex-view img');setSafeImgSrc(exImg,(p.images||[])[0]);const actions=expander.querySelector('#exActions');actions.innerHTML='';const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));if(!deliver){actions.appendChild(el('span',{class:'inline-block px-4 py-2 rounded-full border border-[rgba(0,0,0,.15)]'},'Tulossa'))}else{const label='Lisää ostoskoriin'+(p.price===0?' (0,00 €)':'');const buyBtn=el('button',{id:'exBuy',class:'btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2'},label);buyBtn.onclick=()=>window.addToCart?window.addToCart(p.id):null;actions.appendChild(buyBtn)}insertAfterRow(tileEl);expander.scrollIntoView({block:'nearest',behavior:'smooth'})}
-    function nav(dir){if(!current)return;const imgs=current.images||[];imgIdx=imgs.length?(imgIdx+dir+imgs.length)%imgs.length:0;const exImg=expander.querySelector('.ex-view img');setSafeImgSrc(exImg,imgs[imgIdx])}
-    function markSelected(tile,on){tile.classList.toggle('tile--selected',!!on);tile.innerHTML='';const p=DATA.find(x=>x.id===tile.dataset.id);tile.appendChild(createImg((p.images||[])[0],p.name));const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));const capTxt=p.name+(!deliver?' · Tulossa':(p.price===0?' · Ilmainen':''));tile.appendChild(Object.assign(document.createElement('div'),{className:'tile-caption',textContent:capTxt}));if(on){const btn=Object.assign(document.createElement('button'),{className:'min-full',type:'button',textContent:'pienennä'});btn.addEventListener('click',e=>{e.stopPropagation();clearSelection()},{passive:true});tile.appendChild(btn)}}
-    function clearSelection(){if(!selectedId)return;const prev=grid.querySelector(`.tile[data-id="${selectedId}"]`);if(prev)markSelected(prev,false);if(expander.parentNode===grid)grid.removeChild(expander);selectedId=null;current=null;imgIdx=0}
-    function selectTile(tile){const id=tile.getAttribute('data-id');if(id===selectedId){clearSelection();return}clearSelection();selectedId=id;markSelected(tile,true);const p=DATA.find(x=>x.id===id);openFor(p,tile)}
-    grid.addEventListener('click',e=>{const tile=e.target.closest('.tile');if(!tile||!grid.contains(tile))return;selectTile(tile)},{passive:true})
-  })()
-
-  /* Ankkurit valikossa – SKIP efektit ankkurilla */
-  ;(()=> {
-    const HEADER = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64;
-    function vh(){ return (window.visualViewport?.height || window.innerHeight || 800); }
-    function stickyHeight(){ return Math.max(1, vh() - HEADER); }
-    function sceneProgressTop(sceneEl, progress){
-      const stick = stickyHeight();
-      const start = sceneEl.offsetTop;
-      const total = Math.max(1, sceneEl.offsetHeight - stick);
-      return start + progress * total;
-    }
-    function scrollToHash(hash){
-      if(!hash || hash==='#' || hash==='#etusivu'){ window.__sceneNavSkip(null); window.scrollTo({top:0,behavior:'smooth'}); return true; }
+  /* Ankkurinapit – skip-tila ja tarkka scrollaus */
+  (function(){
+    const HEADER = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'))||64;
+    const vh = ()=> (window.visualViewport?.height || window.innerHeight || 800);
+    const stickyH = ()=> Math.max(1, vh()-HEADER);
+    const scenePos = (sceneEl,progress)=>{
+      const start=sceneEl.offsetTop, total=Math.max(1, sceneEl.offsetHeight - stickyH());
+      return start + progress*total;
+    };
+    function go(hash){
+      if(!hash || hash==='#' || hash==='#etusivu'){ window.__sceneNavSkip?.(null); window.scrollTo({top:0,behavior:'smooth'}); return true; }
       if(hash==='#mikaonrumat'){
         const s=document.getElementById('scene-intro'); if(!s) return false;
-        window.__sceneNavSkip('intro'); // ohita koira
-        window.scrollTo({top:sceneProgressTop(s,1),behavior:'smooth'});
+        window.__sceneNavSkip?.('intro');
+        window.scrollTo({top:scenePos(s,1),behavior:'smooth'});
+        setTimeout(()=>window.__sceneMeasure?.(),10);
         return true;
       }
       if(hash==='#suunnittelija'){
         const s=document.getElementById('scene-designer'); if(!s) return false;
-        window.__sceneNavSkip('designer'); // ohita hymiö
-        // pikkaisen sisään stickystä että näkyy heti
-        window.scrollTo({top:sceneProgressTop(s,0.08),behavior:'smooth'});
+        window.__sceneNavSkip?.('designer');
+        window.scrollTo({top:scenePos(s,0.08),behavior:'smooth'});
+        setTimeout(()=>window.__sceneMeasure?.(),10);
         return true;
       }
-      const el=document.querySelector(hash); if(el){ window.__sceneNavSkip(null); el.scrollIntoView({behavior:'smooth',block:'start'}); return true; }
+      const el=document.querySelector(hash); if(el){ window.__sceneNavSkip?.(null); el.scrollIntoView({behavior:'smooth'}); return true; }
       return false;
     }
     document.getElementById('mainNav')?.addEventListener('click',e=>{
       const a=e.target.closest('a[href^="#"]'); if(!a) return;
-      const h=a.getAttribute('href'); if(scrollToHash(h)){ e.preventDefault(); history.pushState(null,'',h); }
-    }, {passive:true});
-    // jos on erillinen menulokerikko – sama idea (jos käytössä)
-    document.getElementById('menuDrawer')?.addEventListener('click',e=>{
-      const a=e.target.closest('a[href^="#"]'); if(!a) return;
-      const h=a.getAttribute('href'); if(scrollToHash(h)){ e.preventDefault(); document.getElementById('menuDrawer').classList.remove('open'); document.getElementById('openMenu')?.setAttribute('aria-expanded','false'); history.pushState(null,'',h); }
-    }, {passive:true});
-    window.addEventListener('load', ()=>{ window.__sceneMeasure?.(); const ok=scrollToHash(location.hash); if(!ok) window.__sceneNavSkip(null); }, {once:true});
-    window.addEventListener('hashchange', ()=>{ scrollToHash(location.hash) }, {passive:true});
+      const h=a.getAttribute('href'); if(go(h)){ e.preventDefault(); history.pushState(null,'',h); }
+    },{passive:true});
+    window.addEventListener('hashchange', ()=>{ go(location.hash) }, {passive:true});
+    document.addEventListener('DOMContentLoaded', ()=>{ go(location.hash) });
   })();
   </script>
 </body>
