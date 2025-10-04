@@ -72,8 +72,15 @@
     .drawer.open{display:block}
     .drawer>.panel{position:absolute;top:0;bottom:0;width:min(640px,94vw);background:var(--ivory);box-shadow:0 10px 30px rgba(0,0,0,.2);overflow:auto}
 
-    /* HERO */
-    .hero{position:relative;height:calc(100dvh - var(--header-h));display:grid;place-items:center;overflow:hidden;background:#000}
+    /* HERO – ei zoomausta mobiilissa */
+    .hero{
+      position:relative;
+      height: calc(var(--vhpx, 100dvh) - var(--header-h));
+      display:grid;place-items:center;overflow:hidden;background:#000;
+    }
+    @media (max-width:900px){
+      .hero{ height: calc(100svh - var(--header-h)); }
+    }
     .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
     .svg-logo{--logo-color:var(--light-blue);display:inline-block;width:9rem;height:9rem;background-color:var(--logo-color);-webkit-mask:url('assets/logo.svg') no-repeat center/contain;mask:url('assets/logo.svg') no-repeat center/contain}
     @media (min-width:640px){.svg-logo{width:11rem;height:11rem}}
@@ -115,9 +122,36 @@
     .expander{grid-column:1/-1;background:var(--ivory);border-radius:16px;border:1px solid rgba(0,0,0,.12);overflow:hidden}
     .ex-row{display:grid;grid-template-columns:1fr;min-height:260px}
     @media (min-width:1024px){.ex-row{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
-    .ex-view{position:relative;background:#000;min-height:min(80vh,1600px);min-width:0}
-    .ex-info{padding:1rem 1.1rem;overflow:auto;min-width:0;overflow-wrap:anywhere}
-    .ex-view img{width:100%;height:100%;object-fit:contain;background:#000;display:block}
+
+    /* ✨ Iso kuva – ei mustia palkkeja + mobiilissa neliö */
+    .ex-view{
+      position:relative;
+      background:transparent; /* pois musta tausta */
+      min-height:min(80vh,1600px);
+      min-width:0;
+    }
+    .ex-view img{
+      width:100%;
+      height:100%;
+      object-fit:contain;   /* desktop: contain */
+      background:transparent;
+      display:block;
+    }
+    @media (max-width:900px){
+      .ex-row{ grid-template-columns:1fr; }
+      .ex-view{
+        aspect-ratio: 1 / 1;  /* neliökehys */
+        min-height: 0;
+        height: auto;
+        background: transparent;
+      }
+      .ex-view img{
+        width:100%;
+        height:100%;
+        object-fit: cover;    /* täyttää neliön – ei palkkeja */
+      }
+    }
+
     .ex-prev,.ex-next{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;display:grid;place-items:center;border-radius:9999px;background:var(--ivory);border:1px solid rgba(0,0,0,.15);font-weight:800}
     .ex-prev{left:10px}.ex-next{right:10px}
     .ex-top{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.6rem .9rem;border-bottom:1px solid rgba(0,0,0,.1)}
@@ -141,7 +175,7 @@
     .panel-dog img.dog-sticker{width:clamp(72px,11vw,120px);height:auto;pointer-events:none}
 
     /* Suunnittelija – maski tekstipalstalle */
-    .designer-text-wrap{position:relative;overflow:hidden;background:var(--ivory)}
+    .designer-text-wrap{position:relative;overflow:hidden;background:var(--ivory);min-height:min(76vh,900px)}
     .designer-mask-svg{
       position:absolute;inset:-10% -10% -10% -10%;
       pointer-events:none;z-index:5;
@@ -356,6 +390,22 @@
 </div>
 
 <script>
+/* ===== Hero-korkeuden lukitus mobiilissa – ei zoomausta ===== */
+(function(){
+  const apply = ()=>{
+    const h = (window.visualViewport?.height || window.innerHeight);
+    if (window.innerWidth <= 900) {
+      document.documentElement.style.setProperty('--vhpx', h + 'px');
+    } else {
+      document.documentElement.style.removeProperty('--vhpx');
+    }
+  };
+  apply();
+  window.addEventListener('resize', apply, {passive:true});
+  window.visualViewport?.addEventListener('resize', apply, {passive:true});
+  window.addEventListener('orientationchange', apply, {passive:true});
+})();
+
 /* ===== Perus apurit ===== */
 const $=s=>document.querySelector(s);
 const ca=(t,attrs={})=>Object.assign(document.createElement(t),attrs);
@@ -367,7 +417,7 @@ function setSafeImgSrc(img, src) {
   img.onerror = function(){ this.onerror=null; this.src='assets/placeholder.jpg'; };
 }
 
-/* Brändi/valikko – ikonit takaisin */
+/* Brändi/valikko – ikonit ja responsiivisuus */
 (()=>{
   const container=$('#hdrRow'),brand=$('#brandBlock'),nav=$('#mainNav'),
         right=$('#rightBlock'),menuBtn=$('#openMenu'),cartIcon=$('#openCartIcon'),cartText=$('#openCartText');
@@ -500,7 +550,7 @@ window.KAAVIOT=[
   {id:'villapaita',name:'Villapaita',price:0.01,sizes:'XS–XXL',blurb:'Klassinen pyöröneule.',images:[IMG('villapaita',1),IMG('villapaita',2)],deliverable:false},
 ];
 
-/* Kaavaruudukko (vanhat toiminnot + placeholder-fallback) */
+/* Kaavaruudukko + expander + placeholder-fallback */
 (()=>{
   const grid=$('#patternsGrid'); if(!grid) return;
   let selectedId=null, expander=null, current=null, imgIdx=0;
@@ -603,6 +653,7 @@ window.KAAVIOT=[
     tile.innerHTML='';
     const p=DATA.find(x=>x.id===tile.dataset.id);
     const img=document.createElement('img'); img.alt=p.name; img.loading='lazy';
+    // Ruudukossa käytetään cover, fallback toimii
     setSafeImgSrc(img,(p.images||[])[0]);
     const cap=document.createElement('div'); cap.className='tile-caption';
     const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));
@@ -873,7 +924,7 @@ function sendConfirmationEmails(order){
     subject:'RUMAT STUDIO – tilausvahvistus',
     message:`Kiitos ostoksesta!\n\nTuotteet: ${itemsList}\nYhteensä: ${totalStr}\n\nAsiakastiedot:\n${addressBlock}\n\nDummy-kaava: ${base.dummy_link}`,
     ...base
-  }).then(()=>console.log('Vahvistus lähetetty asiakkaalle')).catch(err=>{console.error(err);alert('Sähköpostin lähetys (asiakas) epäonnistui.')});
+  }).catch(err=>{console.error(err);alert('Sähköpostin lähetys (asiakas) epäonnistui.')});
 
   window.emailjs.send(cfg.SERVICE_ID,cfg.TEMPLATE_ID,{
     to_email:anneEmail,
@@ -916,7 +967,7 @@ function sendConfirmationEmails(order){
     const totalH = Math.ceil(stick + transPx + extra + 1);
     sceneIntro.style.height = totalH + 'px';
 
-    return { el: sceneIntro, start: sceneIntro.offsetTop, stick, total: totalH - stick,
+    return { el: sceneIntro, start: sceneIntro.offsetTop, stick, total: Math.max(1,totalH - stick),
       intro: { transPx, extra, threshold: (totalH - stick) ? transPx / (totalH - stick) : 1 } };
   }
   function measureDesignerScene(){
@@ -931,7 +982,15 @@ function sendConfirmationEmails(order){
     const totalH = Math.ceil(stick + transPx + extra + 1);
     sceneDes.style.height = totalH + 'px';
 
-    return { el: sceneDes, start: sceneDes.offsetTop, stick, total: totalH - stick,
+    const isMobile = window.innerWidth <= 900;
+    const sx = isMobile ? 1.32 : 1.0;
+    const sy = isMobile ? 0.78 : 1.0;
+    if (maskSvg){
+      maskSvg.style.transform = `translate3d(0,0,0) scaleX(${sx}) scaleY(${sy})`;
+      maskSvg.style.opacity   = '1';
+    }
+
+    return { el: sceneDes, start: sceneDes.offsetTop, stick, total: Math.max(1,totalH - stick),
       des: { transPx, extra, threshold: (totalH - stick) ? transPx / (totalH - stick) : 1 } };
   }
   function measureAll(){
@@ -971,8 +1030,8 @@ function sendConfirmationEmails(order){
         }
       }
 
-      /* Scene: Designer (maski alas + release jotta kaikki näkyy) */
-      if(s.el===sceneDes && desPanel){
+      /* Scene: Designer (maski alas + release jotta koko teksti näkyy) */
+      if(s.el===sceneDes && desPanel && s.des){
         const tt = s.des.threshold, extra = s.des.extra;
         const isMobile = window.innerWidth <= 900;
         const sx = isMobile ? 1.32 : 1.0;
@@ -983,15 +1042,12 @@ function sendConfirmationEmails(order){
           let ty = s.stick * (isMobile ? 0.85 : 0.6) * f;
 
           if (maskSvg && maskWrap){
-            const wrapBB = maskWrap.getBoundingClientRect();
-            const maskBB = maskSvg.getBoundingClientRect();
-            const scaledMaskHeight = maskBB.height * sy;
-            const maxTy = Math.max(0, (wrapBB.height - scaledMaskHeight) - 12);
+            const wrapH = maskWrap.scrollHeight; // vakaa korkeus
+            const maskH = maskSvg.getBoundingClientRect().height * sy;
+            const maxTy = Math.max(0, (wrapH - maskH) - 12);
             ty = Math.min(ty, maxTy);
             maskSvg.style.transform = `translate3d(0,${Math.round(ty)}px,0) scaleX(${sx}) scaleY(${sy})`;
             maskSvg.style.opacity = '1';
-          } else if (maskSvg){
-            maskSvg.style.transform = `translate3d(0,${Math.round(ty)}px,0)`; maskSvg.style.opacity='1';
           }
 
           if (photo){ const sc = 0.985 + 0.045*f; photo.style.transform = `scale(${sc})`; }
@@ -1002,13 +1058,10 @@ function sendConfirmationEmails(order){
           desPanel.style.transform = `translate3d(0,${tyPanel}px,0)`;
 
           if (maskSvg && maskWrap){
-            const wrapBB = maskWrap.getBoundingClientRect();
-            const maskBB = maskSvg.getBoundingClientRect();
-            const scaledMaskHeight = maskBB.height * sy;
-            const maxTy = Math.max(0, (wrapBB.height - scaledMaskHeight) - 12);
+            const wrapH = maskWrap.scrollHeight;
+            const maskH = maskSvg.getBoundingClientRect().height * sy;
+            const maxTy = Math.max(0, (wrapH - maskH) - 12);
             maskSvg.style.transform = `translate3d(0,${Math.round(maxTy+24)}px,0) scaleX(${sx}) scaleY(${sy})`;
-            maskSvg.style.opacity = String(1 - r);
-          } else if (maskSvg){
             maskSvg.style.opacity = String(1 - r);
           }
 
@@ -1028,7 +1081,15 @@ function sendConfirmationEmails(order){
   window.visualViewport?.addEventListener('resize', onResize, {passive:true});
   window.addEventListener('orientationchange', onResize, {passive:true});
   window.addEventListener('scroll', req, {passive:true});
-  document.addEventListener('DOMContentLoaded', ()=>{ measureAll(); renderNow(); });
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const boot=()=>{ measureAll(); renderNow(); };
+    const photo=document.getElementById('designerPhoto');
+    if (photo){
+      if (photo.complete) boot();
+      else photo.addEventListener('load', boot, {once:true});
+    } else { boot(); }
+    if ('fonts' in document){ document.fonts.ready.then(()=>{ measureAll(); renderNow(); }); }
+  });
 })();
 
 /* Ankkurit: ohita efektien alku + mittaus */
