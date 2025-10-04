@@ -11,6 +11,7 @@
   <link rel="preload" as="image" href="assets/intro-right.jpg">
   <link rel="preload" as="image" href="assets/dog-sticker.png">
 
+  <!-- Montserrat & Tailwind -->
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -28,6 +29,7 @@
     h1,h2,h3,h4,h5,h6{font-weight:900!important;text-transform:uppercase;color:var(--deep-blue);letter-spacing:.02em;margin:0 0 .6rem}
     .normalcase{text-transform:none!important}
 
+    /* Header */
     header{background:var(--ivory);border-bottom:1px solid rgba(0,0,0,.08)}
     #hdrRow{position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center}
     #brandText{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:min(42vw,460px);color:var(--ink)}
@@ -41,7 +43,7 @@
 
     .btn{border-radius:9999px;padding:.6rem 1rem;border:1px solid rgba(0,0,0,.16);background:rgba(0,0,0,.04)}
 
-    /* HERO */
+    /* HERO (kuva staattinen, logo sykkii) */
     .hero{position:relative;height:calc(100dvh - var(--header-h));display:grid;place-items:center;overflow:hidden;background:#000}
     .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
     .svg-logo{--logo-color:var(--light-blue);display:inline-block;width:9rem;height:9rem;background-color:var(--logo-color);-webkit-mask:url('assets/logo.svg') no-repeat center/contain;mask:url('assets/logo.svg') no-repeat center/contain}
@@ -70,7 +72,7 @@
     .intro-copy p{margin:0 0 .8rem;line-height:1.6}
     @media (max-width:900px){.intro-grid{grid-template-columns:1fr}.intro-img{height: clamp(240px, 52vw, 360px);border-radius:14px;transform:none}}
 
-    /* Kaaviot */
+    /* Kaaviot – minimalistinen */
     .card{background:var(--ivory);border-radius:16px;border:1px solid rgba(0,0,0,.12);overflow:hidden}
     .pattern-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
     @media (min-width:768px){.pattern-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}}
@@ -78,17 +80,8 @@
     .tile:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.05)}
     .tile img{width:100%;height:100%;object-fit:cover;display:block}
     .tile-caption{position:absolute;left:0;right:0;bottom:0;padding:.45rem .65rem;background:linear-gradient(to top,rgba(0,0,0,.55),rgba(0,0,0,0));color:#fff;font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem}
-    .expander{grid-column:1/-1;background:var(--ivory);border-radius:16px;border:1px solid rgba(0,0,0,.12);overflow:hidden}
-    .ex-row{display:grid;grid-template-columns:1fr;min-height:260px}
-    @media (min-width:1024px){.ex-row{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
-    .ex-view{position:relative;background:#000;min-height:min(70vh,1200px)}
-    .ex-info{padding:1rem 1.1rem;overflow:auto}
-    .ex-view img{width:100%;height:100%;object-fit:contain;background:#000}
-    .ex-prev,.ex-next{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;display:grid;place-items:center;border-radius:9999px;background:var(--ivory);border:1px solid rgba(0,0,0,.15);font-weight:800}
-    .ex-prev{left:10px}.ex-next{right:10px}
-    .ex-top{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.6rem .9rem;border-bottom:1px solid rgba(0,0,0,.1)}
 
-    /* Footer */
+    /* Footer – iso logo */
     .footer-bar{position:relative;background:var(--olive);color:var(--ink)}
     .footer-grid{max-width:72rem;margin:0 auto;padding:1.5rem 1rem;display:grid;gap:1rem 2rem;align-items:start;grid-template-columns:1fr 1fr 1fr;grid-template-areas:"social contact logo"}
     .footer-logoBox{grid-area:logo;display:flex;justify-content:flex-end;align-items:flex-start;font-size:5.6rem;line-height:1}
@@ -104,11 +97,20 @@
     .panelCentered{display:grid;place-items:center}
     #scene-intro .panel-dog{z-index:2;transform:translate3d(0,0,0);opacity:1}
     #scene-intro .panel-intro{z-index:1;transform:translate3d(100%,0,0);opacity:0}
-    .panel-dog img.dog-sticker{width: clamp(80px, 14vw, 150px);height:auto;pointer-events:none}
+    .panel-dog img.dog-sticker{width: clamp(80px, 12vw, 140px);height:auto;pointer-events:none}
 
     /* Suunnittelija – maski vain tekstipalstalle */
     .designer-text-wrap{position:relative}
-    .designer-mask-svg{position:absolute;inset:0;pointer-events:none;z-index:5;display:block;width:100%;height:100%;will-change:transform;transform:translateZ(0)}
+    .designer-mask-svg{
+      position:absolute;inset:0;pointer-events:none;z-index:5;display:block;width:100%;height:100%;
+      will-change:transform;transform:translateZ(0);
+      /* Mahdollistaa skaalauksen siististi */
+      transform-box: fill-box; transform-origin: center top;
+    }
+    /* Mobiilissa leveämpi hymiö ja varmistetaan, että teksti vapautuu nopeasti */
+    @media (max-width:900px){
+      .designer-mask-svg{ transform: scaleX(1.18); }
+    }
 
     @media (prefers-reduced-motion:reduce){
       .scene{height:auto}.scene-sticky{position:relative;height:auto}
@@ -139,8 +141,8 @@
     </div>
   </header>
 
-  <!-- HERO -->
   <main class="pt-[64px]">
+    <!-- HERO -->
     <section id="etusivu" class="hero px-4">
       <img src="assets/hero.jpg" alt="RUMAT STUDIO hero" class="hero-img" onerror="this.onerror=null;this.src='assets/placeholder.jpg'">
       <span id="heroLogo" class="svg-logo logo-light logo-beat" role="img" aria-label="RUMAT STUDIO"></span>
@@ -197,8 +199,10 @@
                     <defs>
                       <mask id="smileyMaskText">
                         <rect x="0" y="0" width="100" height="100" fill="white"/>
+                        <!-- pystysilmät ylempänä ja korkeammat -->
                         <rect x="40" y="6" width="5" height="40" rx="2" fill="black"/>
                         <rect x="55" y="6" width="5" height="40" rx="2" fill="black"/>
+                        <!-- leveä hymy, kulmat korkealla -->
                         <path d="M28 56 C 44 92, 56 92, 72 56" fill="none" stroke="black" stroke-width="9" stroke-linecap="round"/>
                       </mask>
                     </defs>
@@ -215,6 +219,7 @@
       </div>
     </section>
 
+    <!-- FOOTER -->
     <footer id="yhteys" class="footer-bar">
       <div class="footer-grid">
         <div class="footer-social">
@@ -238,7 +243,7 @@
   </main>
 
   <script>
-  /* helpers */
+  /* ===== Helpers ===== */
   const $=s=>document.querySelector(s);
   const ca=(t,attrs={})=>Object.assign(document.createElement(t),attrs);
   (function(){const y=$('#year');if(y)y.textContent=new Date().getFullYear()})();
@@ -289,7 +294,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     measure(); kick();
   })();
 
-  /* ===== SCENE CONTROLLER ===== */
+  /* ===== SCENE CONTROLLER (koira→intro & suunnittelija maski) ===== */
   (function(){
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -327,6 +332,8 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     function render(){
       raf=0;
       const y=window.scrollY||0;
+      const isMobile = window.innerWidth <= 900;
+
       for(const s of scenes){
         const raw=clamp((y - s.start)/s.total);
         const p = (navSkip==='intro' && s.el===sceneIntro) ? 1 :
@@ -342,10 +349,12 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
         }
 
         if(s.el===sceneDes){
-          const e = (navSkip==='designer') ? 1 : p*(2-p);
+          // Mobiilissa nopeampi vapautus (accel 1.6) ja pidempi liike (0.9 * stick)
+          const accel = isMobile ? 1.6 : 1.0;
+          const e = (navSkip==='designer') ? 1 : Math.min(1, (p*(2-p))*accel);
           if(maskSvg){
-            const ty=s.stick*0.6*e;
-            maskSvg.style.transform=`translate3d(0,${ty}px,0)`;
+            const ty = (isMobile ? 0.9 : 0.6) * s.stick * e;
+            maskSvg.style.transform=`translate3d(0,${ty}px,0) ${isMobile ? 'scaleX(1.18)' : ''}`;
           }
           if(photo){
             const sc=0.985+0.045*e;
@@ -366,40 +375,55 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     window.addEventListener('orientationchange', onResize, {passive:true});
     window.addEventListener('scroll', request, {passive:true});
 
-    document.addEventListener('DOMContentLoaded', ()=>{ measureAll(); renderNow(); }); // ⟵ tärkeä: käynnistä heti
+    document.addEventListener('DOMContentLoaded', ()=>{ measureAll(); renderNow(); }); // käynnistä heti
   })();
 
-  /* Kaaviot (ytimekkäänä) */
+  /* ===== Patterns grid: älykäs kuvien asetus + placeholder ===== */
+  function setSmartImage(img, bases) {
+    const exts = ['.webp', '.jpg', '.jpeg', '.png', '.JPG', '.JPEG', '.PNG'];
+    const candidates = [];
+    (Array.isArray(bases) ? bases : [bases]).forEach(b => exts.forEach(e => candidates.push(b+e)));
+    let i = 0;
+    const tryNext = () => {
+      if (i >= candidates.length) { img.src = 'assets/placeholder.jpg'; return; }
+      const url = candidates[i++];
+      const probe = new Image();
+      probe.onload = () => { img.src = url; };
+      probe.onerror = tryNext;
+      probe.src = url;
+    };
+    tryNext();
+  }
+
   (function(){
-    const grid=$('#patternsGrid'); if(!grid) return;
-    const IMG=(id,n=1)=>`assets/patterns/${id}-${n}.jpg`;
+    const grid=document.querySelector('#patternsGrid'); if(!grid) return;
     const DATA=[
-      {id:'dummy-kaava',name:'Dummy kaava',price:0.01,sizes:'PDF',blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla.',images:[IMG('dummy-kaava',1),IMG('dummy-kaava',2)],isDummy:true,deliverable:true},
-      {id:'ilmainen-ohje',name:'Ilmainen ohje',price:0.00,sizes:'One size',blurb:'Täysin ilmainen kokeiltava ohje (dummy-PDF).',images:[IMG('ilmainen-ohje',1)],deliverable:true},
-      {id:'takki',name:'Takki',price:0.01,sizes:'XS–XL',blurb:'Tulossa pian.',images:[IMG('takki',1)],deliverable:false},
-      {id:'laukku',name:'Laukku',price:0.01,sizes:'One size',blurb:'Sling-laukku kaava (PDF).',images:[IMG('laukku',1),IMG('laukku',2)],deliverable:false},
-      {id:'usva-paita',name:'Usva paita',price:0.01,sizes:'XS–XL',blurb:'Rento paita raglan-hihoilla.',images:[IMG('usva-paita',1),IMG('usva-paita',2)],deliverable:false},
-      {id:'neule-panta',name:'Neule panta',price:0.01,sizes:'S–L',blurb:'Helppo aloittelijalle.',images:[IMG('neule-panta',1),IMG('neule-panta',2)],deliverable:false},
-      {id:'kauluri',name:'Kauluri',price:0.01,sizes:'One size',blurb:'Nopea viikonloppuprojekti.',images:[IMG('kauluri',1),IMG('kauluri',2)],deliverable:false},
-      {id:'pipo',name:'Pipo',price:0.01,sizes:'S–L',blurb:'Peruspipo.',images:[IMG('pipo',1),IMG('pipo',2)],deliverable:false},
-      {id:'lapaset',name:'Lapaset',price:0.01,sizes:'S–XL',blurb:'Tiivis peruslapanen.',images:[IMG('lapaset',1),IMG('lapaset',2)],deliverable:false},
-      {id:'sukat',name:'Sukat',price:0.01,sizes:'36–46',blurb:'Vahvistettu kantapää.',images:[IMG('sukat',1),IMG('sukat',2)],deliverable:false},
-      {id:'villapaita',name:'Villapaita',price:0.01,sizes:'XS–XXL',blurb:'Klassinen pyöröneule.',images:[IMG('villapaita',1),IMG('villapaita',2)],deliverable:false},
+      {id:'dummy-kaava',name:'Dummy kaava',price:0.01,sizes:'PDF',blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla.',imgBase:'assets/patterns/dummy-kaava-1',deliverable:true},
+      {id:'ilmainen-ohje',name:'Ilmainen ohje',price:0.00,sizes:'One size',blurb:'Täysin ilmainen kokeiltava ohje (dummy-PDF).',imgBase:'assets/patterns/ilmainen-ohje-1',deliverable:true},
+      {id:'takki',name:'Takki',price:0.01,sizes:'XS–XL',blurb:'Tulossa pian.',imgBase:'assets/patterns/takki-1',deliverable:false},
+      {id:'laukku',name:'Laukku',price:0.01,sizes:'One size',blurb:'Sling-laukku kaava (PDF).',imgBase:'assets/patterns/laukku-1',deliverable:false},
+      {id:'usva-paita',name:'Usva paita',price:0.01,sizes:'XS–XL',blurb:'Rento paita raglan-hihoilla.',imgBase:'assets/patterns/usva-paita-1',deliverable:false},
+      {id:'neule-panta',name:'Neule panta',price:0.01,sizes:'S–L',blurb:'Helppo aloittelijalle.',imgBase:'assets/patterns/neule-panta-1',deliverable:false},
+      {id:'kauluri',name:'Kauluri',price:0.01,sizes:'One size',blurb:'Nopea viikonloppuprojekti.',imgBase:'assets/patterns/kauluri-1',deliverable:false},
+      {id:'pipo',name:'Pipo',price:0.01,sizes:'S–L',blurb:'Peruspipo.',imgBase:'assets/patterns/pipo-1',deliverable:false},
+      {id:'lapaset',name:'Lapaset',price:0.01,sizes:'S–XL',blurb:'Tiivis peruslapanen.',imgBase:'assets/patterns/lapaset-1',deliverable:false},
+      {id:'sukat',name:'Sukat',price:0.01,sizes:'36–46',blurb:'Vahvistettu kantapää.',imgBase:'assets/patterns/sukat-1',deliverable:false},
+      {id:'villapaita',name:'Villapaita',price:0.01,sizes:'XS–XXL',blurb:'Klassinen pyöröneule.',imgBase:'assets/patterns/villapaita-1',deliverable:false},
     ];
+
     DATA.forEach(p=>{
       const tile=ca('article',{className:'tile card','data-id':p.id});
       const img=ca('img',{alt:p.name,loading:'lazy',decoding:'async'});
-      img.src=(p.images||[])[0]||'assets/placeholder.jpg';
-      img.onerror=()=>{img.src='assets/placeholder.jpg'};
+      setSmartImage(img, p.imgBase);
       const cap=ca('div',{className:'tile-caption'});
-      const deliver=!!(p.deliverable||p.isDummy);
-      cap.textContent=p.name + (!deliver?' · Tulossa':(p.price===0?' · Ilmainen':''));
+      const labelSuffix=!p.deliverable?' · Tulossa':(p.price===0?' · Ilmainen':'');
+      cap.textContent=p.name+labelSuffix;
       tile.append(img,cap);
       grid.appendChild(tile);
     });
   })();
 
-  /* Ankkurinapit – skip-tila ja tarkka scrollaus */
+  /* ===== Ankkurinapit – efektien skip ===== */
   (function(){
     const HEADER = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'))||64;
     const vh = ()=> (window.visualViewport?.height || window.innerHeight || 800);
