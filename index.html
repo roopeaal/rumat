@@ -107,8 +107,19 @@
 
     /* Suunnittelija – maski tekstipalstalle */
     .designer-text-wrap{position:relative}
-    .designer-mask-svg{position:absolute;inset:0;pointer-events:none;z-index:5;width:100%;height:100%;will-change:transform;transform:translateZ(0);transform-box:fill-box;transform-origin:center top}
-    @media (max-width:900px){.designer-mask-svg{transform:scaleX(1.14)}}
+    .designer-mask-svg{
+      position:absolute;inset:0;pointer-events:none;z-index:5;
+      width:100%;height:100%;
+      will-change:transform;transform:translateZ(0);
+      transform-box:fill-box;transform-origin:center top;
+    }
+    /* MOBIILI: leveämpi ja matalampi hymiö */
+    @media (max-width:900px){
+      .designer-mask-svg{
+        transform: scaleX(1.32) scaleY(0.78);
+        transform-origin:center top;
+      }
+    }
 
     @media (prefers-reduced-motion:reduce){
       .scene{height:auto}.scene-sticky{position:relative;height:auto}
@@ -197,8 +208,10 @@
                   <defs>
                     <mask id="smileyMaskText">
                       <rect x="0" y="0" width="100" height="100" fill="white"/>
+                      <!-- pystysilmät -->
                       <rect x="40" y="6" width="5" height="44" rx="2" fill="black"/>
                       <rect x="55" y="6" width="5" height="44" rx="2" fill="black"/>
+                      <!-- kaareva suu -->
                       <path d="M28 56 C 44 92, 56 92, 72 56" fill="none" stroke="black" stroke-width="9" stroke-linecap="round"/>
                     </mask>
                   </defs>
@@ -270,7 +283,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
 (()=>{
   const img=$('#dogSticker'); if(!img) return;
   setSafeImgSrc(img,'assets/dog-sticker.png');
-  img.onerror = function(){ // jos tarra puuttuu, korvaa emojilla
+  img.onerror = function(){
     const e=ca('div',{textContent:'🐶'}); e.style.cssText='font-size:12vw;line-height:1';
     img.replaceWith(e);
   };
@@ -301,7 +314,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   measure(); kick();
 })();
 
-/* Scenes (koira→intro “release” + suunnittelija maski) */
+/* Scenes (koira→intro & suunnittelija) dynaamisella pituudella */
 (()=>{
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -309,8 +322,11 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   const sceneIntro = document.getElementById('scene-intro');
   const dogPanel   = sceneIntro?.querySelector('.panel-dog');
   const introPanel = sceneIntro?.querySelector('#mikaonrumat');
+
   const sceneDes   = document.getElementById('scene-designer');
+  const desPanel   = sceneDes?.querySelector('#suunnittelija');
   const maskSvg    = document.getElementById('designerMaskText');
+  const maskWrap   = document.querySelector('.designer-text-wrap');
   const photo      = document.getElementById('designerPhoto');
 
   const smoother=(p)=>p*p*p*(p*(6*p-15)+10);
@@ -321,40 +337,47 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   let scenes=[];
   function measureIntroScene(){
     if(!sceneIntro || !introPanel) return null;
-
-    // mitataan intron todellinen korkeus TRANSFORMIT POIS päältä
-    const prevTransform = introPanel.style.transform;
-    introPanel.style.transform = 'none';
-    const contentH = introPanel.scrollHeight; // koko sisältö
-    introPanel.style.transform = prevTransform;
+    const prev = introPanel.style.transform; introPanel.style.transform='none';
+    const contentH = introPanel.scrollHeight;
+    introPanel.style.transform = prev;
 
     const stick = stickyH();
-
-    // Vaakasiirtymän “matka” pikseleinä ennen release-vaihetta
     const transPx = Math.max(0.28*window.innerWidth, 0.42*stick);
-
-    // Kuinka paljon sisältö ylittää sticky-ikkunan?
     const extra = Math.max(0, contentH - stick + 24);
-
-    // Kohtauksen kokonaiskorkeus = sticky + vaakasiirtymä + extra (jotta kaikki mahtuu)
     const totalH = Math.ceil(stick + transPx + extra + 1);
     sceneIntro.style.height = totalH + 'px';
 
-    // Palautetaan kontrolliluvut
     return {
-      el: sceneIntro,
-      start: sceneIntro.offsetTop,
-      stick,
+      el: sceneIntro, start: sceneIntro.offsetTop, stick,
       total: totalH - stick,
-      intro: { transPx, extra, threshold: transPx / (totalH - stick) }
+      intro: { transPx, extra, threshold: (totalH - stick) ? transPx / (totalH - stick) : 1 }
     };
   }
 
   function measureDesignerScene(){
-    if(!sceneDes) return null;
+    if(!sceneDes || !desPanel) return null;
+
+    // mitataan sisältö ilman transformia
+    const prev = desPanel.style.transform; desPanel.style.transform='none';
+    const contentH = desPanel.scrollHeight;
+    desPanel.style.transform = prev;
+
     const stick = stickyH();
-    const totalH = sceneDes.offsetHeight; // CSS asettaa perusrungon
-    return { el: sceneDes, start: sceneDes.offsetTop, stick, total: Math.max(1, totalH - stick) };
+
+    // maskin liu'un "vaihe" (kuinka pitkälle annetaan liukua ennen releasea)
+    const transPx = Math.max(0.32*stick, 0.24*window.innerWidth);
+
+    // jos sisältö korkeampi kuin sticky, varataan extraa release-vaiheeseen
+    const extra = Math.max(0, contentH - stick + 24);
+
+    const totalH = Math.ceil(stick + transPx + extra + 1);
+    sceneDes.style.height = totalH + 'px';
+
+    return {
+      el: sceneDes, start: sceneDes.offsetTop, stick,
+      total: totalH - stick,
+      des: { transPx, extra, threshold: (totalH - stick) ? transPx / (totalH - stick) : 1 }
+    };
   }
 
   function measureAll(){
@@ -370,19 +393,15 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     const W=window.innerWidth;
 
     for(const s of scenes){
-      // perusprosentti edistymisestä
       const raw=clamp((y - s.start)/s.total);
-
-      // jos suoraan skipataan navista, mennään loppuun
       const p = (navSkip==='intro' && s.el===sceneIntro) ? 1 :
                 (navSkip==='designer' && s.el===sceneDes) ? 1 : smoother(raw);
 
+      /* Scene: Intro (koira→intro + release) */
       if(s.el===sceneIntro && dogPanel && introPanel && s.intro){
-        const t = s.intro.threshold;         // osuus kokonaisesta matkasta, joka on vaakasiirtymää
-        const extra = s.intro.extra;
+        const t = s.intro.threshold, extra = s.intro.extra;
 
         if(raw <= t){
-          // VAIHE 1: vaakasuuntainen siirtymä (koira → intro)
           const f = smoother(raw / Math.max(t, 1e-6));
           const txDog   = Math.round(-W*1.05*f);
           const txIntro = Math.round(W*(1-f));
@@ -391,23 +410,69 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
           introPanel.style.transform = `translate3d(${txIntro}px,0,0)`;
           introPanel.style.opacity   = Math.min(1,f*1.15).toFixed(3);
         }else{
-          // VAIHE 2: “release” – liu’uta intro-paneelia pystysuunnassa ylös niin,
-          // että koko sisältö mahtuu näkyviin sticky-ikkunassa
           dogPanel.style.transform = `translate3d(${-W*1.05}px,0,0)`;
           dogPanel.style.opacity = '0';
-
           const r = smoother((raw - t) / Math.max(1 - t, 1e-6));
-          const ty = Math.round(-extra * r); // nosta ylös max. extra
+          const ty = Math.round(-extra * r);
           introPanel.style.transform = `translate3d(0,${ty}px,0)`;
           introPanel.style.opacity = '1';
         }
       }
 
-      if(s.el===sceneDes){
-        const e = (navSkip==='designer') ? 1 : p*(2-p);
-        const ty = Math.round(s.stick*(window.innerWidth<=900?0.85:0.6)*e);
-        if(maskSvg) { maskSvg.style.transform=`translate3d(0,${ty}px,0) ${window.innerWidth<=900 ? 'scaleX(1.14)' : ''}`; }
-        if(photo)   { const sc=0.985+0.045*e; photo.style.transform=`scale(${sc})`; }
+      /* Scene: Designer (maski alas + release jotta kaikki näkyy) */
+      if(s.el===sceneDes && desPanel){
+        const tt = s.des.threshold, extra = s.des.extra;
+
+        // Mobiilin skaala hymiölle (leveämpi, matalampi)
+        const isMobile = window.innerWidth <= 900;
+        const sx = isMobile ? 1.32 : 1.0;
+        const sy = isMobile ? 0.78 : 1.0;
+
+        if(raw <= tt){
+          // Vaihe 1: maskin alas-liuku
+          const f = smoother(raw / Math.max(tt,1e-6));
+          let ty = s.stick * (isMobile ? 0.85 : 0.6) * f;
+
+          if (maskSvg && maskWrap) {
+            const wrapBB = maskWrap.getBoundingClientRect();
+            const maskBB = maskSvg.getBoundingClientRect();
+            const scaledMaskHeight = maskBB.height * sy;
+            const maxTy = Math.max(0, (wrapBB.height - scaledMaskHeight) - 12);
+            ty = Math.min(ty, maxTy);
+            maskSvg.style.transform = `translate3d(0,${Math.round(ty)}px,0) scaleX(${sx}) scaleY(${sy})`;
+          } else if (maskSvg) {
+            maskSvg.style.transform = `translate3d(0,${Math.round(ty)}px,0)`;
+          }
+
+          // kuva kevyt scale
+          if (photo) {
+            const sc = 0.985 + 0.045*f;
+            photo.style.transform = `scale(${sc})`;
+          }
+
+          // release ei vielä: paneeli paikallaan
+          desPanel.style.transform = 'translate3d(0,0,0)';
+        } else {
+          // Vaihe 2: release — nostetaan koko sisältöä ylös, jotta koko teksti mahtuu
+          const r = smoother((raw - tt) / Math.max(1 - tt, 1e-6));
+          const tyPanel = Math.round(-extra * r);
+          desPanel.style.transform = `translate3d(0,${tyPanel}px,0)`;
+
+          // maski parkkeerataan alarajaan siististi
+          if (maskSvg && maskWrap) {
+            const wrapBB = maskWrap.getBoundingClientRect();
+            const maskBB = maskSvg.getBoundingClientRect();
+            const scaledMaskHeight = maskBB.height * sy;
+            const maxTy = Math.max(0, (wrapBB.height - scaledMaskHeight) - 12);
+            maskSvg.style.transform = `translate3d(0,${Math.round(maxTy)}px,0) scaleX(${sx}) scaleY(${sy})`;
+          }
+
+          // kuva jää lopputilaan
+          if (photo) {
+            const sc = 0.985 + 0.045; // maksimi
+            photo.style.transform = `scale(${sc})`;
+          }
+        }
       }
     }
   }
@@ -425,7 +490,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   document.addEventListener('DOMContentLoaded', ()=>{ measureAll(); renderNow(); });
 })();
 
-/* ====== VANHAT KAAVAT-TOIMINNOT TÄYSIN (placeholder-fallback lisätty) ====== */
+/* ====== VANHAT KAAVAT-TOIMINNOT (placeholder-fallback lisätty) ====== */
 function showToast(msg){alert(msg)}
 let CART=JSON.parse(localStorage.getItem('cart')||'{}');
 function saveCart(){localStorage.setItem('cart',JSON.stringify(CART));updateBadge()}
@@ -460,7 +525,7 @@ window.KAAVIOT=[
     tile.setAttribute('data-id',p.id);
     const img=document.createElement('img');
     img.alt=p.name; img.loading='lazy';
-    setSafeImgSrc(img, (p.images||[])[0]);                 // ← fallback
+    setSafeImgSrc(img, (p.images||[])[0]);
     const cap=document.createElement('div'); cap.className='tile-caption';
     const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));
     const labelSuffix=!deliver?' · Tulossa':(p.price===0?' · Ilmainen':'');
@@ -521,7 +586,7 @@ window.KAAVIOT=[
     expander.querySelector('#exPrice').textContent=p.price===0?'ILMAINEN':new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(p.price||0);
 
     const exImg=expander.querySelector('.ex-view img');
-    setSafeImgSrc(exImg, (p.images||[])[0]);               // ← fallback
+    setSafeImgSrc(exImg, (p.images||[])[0]);
 
     const actions=expander.querySelector('#exActions'); actions.innerHTML='';
     const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));
@@ -544,14 +609,14 @@ window.KAAVIOT=[
     const imgs=current.images||[];
     imgIdx=imgs.length?(imgIdx+dir+imgs.length)%imgs.length:0;
     const exImg=expander.querySelector('.ex-view img');
-    setSafeImgSrc(exImg, imgs[imgIdx]);                    // ← fallback
+    setSafeImgSrc(exImg, imgs[imgIdx]);
   }
   function markSelected(tile,on){
     tile.classList.toggle('tile--selected',!!on);
     tile.innerHTML='';
     const p=DATA.find(x=>x.id===tile.dataset.id);
     const img=document.createElement('img'); img.alt=p.name; img.loading='lazy';
-    setSafeImgSrc(img,(p.images||[])[0]);                  // ← fallback
+    setSafeImgSrc(img,(p.images||[])[0]);
     const cap=document.createElement('div'); cap.className='tile-caption';
     const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));
     const capTxt=p.name+(!deliver?' · Tulossa':(p.price===0?' · Ilmainen':'')); cap.textContent=capTxt;
