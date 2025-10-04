@@ -63,27 +63,26 @@
     .intro-copy p{margin:0 0 .8rem;line-height:1.6}
     @media (max-width:900px){.intro-grid{grid-template-columns:1fr}.intro-img{height:clamp(240px,52vw,360px);border-radius:14px;transform:none}}
 
-    /* Kaaviot + expander (mobiilissa 1 sarake) */
-    .pattern-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-    @media (max-width:640px){.pattern-grid{grid-template-columns:1fr;gap:10px}}
+    /* Kaaviot (vanha toiminta) */
+    .pattern-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
     @media (min-width:768px){.pattern-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}}
-    .tile{position:relative;cursor:pointer;aspect-ratio:1/1;display:block;transition:transform .12s linear,box-shadow .12s linear;will-change:transform}
-    .tile:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.05)}
+    .tile{position:relative;cursor:pointer;aspect-ratio:1/1;display:block;transition:transform .25s ease,box-shadow .25s ease;will-change:transform}
+    .tile:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+    .tile:active{transform:translateY(-1px)}
     .tile img{width:100%;height:100%;object-fit:cover;display:block}
     .tile-caption{position:absolute;left:0;right:0;bottom:0;padding:.45rem .65rem;background:linear-gradient(to top,rgba(0,0,0,.55),rgba(0,0,0,0));color:#fff;font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:.85rem}
-
+    .tile--selected{outline:2px solid var(--deep-blue)}
+    .min-full{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.04);color:var(--deep-blue);font-weight:800;text-decoration:underline}
+    .min-full:hover{background:rgba(0,0,0,.08)}
     .expander{grid-column:1/-1;background:var(--ivory);border-radius:16px;border:1px solid rgba(0,0,0,.12);overflow:hidden}
-    .ex-top{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.6rem .9rem;border-bottom:1px solid rgba(0,0,0,.1)}
     .ex-row{display:grid;grid-template-columns:1fr;min-height:260px}
     @media (min-width:1024px){.ex-row{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}}
-    .ex-view{position:relative;background:#000}
-    /* Mobiilissa kompakti ja joustava korkeus */
-    .ex-view{min-height:clamp(50vh, 66vw, 70vh)}
-    @media (min-width:640px){.ex-view{min-height:min(70vh,1200px)}}
+    .ex-view{position:relative;background:#000;min-height:min(80vh,1600px);min-width:0}
+    .ex-info{padding:1rem 1.1rem;overflow:auto;min-width:0;overflow-wrap:anywhere}
     .ex-view img{width:100%;height:100%;object-fit:contain;background:#000;display:block}
     .ex-prev,.ex-next{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;display:grid;place-items:center;border-radius:9999px;background:var(--ivory);border:1px solid rgba(0,0,0,.15);font-weight:800}
     .ex-prev{left:10px}.ex-next{right:10px}
-    .ex-info{padding:1rem 1.1rem;overflow:auto}
+    .ex-top{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.6rem .9rem;border-bottom:1px solid rgba(0,0,0,.1)}
 
     /* Footer */
     .footer-bar{background:var(--olive);color:var(--ink)}
@@ -236,10 +235,16 @@
 </main>
 
 <script>
-/* ===== Helpers ===== */
+/* ===== Helpers & minimal ostoskori ===== */
 const $=s=>document.querySelector(s);
 const ca=(t,attrs={})=>Object.assign(document.createElement(t),attrs);
 (()=>{const y=$('#year');if(y)y.textContent=new Date().getFullYear()})();
+function showToast(msg){alert(msg)}
+let CART=JSON.parse(localStorage.getItem('cart')||'{}');
+function saveCart(){localStorage.setItem('cart',JSON.stringify(CART));updateBadge()}
+function updateBadge(){const n=Object.values(CART).reduce((a,b)=>a+b,0);const tx=$('#cartCountText');if(tx)tx.textContent=n?`(${n})`:''}
+function addToCart(id){CART[id]=(CART[id]||0)+1;saveCart();showToast('Lisätty ostoskoriin')}
+updateBadge();
 
 /* Intro teksti */
 (()=>{
@@ -255,7 +260,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   const intro=$('#intro-text'); if(intro) intro.innerHTML=s.trim().split(/\n\s*\n/).map(p=>`<p>${p}</p>`).join('');
 })();
 
-/* Koira tarra (pienempi) */
+/* Koira tarra */
 (()=>{
   const img=$('#dogSticker'); if(!img) return;
   img.src='assets/dog-sticker.png';
@@ -357,83 +362,94 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   document.addEventListener('DOMContentLoaded', ()=>{ measureAll(); renderNow(); });
 })();
 
-/* ===== Kaaviot: älykäs kuvien lataus + EXPANDER ===== */
-function setSmartImage(img,bases){
-  const exts=['.webp','.jpg','.jpeg','.png','.JPG','.JPEG','.PNG'];
-  const c=[];(Array.isArray(bases)?bases:[bases]).forEach(b=>exts.forEach(e=>c.push(b+e)));
-  let i=0;const next=()=>{ if(i>=c.length){img.src='assets/placeholder.jpg';return;}
-    const url=c[i++]; const p=new Image(); p.onload=()=>img.src=url; p.onerror=next; p.src=url; }; next();
-}
+/* ====== VANHAT KAAVAT-TOIMINNOT TÄYSIN PALAUTETTUNA ====== */
 
+/* Data + apurit kuten alkuperäisessä */
+const IMG=(id,n=1)=>`assets/patterns/${id}-${n}.jpg`;
+window.KAAVIOT=[
+  {id:'dummy-kaava',name:'Dummy kaava',price:0.01,sizes:'PDF',blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla.',images:[IMG('dummy-kaava',1),IMG('dummy-kaava',2)],isDummy:true,deliverable:true,file:'auto-dummy'},
+  {id:'ilmainen-ohje',name:'Ilmainen ohje',price:0.00,sizes:'One size',blurb:'Täysin ilmainen kokeiltava ohje (dummy-PDF).',images:[IMG('ilmainen-ohje',1)],deliverable:true,file:'auto-dummy'},
+  {id:'takki',name:'Takki',price:0.01,sizes:'XS–XL',blurb:'Työn alla – pian saatavilla.',images:[IMG('takki',1)],deliverable:false},
+  {id:'laukku',name:'Laukku',price:0.01,sizes:'One size',blurb:'Sling-laukku kaava (PDF).',images:[IMG('laukku',1),IMG('laukku',2)],deliverable:false},
+  {id:'usva-paita',name:'Usva paita',price:0.01,sizes:'XS–XL',blurb:'Rento paita raglan-hihoilla.',images:[IMG('usva-paita',1),IMG('usva-paita',2)],deliverable:false},
+  {id:'neule-panta',name:'Neule panta',price:0.01,sizes:'S–L',blurb:'Helppo aloittelijalle.',images:[IMG('neule-panta',1),IMG('neule-panta',2)],deliverable:false},
+  {id:'kauluri',name:'Kauluri',price:0.01,sizes:'One size',blurb:'Nopea viikonloppuprojekti.',images:[IMG('kauluri',1),IMG('kauluri',2)],deliverable:false},
+  {id:'pipo',name:'Pipo',price:0.01,sizes:'S–L',blurb:'Peruspipo, selkeä ohje.',images:[IMG('pipo',1),IMG('pipo',2)],deliverable:false},
+  {id:'lapaset',name:'Lapaset',price:0.01,sizes:'S–XL',blurb:'Tiivis peruslapanen.',images:[IMG('lapaset',1),IMG('lapaset',2)],deliverable:false},
+  {id:'sukat',name:'Sukat',price:0.01,sizes:'36–46',blurb:'Vahvistettu kantapää.',images:[IMG('sukat',1),IMG('sukat',2)],deliverable:false},
+  {id:'villapaita',name:'Villapaita',price:0.01,sizes:'XS–XXL',blurb:'Klassinen pyöröneule.',images:[IMG('villapaita',1),IMG('villapaita',2)],deliverable:false},
+];
+
+/* Vanha expander-koodi 1:1-henkisesti */
 (()=>{
-  const grid=$('#patternsGrid'); if(!grid) return;
+  const grid=$('#patternsGrid');
+  if(!grid) return;
 
-  const DATA=[
-    {id:'dummy-kaava',name:'Dummy kaava',price:0.01,sizes:'PDF',blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla.',imgBase:'assets/patterns/dummy-kaava-1',images:['assets/patterns/dummy-kaava-1','assets/patterns/dummy-kaava-2'],deliverable:true},
-    {id:'ilmainen-ohje',name:'Ilmainen ohje',price:0.00,sizes:'One size',blurb:'Täysin ilmainen kokeiltava ohje (dummy-PDF).',imgBase:'assets/patterns/ilmainen-ohje-1',images:['assets/patterns/ilmainen-ohje-1'],deliverable:true},
-    {id:'takki',name:'Takki',price:0.01,sizes:'XS–XL',blurb:'Tulossa pian.',imgBase:'assets/patterns/takki-1',images:['assets/patterns/takki-1'],deliverable:false},
-    {id:'laukku',name:'Laukku',price:0.01,sizes:'One size',blurb:'Sling-laukku kaava (PDF).',imgBase:'assets/patterns/laukku-1',images:['assets/patterns/laukku-1','assets/patterns/laukku-2'],deliverable:false},
-    {id:'usva-paita',name:'Usva paita',price:0.01,sizes:'XS–XL',blurb:'Rento paita.',imgBase:'assets/patterns/usva-paita-1',images:['assets/patterns/usva-paita-1','assets/patterns/usva-paita-2'],deliverable:false},
-    {id:'neule-panta',name:'Neule panta',price:0.01,sizes:'S–L',blurb:'Helppo aloittelijalle.',imgBase:'assets/patterns/neule-panta-1',images:['assets/patterns/neule-panta-1'],deliverable:false},
-    {id:'kauluri',name:'Kauluri',price:0.01,sizes:'One size',blurb:'Nopea viikonloppu.',imgBase:'assets/patterns/kauluri-1',images:['assets/patterns/kauluri-1'],deliverable:false},
-    {id:'pipo',name:'Pipo',price:0.01,sizes:'S–L',blurb:'Peruspipo.',imgBase:'assets/patterns/pipo-1',images:['assets/patterns/pipo-1'],deliverable:false},
-    {id:'lapaset',name:'Lapaset',price:0.01,sizes:'S–XL',blurb:'Tiivis peruslapanen.',imgBase:'assets/patterns/lapaset-1',images:['assets/patterns/lapaset-1'],deliverable:false},
-    {id:'sukat',name:'Sukat',price:0.01,sizes:'36–46',blurb:'Vahvistettu kantapää.',imgBase:'assets/patterns/sukat-1',images:['assets/patterns/sukat-1'],deliverable:false},
-    {id:'villapaita',name:'Villapaita',price:0.01,sizes:'XS–XXL',blurb:'Klassikko.',imgBase:'assets/patterns/villapaita-1',images:['assets/patterns/villapaita-1'],deliverable:false},
-  ];
+  let selectedId=null;
+  let expander=null;
+  let current=null;
+  let imgIdx=0;
+  const DATA=window.KAAVIOT;
 
-  // Render tiles
+  // Ruutuun kortit
   DATA.forEach(p=>{
-    const tile=ca('article',{className:'tile card','data-id':p.id});
-    const img=ca('img',{alt:p.name,loading:'lazy',decoding:'async'}); setSmartImage(img,p.imgBase);
-    const cap=ca('div',{className:'tile-caption'});
-    const suffix=!p.deliverable?' · Tulossa':(p.price===0?' · Ilmainen':''); cap.textContent=p.name+suffix;
-    tile.append(img,cap); grid.appendChild(tile);
+    const tile=document.createElement('article');
+    tile.className='tile card';
+    tile.setAttribute('data-id',p.id);
+    const img=document.createElement('img'); img.alt=p.name; img.loading='lazy';
+    img.src=(p.images||[])[0]||'assets/placeholder.jpg';
+    const cap=document.createElement('div'); cap.className='tile-caption';
+    const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));
+    const labelSuffix=!deliver?' · Tulossa':(p.price===0?' · Ilmainen':'');
+    cap.textContent=p.name+labelSuffix;
+    tile.append(img,cap);
+    grid.appendChild(tile);
   });
 
-  // Luotettava sarakemäärä: lasketaan ensimmäisen rivin kortit offsetTopin avulla
-  function getCols(){
-    const tiles=[...grid.querySelectorAll('.tile')];
-    if(!tiles.length) return 1;
-    const top0=tiles[0].offsetTop;
-    let count=0;
-    for(const t of tiles){ if(t.offsetTop!==top0) break; count++; }
-    return Math.max(1,count);
+  function columns(){
+    const cs=getComputedStyle(grid).gridTemplateColumns;
+    return Math.max(1, cs.split(' ').length);
   }
-
-  // Expander
-  let expander=null, current=null, imgIdx=0, selectedTile=null;
-  const fmtEUR=x=>new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
-
+  function insertAfterRow(tileEl){
+    const tiles=[...grid.querySelectorAll('.tile, .expander')];
+    const only=tiles.filter(n=>n.classList.contains('tile'));
+    const idx=only.indexOf(tileEl);
+    const cols=columns();
+    const rowEndIdx=Math.min(only.length-1, Math.floor(idx/cols)*cols+(cols-1));
+    const after=only[rowEndIdx];
+    grid.insertBefore(expander, after.nextSibling);
+  }
   function buildExpander(){
-    expander=ca('div',{className:'expander'});
-    const top=ca('div',{className:'ex-top'});
-    top.append(ca('div',{id:'exTitle',className:'font-semibold'}), ca('button',{id:'exClose',className:'px-3 py-1 rounded border border-[rgba(0,0,0,.15)]',textContent:'Sulje'}));
-    const row=ca('div',{className:'ex-row'});
-    const view=ca('div',{className:'ex-view'});
-    view.append(ca('img',{alt:'Kaava',loading:'eager',decoding:'async'}), ca('button',{id:'exPrev',className:'ex-prev',textContent:'◀'}), ca('button',{id:'exNext',className:'ex-next',textContent:'▶'}));
-    const info=ca('div',{className:'ex-info'});
+    expander=document.createElement('div');
+    expander.className='expander';
+    const top=document.createElement('div'); top.className='ex-top';
+    const title=document.createElement('div'); title.id='exTitle'; title.className='font-semibold';
+    const close=document.createElement('button'); close.id='exClose'; close.className='px-3 py-1 rounded border border-[rgba(0,0,0,.15)]'; close.textContent='pienennä';
+    top.append(title,close);
+
+    const row=document.createElement('div'); row.className='ex-row';
+    const view=document.createElement('div'); view.className='ex-view';
+    const img=document.createElement('img'); img.alt='Kaava';
+    const prev=document.createElement('button'); prev.id='exPrev'; prev.className='ex-prev'; prev.textContent='◀';
+    const next=document.createElement('button'); next.id='exNext'; next.className='ex-next'; next.textContent='▶';
+    view.append(img,prev,next);
+
+    const info=document.createElement('div'); info.className='ex-info';
     info.innerHTML=`<h3 id="exName" class="text-2xl mb-2"></h3>
       <div style="height:8px"></div>
       <p id="exBlurb" class="opacity-80 mb-2 normalcase"></p>
       <div class="mb-2"><span class="font-semibold">Koot: </span><span id="exSizes"></span></div>
       <div id="exPrice" class="text-xl font-bold mb-4"></div>
       <div id="exActions"></div>`;
-    row.append(view,info); expander.append(top,row);
 
-    expander.querySelector('#exPrev').addEventListener('click',()=>nav(-1));
-    expander.querySelector('#exNext').addEventListener('click',()=>nav(+1));
-    expander.querySelector('#exClose').addEventListener('click',clearSelection);
+    row.append(view,info);
+    expander.append(top,row);
+
+    prev.addEventListener('click',()=>nav(-1));
+    next.addEventListener('click',()=>nav(+1));
+    close.addEventListener('click',()=>clearSelection());
   }
   buildExpander();
-
-  function setAfterRow(tileEl){
-    const tiles=[...grid.querySelectorAll('.tile')];
-    const idx=tiles.indexOf(tileEl);
-    const cols=getCols();                 // ← luotettava sarakeluku
-    const rowEnd = tiles[Math.min(tiles.length-1, Math.floor(idx/cols)*cols + (cols-1))];
-    grid.insertBefore(expander, rowEnd.nextSibling);
-  }
 
   function openFor(p,tileEl){
     current=p; imgIdx=0;
@@ -441,45 +457,85 @@ function setSmartImage(img,bases){
     expander.querySelector('#exName').textContent=p.name;
     expander.querySelector('#exBlurb').textContent=p.blurb||'';
     expander.querySelector('#exSizes').textContent=p.sizes||'';
-    expander.querySelector('#exPrice').textContent=p.price===0?'ILMAINEN':fmtEUR(p.price||0);
-    const exImg=expander.querySelector('.ex-view img'); setSmartImage(exImg, (p.images||[])[0]);
-    const actions=expander.querySelector('#exActions'); actions.innerHTML='';
-    const deliver=!!p.deliverable;
-    if(!deliver){ actions.append(ca('span',{className:'inline-block px-4 py-2 rounded-full border border-[rgba(0,0,0,.15)]',textContent:'Tulossa'})); }
-    else{ actions.append(ca('button',{className:'btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2',textContent:'Lisää ostoskoriin'})); }
-    setAfterRow(tileEl);
-  }
+    expander.querySelector('#exPrice').textContent=p.price===0?'ILMAINEN':new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(p.price||0);
 
+    const exImg=expander.querySelector('.ex-view img');
+    exImg.src=(p.images||[])[0]||'assets/placeholder.jpg';
+
+    const actions=expander.querySelector('#exActions');
+    actions.innerHTML='';
+    const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));
+    if(!deliver){
+      const tag=document.createElement('span');
+      tag.className='inline-block px-4 py-2 rounded-full border border-[rgba(0,0,0,.15)]';
+      tag.textContent='Tulossa';
+      actions.appendChild(tag);
+    }else{
+      const buyBtn=document.createElement('button');
+      buyBtn.className='btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2';
+      buyBtn.textContent='Lisää ostoskoriin'+(p.price===0?' (0,00 €)':'');
+      buyBtn.addEventListener('click',()=>addToCart(p.id));
+      actions.appendChild(buyBtn);
+    }
+    insertAfterRow(tileEl);
+  }
   function nav(dir){
     if(!current) return;
-    const imgs=current.images||[]; if(!imgs.length) return;
-    imgIdx=(imgIdx+dir+imgs.length)%imgs.length;
-    const exImg=expander.querySelector('.ex-view img'); setSmartImage(exImg, imgs[imgIdx]);
+    const imgs=current.images||[];
+    imgIdx=imgs.length?(imgIdx+dir+imgs.length)%imgs.length:0;
+    const exImg=expander.querySelector('.ex-view img');
+    exImg.src=imgs[imgIdx]||'assets/placeholder.jpg';
   }
-
+  function markSelected(tile,on){
+    tile.classList.toggle('tile--selected',!!on);
+    tile.innerHTML='';
+    const p=DATA.find(x=>x.id===tile.dataset.id);
+    const img=document.createElement('img'); img.alt=p.name; img.loading='lazy'; img.src=(p.images||[])[0]||'assets/placeholder.jpg';
+    const cap=document.createElement('div'); cap.className='tile-caption';
+    const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));
+    const capTxt=p.name+(!deliver?' · Tulossa':(p.price===0?' · Ilmainen':'')); cap.textContent=capTxt;
+    tile.append(img,cap);
+    if(on){
+      const btn=document.createElement('button');
+      btn.className='min-full'; btn.type='button'; btn.textContent='pienennä';
+      btn.addEventListener('click',e=>{e.stopPropagation();clearSelection()});
+      tile.appendChild(btn);
+    }
+  }
   function clearSelection(){
-    if(!selectedTile) return;
-    selectedTile.classList.remove('tile--selected');
+    if(!selectedId) return;
+    const prev=grid.querySelector(`.tile[data-id="${selectedId}"]`);
+    if(prev) markSelected(prev,false);
     if(expander.parentNode===grid) grid.removeChild(expander);
-    selectedTile=null; current=null; imgIdx=0;
+    selectedId=null; current=null; imgIdx=0;
   }
-
+  function selectTile(tile){
+    const id=tile.getAttribute('data-id');
+    if(id===selectedId){ clearSelection(); return; }
+    clearSelection();
+    selectedId=id;
+    markSelected(tile,true);
+    const p=DATA.find(x=>x.id===id);
+    openFor(p,tile);
+  }
   grid.addEventListener('click',e=>{
-    const tile=e.target.closest('.tile'); if(!tile||!grid.contains(tile)) return;
-    if(tile===selectedTile){ clearSelection(); return; }
-    clearSelection(); selectedTile=tile; tile.classList.add('tile--selected');
-    const p=DATA.find(x=>x.id===tile.dataset.id); if(p) openFor(p,tile);
+    const tile=e.target.closest('.tile'); if(!tile||!grid.contains(tile))return;
+    selectTile(tile);
   });
 
-  // Reflow expander oikein myös ruudukon murtuessa / rotaatiossa
+  // Sijoittelu päivittyy kun ruudukko murtuu/resizessa
   let roTimer=null;
-  const onResize=()=>{ if(!selectedTile) return; clearTimeout(roTimer); roTimer=setTimeout(()=>setAfterRow(selectedTile),80); };
-  addEventListener('resize',onResize,{passive:true});
-  window.visualViewport?.addEventListener('resize',onResize,{passive:true});
-  addEventListener('orientationchange',onResize,{passive:true});
+  addEventListener('resize',()=>{
+    if(!selectedId||!expander.parentNode) return;
+    clearTimeout(roTimer);
+    roTimer=setTimeout(()=>{
+      const tile=grid.querySelector(`.tile[data-id="${selectedId}"]`);
+      if(tile) insertAfterRow(tile);
+    },120);
+  },{passive:true});
 })();
 
-/* ===== Ankkuri-linkit: ohita efektien alku/puoliväli ===== */
+/* ===== Ankkuri-linkit (ohita efektien alku/puoliväli) ===== */
 (()=>{
   const HEADER=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'))||64;
   const vh=()=> (visualViewport?.height||innerHeight||800);
