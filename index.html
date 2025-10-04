@@ -49,7 +49,7 @@
     @keyframes logoBeat{0%{transform:scale(1)}12%{transform:scale(1.12)}24%{transform:scale(1.02)}36%{transform:scale(1.1)}48%{transform:scale(1)}100%{transform:scale(1)}}
     @media (prefers-reduced-motion:reduce){.logo-beat{animation:none}}
 
-    .band{background:var(--ivory);border-radius:var(--band-radius);overflow:hidden}
+    .band{background:var(--ivory);border-radius:var(--band-radius);overflow:visible}
     .band-inner{max-width:72rem;margin:0 auto;padding:3rem 1rem}
 
     /* Intro palkki */
@@ -61,9 +61,12 @@
     .intro-copy{padding:6px 12px;min-width:0}
     .intro-copy .logo{width:56px;height:56px;display:block;margin:0 auto 12px;object-fit:contain}
     .intro-copy p{margin:0 0 .8rem;line-height:1.6}
-    @media (max-width:900px){.intro-grid{grid-template-columns:1fr}.intro-img{height:clamp(240px,52vw,360px);border-radius:14px;transform:none}}
+    @media (max-width:900px){
+      .intro-grid{grid-template-columns:1fr}
+      .intro-img{height:clamp(240px,52vw,360px);border-radius:14px;transform:none}
+    }
 
-    /* Kaaviot (vanha toiminta) */
+    /* Kaaviot – VANHA toiminta */
     .pattern-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}
     @media (min-width:768px){.pattern-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}}
     .tile{position:relative;cursor:pointer;aspect-ratio:1/1;display:block;transition:transform .25s ease,box-shadow .25s ease;will-change:transform}
@@ -235,16 +238,19 @@
 </main>
 
 <script>
-/* ===== Helpers & minimal ostoskori ===== */
+/* ===== Helpers ===== */
 const $=s=>document.querySelector(s);
 const ca=(t,attrs={})=>Object.assign(document.createElement(t),attrs);
 (()=>{const y=$('#year');if(y)y.textContent=new Date().getFullYear()})();
-function showToast(msg){alert(msg)}
-let CART=JSON.parse(localStorage.getItem('cart')||'{}');
-function saveCart(){localStorage.setItem('cart',JSON.stringify(CART));updateBadge()}
-function updateBadge(){const n=Object.values(CART).reduce((a,b)=>a+b,0);const tx=$('#cartCountText');if(tx)tx.textContent=n?`(${n})`:''}
-function addToCart(id){CART[id]=(CART[id]||0)+1;saveCart();showToast('Lisätty ostoskoriin')}
-updateBadge();
+
+/* Kuvien turvallinen asetus: placeholder-fallback */
+function setSafeImgSrc(img, src) {
+  img.src = src || 'assets/placeholder.jpg';
+  img.onerror = function() {
+    this.onerror = null;
+    this.src = 'assets/placeholder.jpg';
+  };
+}
 
 /* Intro teksti */
 (()=>{
@@ -260,11 +266,14 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   const intro=$('#intro-text'); if(intro) intro.innerHTML=s.trim().split(/\n\s*\n/).map(p=>`<p>${p}</p>`).join('');
 })();
 
-/* Koira tarra */
+/* Koira tarra (fallback emoji) */
 (()=>{
   const img=$('#dogSticker'); if(!img) return;
-  img.src='assets/dog-sticker.png';
-  img.onerror=()=>{const e=ca('div',{textContent:'🐶'}); e.style.cssText='font-size:12vw;line-height:1'; img.replaceWith(e);}
+  setSafeImgSrc(img,'assets/dog-sticker.png');
+  img.onerror = function(){ // jos tarra puuttuu, korvaa emojilla
+    const e=ca('div',{textContent:'🐶'}); e.style.cssText='font-size:12vw;line-height:1';
+    img.replaceWith(e);
+  };
 })();
 
 /* Intro: oikea kuva laskee pehmeästi tekstin mukaan */
@@ -292,7 +301,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   measure(); kick();
 })();
 
-/* Scenes (koira→intro & suunnittelija maski) */
+/* Scenes (koira→intro “release” + suunnittelija maski) */
 (()=>{
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -306,18 +315,52 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
 
   const smoother=(p)=>p*p*p*(p*(6*p-15)+10);
   const clamp=(x)=>x<0?0:x>1?1:x;
-  function vvh(){ return (window.visualViewport?.height || window.innerHeight || 800); }
-  function stickyH(){ return Math.max(1, vvh() - HEADER); }
+  const vvh = ()=> (window.visualViewport?.height || window.innerHeight || 800);
+  const stickyH = ()=> Math.max(1, vvh() - HEADER);
 
-  const scenes=[];
-  function measureScene(el){
-    if(!el) return null;
-    return { el, start: el.offsetTop, stick: stickyH(), total: Math.max(1, el.offsetHeight - stickyH()) };
+  let scenes=[];
+  function measureIntroScene(){
+    if(!sceneIntro || !introPanel) return null;
+
+    // mitataan intron todellinen korkeus TRANSFORMIT POIS päältä
+    const prevTransform = introPanel.style.transform;
+    introPanel.style.transform = 'none';
+    const contentH = introPanel.scrollHeight; // koko sisältö
+    introPanel.style.transform = prevTransform;
+
+    const stick = stickyH();
+
+    // Vaakasiirtymän “matka” pikseleinä ennen release-vaihetta
+    const transPx = Math.max(0.28*window.innerWidth, 0.42*stick);
+
+    // Kuinka paljon sisältö ylittää sticky-ikkunan?
+    const extra = Math.max(0, contentH - stick + 24);
+
+    // Kohtauksen kokonaiskorkeus = sticky + vaakasiirtymä + extra (jotta kaikki mahtuu)
+    const totalH = Math.ceil(stick + transPx + extra + 1);
+    sceneIntro.style.height = totalH + 'px';
+
+    // Palautetaan kontrolliluvut
+    return {
+      el: sceneIntro,
+      start: sceneIntro.offsetTop,
+      stick,
+      total: totalH - stick,
+      intro: { transPx, extra, threshold: transPx / (totalH - stick) }
+    };
   }
+
+  function measureDesignerScene(){
+    if(!sceneDes) return null;
+    const stick = stickyH();
+    const totalH = sceneDes.offsetHeight; // CSS asettaa perusrungon
+    return { el: sceneDes, start: sceneDes.offsetTop, stick, total: Math.max(1, totalH - stick) };
+  }
+
   function measureAll(){
     scenes.length=0;
-    const a=measureScene(sceneIntro); if(a) scenes.push(a);
-    const b=measureScene(sceneDes);   if(b) scenes.push(b);
+    const a=measureIntroScene(); if(a) scenes.push(a);
+    const b=measureDesignerScene(); if(b) scenes.push(b);
   }
 
   let raf=0, navSkip=null;
@@ -327,17 +370,37 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
     const W=window.innerWidth;
 
     for(const s of scenes){
+      // perusprosentti edistymisestä
       const raw=clamp((y - s.start)/s.total);
+
+      // jos suoraan skipataan navista, mennään loppuun
       const p = (navSkip==='intro' && s.el===sceneIntro) ? 1 :
                 (navSkip==='designer' && s.el===sceneDes) ? 1 : smoother(raw);
 
-      if(s.el===sceneIntro && dogPanel && introPanel){
-        const txDog   = Math.round(-W*1.05*p);
-        const txIntro = Math.round(W*(1-p));
-        dogPanel.style.transform   = `translate3d(${txDog}px,0,0)`;
-        dogPanel.style.opacity     = (1 - p*1.1).toFixed(3);
-        introPanel.style.transform = `translate3d(${txIntro}px,0,0)`;
-        introPanel.style.opacity   = Math.min(1,p*1.15).toFixed(3);
+      if(s.el===sceneIntro && dogPanel && introPanel && s.intro){
+        const t = s.intro.threshold;         // osuus kokonaisesta matkasta, joka on vaakasiirtymää
+        const extra = s.intro.extra;
+
+        if(raw <= t){
+          // VAIHE 1: vaakasuuntainen siirtymä (koira → intro)
+          const f = smoother(raw / Math.max(t, 1e-6));
+          const txDog   = Math.round(-W*1.05*f);
+          const txIntro = Math.round(W*(1-f));
+          dogPanel.style.transform   = `translate3d(${txDog}px,0,0)`;
+          dogPanel.style.opacity     = (1 - f*1.1).toFixed(3);
+          introPanel.style.transform = `translate3d(${txIntro}px,0,0)`;
+          introPanel.style.opacity   = Math.min(1,f*1.15).toFixed(3);
+        }else{
+          // VAIHE 2: “release” – liu’uta intro-paneelia pystysuunnassa ylös niin,
+          // että koko sisältö mahtuu näkyviin sticky-ikkunassa
+          dogPanel.style.transform = `translate3d(${-W*1.05}px,0,0)`;
+          dogPanel.style.opacity = '0';
+
+          const r = smoother((raw - t) / Math.max(1 - t, 1e-6));
+          const ty = Math.round(-extra * r); // nosta ylös max. extra
+          introPanel.style.transform = `translate3d(0,${ty}px,0)`;
+          introPanel.style.opacity = '1';
+        }
       }
 
       if(s.el===sceneDes){
@@ -348,8 +411,8 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
       }
     }
   }
-  function req(){ if(!raf) raf=requestAnimationFrame(render); }
-  function renderNow(){ cancelAnimationFrame(raf); raf=0; render(); }
+  const req=()=>{ if(!raf) raf=requestAnimationFrame(render); };
+  const renderNow=()=>{ cancelAnimationFrame(raf); raf=0; render(); };
 
   window.__sceneNavSkip = (which)=>{ navSkip=which; renderNow(); };
   window.__sceneMeasure = ()=>{ measureAll(); renderNow(); };
@@ -362,9 +425,14 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   document.addEventListener('DOMContentLoaded', ()=>{ measureAll(); renderNow(); });
 })();
 
-/* ====== VANHAT KAAVAT-TOIMINNOT TÄYSIN PALAUTETTUNA ====== */
+/* ====== VANHAT KAAVAT-TOIMINNOT TÄYSIN (placeholder-fallback lisätty) ====== */
+function showToast(msg){alert(msg)}
+let CART=JSON.parse(localStorage.getItem('cart')||'{}');
+function saveCart(){localStorage.setItem('cart',JSON.stringify(CART));updateBadge()}
+function updateBadge(){const n=Object.values(CART).reduce((a,b)=>a+b,0);const tx=$('#cartCountText');if(tx)tx.textContent=n?`(${n})`:''}
+function addToCart(id){CART[id]=(CART[id]||0)+1;saveCart();showToast('Lisätty ostoskoriin')}
+updateBadge();
 
-/* Data + apurit kuten alkuperäisessä */
 const IMG=(id,n=1)=>`assets/patterns/${id}-${n}.jpg`;
 window.KAAVIOT=[
   {id:'dummy-kaava',name:'Dummy kaava',price:0.01,sizes:'PDF',blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla.',images:[IMG('dummy-kaava',1),IMG('dummy-kaava',2)],isDummy:true,deliverable:true,file:'auto-dummy'},
@@ -380,24 +448,19 @@ window.KAAVIOT=[
   {id:'villapaita',name:'Villapaita',price:0.01,sizes:'XS–XXL',blurb:'Klassinen pyöröneule.',images:[IMG('villapaita',1),IMG('villapaita',2)],deliverable:false},
 ];
 
-/* Vanha expander-koodi 1:1-henkisesti */
 (()=>{
-  const grid=$('#patternsGrid');
-  if(!grid) return;
+  const grid=$('#patternsGrid'); if(!grid) return;
 
-  let selectedId=null;
-  let expander=null;
-  let current=null;
-  let imgIdx=0;
+  let selectedId=null, expander=null, current=null, imgIdx=0;
   const DATA=window.KAAVIOT;
 
-  // Ruutuun kortit
   DATA.forEach(p=>{
     const tile=document.createElement('article');
     tile.className='tile card';
     tile.setAttribute('data-id',p.id);
-    const img=document.createElement('img'); img.alt=p.name; img.loading='lazy';
-    img.src=(p.images||[])[0]||'assets/placeholder.jpg';
+    const img=document.createElement('img');
+    img.alt=p.name; img.loading='lazy';
+    setSafeImgSrc(img, (p.images||[])[0]);                 // ← fallback
     const cap=document.createElement('div'); cap.className='tile-caption';
     const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));
     const labelSuffix=!deliver?' · Tulossa':(p.price===0?' · Ilmainen':'');
@@ -420,8 +483,7 @@ window.KAAVIOT=[
     grid.insertBefore(expander, after.nextSibling);
   }
   function buildExpander(){
-    expander=document.createElement('div');
-    expander.className='expander';
+    expander=document.createElement('div'); expander.className='expander';
     const top=document.createElement('div'); top.className='ex-top';
     const title=document.createElement('div'); title.id='exTitle'; title.className='font-semibold';
     const close=document.createElement('button'); close.id='exClose'; close.className='px-3 py-1 rounded border border-[rgba(0,0,0,.15)]'; close.textContent='pienennä';
@@ -441,7 +503,6 @@ window.KAAVIOT=[
       <div class="mb-2"><span class="font-semibold">Koot: </span><span id="exSizes"></span></div>
       <div id="exPrice" class="text-xl font-bold mb-4"></div>
       <div id="exActions"></div>`;
-
     row.append(view,info);
     expander.append(top,row);
 
@@ -460,10 +521,9 @@ window.KAAVIOT=[
     expander.querySelector('#exPrice').textContent=p.price===0?'ILMAINEN':new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(p.price||0);
 
     const exImg=expander.querySelector('.ex-view img');
-    exImg.src=(p.images||[])[0]||'assets/placeholder.jpg';
+    setSafeImgSrc(exImg, (p.images||[])[0]);               // ← fallback
 
-    const actions=expander.querySelector('#exActions');
-    actions.innerHTML='';
+    const actions=expander.querySelector('#exActions'); actions.innerHTML='';
     const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));
     if(!deliver){
       const tag=document.createElement('span');
@@ -474,7 +534,7 @@ window.KAAVIOT=[
       const buyBtn=document.createElement('button');
       buyBtn.className='btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2';
       buyBtn.textContent='Lisää ostoskoriin'+(p.price===0?' (0,00 €)':'');
-      buyBtn.addEventListener('click',()=>addToCart(p.id));
+      buyBtn.addEventListener('click',()=>{CART[p.id]=(CART[p.id]||0)+1;saveCart();showToast('Lisätty ostoskoriin')});
       actions.appendChild(buyBtn);
     }
     insertAfterRow(tileEl);
@@ -484,13 +544,14 @@ window.KAAVIOT=[
     const imgs=current.images||[];
     imgIdx=imgs.length?(imgIdx+dir+imgs.length)%imgs.length:0;
     const exImg=expander.querySelector('.ex-view img');
-    exImg.src=imgs[imgIdx]||'assets/placeholder.jpg';
+    setSafeImgSrc(exImg, imgs[imgIdx]);                    // ← fallback
   }
   function markSelected(tile,on){
     tile.classList.toggle('tile--selected',!!on);
     tile.innerHTML='';
     const p=DATA.find(x=>x.id===tile.dataset.id);
-    const img=document.createElement('img'); img.alt=p.name; img.loading='lazy'; img.src=(p.images||[])[0]||'assets/placeholder.jpg';
+    const img=document.createElement('img'); img.alt=p.name; img.loading='lazy';
+    setSafeImgSrc(img,(p.images||[])[0]);                  // ← fallback
     const cap=document.createElement('div'); cap.className='tile-caption';
     const deliver=!!(p&&(p.deliverable||p.isDummy||p.file));
     const capTxt=p.name+(!deliver?' · Tulossa':(p.price===0?' · Ilmainen':'')); cap.textContent=capTxt;
@@ -523,7 +584,6 @@ window.KAAVIOT=[
     selectTile(tile);
   });
 
-  // Sijoittelu päivittyy kun ruudukko murtuu/resizessa
   let roTimer=null;
   addEventListener('resize',()=>{
     if(!selectedId||!expander.parentNode) return;
