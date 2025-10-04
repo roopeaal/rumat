@@ -15,6 +15,31 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- EmailJS selainkirjasto -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    /* EmailJS asetukset – avaa Ctrl/Cmd + E */
+    function getEmailCfg(){return{PUBLIC_KEY:localStorage.getItem('emailjs_public')||'',SERVICE_ID:localStorage.getItem('emailjs_service')||'',TEMPLATE_ID:localStorage.getItem('emailjs_template')||''}}
+    function setEmailCfg(pub,svc,tpl){if(pub)localStorage.setItem('emailjs_public',pub);if(svc)localStorage.setItem('emailjs_service',svc);if(tpl)localStorage.setItem('emailjs_template',tpl)}
+    window.configureEmailJS=function(){
+      const c=getEmailCfg();
+      const p=prompt('EmailJS Public Key',c.PUBLIC_KEY||'')||'';
+      const s=prompt('EmailJS Service ID',c.SERVICE_ID||'')||'';
+      const t=prompt('EmailJS Template ID',c.TEMPLATE_ID||'')||'';
+      setEmailCfg(p.trim(),s.trim(),t.trim());
+      const cfg=getEmailCfg();
+      if(window.emailjs&&cfg.PUBLIC_KEY){
+        try{window.emailjs.init({publicKey:cfg.PUBLIC_KEY});alert('EmailJS alustettu.')}
+        catch(e){console.error(e);alert('EmailJS-alustus epäonnistui.')}
+      }
+    }
+    ;(function(){
+      const c=getEmailCfg();
+      if(window.emailjs&&c.PUBLIC_KEY){try{window.emailjs.init({publicKey:c.PUBLIC_KEY})}catch(e){}}
+      window.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='e'){e.preventDefault();window.configureEmailJS()}})
+    })()
+  </script>
+
   <style>
     :root{
       --ink:#202020; --olive:#A1A266; --deep-blue:#345563; --ivory:#F6F6F4; --light-blue:#DEEEEE;
@@ -36,20 +61,16 @@
     #mainNav a{color:var(--ink);text-decoration:none}
     .nav-hidden{display:none!important}
     .nav-measure{position:absolute!important;visibility:hidden!important;display:flex!important;white-space:nowrap!important}
-
     #rightBlock{justify-self:end;display:flex;align-items:center;gap:.5rem;white-space:nowrap}
     .icon-btn{position:relative;width:38px;height:38px;display:grid;place-items:center;border-radius:9999px;background:rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.16);color:var(--ink)}
     .icon-btn:hover{background:rgba(0,0,0,.1)}
     .cart-text-btn{border:1px solid rgba(0,0,0,.16);padding:.45rem .8rem;border-radius:9999px;background:rgba(0,0,0,.04)}
     .badge{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 4px;display:grid;place-items:center;border-radius:9999px;background:var(--ink);color:#fff;font-size:11px;font-weight:700;border:1px solid rgba(0,0,0,.15)}
-
     .btn{border-radius:9999px;padding:.6rem 1rem;border:1px solid rgba(0,0,0,.16);background:rgba(0,0,0,.04)}
 
     .drawer{position:fixed;inset:0;z-index:60;display:none}
     .drawer.open{display:block}
     .drawer>.panel{position:absolute;top:0;bottom:0;width:min(640px,94vw);background:var(--ivory);box-shadow:0 10px 30px rgba(0,0,0,.2);overflow:auto}
-    #menuDrawer .panel{left:0}
-    #cartDrawer .panel{right:0}
 
     /* HERO */
     .hero{position:relative;height:calc(100dvh - var(--header-h));display:grid;place-items:center;overflow:hidden;background:#000}
@@ -122,19 +143,15 @@
     /* Suunnittelija – maski tekstipalstalle */
     .designer-text-wrap{position:relative;overflow:hidden;background:var(--ivory)}
     .designer-mask-svg{
-      position:absolute;inset:-10% -10% -10% -10%; /* peitto yli reunojen */
+      position:absolute;inset:-10% -10% -10% -10%;
       pointer-events:none;z-index:5;
       width:120%;height:120%;
       will-change:transform,opacity;transform:translateZ(0);
       transform-box:fill-box;transform-origin:center top;
       opacity:1;
     }
-    /* MOBIILI: leveämpi ja matalampi hymiö */
     @media (max-width:900px){
-      .designer-mask-svg{
-        transform: scaleX(1.32) scaleY(0.78);
-        transform-origin:center top;
-      }
+      .designer-mask-svg{ transform: scaleX(1.32) scaleY(0.78); transform-origin:center top; }
     }
 
     @media (prefers-reduced-motion:reduce){
@@ -234,16 +251,13 @@
                   <defs>
                     <mask id="smileyMaskText">
                       <rect x="-10" y="-10" width="120" height="120" fill="white"/>
-                      <!-- pystysilmät -->
                       <rect x="40" y="6" width="5" height="44" rx="2" fill="black"/>
                       <rect x="55" y="6" width="5" height="44" rx="2" fill="black"/>
-                      <!-- kaareva suu -->
                       <path d="M28 56 C 44 92, 56 92, 72 56" fill="none" stroke="black" stroke-width="9" stroke-linecap="round"/>
                     </mask>
                   </defs>
                   <rect x="-10" y="-10" width="120" height="120" fill="var(--ivory)" mask="url(#smileyMaskText)"/>
                 </svg>
-
                 <p>Aaltonen on itsevarma neuloja, joka ei rajoita luovuuttaan vain yhteen tekemisen tapaan. Neulomisen rinnalla myös asusteiden ompelu on tärkeä osa ilmaisua – ja ennen kaikkea intohimo. Lapsuuden kiinnostus vaatteiden suunnitteluun johti muodin ja tekstiilisuunnittelun opintoihin vuonna 2021.</p>
                 <p>Pian Aaltonen valmistuu taiteen maisteriksi, mukanaan vankka osaaminen ja omat suosikkitekniikat, joita hän on hionut opintojen aikana. Neulomisen ja asusteiden lisäksi Aaltonen on syventynyt erityisesti vaatteiden kierrätykseen, korjaamiseen liittyviin asenteisiin sekä kriittiseen tarkasteluun siitä, miten kuluttamista ohjataan – ja millaisia seurauksia sillä on ympäristölle.</p>
               </div>
@@ -274,9 +288,12 @@
     </div>
     <div class="footer-copy">© <span id="year"></span> RUMAT STUDIO</div>
   </footer>
+
+  <!-- Tilauksen viesti + latauslinkki -->
+  <section id="orderMsg" class="max-w-3xl mx-auto my-4 px-4 hidden"></section>
 </main>
 
-<!-- DRAWERIT: valikko + ostoskori -->
+<!-- DRAWERIT: valikko + ostoskori + kassa -->
 <div id="menuDrawer" class="drawer" aria-hidden="true">
   <div class="absolute inset-0 bg-black/40" id="closeMenu" aria-label="Sulje valikko"></div>
   <div class="panel p-6 flex flex-col gap-4">
@@ -293,31 +310,64 @@
 <div id="cartDrawer" class="drawer" aria-hidden="true">
   <div class="absolute inset-0 bg-black/40" id="closeCart" aria-label="Sulje ostoskori"></div>
   <div class="panel p-5 flex flex-col">
-    <div class="flex items-center justify-between mb-4"><h3 class="text-xl">Ostoskori</h3><button id="closeCartX" class="text-stone-500 hover:text-stone-800">✕</button></div>
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-xl">Ostoskori</h3>
+      <button id="closeCartX" class="text-stone-500 hover:text-stone-800">✕</button>
+    </div>
     <div id="cartItems" class="flex-1 overflow-auto divide-y"></div>
     <div class="mt-4 space-y-3">
-      <div class="text-sm grid grid-cols-2 gap-y-1"><div class="text-[color:#202020]/70">Välisumma</div><div class="text-right" id="subTotal">€0,00</div></div>
-      <div class="text-xs text-[color:#202020]/70">Demo-ostoskori. “Lisää ostoskoriin” toimii ja laskuri päivittyy.</div>
+      <div class="text-sm grid grid-cols-2 gap-y-1">
+        <div class="text-[color:#202020]/70">Välisumma</div><div class="text-right" id="subTotal">€0,00</div>
+      </div>
+      <button id="checkout" class="btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2">Kassalle</button>
+      <div id="paypalWarn" class="text-xs text-[color:#202020]/70"></div>
     </div>
   </div>
 </div>
 
+<div id="checkoutDrawer" class="drawer" aria-hidden="true">
+  <div class="absolute inset-0 bg-black/40" id="closeCheckout" aria-label="Sulje kassa"></div>
+  <div class="panel p-6 flex flex-col">
+    <div class="flex items-center justify-between mb-4"><h3 class="text-xl">Kassa</h3><button id="closeCheckoutX" class="text-stone-500 hover:text-stone-800">✕</button></div>
+    <form id="checkoutForm" class="flex-1 overflow-auto space-y-3">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div><label class="text-sm font-semibold">Etunimi</label><input required name="firstName" class="w-full mt-1 border rounded px-3 py-2"></div>
+        <div><label class="text-sm font-semibold">Sukunimi</label><input required name="lastName" class="w-full mt-1 border rounded px-3 py-2"></div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div><label class="text-sm font-semibold">Sähköposti</label><input required type="email" name="email" class="w-full mt-1 border rounded px-3 py-2"></div>
+        <div><label class="text-sm font-semibold">Puhelin (valinn.)</label><input name="phone" class="w-full mt-1 border rounded px-3 py-2"></div>
+      </div>
+      <div><label class="text-sm font-semibold">Osoite</label><input required name="address" class="w-full mt-1 border rounded px-3 py-2"></div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div><label class="text-sm font-semibold">Postinumero</label><input required name="zip" class="w-full mt-1 border rounded px-3 py-2"></div>
+        <div><label class="text-sm font-semibold">Kaupunki</label><input required name="city" class="w-full mt-1 border rounded px-3 py-2"></div>
+        <div><label class="text-sm font-semibold">Maa</label><input required name="country" class="w-full mt-1 border rounded px-3 py-2" value="Suomi"></div>
+      </div>
+      <div><label class="text-sm font-semibold">Lisätiedot (valinn.)</label><textarea name="notes" rows="3" class="w-full mt-1 border rounded px-3 py-2"></textarea></div>
+      <label class="flex gap-2 items-start text-sm"><input type="checkbox" id="acceptDigitalWaiver" required><span>Hyväksyn, että digitaalisen sisällön toimittaminen alkaa heti, enkä voi peruuttaa ostosta (KSL 6:16).<br><a class="underline" href="legal/terms.html" target="_blank" rel="noopener">Lue Toimitus- ja sopimusehdot (PDF)</a></span></label>
+    </form>
+    <div class="mt-4 flex items-center justify-between gap-3">
+      <button id="checkoutBack" class="btn">Takaisin</button>
+      <button id="checkoutPay" class="btn bg-[color:var(--deep-blue)] text-white">Jatka maksamaan</button>
+    </div>
+    <p class="text-xs text-stone-500 mt-2">Huom: Maksulliset tuotteet maksetaan PayPalissa (myyjä: <strong>aaltonen96@outlook.com</strong>). Ilmaiset tilaukset vahvistetaan heti.</p>
+  </div>
+</div>
+
 <script>
-/* ===== Helpers ===== */
+/* ===== Perus apurit ===== */
 const $=s=>document.querySelector(s);
 const ca=(t,attrs={})=>Object.assign(document.createElement(t),attrs);
+const fmtEUR=x=>new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x);
 (()=>{const y=$('#year');if(y)y.textContent=new Date().getFullYear()})();
 
-/* Kuvien turvallinen asetus: placeholder-fallback */
 function setSafeImgSrc(img, src) {
   img.src = src || 'assets/placeholder.jpg';
-  img.onerror = function() {
-    this.onerror = null;
-    this.src = 'assets/placeholder.jpg';
-  };
+  img.onerror = function(){ this.onerror=null; this.src='assets/placeholder.jpg'; };
 }
 
-/* Brändi/valikko – automaattinen ikonimoodi kun tila loppuu */
+/* Brändi/valikko – ikonit takaisin */
 (()=>{
   const container=$('#hdrRow'),brand=$('#brandBlock'),nav=$('#mainNav'),
         right=$('#rightBlock'),menuBtn=$('#openMenu'),cartIcon=$('#openCartIcon'),cartText=$('#openCartText');
@@ -353,7 +403,6 @@ function setSafeImgSrc(img, src) {
     }
   }
   function compute(){ applyState(canShowNav()); }
-
   let t=null;
   const schedule=()=>{ if(t) return; t=setTimeout(()=>{t=null; compute()},80) };
   addEventListener('resize',schedule,{passive:true});
@@ -371,7 +420,7 @@ function setSafeImgSrc(img, src) {
   drawer.querySelectorAll?.('[data-menu-close]')?.forEach(a=>a.addEventListener('click',close));
 })();
 
-/* Intro teksti */
+/* Intro-teksti sisään */
 (()=>{
   const s=`RUMAT STUDIO syntyi lapsuuden haaveesta ja vuosien aikana kypsyneestä intohimosta vaatesuunnitteluun. Vuonna 2023 visio alkoi muovautumaan nykyiseen muotoonsa: ajattomia ja kestäviä vaatteita, jotka syntyvät harkitusta rakkaudesta ja intohimosta luovaan tekemiseen.
 
@@ -420,176 +469,7 @@ Jokainen “liian RUMAT ollakseen totta” -tuote on suunniteltu huolella merkit
   measure(); kick();
 })();
 
-/* Scenes (koira→intro & suunnittelija) dynaamisella pituudella */
-(()=>{
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  const HEADER = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'))||64;
-  const sceneIntro = document.getElementById('scene-intro');
-  const dogPanel   = sceneIntro?.querySelector('.panel-dog');
-  const introPanel = sceneIntro?.querySelector('#mikaonrumat');
-
-  const sceneDes   = document.getElementById('scene-designer');
-  const desPanel   = sceneDes?.querySelector('#suunnittelija');
-  const maskSvg    = document.getElementById('designerMaskText');
-  const maskWrap   = document.querySelector('.designer-text-wrap');
-  const photo      = document.getElementById('designerPhoto');
-
-  const smoother=(p)=>p*p*p*(p*(6*p-15)+10);
-  const clamp=(x)=>x<0?0:x>1?1:x;
-  const vvh = ()=> (window.visualViewport?.height || window.innerHeight || 800);
-  const stickyH = ()=> Math.max(1, vvh() - HEADER);
-
-  let scenes=[];
-  function measureIntroScene(){
-    if(!sceneIntro || !introPanel) return null;
-    const prev = introPanel.style.transform; introPanel.style.transform='none';
-    const contentH = introPanel.scrollHeight;
-    introPanel.style.transform = prev;
-
-    const stick = stickyH();
-    const transPx = Math.max(0.28*window.innerWidth, 0.42*stick);
-    const extra = Math.max(0, contentH - stick + 24);
-    const totalH = Math.ceil(stick + transPx + extra + 1);
-    sceneIntro.style.height = totalH + 'px';
-
-    return {
-      el: sceneIntro, start: sceneIntro.offsetTop, stick,
-      total: totalH - stick,
-      intro: { transPx, extra, threshold: (totalH - stick) ? transPx / (totalH - stick) : 1 }
-    };
-  }
-
-  function measureDesignerScene(){
-    if(!sceneDes || !desPanel) return null;
-
-    const prev = desPanel.style.transform; desPanel.style.transform='none';
-    const contentH = desPanel.scrollHeight;
-    desPanel.style.transform = prev;
-
-    const stick = stickyH();
-    const transPx = Math.max(0.32*stick, 0.24*window.innerWidth);
-    const extra = Math.max(0, contentH - stick + 24);
-    const totalH = Math.ceil(stick + transPx + extra + 1);
-    sceneDes.style.height = totalH + 'px';
-
-    return {
-      el: sceneDes, start: sceneDes.offsetTop, stick,
-      total: totalH - stick,
-      des: { transPx, extra, threshold: (totalH - stick) ? transPx / (totalH - stick) : 1 }
-    };
-  }
-
-  function measureAll(){
-    scenes.length=0;
-    const a=measureIntroScene(); if(a) scenes.push(a);
-    const b=measureDesignerScene(); if(b) scenes.push(b);
-  }
-
-  let raf=0, navSkip=null;
-  function render(){
-    raf=0;
-    const y=window.scrollY||0;
-    const W=window.innerWidth;
-
-    for(const s of scenes){
-      const raw=clamp((y - s.start)/s.total);
-      const p = (navSkip==='intro' && s.el===sceneIntro) ? 1 :
-                (navSkip==='designer' && s.el===sceneDes) ? 1 : smoother(raw);
-
-      /* Scene: Intro (koira→intro + release) */
-      if(s.el===sceneIntro && dogPanel && introPanel && s.intro){
-        const t = s.intro.threshold, extra = s.intro.extra;
-
-        if(raw <= t){
-          const f = smoother(raw / Math.max(t, 1e-6));
-          const txDog   = Math.round(-W*1.05*f);
-          const txIntro = Math.round(W*(1-f));
-          dogPanel.style.transform   = `translate3d(${txDog}px,0,0)`;
-          dogPanel.style.opacity     = (1 - f*1.1).toFixed(3);
-          introPanel.style.transform = `translate3d(${txIntro}px,0,0)`;
-          introPanel.style.opacity   = Math.min(1,f*1.15).toFixed(3);
-        }else{
-          dogPanel.style.transform = `translate3d(${-W*1.05}px,0,0)`;
-          dogPanel.style.opacity = '0';
-          const r = smoother((raw - t) / Math.max(1 - t, 1e-6));
-          const ty = Math.round(-extra * r);
-          introPanel.style.transform = `translate3d(0,${ty}px,0)`;
-          introPanel.style.opacity = '1';
-        }
-      }
-
-      /* Scene: Designer (maski alas + release jotta kaikki näkyy) */
-      if(s.el===sceneDes && desPanel){
-        const tt = s.des.threshold, extra = s.des.extra;
-        const isMobile = window.innerWidth <= 900;
-        const sx = isMobile ? 1.32 : 1.0;
-        const sy = isMobile ? 0.78 : 1.0;
-
-        if(raw <= tt){
-          // Vaihe 1: maskin alas-liuku
-          const f = smoother(raw / Math.max(tt,1e-6));
-          let ty = s.stick * (isMobile ? 0.85 : 0.6) * f;
-
-          if (maskSvg && maskWrap) {
-            const wrapBB = maskWrap.getBoundingClientRect();
-            const maskBB = maskSvg.getBoundingClientRect();
-            const scaledMaskHeight = maskBB.height * sy;
-            const maxTy = Math.max(0, (wrapBB.height - scaledMaskHeight) - 12);
-            ty = Math.min(ty, maxTy);
-            maskSvg.style.transform = `translate3d(0,${Math.round(ty)}px,0) scaleX(${sx}) scaleY(${sy})`;
-            maskSvg.style.opacity = '1';
-          } else if (maskSvg) {
-            maskSvg.style.transform = `translate3d(0,${Math.round(ty)}px,0)`;
-            maskSvg.style.opacity = '1';
-          }
-
-          if (photo) {
-            const sc = 0.985 + 0.045*f;
-            photo.style.transform = `scale(${sc})`;
-          }
-          desPanel.style.transform = 'translate3d(0,0,0)';
-        } else {
-          // Vaihe 2: release — nostetaan sisältö, haivutetaan maski pois
-          const r = smoother((raw - tt) / Math.max(1 - tt, 1e-6));
-          const tyPanel = Math.round(-extra * r);
-          desPanel.style.transform = `translate3d(0,${tyPanel}px,0)`;
-
-          if (maskSvg && maskWrap) {
-            const wrapBB = maskWrap.getBoundingClientRect();
-            const maskBB = maskSvg.getBoundingClientRect();
-            const scaledMaskHeight = maskBB.height * sy;
-            const maxTy = Math.max(0, (wrapBB.height - scaledMaskHeight) - 12);
-            maskSvg.style.transform = `translate3d(0,${Math.round(maxTy+24)}px,0) scaleX(${sx}) scaleY(${sy})`;
-            maskSvg.style.opacity = String(1 - r); // fade out
-          } else if (maskSvg) {
-            maskSvg.style.opacity = String(1 - r);
-          }
-
-          if (photo) {
-            const sc = 0.985 + 0.045;
-            photo.style.transform = `scale(${sc})`;
-          }
-        }
-      }
-    }
-  }
-  const req=()=>{ if(!raf) raf=requestAnimationFrame(render); };
-  const renderNow=()=>{ cancelAnimationFrame(raf); raf=0; render(); };
-
-  window.__sceneNavSkip = (which)=>{ navSkip=which; renderNow(); };
-  window.__sceneMeasure = ()=>{ measureAll(); renderNow(); };
-
-  const onResize=()=>{ measureAll(); req(); };
-  window.addEventListener('resize', onResize, {passive:true});
-  window.visualViewport?.addEventListener('resize', onResize, {passive:true});
-  window.addEventListener('orientationchange', onResize, {passive:true});
-  window.addEventListener('scroll', req, {passive:true});
-  document.addEventListener('DOMContentLoaded', ()=>{ measureAll(); renderNow(); });
-})();
-
-/* ====== VANHAT KAAVAT-TOIMINNOT (placeholder-fallback lisätty) ====== */
-function fmtEUR(x){return new Intl.NumberFormat('fi-FI',{style:'currency',currency:'EUR'}).format(x)}
+/* ====== Ostoskori + Kassa (täysi polku) ====== */
 function showToast(msg){alert(msg)}
 let CART=JSON.parse(localStorage.getItem('cart')||'{}');
 function saveCart(){localStorage.setItem('cart',JSON.stringify(CART));updateBadge()}
@@ -598,10 +478,13 @@ function updateBadge(){
   const tx=$('#cartCountText'); if(tx) tx.textContent=n?`(${n})`:'';
   const ic=$('#cartCount'); if(ic) ic.textContent=String(n);
 }
-function addToCart(id){CART[id]=(CART[id]||0)+1;saveCart();openCart();}
-
+function openCart(){const d=$('#cartDrawer');d.classList.add('open');renderCart()}
+function closeCart(){const d=$('#cartDrawer');d.classList.remove('open')}
+function openCheckout(){const d=$('#checkoutDrawer');d.classList.add('open');fillCheckoutFromStorage()}
+function closeCheckout(){const d=$('#checkoutDrawer');d.classList.remove('open')}
 updateBadge();
 
+/* Tuotedata (demo) */
 const IMG=(id,n=1)=>`assets/patterns/${id}-${n}.jpg`;
 window.KAAVIOT=[
   {id:'dummy-kaava',name:'Dummy kaava',price:0.01,sizes:'PDF',blurb:'Väliaikainen testikaava – korvataan myöhemmin oikeilla.',images:[IMG('dummy-kaava',1),IMG('dummy-kaava',2)],isDummy:true,deliverable:true,file:'auto-dummy'},
@@ -617,6 +500,7 @@ window.KAAVIOT=[
   {id:'villapaita',name:'Villapaita',price:0.01,sizes:'XS–XXL',blurb:'Klassinen pyöröneule.',images:[IMG('villapaita',1),IMG('villapaita',2)],deliverable:false},
 ];
 
+/* Kaavaruudukko (vanhat toiminnot + placeholder-fallback) */
 (()=>{
   const grid=$('#patternsGrid'); if(!grid) return;
   let selectedId=null, expander=null, current=null, imgIdx=0;
@@ -702,7 +586,7 @@ window.KAAVIOT=[
       const buyBtn=document.createElement('button');
       buyBtn.className='btn bg-[color:var(--deep-blue)] text-white rounded-full px-4 py-2';
       buyBtn.textContent='Lisää ostoskoriin'+(p.price===0?' (0,00 €)':'');
-      buyBtn.addEventListener('click',()=>addToCart(p.id));
+      buyBtn.addEventListener('click',()=>{CART[p.id]=(CART[p.id]||0)+1;saveCart();openCart()});
       actions.appendChild(buyBtn);
     }
     insertAfterRow(tileEl);
@@ -763,52 +647,391 @@ window.KAAVIOT=[
   },{passive:true});
 })();
 
-/* Ostoskori drawer */
+/* CART drawer */
 (()=>{
   const drawer=$('#cartDrawer');
-  const openBtnTxt=$('#openCartText');
-  const openBtnIco=$('#openCartIcon');
-  const closeA=$('#closeCart');
-  const closeX=$('#closeCartX');
-
-  function openCart(){drawer.classList.add('open');renderCart();}
-  function closeCart(){drawer.classList.remove('open');}
-
-  window.openCart=openCart;
-
-  openBtnTxt?.addEventListener('click',openCart);
-  openBtnIco?.addEventListener('click',openCart);
-  closeA?.addEventListener('click',closeCart);
-  closeX?.addEventListener('click',closeCart);
+  $('#openCartText')?.addEventListener('click',openCart);
+  $('#openCartIcon')?.addEventListener('click',openCart);
+  $('#closeCart')?.addEventListener('click',closeCart);
+  $('#closeCartX')?.addEventListener('click',closeCart);
   drawer.addEventListener('click',e=>{if(e.target===drawer)closeCart()});
+})();
 
-  function renderCart(){
-    const root=$('#cartItems'); if(!root) return;
-    root.innerHTML='';
-    let sub=0;
-    Object.entries(CART).forEach(([id,q])=>{
-      const p=window.KAAVIOT.find(x=>x.id===id); if(!p) return;
-      sub+=(p.price||0)*q;
-      const row=document.createElement('div');
-      row.className='py-3 flex items-center justify-between gap-3';
-      row.innerHTML=`<div><div class="font-semibold">${p.name}</div><div class="text-sm opacity-70">${fmtEUR(p.price||0)}</div></div>
+/* CART render + kassalle */
+function renderCart(){
+  const root=$('#cartItems'); if(!root) return;
+  root.innerHTML='';
+  let sub=0;
+  Object.entries(CART).forEach(([id,q])=>{
+    const p=window.KAAVIOT.find(x=>x.id===id); if(!p) return;
+    sub+=(p.price||0)*q;
+    const row=document.createElement('div');
+    row.className='py-3 flex items-center justify-between gap-3';
+    row.innerHTML=`<div><div class="font-semibold">${p.name}</div><div class="text-sm opacity-70">${fmtEUR(p.price||0)}</div></div>
       <div class="flex items-center gap-2">
         <button data-dec="${id}" class="px-2 border border-[rgba(0,0,0,.15)] rounded">−</button>
         <span>${q}</span>
         <button data-inc="${id}" class="px-2 border border-[rgba(0,0,0,.15)] rounded">+</button>
         <button data-remove="${id}" class="px-2 border border-[rgba(0,0,0,.15)] rounded">Poista</button>
       </div>`;
-      root.appendChild(row);
-    });
-    $('#subTotal').textContent=fmtEUR(sub);
+    root.appendChild(row);
+  });
+  $('#subTotal').textContent=fmtEUR(sub);
+  root.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{const id=b.dataset.remove;delete CART[id];saveCart();renderCart()});
+  root.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{const id=b.dataset.inc;CART[id]=(CART[id]||0)+1;saveCart();renderCart()});
+  root.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{const id=b.dataset.dec;CART[id]=Math.max(0,(CART[id]||0)-1);if(CART[id]===0)delete CART[id];saveCart();renderCart()});
+}
+$('#checkout')?.addEventListener('click',()=>{ if(Object.keys(CART).length===0){alert('Ostoskori on tyhjä.');return;} closeCart(); openCheckout(); });
 
-    root.querySelectorAll('[data-remove]').forEach(b=>b.onclick=()=>{const id=b.dataset.remove;delete CART[id];saveCart();renderCart()});
-    root.querySelectorAll('[data-inc]').forEach(b=>b.onclick=()=>{const id=b.dataset.inc;CART[id]=(CART[id]||0)+1;saveCart();renderCart()});
-    root.querySelectorAll('[data-dec]').forEach(b=>b.onclick=()=>{const id=b.dataset.dec;CART[id]=Math.max(0,(CART[id]||0)-1);if(CART[id]===0)delete CART[id];saveCart();renderCart()});
+/* Kassa */
+function fillCheckoutFromStorage(){
+  const f=$('#checkoutForm'); if(!f) return;
+  const s=JSON.parse(localStorage.getItem('customer')||'{}');
+  ['firstName','lastName','email','phone','address','zip','city','country','notes'].forEach(k=>{if(s[k])f.elements[k].value=s[k]})
+}
+function collectCustomer(){
+  const f=$('#checkoutForm'); if(!f) return null;
+  const w=$('#acceptDigitalWaiver');
+  if(!w?.checked){showToast('Hyväksy digisisällön toimitus heti -ehto.');return null}
+  const d=Object.fromEntries(new FormData(f).entries());
+  if(!d.firstName||!d.lastName||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)||!d.address||!d.zip||!d.city||!d.country){
+    showToast('Täytä pakolliset kentät oikein.');return null
   }
+  localStorage.setItem('customer',JSON.stringify(d));
+  return d;
+}
+
+$('#checkoutBack')?.addEventListener('click',e=>{e.preventDefault();closeCheckout();openCart()});
+$('#closeCheckout')?.addEventListener('click',closeCheckout);
+$('#closeCheckoutX')?.addEventListener('click',closeCheckout);
+
+$('#checkoutPay')?.addEventListener('click',e=>{
+  e.preventDefault();
+  const customer=collectCustomer(); if(!customer) return;
+  const ids=Object.keys(CART); if(ids.length===0){closeCheckout();return}
+  const snapshot=[]; let totalPaid=0;
+  ids.forEach(id=>{
+    const p=window.KAAVIOT.find(x=>x.id===id); if(!p) return;
+    const qty=CART[id]||1;
+    snapshot.push({id,name:p.name,price:p.price||0,qty,isDummy:!!p.isDummy});
+    totalPaid+=Math.max(0,(p.price||0))*qty;
+  });
+  const order={customer,email:customer.email,items:snapshot,createdAt:new Date().toISOString()};
+  localStorage.setItem('lastOrder',JSON.stringify(order));
+
+  if(totalPaid<=0){ closeCheckout(); showSuccess(order); return; }
+
+  // PayPal "Cart upload" -post
+  const email="aaltonen96@outlook.com";
+  const form=ca('form',{method:'POST',action:'https://www.paypal.com/cgi-bin/webscr',target:'_blank'});
+  form.append(
+    ca('input',{type:'hidden',name:'cmd',value:'_cart'}),
+    ca('input',{type:'hidden',name:'upload',value:'1'}),
+    ca('input',{type:'hidden',name:'business',value:email}),
+    ca('input',{type:'hidden',name:'currency_code',value:'EUR'}),
+    ca('input',{type:'hidden',name:'return',value:(()=>{const u=new URL(location.href);u.hash='success';return u.href})()}),
+    ca('input',{type:'hidden',name:'cancel_return',value:(()=>{const u=new URL(location.href);u.hash='cancel';return u.href})()})
+  );
+  let i=1;
+  snapshot.filter(x=>x.price>0).forEach(x=>{
+    form.append(
+      ca('input',{type:'hidden',name:`item_name_${i}`,value:x.name}),
+      ca('input',{type:'hidden',name:`amount_${i}`,value:Number(x.price||0).toFixed(2)}),
+      ca('input',{type:'hidden',name:`quantity_${i}`,value:x.qty})
+    ); i++;
+  });
+  document.body.appendChild(form);
+  form.submit();
+  form.remove();
+  showToast('Siirryt PayPaliin maksamaan…');
+});
+
+/* Dummy-PDF tilausvahvistukseen */
+function pdfEscape(s){return String(s).replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)')}
+function makeDummyPDF({title='Dummy-kaava',lines=[]}={}){
+  const header='%PDF-1.4\n%âãÏÓ\n';
+  const obj5='5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n';
+  let y=800; const leading=18;
+  let content='BT\n/F1 20 Tf 50 820 Td ('+pdfEscape(title)+') Tj\nET\n';
+  content+='BT\n/F1 12 Tf\n';
+  lines.forEach((L,i)=>{y-=(i===0?30:leading);content+=`1 0 0 1 50 ${y} Tm (${pdfEscape(L)}) Tj\n`});
+  content+='ET\n';
+  const stream=`4 0 obj\n<< /Length ${content.length} >>\nstream\n${content}endstream\nendobj\n`;
+  const obj3='3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n';
+  const obj2='2 0 obj\n<< /Type /Pages /Count 1 /Kids [3 0 R] >>\nendobj\n';
+  const obj1='1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n';
+  const order=[obj1,obj2,obj3,stream,obj5];
+  let acc=header.length; const offs=[];
+  for(let s of order){offs.push(acc);acc+=s.length}
+  const xrefStart=acc;
+  let xref='xref\n0 6\n'; xref+='0000000000 65535 f \n';
+  offs.forEach(off=>{xref+=`${String(off).padStart(10,'0')} 00000 n \n`});
+  const trailer=`trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xrefStart}\n%%EOF`;
+  return header+order.join('')+xref+trailer
+}
+function generateDummyPDF(order){
+  const items=(order?.items||[]).map(x=>`${x.name} × ${x.qty} — ${(x.price||0).toFixed(2)} €`);
+  const c=order?.customer||{};
+  const lines=[
+    'Tämä on väliaikainen DUMMY-KAAVA.',
+    'Korvataan myöhemmin oikealla kaavalla.',
+    '',
+    'Tilaus:',
+    ...items,
+    '',
+    'Asiakas:',
+    `${(c.firstName||'')} ${(c.lastName||'')}`,
+    `${c.address||''}`,
+    `${(c.zip||'')} ${(c.city||'')}, ${c.country||''}`,
+    `${c.email||''}${c.phone?(' / '+c.phone):''}`,
+    '',
+    `Päiväys: ${new Date().toLocaleString('fi-FI')}`
+  ];
+  const pdfStr=makeDummyPDF({title:'RUMAT STUDIO – Dummy-kaava',lines});
+  const enc=new TextEncoder(); const bytes=enc.encode(pdfStr);
+  const blob=new Blob([bytes],{type:'application/pdf'});
+  const url=URL.createObjectURL(blob);
+  let binary=''; const chunk=0x8000;
+  for(let i=0;i<bytes.length;i+=chunk){binary+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk))}
+  const base64=btoa(binary);
+  const dataUrl=`data:application/pdf;base64,${base64}`;
+  return {blob,url,dataUrl}
+}
+function offerDummyDownload(order){
+  const {url,dataUrl}=generateDummyPDF(order||{});
+  try{localStorage.setItem('lastDummyDataUrl',dataUrl)}catch(e){}
+  const msgBox=$('#orderMsg');
+  const a=document.createElement('a');
+  a.href=url; a.download='dummy-kaava.pdf';
+  a.className='underline text-emerald-800';
+  a.textContent='Lataa dummy-kaava (PDF)';
+  const wrap=document.createElement('div'); wrap.className='mt-3'; wrap.appendChild(a);
+  msgBox.appendChild(wrap);
+}
+
+/* PayPal return handler + onnistumisnäkymä + emailit */
+async function showSuccess(order){
+  const msgBox=$('#orderMsg');
+  const items=(order?.items||[]);
+  const total=items.reduce((s,x)=>s+(x.price||0)*x.qty,0);
+  const c=order?.customer||{};
+  msgBox.classList.remove('hidden');
+  msgBox.innerHTML=`<div class="border border-emerald-200 bg-emerald-50 rounded-2xl p-4">
+    <h3 class="text-xl font-extrabold text-emerald-900 uppercase tracking-wide mb-2">Tilaus vastaanotettu</h3>
+    <p class="text-emerald-900/80">Kiitos, <strong>${(c.firstName||'')+' '+(c.lastName||'')}</strong>! Vahvistus on (yritetty) lähettää osoitteeseen <strong>${order?.email||c.email||''}</strong>.</p>
+    <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <div class="font-semibold mb-1">Tilaus:</div>
+        <ul class="list-disc pl-5 text-sm">${items.map(x=>`<li>${x.name} × ${x.qty} — ${fmtEUR((x.price||0)*x.qty)}</li>`).join('')}</ul>
+        <div class="mt-2 font-bold">Yhteensä: ${fmtEUR(total)}</div>
+      </div>
+      <div>
+        <div class="font-semibold mb-1">Asiakastiedot:</div>
+        <div class="text-sm">${(c.firstName||'')+' '+(c.lastName||'')}<br/>${c.address||''}<br/>${(c.zip||'')+' '+(c.city||'')}<br/>${c.country||''}<br/>${c.email||''}${c.phone?('<br/>'+c.phone):''}${c.notes?('<br/><em>'+String(c.notes).replace(/</g,'&lt;')+'</em>'):''}</div>
+      </div>
+    </div>
+  </div>`;
+  CART={}; saveCart(); renderCart();
+  offerDummyDownload(order);
+  sendConfirmationEmails(order);
+}
+function handleReturn(){
+  const h=location.hash||'';
+  if(h.indexOf('#success')===0){
+    const order=JSON.parse(localStorage.getItem('lastOrder')||'null');
+    closeCheckout(); showSuccess(order);
+  }
+  if(h.indexOf('#cancel')===0){
+    alert('Maksu keskeytettiin tai epäonnistui.');
+    const msgBox=$('#orderMsg'); msgBox.classList.remove('hidden');
+    msgBox.innerHTML=`<div class="border border-red-200 bg-red-50 rounded-2xl p-4">
+      <h3 class="text-xl font-extrabold text-red-900 uppercase tracking-wide mb-2">Maksu epäonnistui</h3>
+      <p class="text-red-900/80">Yritä uudelleen. Jos ongelma jatkuu, ota yhteyttä: <a class="underline" href="mailto:aaltonen96@outlook.com">aaltonen96@outlook.com</a>.</p>
+    </div>`;
+  }
+}
+window.addEventListener('hashchange',handleReturn); handleReturn();
+
+function sendConfirmationEmails(order){
+  const anneEmail='aaltonen96@outlook.com';
+  const cfg=(typeof getEmailCfg==='function')?getEmailCfg():{PUBLIC_KEY:'',SERVICE_ID:'',TEMPLATE_ID:''};
+  const c=order?.customer||{};
+  const itemsList=(order.items||[]).map(x=>`${x.name} x ${x.qty}`).join(', ');
+  const totalStr=(order.items||[]).reduce((s,x)=>s+(x.price||0)*x.qty,0).toFixed(2)+' €';
+  const addressBlock=`${(c.firstName||'')} ${(c.lastName||'')}\n${c.address||''}\n${(c.zip||'')} ${(c.city||'')}\n${c.country||''}\n${c.email||''}${c.phone?('\n'+c.phone):''}${c.notes?('\n'+c.notes):''}`;
+  const dummyDataUrl=localStorage.getItem('lastDummyDataUrl')||'';
+  const base={order_json:JSON.stringify(order,null,2),items:itemsList,total:totalStr,dummy_link:dummyDataUrl||(location.origin+'/assets/dummy-kaava.pdf'),customer_block:addressBlock};
+
+  if(!window.emailjs||!cfg.PUBLIC_KEY||!cfg.SERVICE_ID||!cfg.TEMPLATE_ID){
+    const warn=$('#paypalWarn');
+    if(warn)warn.textContent='Huom: automaattinen sähköpostivahvistus ei ole käytössä – paina Ctrl/Cmd+E lisätäksesi EmailJS-avaimet.';
+    console.info('EmailJS ei konffattu. Tilauksen tiedot:',order);
+    return;
+  }
+  window.emailjs.send(cfg.SERVICE_ID,cfg.TEMPLATE_ID,{
+    to_email:order.email||c.email,
+    subject:'RUMAT STUDIO – tilausvahvistus',
+    message:`Kiitos ostoksesta!\n\nTuotteet: ${itemsList}\nYhteensä: ${totalStr}\n\nAsiakastiedot:\n${addressBlock}\n\nDummy-kaava: ${base.dummy_link}`,
+    ...base
+  }).then(()=>console.log('Vahvistus lähetetty asiakkaalle')).catch(err=>{console.error(err);alert('Sähköpostin lähetys (asiakas) epäonnistui.')});
+
+  window.emailjs.send(cfg.SERVICE_ID,cfg.TEMPLATE_ID,{
+    to_email:anneEmail,
+    subject:'Uusi tilaus – RUMAT STUDIO',
+    message:`Uusi tilaus vastaanotettu.\n\nTuotteet: ${itemsList}\nYhteensä: ${totalStr}\n\nAsiakastiedot:\n${addressBlock}\n\nDummy-kaava: ${base.dummy_link}`,
+    ...base
+  }).catch(err=>console.error(err));
+}
+
+/* ===== Scenes (koira→intro & suunnittelija) ===== */
+(()=>{
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const HEADER = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'))||64;
+  const sceneIntro = document.getElementById('scene-intro');
+  const dogPanel   = sceneIntro?.querySelector('.panel-dog');
+  const introPanel = sceneIntro?.querySelector('#mikaonrumat');
+
+  const sceneDes   = document.getElementById('scene-designer');
+  const desPanel   = sceneDes?.querySelector('#suunnittelija');
+  const maskSvg    = document.getElementById('designerMaskText');
+  const maskWrap   = document.querySelector('.designer-text-wrap');
+  const photo      = document.getElementById('designerPhoto');
+
+  const smoother=(p)=>p*p*p*(p*(6*p-15)+10);
+  const clamp=(x)=>x<0?0:x>1?1:x;
+  const vvh = ()=> (window.visualViewport?.height || window.innerHeight || 800);
+  const stickyH = ()=> Math.max(1, vvh() - HEADER);
+
+  let scenes=[];
+  function measureIntroScene(){
+    if(!sceneIntro || !introPanel) return null;
+    const prev = introPanel.style.transform; introPanel.style.transform='none';
+    const contentH = introPanel.scrollHeight;
+    introPanel.style.transform = prev;
+
+    const stick = stickyH();
+    const transPx = Math.max(0.28*window.innerWidth, 0.42*stick);
+    const extra = Math.max(0, contentH - stick + 24);
+    const totalH = Math.ceil(stick + transPx + extra + 1);
+    sceneIntro.style.height = totalH + 'px';
+
+    return { el: sceneIntro, start: sceneIntro.offsetTop, stick, total: totalH - stick,
+      intro: { transPx, extra, threshold: (totalH - stick) ? transPx / (totalH - stick) : 1 } };
+  }
+  function measureDesignerScene(){
+    if(!sceneDes || !desPanel) return null;
+    const prev = desPanel.style.transform; desPanel.style.transform='none';
+    const contentH = desPanel.scrollHeight;
+    desPanel.style.transform = prev;
+
+    const stick = stickyH();
+    const transPx = Math.max(0.32*stick, 0.24*window.innerWidth);
+    const extra = Math.max(0, contentH - stick + 24);
+    const totalH = Math.ceil(stick + transPx + extra + 1);
+    sceneDes.style.height = totalH + 'px';
+
+    return { el: sceneDes, start: sceneDes.offsetTop, stick, total: totalH - stick,
+      des: { transPx, extra, threshold: (totalH - stick) ? transPx / (totalH - stick) : 1 } };
+  }
+  function measureAll(){
+    scenes.length=0;
+    const a=measureIntroScene(); if(a) scenes.push(a);
+    const b=measureDesignerScene(); if(b) scenes.push(b);
+  }
+
+  let raf=0, navSkip=null;
+  function render(){
+    raf=0;
+    const y=window.scrollY||0;
+    const W=window.innerWidth;
+
+    for(const s of scenes){
+      const raw=clamp((y - s.start)/s.total);
+      const p = (navSkip==='intro' && s.el===sceneIntro) ? 1 :
+                (navSkip==='designer' && s.el===sceneDes) ? 1 : smoother(raw);
+
+      /* Scene: Intro (koira→intro + release) */
+      if(s.el===sceneIntro && dogPanel && introPanel && s.intro){
+        const t = s.intro.threshold, extra = s.intro.extra;
+
+        if(raw <= t){
+          const f = smoother(raw / Math.max(t, 1e-6));
+          const txDog   = Math.round(-W*1.05*f);
+          const txIntro = Math.round(W*(1-f));
+          dogPanel.style.transform   = `translate3d(${txDog}px,0,0)`;
+          dogPanel.style.opacity     = (1 - f*1.1).toFixed(3);
+          introPanel.style.transform = `translate3d(${txIntro}px,0,0)`;
+          introPanel.style.opacity   = Math.min(1,f*1.15).toFixed(3);
+        }else{
+          dogPanel.style.transform = `translate3d(${-W*1.05}px,0,0)`; dogPanel.style.opacity = '0';
+          const r = smoother((raw - t) / Math.max(1 - t, 1e-6));
+          const ty = Math.round(-extra * r);
+          introPanel.style.transform = `translate3d(0,${ty}px,0)`; introPanel.style.opacity = '1';
+        }
+      }
+
+      /* Scene: Designer (maski alas + release jotta kaikki näkyy) */
+      if(s.el===sceneDes && desPanel){
+        const tt = s.des.threshold, extra = s.des.extra;
+        const isMobile = window.innerWidth <= 900;
+        const sx = isMobile ? 1.32 : 1.0;
+        const sy = isMobile ? 0.78 : 1.0;
+
+        if(raw <= tt){
+          const f = smoother(raw / Math.max(tt,1e-6));
+          let ty = s.stick * (isMobile ? 0.85 : 0.6) * f;
+
+          if (maskSvg && maskWrap){
+            const wrapBB = maskWrap.getBoundingClientRect();
+            const maskBB = maskSvg.getBoundingClientRect();
+            const scaledMaskHeight = maskBB.height * sy;
+            const maxTy = Math.max(0, (wrapBB.height - scaledMaskHeight) - 12);
+            ty = Math.min(ty, maxTy);
+            maskSvg.style.transform = `translate3d(0,${Math.round(ty)}px,0) scaleX(${sx}) scaleY(${sy})`;
+            maskSvg.style.opacity = '1';
+          } else if (maskSvg){
+            maskSvg.style.transform = `translate3d(0,${Math.round(ty)}px,0)`; maskSvg.style.opacity='1';
+          }
+
+          if (photo){ const sc = 0.985 + 0.045*f; photo.style.transform = `scale(${sc})`; }
+          desPanel.style.transform = 'translate3d(0,0,0)';
+        } else {
+          const r = smoother((raw - tt) / Math.max(1 - tt, 1e-6));
+          const tyPanel = Math.round(-extra * r);
+          desPanel.style.transform = `translate3d(0,${tyPanel}px,0)`;
+
+          if (maskSvg && maskWrap){
+            const wrapBB = maskWrap.getBoundingClientRect();
+            const maskBB = maskSvg.getBoundingClientRect();
+            const scaledMaskHeight = maskBB.height * sy;
+            const maxTy = Math.max(0, (wrapBB.height - scaledMaskHeight) - 12);
+            maskSvg.style.transform = `translate3d(0,${Math.round(maxTy+24)}px,0) scaleX(${sx}) scaleY(${sy})`;
+            maskSvg.style.opacity = String(1 - r);
+          } else if (maskSvg){
+            maskSvg.style.opacity = String(1 - r);
+          }
+
+          if (photo){ const sc = 0.985 + 0.045; photo.style.transform = `scale(${sc})`; }
+        }
+      }
+    }
+  }
+  const req=()=>{ if(!raf) raf=requestAnimationFrame(render); };
+  const renderNow=()=>{ cancelAnimationFrame(raf); raf=0; render(); };
+
+  window.__sceneNavSkip = (which)=>{ navSkip=which; renderNow(); };
+  window.__sceneMeasure = ()=>{ measureAll(); renderNow(); };
+
+  const onResize=()=>{ measureAll(); req(); };
+  window.addEventListener('resize', onResize, {passive:true});
+  window.visualViewport?.addEventListener('resize', onResize, {passive:true});
+  window.addEventListener('orientationchange', onResize, {passive:true});
+  window.addEventListener('scroll', req, {passive:true});
+  document.addEventListener('DOMContentLoaded', ()=>{ measureAll(); renderNow(); });
 })();
 
-/* ===== Ankkuri-linkit (ohita efektien alku/puoliväli) ===== */
+/* Ankkurit: ohita efektien alku + mittaus */
 (()=>{
   const HEADER=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h'))||64;
   const vh=()=> (visualViewport?.height||innerHeight||800);
